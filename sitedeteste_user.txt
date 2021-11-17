@@ -1,0 +1,1 @@
+"Driver={MySQL ODBC 5.1 Driver};Server=MYSQL5045.site4now.net;Database=db_a79629_mtxdb;Uid=a79629_mtxdb;Password=ctrl2021"

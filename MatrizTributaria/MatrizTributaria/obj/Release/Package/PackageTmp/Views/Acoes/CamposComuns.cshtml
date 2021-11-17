@@ -1,0 +1,87 @@
+﻿<div style="margin-top:12px;" class="form-row">
+    <div class="col-lg-2">
+        <label class="col-form-label pr-fontalternativa" for="produtoFor">Descrição ou Cód Barras:</label>
+
+    </div>
+
+    <div class="col-lg-8">
+        <div class="input-group input-group-sm mb-3">
+            @Html.TextBox("procurarPor", null, new { @class = "pr-fontalternativa   form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do produto ou código de barras", id = "cstCompInd" })
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary pr-botoes-fundo">
+                    <i style="font-size:1.3em;" class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div> <!--Fim da Row-->
+@if(ViewBag.Opcao == "Com aliquota")
+{
+<div class="form-row">
+    <div class="col-lg-2">
+        <label class="col-form-label  pr-fontalternativa" for="produtoFor">Aliq Ent. Pis do Produto:</label>
+    </div>
+
+
+    <div class="col-lg-4">
+        <div class="input-group input-group-sm mb-3">
+            @Html.TextBox("procurarPorAliq", null, new { @class = "pr-fontalternativa   form-control form-control-sm pr-aliq", placeholder = "Digite a aliquota", id = "aliEntPis" })
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary pr-botoes-fundo">
+                    <i style="font-size:1.3em;" class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+}
+
+
+
+<div  class="form-row">
+    <div class="col-lg-2">
+        <label class="col-form-label pr-fontalternativa" for="linhas">Linhas:</label>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group input-group-sm mb-3">
+            <select class="pr-fontalternativa form-control form-control-sm" id="numeroLinhas" name="numeroLinhas">
+                @if (ViewBag.NumeroLinhas == 10)
+                {
+
+                    <option selected>10</option>
+                    <option>20</option>
+                    <option>30</option>
+                }
+                else
+                {
+                    if (ViewBag.NumeroLinhas == 20)
+                    {
+
+                        <option>10</option>
+                        <option selected>20</option>
+                        <option>30</option>
+                    }
+                    else
+                    {
+                        <option>10</option>
+                        <option>20</option>
+                        <option selected>30</option>
+                    }
+                }
+            </select>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary pr-botoes-fundo">
+                    <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+</div> <!--fim da row-->

@@ -1,0 +1,149 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<MatrizTributaria.Models.Tributacao>
+@{
+    ViewBag.Title = "Tributacao";
+}
+
+
+<div class="container pr-container pr-card-cad">
+    <div class="card mt-2">
+        <div class="card-header">
+            Manuntenção de Tributação: LISTAGEM
+            @RenderPage("~/Views/Acoes/botoes2.cshtml")
+        </div><!--fim do cabeçalho-->
+
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    @* @RenderPage("~/Views/Acoes/Botoes.cshtml") <!--Renderiza os botões de ação-->*@
+                    <div class="col-lg-12">
+                        <div class="container-fluid">
+                            @using (Html.BeginForm("Index", "Tributacao", FormMethod.Get))
+                            {
+
+                                <div class="form-group row ml-2" style="margin-top:10px;">
+                                    <label class="col-form-label col-lg-1 pr-fontalternativa" for="produtoFor">Produto:</label>
+                                    <div class="col-lg-8">
+                                        @Html.TextBox("SearchString", null, new { @class = "pr-fontalternativa   form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do produto", style = "width:100%;", id = "btnClick" })
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <button type="submit" class="btn btn-secondary pr-botoes-fundo border-0">
+                                            <i style="font-size:1.3em;" class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row ml-2">
+
+                                    <label class="col-form-label col-lg-1 pl-1  pr-fontalternativa" for="linhas">Linhas:</label>
+                                    <div class="col-lg-1">
+                                        <select class="pr-fontalternativa form-control form-control-sm" id="LinhasNum" name="LinhasNum">
+                                            <option>10</option>
+                                            <option>20</option>
+                                            <option>30</option>
+                                        </select>
+                                    </div>
+                                    <div class="class-col-lg-2 pl-1">
+                                        <button type="submit" class="btn btn-secondary pr-botoes-fundo border-0">
+                                            <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                                        </button>
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                            }
+                            <table style="border-bottom: 1px solid #111;" class="table table-striped table-hover" id="tablepr-2">
+                                <thead style="font-size:12px; color:#ffffff; font-weight:100 !important;" class="pr-thead">
+
+                                    <tr>
+                                        <th>
+                                            Reg
+                                        </th>
+                                        <th>Estado</th>
+                                        <th class="pr-actionlink">
+                                            <i style="font-size:1.1em;" class="fas fa-sort pr-actionlink"></i> @Html.ActionLink("Produto", "Index", new { sortOrder = ViewBag.ProdutoParam })
+                                        </th>
+                                        <th>Setor</th>
+                                        <th>Pis - E</th>
+                                        <th>Pis - S</th>
+                                        <th>Cofins - E</th>
+                                        <th>Cofins - S</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="pr-td">
+                                            <td style="width:5%;">
+                                                @Html.DisplayFor(modelItem => item.id)
+                                            </td>
+                                            <td style="width:5%;">
+                                                @Html.DisplayFor(modelItem => item.estado)
+                                            </td>
+                                            <td style="width:20%;">
+                                                @Html.DisplayFor(modelItem => item.produtos.descricao)
+                                            </td>
+                                            <td style="width:20%;">
+                                                @Html.DisplayFor(modelItem => item.setorProdutos.descricao)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.aliqEntPis)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.aliqSaidaPis)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.aliqEntCofins)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.aliqSaidaCofins)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="d-flex">
+                                <div class="mr-auto p-2">
+
+                                    <p class="pr-fontanternativa">
+
+                                        <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                                    </p>
+                                </div>
+
+                                <div style="float:right;" class="p-2 pr-fontalternativa">
+                                    @Html.PagedListPager(
+                                         Model,
+                                         page => Url.Action("Index",
+                                         new
+                                         {
+                                             page,
+                                             sortOrder = ViewBag.CurrentSort,
+                                             currentFilter = ViewBag.CurrentFilter
+                                         }),
+                                         new PagedListRenderOptions()
+                                         {
+                                             LiElementClasses = new List<string> { "page-item" }
+                                         })
+                                </div>
+
+                            </div>
+                        </div><!--Fim do container da coluna-->
+                            </div><!--Fim da primeira coluna 12-->
+
+                </div><!--fim da linha-->
+
+            </div><!--fim do container do body do card-->
+
+        </div><!--Fim do corpo do card-->
+
+    </div><!--fim do card-->
+
+
+</div><!--fim do container-->
+
