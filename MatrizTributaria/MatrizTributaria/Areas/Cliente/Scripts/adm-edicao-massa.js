@@ -1,4 +1,35 @@
-﻿/*=============== ATUALIZAÇÃO ALIQUOTA SAÍDA COFINS NO CLIENTE  =====================*/
+﻿/*=============== ATUALIZAÇÃO CST ENTRADA PIS COFINS NO CLIENTE  =====================*/
+/*Alteração CST ENTRADA PIS COFINS NO CLIENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstPisCofEnt"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstEntPisCofCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstEntPisCofCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstEntradaPisCofinsMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+
+    $('#edtSelCstEntPisCofCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstEntPisCofCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstEntradaPisCofinsMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*=============== ATUALIZAÇÃO ALIQUOTA SAÍDA COFINS NO CLIENTE  =====================*/
 /*Alteração ALIQUOTA SAÍDA COFINS NO CLIENTE*/
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
