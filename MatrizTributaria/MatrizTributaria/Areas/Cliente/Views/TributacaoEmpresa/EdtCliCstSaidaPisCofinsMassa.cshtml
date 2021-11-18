@@ -2,7 +2,7 @@
 @using MatrizTributaria.Areas.Cliente.Models
 @model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
 @{
-    ViewBag.Title = "EdtCliCstEntradaPisCofinsMassa";
+    ViewBag.Title = "EdtCliCstSaidaPisCofinsMassa";
 
 }
 
@@ -13,8 +13,8 @@
     <div class="card">
         <div class="card-header">
             ANALISE:Produto <strong>"@ViewBag.Mensagem"</strong> <a data-toggle="tooltip" data-placement="right" title="Ir para Gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("AnaliseCST","TributacaoEmpresa")"><i style="font-size:1.3em;" class="fas fa-chart-pie"></i>  </a>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="edtSelCstEntPisCofCli" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="edtSelCstEntPisCofCliManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="edtSelCstSaiPisCofCli" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="edtSelCstSaiPisCofCliManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
 
         </div><!--fim do cabeçalho-->
 
@@ -27,7 +27,7 @@
                         <!--Caixa Geral-->
                         <div class="scrolling-wrapper">
                             <div style="min-width:98.5%; height:inherit;" class="box">
-                                <table id="tbl-edtCstPisCofEnt" class="table table table-light table-hover thead-dark table-striped pr-table">
+                                <table id="tbl-edtCstPisCofSai" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
                                             <th style="text-align:center; border:none;" colspan="6" class="pr-fonte2" scope="col">Analise CST</th>
@@ -47,7 +47,7 @@
                                                 Cest
                                             </th>
                                             <th>
-                                               CST no Cliente
+                                                CST no Cliente
                                             </th>
                                             <th>
                                                 CST no MTX
@@ -73,42 +73,42 @@
                                                     @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
                                                 </td>
 
-                                                @if (item.CST_ENTRADA_PIS_COFINS == null)
+                                                @if (item.CST_SAIDA_PIS_COFINS == null)
                                                 {
                                                     <td style="text-align:center; width:10%;">
-                                                        @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                                                        @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                                     </td>
                                                 }
                                                 else
                                                 {
-                                                    if (item.CST_ENTRADA_PIS_COFINS != item.Cst_Entrada_PisCofins_INTERNO && item.CST_ENTRADA_PIS_COFINS != null)
+                                                    if (item.CST_SAIDA_PIS_COFINS != item.Cst_Saida_PisCofins_INTERNO && item.CST_SAIDA_PIS_COFINS != null)
                                                     {
 
                                                         <td style="text-align:center; width:10%;" class="pr-td-maior">
-                                                            @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                                                            @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                                         </td>
                                                     }
                                                     else
                                                     {
-                                                        if (item.CST_ENTRADA_PIS_COFINS == item.Cst_Entrada_PisCofins_INTERNO && item.CST_ENTRADA_PIS_COFINS != null)
+                                                        if (item.CST_SAIDA_PIS_COFINS == item.Cst_Saida_PisCofins_INTERNO && item.CST_SAIDA_PIS_COFINS != null)
                                                         {
                                                             <td style="text-align:center; width:10%;" class="pr-td-menor">
-                                                                @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                                                                @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                                             </td>
 
                                                         }
                                                         else
                                                         {
 
-                                                            if (item.Cst_Entrada_PisCofins_INTERNO == null && item.CST_ENTRADA_PIS_COFINS != null)
+                                                            if (item.Cst_Saida_PisCofins_INTERNO == null && item.CST_SAIDA_PIS_COFINS != null)
                                                             {
                                                                 <td style="text-align:center; width:10%;" class="pr-td-igual">
-                                                                    @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                                                                    @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                                                 </td>
 
                                                             }
-                                                           
-                                                            
+
+
 
                                                         }
 
@@ -117,7 +117,7 @@
 
 
                                                 <td style="text-align:center; width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.Cst_Entrada_PisCofins_INTERNO)
+                                                    @Html.DisplayFor(modelItem => item.Cst_Saida_PisCofins_INTERNO)
 
                                             </tr>
 
@@ -143,7 +143,7 @@
                     <div style="float:right;" class="p-2 pr-fontalternativa">
                         @Html.PagedListPager(
                             Model,
-                            page => Url.Action("EdtCliCstEntradaPisCofinsMassa",
+                            page => Url.Action("EdtCliCstSaidaPisCofinsMassa",
                             new
                             {
                                 page,
@@ -168,7 +168,7 @@
         </div><!--Fim do corpo do card-->
         <div class="card-footer">
             Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-edit"></i> = Edição em massa igualando ao MTX; <br />
-            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-user-edit"></i> = Edição em massa informando CST manualmente <br />
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-user-edit"></i> = Edição em massa informando Alíquota manualmente <br />
         </div>
 
     </div><!--fim do card-->
