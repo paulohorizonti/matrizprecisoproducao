@@ -833,3 +833,7 @@ li.page-item.active > a {
     color: #ffffff;
     font-size: 0.99em;
 }
+
+.select-cst{
+    max-width:100% !important;
+}

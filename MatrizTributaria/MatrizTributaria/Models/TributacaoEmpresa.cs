@@ -176,10 +176,6 @@ namespace MatrizTributaria.Models
         public string ALIQ_ICMS_NFE_FOR_ATA { get; set; }
 
 
-
-
-
-
         [Column("TIPO_MVA")]
         public string TIPO_MVA { get; set; }
 

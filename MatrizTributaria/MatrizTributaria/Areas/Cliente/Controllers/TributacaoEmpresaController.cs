@@ -653,41 +653,40 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             /*CST Compra de industria*/
             ViewBag.CstCompraIndustriaNulaCliente = this.analise.Count(a => a.CST_COMPRA_DE_IND == null); //nula do cliente
-            ViewBag.CstCompraIndustriaNulaMtx     = this.analise.Count(a => a.Cst_Compra_de_Ind_INTERNO == null); //nula no mtx
-            ViewBag.CstCompraIndustriaIgual       = this.analise.Count(a => a.CST_COMPRA_DE_IND == a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null && a.Cst_Compra_de_Ind_INTERNO != null); //compara tirando os nulos
-            ViewBag.CstCompraIndustriaDif         = this.analise.Count(a => a.CST_COMPRA_DE_IND != a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null && a.Cst_Compra_de_Ind_INTERNO != null);
-
+            ViewBag.CstCompraIndustriaNulaMtx     = this.analise.Count(a => a.Cst_Compra_de_Ind_INTERNO == null && a.CST_COMPRA_DE_IND != null); //nula no mtx
+            ViewBag.CstCompraIndustriaIgual       = this.analise.Count(a => a.CST_COMPRA_DE_IND == a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null); //compara tirando os nulos
+            ViewBag.CstCompraIndustriaDif         = this.analise.Count(a => a.CST_COMPRA_DE_IND != a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null);
             /*CST Compra de Atacado*/
             ViewBag.CstCompraAtacadoNulaCliente = this.analise.Count(a => a.CST_COMPRA_DE_ATA == null); //nula do cliente
-            ViewBag.CstCompraAtacadoNulaMtx     = this.analise.Count(a => a.Cst_Compra_de_Ata_INTERNO == null); //nula no mtx
-            ViewBag.CstCompraAtacadoIgual       = this.analise.Count(a => a.CST_COMPRA_DE_ATA == a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null && a.Cst_Compra_de_Ata_INTERNO != null); //compara tirando os nulos
-            ViewBag.CstCompraAtacadoDif         = this.analise.Count(a => a.CST_COMPRA_DE_ATA != a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null && a.Cst_Compra_de_Ata_INTERNO != null);
+            ViewBag.CstCompraAtacadoNulaMtx     = this.analise.Count(a => a.Cst_Compra_de_Ata_INTERNO == null && a.CST_COMPRA_DE_ATA != null); //nula no mtx
+            ViewBag.CstCompraAtacadoIgual       = this.analise.Count(a => a.CST_COMPRA_DE_ATA == a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null); //compara tirando os nulos
+            ViewBag.CstCompraAtacadoDif         = this.analise.Count(a => a.CST_COMPRA_DE_ATA != a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null);
 
             /*CST Compra de Simples nacional*/
             ViewBag.CstCompraSNNulaCliente = this.analise.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null); //nula do cliente
-            ViewBag.CstCompraSNNulaMtx     = this.analise.Count(a => a.Cst_Compra_de_Simp_Nacional_INTERNO == null); //nula no mtx
-            ViewBag.CstCompraSNIgual       = this.analise.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null && a.Cst_Compra_de_Simp_Nacional_INTERNO != null); //compara tirando os nulos
-            ViewBag.CstCompraSNDif         = this.analise.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL != a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null && a.Cst_Compra_de_Simp_Nacional_INTERNO != null);
+            ViewBag.CstCompraSNNulaMtx     = this.analise.Count(a => a.Cst_Compra_de_Simp_Nacional_INTERNO == null && a.CST_COMPRA_DE_SIMP_NACIONAL != null); //nula no mtx
+            ViewBag.CstCompraSNIgual       = this.analise.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null); //compara tirando os nulos
+            ViewBag.CstCompraSNDif         = this.analise.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL != a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null);
 
 
             /*Tres juntos: CST_NFE_IND, CST_NFE_ATA, CST_NFE_SN*/
             /*CST NFE Industria*/
             ViewBag.CstNFEIndNulaCliente = this.analise.Count(a => a.CST_DA_NFE_DA_IND_FORN == null); //nula do cliente
-            ViewBag.CstNFEIndNulaMtx     = this.analise.Count(a => a.Cst_da_Nfe_da_Ind_FORN_INTERNO == null); //nula no mtx
-            ViewBag.CstNFEIndIgual       = this.analise.Count(a => a.CST_DA_NFE_DA_IND_FORN == a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null && a.Cst_da_Nfe_da_Ind_FORN_INTERNO != null); //compara tirando os nulos
-            ViewBag.CstNFEIndDif         = this.analise.Count(a => a.CST_DA_NFE_DA_IND_FORN != a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null && a.Cst_da_Nfe_da_Ind_FORN_INTERNO != null);
+            ViewBag.CstNFEIndNulaMtx     = this.analise.Count(a => a.Cst_da_Nfe_da_Ind_FORN_INTERNO == null && a.CST_DA_NFE_DA_IND_FORN != null); //nula no mtx
+            ViewBag.CstNFEIndIgual       = this.analise.Count(a => a.CST_DA_NFE_DA_IND_FORN == a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null); //compara tirando os nulos
+            ViewBag.CstNFEIndDif         = this.analise.Count(a => a.CST_DA_NFE_DA_IND_FORN != a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null);
 
             /*CST NFE Atacado*/
             ViewBag.CstNFEAtaNulaCliente = this.analise.Count(a => a.CST_DA_NFE_DE_ATA_FORN == null); //nula do cliente
-            ViewBag.CstNFEAtaNulaMtx     = this.analise.Count(a => a.Cst_da_Nfe_de_Ata_FORn_INTERNO == null); //nula no mtx
-            ViewBag.CstNFEAtaIgual       = this.analise.Count(a => a.CST_DA_NFE_DE_ATA_FORN == a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null && a.Cst_da_Nfe_de_Ata_FORn_INTERNO != null); //compara tirando os nulos
-            ViewBag.CstNFEAtaDif         = this.analise.Count(a => a.CST_DA_NFE_DE_ATA_FORN != a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null && a.Cst_da_Nfe_de_Ata_FORn_INTERNO != null);
+            ViewBag.CstNFEAtaNulaMtx     = this.analise.Count(a => a.Cst_da_Nfe_de_Ata_FORn_INTERNO == null && a.CST_DA_NFE_DE_ATA_FORN != null); //nula no mtx
+            ViewBag.CstNFEAtaIgual       = this.analise.Count(a => a.CST_DA_NFE_DE_ATA_FORN == a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null); //compara tirando os nulos
+            ViewBag.CstNFEAtaDif         = this.analise.Count(a => a.CST_DA_NFE_DE_ATA_FORN != a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null);
 
             /*CSosnt NFE For Simples Nacional*/
             ViewBag.CstNFESNNulaCliente = this.analise.Count(a => a.CSOSNT_DANFE_DOS_NFOR == null); //nula do cliente
-            ViewBag.CstNFESNNulaMtx     = this.analise.Count(a => a.CsosntdaNfedoSnFOR_INTERNO == null); //nula no mtx
-            ViewBag.CstNFESNIgual       = this.analise.Count(a => a.CSOSNT_DANFE_DOS_NFOR == a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null && a.CsosntdaNfedoSnFOR_INTERNO != null); //compara tirando os nulos
-            ViewBag.CstNFESNDif         = this.analise.Count(a => a.CSOSNT_DANFE_DOS_NFOR != a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null && a.CsosntdaNfedoSnFOR_INTERNO != null);
+            ViewBag.CstNFESNNulaMtx     = this.analise.Count(a => a.CsosntdaNfedoSnFOR_INTERNO == null && a.CSOSNT_DANFE_DOS_NFOR != null); //nula no mtx
+            ViewBag.CstNFESNIgual       = this.analise.Count(a => a.CSOSNT_DANFE_DOS_NFOR == a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null); //compara tirando os nulos
+            ViewBag.CstNFESNDif         = this.analise.Count(a => a.CSOSNT_DANFE_DOS_NFOR != a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null);
 
             return View();
 
@@ -18361,9 +18360,6 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
 
 
-
-
-
        
         /*Edição de CST de Venda varejo para Contribuinte*/
         [HttpGet]
@@ -18772,6 +18768,3248 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             //Redirecionar para a tela de graficos
             return RedirectToAction("EdtCliCstVendaVarContMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+
+        /*Edição de CST de Venda Atacado para Contribuinte*/
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaContMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de Venda Atacado para Contribuinte no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA != a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Cont_INTERNO == null && a.CST_VENDA_ATA != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA != a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Cont_INTERNO == null && a.CST_VENDA_ATA != null).ToList();
+                            break;
+
+
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA != a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Cont_INTERNO == null && a.CST_VENDA_ATA != null).ToList();
+                            break;
+
+
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA != a.Cst_Venda_Ata_Cont_INTERNO && a.CST_VENDA_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Cont_INTERNO == null && a.CST_VENDA_ATA != null).ToList();
+                            break;
+
+
+
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaContMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analise.Cst_Venda_Ata_Cont_INTERNO;
+
+                    analiseTrib = (analise.CST_VENDA_ATA == null) ? analiseTrib : int.Parse(trib.CST_VENDA_ATA);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_VENDA_ATA = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_VENDA_ATA = analise.Cst_Venda_Ata_Cont_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstVendaAtaContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaContMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstVenda = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstVenda = new SelectList(cstVenda, "descricao", "codigo");
+
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaContMassaManualModalPost(string strDados, string cstVenAtaCont)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstVenAtaCont == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstVenAtaCont select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_VENDA_ATA = (cstCodigo.ToString() != "") ? trib.CST_VENDA_ATA = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstVendaAtaContMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+
+
+        /*Edição de CST de Venda Atacado para Simples Nacional*/
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaSNMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de Venda Atacado para Simples Nacional no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL != a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Simp_Nacional_INTERNO == null && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL != a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Simp_Nacional_INTERNO == null && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL != a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Simp_Nacional_INTERNO == null && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL != a.Cst_Venda_Ata_Simp_Nacional_INTERNO && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Venda_Ata_Simp_Nacional_INTERNO == null && a.CST_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            break;
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaSNMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : analise.Cst_Venda_Ata_Simp_Nacional_INTERNO;
+
+                    analiseTrib = (analise.CST_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : int.Parse(trib.CST_VENDA_ATA_SIMP_NACIONAL);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_VENDA_ATA_SIMP_NACIONAL = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_VENDA_ATA_SIMP_NACIONAL = analise.Cst_Venda_Ata_Simp_Nacional_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstVendaAtaSNMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaSNMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstVenda = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstVenda = new SelectList(cstVenda, "descricao", "codigo");
+
+           
+
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstVendaAtaSNMassaManualModalPost(string strDados, string cstVenAtaSN)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstVenAtaSN == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstVenAtaSN select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_VENDA_ATA_SIMP_NACIONAL = (cstCodigo.ToString() != "") ? trib.CST_VENDA_ATA_SIMP_NACIONAL = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstVendaAtaSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+
+       
+        /*Edição de CST de Compra de Indústria*/
+        [HttpGet]
+        public ActionResult EdtCliCstCompIndMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de Compra de Indústria no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND != a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ind_INTERNO == null && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND != a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ind_INTERNO == null && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND != a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ind_INTERNO == null && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND != a.Cst_Compra_de_Ind_INTERNO && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_IND == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ind_INTERNO == null && a.CST_COMPRA_DE_IND != null).ToList();
+                            break;
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompIndMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_Compra_de_Ind_INTERNO == null) ? analiseRetorno : analise.Cst_Compra_de_Ind_INTERNO;
+
+                    analiseTrib = (analise.CST_COMPRA_DE_IND == null) ? analiseTrib : int.Parse(trib.CST_COMPRA_DE_IND);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_COMPRA_DE_IND = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_COMPRA_DE_IND = analise.Cst_Compra_de_Ind_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstCompIndMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompIndMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstCompra = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstCompra = new SelectList(cstCompra, "descricao", "codigo");
+
+            //Mostrar descrição da cst
+            var cstCompraDesc = (from d in db.CstIcmsGerais where d.codigo != 0 select d).ToList();
+            ViewBag.CstCompraDesc = cstCompraDesc;
+
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompIndMassaManualModalPost(string strDados, string cstCompInd)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstCompInd == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstCompInd select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_COMPRA_DE_IND = (cstCodigo.ToString() != "") ? trib.CST_COMPRA_DE_IND = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstCompIndMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+        
+        /*Edição de CST de Compra de Indústria*/
+        [HttpGet]
+        public ActionResult EdtCliCstCompSNMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de Compra de Simples Nacional no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL != a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Simp_Nacional_INTERNO == null && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL != a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Simp_Nacional_INTERNO == null && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL != a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Simp_Nacional_INTERNO == null && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL != a.Cst_Compra_de_Simp_Nacional_INTERNO && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Simp_Nacional_INTERNO == null && a.CST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            break;
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompSNMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_Compra_de_Simp_Nacional_INTERNO == null) ? analiseRetorno : analise.Cst_Compra_de_Simp_Nacional_INTERNO;
+
+                    analiseTrib = (analise.CST_COMPRA_DE_SIMP_NACIONAL == null) ? analiseTrib : int.Parse(trib.CST_COMPRA_DE_SIMP_NACIONAL);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_COMPRA_DE_SIMP_NACIONAL = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_COMPRA_DE_SIMP_NACIONAL = analise.Cst_Compra_de_Simp_Nacional_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstCompSNMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompSNMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstCompra = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstCompra = new SelectList(cstCompra, "descricao", "codigo");
+            //Mostrar descrição da cst
+            var cstCompraDesc = (from d in db.CstIcmsGerais where d.codigo != 0 select d).ToList();
+            ViewBag.CstCompraDesc = cstCompraDesc;
+
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompSNMassaManualModalPost(string strDados, string cstCompSN)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstCompSN == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstCompSN select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_COMPRA_DE_SIMP_NACIONAL = (cstCodigo.ToString() != "") ? trib.CST_COMPRA_DE_SIMP_NACIONAL = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstCompSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+       
+        /*Edição de CST de Compra de Atacado*/
+        [HttpGet]
+        public ActionResult EdtCliCstCompAtaMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de Compra de Atacado no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA != a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ata_INTERNO == null && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA != a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ata_INTERNO == null && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA != a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ata_INTERNO == null && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA != a.Cst_Compra_de_Ata_INTERNO && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_COMPRA_DE_ATA == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_Compra_de_Ata_INTERNO == null && a.CST_COMPRA_DE_ATA != null).ToList();
+                            break;
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompAtaMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_Compra_de_Ata_INTERNO == null) ? analiseRetorno : analise.Cst_Compra_de_Ata_INTERNO;
+
+                    analiseTrib = (analise.CST_COMPRA_DE_ATA == null) ? analiseTrib : int.Parse(trib.CST_COMPRA_DE_ATA);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_COMPRA_DE_ATA = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_COMPRA_DE_ATA = analise.Cst_Compra_de_Ata_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstCompAtaMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompAtaMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstCompra = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstCompra = new SelectList(cstCompra, "descricao", "codigo");
+
+            //Mostrar descrição da cst
+            var cstCompraDesc = (from d in db.CstIcmsGerais where d.codigo != 0 select d).ToList();
+            ViewBag.CstCompraDesc = cstCompraDesc;
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstCompAtaMassaManualModalPost(string strDados, string cstCompAta)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstCompAta == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstCompAta select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_COMPRA_DE_ATA = (cstCodigo.ToString() != "") ? trib.CST_COMPRA_DE_ATA = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstCompAtaMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+
+
+     
+        /*Edição de CST compra com NFE de Indústria*/
+        [HttpGet]
+        public ActionResult EdtCliCstNfeIndMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de NFE compra de Industria no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN != a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_da_Ind_FORN_INTERNO == null && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN != a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_da_Ind_FORN_INTERNO == null && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN != a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_da_Ind_FORN_INTERNO == null && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN != a.Cst_da_Nfe_da_Ind_FORN_INTERNO && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DA_IND_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_da_Ind_FORN_INTERNO == null && a.CST_DA_NFE_DA_IND_FORN != null).ToList();
+                            break;
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeIndMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_da_Nfe_da_Ind_FORN_INTERNO == null) ? analiseRetorno : analise.Cst_da_Nfe_da_Ind_FORN_INTERNO;
+
+                    analiseTrib = (analise.CST_DA_NFE_DA_IND_FORN == null) ? analiseTrib : int.Parse(trib.CST_DA_NFE_DA_IND_FORN);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_DA_NFE_DA_IND_FORN = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_DA_NFE_DA_IND_FORN = analise.Cst_da_Nfe_da_Ind_FORN_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstNfeIndMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeIndMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstCompra = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstCompra = new SelectList(cstCompra, "descricao", "codigo");
+
+            //Mostrar descrição da cst
+            var cstCompraDesc = (from d in db.CstIcmsGerais where d.codigo != 0 select d).ToList();
+            ViewBag.CstCompraDesc = cstCompraDesc;
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeIndMassaManualModalPost(string strDados, string cstNfeInd)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstNfeInd == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstNfeInd select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_DA_NFE_DA_IND_FORN = (cstCodigo.ToString() != "") ? trib.CST_DA_NFE_DA_IND_FORN = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstNfeIndMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+        
+        /*Edição de CST compra com NFE de Atacado*/
+        [HttpGet]
+        public ActionResult EdtCliCstNfeAtaMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de NFE compra de Atacado no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN != a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_de_Ata_FORn_INTERNO == null && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN != a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_de_Ata_FORn_INTERNO == null && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN != a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_de_Ata_FORn_INTERNO == null && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN != a.Cst_da_Nfe_de_Ata_FORn_INTERNO && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CST_DA_NFE_DE_ATA_FORN == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.Cst_da_Nfe_de_Ata_FORn_INTERNO == null && a.CST_DA_NFE_DE_ATA_FORN != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeAtaMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.Cst_da_Nfe_de_Ata_FORn_INTERNO == null) ? analiseRetorno : analise.Cst_da_Nfe_de_Ata_FORn_INTERNO;
+
+                    analiseTrib = (analise.CST_DA_NFE_DE_ATA_FORN == null) ? analiseTrib : int.Parse(trib.CST_DA_NFE_DE_ATA_FORN);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CST_DA_NFE_DE_ATA_FORN = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CST_DA_NFE_DE_ATA_FORN = analise.Cst_da_Nfe_de_Ata_FORn_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstNfeAtaMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeAtaMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstCompra = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstCompra = new SelectList(cstCompra, "descricao", "codigo");
+
+            //Mostrar descrição da cst
+            var cstCompraDesc = (from d in db.CstIcmsGerais where d.codigo != 0 select d).ToList();
+            ViewBag.CstCompraDesc = cstCompraDesc;
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeAtaMassaManualModalPost(string strDados, string cstNfeAta)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstNfeAta == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstNfeAta select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CST_DA_NFE_DE_ATA_FORN = (cstCodigo.ToString() != "") ? trib.CST_DA_NFE_DE_ATA_FORN = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstNfeAtaMassa", new { param = resultado, qtdSalvos = regSalvos });
+        }
+
+
+        
+        /*Edição de CST compra com NFE de Indústria*/
+        [HttpGet]
+        public ActionResult EdtCliCstNfeSNMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "CST de NFE compra de Simples Nacional no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            /*Para tipar*/ /*Ponto de ajuste: verificar se houve alteração na lista se houver instancia novamente caso contrario passa*/
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista carregue novamente
+             */
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise;
+                TempData.Keep("analise");
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                TempData.Keep("analise");
+            }
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR != a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.CsosntdaNfedoSnFOR_INTERNO == null && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Diferentes":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR != a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.CsosntdaNfedoSnFOR_INTERNO == null && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulos Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR != a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.CsosntdaNfedoSnFOR_INTERNO == null && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+
+
+
+                    }
+                    break;
+                case "Nulos MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR != a.CsosntdaNfedoSnFOR_INTERNO && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.CSOSNT_DANFE_DOS_NFOR == null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.CsosntdaNfedoSnFOR_INTERNO == null && a.CSOSNT_DANFE_DOS_NFOR != null).ToList();
+                            break;
+
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeSNMassaModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Objeto do tipo tributação empresa
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+            string resultado = ""; //variavel auxiliar;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+
+            //Variaveis auxiliares
+            int regSalv = 0; //reg salvos
+            int regNsalv = 0; //reg não salvos
+            int? analiseRetorno = 0; //atribui zero ao valor
+            int? analiseTrib = 0; //atribui zero ao valor
+            try
+            {
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                    //pegar valores
+                    /*Caso esteja nulo o retorno do valor a variavel continuar com 0 evitando erro de valores nulos*/
+                    analiseRetorno = (analise.CsosntdaNfedoSnFOR_INTERNO == null) ? analiseRetorno : analise.CsosntdaNfedoSnFOR_INTERNO;
+
+                    analiseTrib = (analise.CSOSNT_DANFE_DOS_NFOR == null) ? analiseTrib : int.Parse(trib.CSOSNT_DANFE_DOS_NFOR);
+
+
+                    //analisar se já são iguais
+                    if (analiseTrib == analiseRetorno)
+                    {
+                        regNsalv++; //se são iguais não salva
+                    }
+                    else
+                    { //se são diferentes
+                        if (analiseRetorno == 0)
+                        {  //se o valor continnuar 0 atribui-se ao valor na base de dados nulo
+                            trib.CSOSNT_DANFE_DOS_NFOR = null;
+                        }
+                        else
+                        {
+                            //caso contrario atribui o valor procurado na analise ao objeto instanciado
+                            trib.CSOSNT_DANFE_DOS_NFOR = analise.CsosntdaNfedoSnFOR_INTERNO.ToString();
+                        }
+
+                        db.SaveChanges();
+                        regSalv++; //contagem de registros salvos
+                    }
+
+
+                }
+                TempData["analise"] = null;
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstNfeSNMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeSNMassaManualModal(string strDados)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            //Objeto do tipo tributação empresa
+            //TributacaoEmpresa trib = new TributacaoEmpresa();
+            List<TributacaoEmpresa> trib;
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //retira o elemento vazio do array deixando somente os id dos registros
+            idTrib = idTrib.Where(item => item != "").ToArray();
+            trib = new List<TributacaoEmpresa>();
+
+            for (int i = 0; i < idTrib.Length; i++)
+            {
+                //converter em inteiro
+                int idTrb = int.Parse(idTrib[i]);
+
+                trib.Add(db.TributacaoEmpresas.Find(idTrb));
+
+            }
+            //montar dropdown list para as cst
+            var cstCompra = db.CstIcmsGerais.Select(c => new
+            {
+                codigo = c.codigo,
+                descricao = c.descricao
+
+
+            }).ToList();
+
+            ViewBag.CstCompra = new SelectList(cstCompra, "descricao", "codigo");
+
+            //Mostrar descrição da cst
+            var cstCompraDesc = (from d in db.CstIcmsGerais where d.codigo != 0 select d).ToList();
+            ViewBag.CstCompraDesc = cstCompraDesc;
+
+            return View(trib);
+        }
+
+
+        [HttpGet]
+        public ActionResult EdtCliCstNfeSNMassaManualModalPost(string strDados, string cstNfeSN)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //variavel auxiliar para receber o codigo do cst
+            int? cstCodigo = 0;
+
+            //pegar o codigo da cst
+            cstCodigo = (cstNfeSN == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == cstNfeSN select a.codigo).FirstOrDefault();
+
+            //separar a String em um array
+            string[] idTrib = strDados.Split(',');
+
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+            //retira o elemento vazio do array
+            idTrib = idTrib.Where(item => item != "").ToArray();
+
+            //objeto tributação
+            TributacaoEmpresa trib = new TributacaoEmpresa();
+
+
+            try
+            {
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    trib.CSOSNT_DANFE_DOS_NFOR = (cstCodigo.ToString() != "") ? trib.CSOSNT_DANFE_DOS_NFOR = cstCodigo.ToString() : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["analise"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
+            }
+
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("EdtCliCstNfeSNMassa", new { param = resultado, qtdSalvos = regSalvos });
         }
 
         //Recebe os parametros e faz a busca na tabela por codigo de barras e cest

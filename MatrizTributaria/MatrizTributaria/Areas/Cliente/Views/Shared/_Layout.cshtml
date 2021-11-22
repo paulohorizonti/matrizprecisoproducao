@@ -2591,9 +2591,9 @@
                                         google.charts.setOnLoadCallback(cstEntPisCofins); /*ok*/
                                         google.charts.setOnLoadCallback(cstSaiPisCofins); /*ok*/
                                         google.charts.setOnLoadCallback(cstVendaVarejoCF);/*ok*/
-                                        google.charts.setOnLoadCallback(cstVendaVarejoCont);
-                                        google.charts.setOnLoadCallback(cstVendaAtaCont);
-                                        google.charts.setOnLoadCallback(cstVendaAtaSN);
+                                        google.charts.setOnLoadCallback(cstVendaVarejoCont);/*OK*/
+                                        google.charts.setOnLoadCallback(cstVendaAtaCont); /*ok*/
+                                        google.charts.setOnLoadCallback(cstVendaAtaSN); /*ok*/
 
                                      /*ok*/
                                      function cstEntPisCofins() {
@@ -2765,7 +2765,7 @@
 
 
                                         }
-
+                                        /*OK */
                                      function cstVendaVarejoCont() {
                                             var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
@@ -2821,7 +2821,7 @@
                                             chart.draw(data, options);
                                         }
 
-
+                                     /*ok */
                                      function cstVendaAtaCont()
                                         {
                                             var data = google.visualization.arrayToDataTable([
@@ -2834,6 +2834,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -2842,12 +2843,44 @@
                                                 legend: 'true'
                                             };
 
-                                            var chart = new google.visualization.PieChart(document.getElementById('cstVendaAtaCont'));
-                                            chart.draw(data, options);
+                                         var chart = new google.visualization.PieChart(document.getElementById('cstVendaAtaCont'));
+                                         //selecionando a parte do grafico para chamar a view correspondente
+                                         function selectHandler() {
+                                             var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                             //se vier alguma coisa
+                                             if (selectedItem) {
+                                                 var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                 //agora analisa essa variavel para ver qual o dado está contida
+                                                 if (topping) {
+                                                     bloqueioTela();
+
+                                                     /*Função para chamar a action com os dados solicitados via ajax*/
+                                                     $.ajax({
+
+                                                         data: { id: topping },
+                                                         types: "GET",
+                                                         processData: true,
+                                                         success: function () {
+                                                             //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                             window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaAtaContMassa?opcao=' + topping;
+                                                         }
+
+                                                     }); //fim ajax
+                                                 }//fim if topping
+
+                                             }//fim if selecteditem
+
+                                         }//fim da função handler
+
+                                         //chmando a view
+                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
+                                         chart.draw(data, options);
 
 
                                         }
 
+                                     /*ok*/
                                      function cstVendaAtaSN()
                                         {
                                              var data = google.visualization.arrayToDataTable([
@@ -2860,6 +2893,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -2868,8 +2902,39 @@
                                                 legend: 'true'
                                             };
 
-                                            var chart = new google.visualization.PieChart(document.getElementById('cstVendaAtaSN'));
-                                            chart.draw(data, options);
+                                         var chart = new google.visualization.PieChart(document.getElementById('cstVendaAtaSN'));
+                                         //selecionando a parte do grafico para chamar a view correspondente
+                                         function selectHandler() {
+                                             var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                             //se vier alguma coisa
+                                             if (selectedItem) {
+                                                 var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                 //agora analisa essa variavel para ver qual o dado está contida
+                                                 if (topping) {
+                                                     bloqueioTela();
+
+                                                     /*Função para chamar a action com os dados solicitados via ajax*/
+                                                     $.ajax({
+
+                                                         data: { id: topping },
+                                                         types: "GET",
+                                                         processData: true,
+                                                         success: function () {
+                                                             //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                             window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaAtaSNMassa?opcao=' + topping;
+                                                         }
+
+                                                     }); //fim ajax
+                                                 }//fim if topping
+
+                                             }//fim if selecteditem
+
+                                         }//fim da função handler
+
+                                         //chmando a view
+                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
+                                         chart.draw(data, options);
 
 
                                         }
@@ -2884,7 +2949,9 @@
                                 if (ViewBag.Title == "AnaliseCSTEnt")
                                 {
                                     <script src="~/Areas/Cliente/Scripts/Graficos/jquery-1.12.4.min.js"></script>
-
+                                    @Scripts.Render("~/bundles/jquerymaskedinput")
+                                    @Scripts.Render("~/bundles/jquerymask")
+                                    <script src="~/Scripts/admin/jquery.blockUI.js"></script>
                                     <script src="~/Areas/Cliente/Scripts/Graficos/bootstrap.bundle.min.js"></script>
 
                                     <script>
@@ -2892,19 +2959,19 @@
                                         {
                                             google.charts.load("current", { packages: ["corechart"] });
 
-                                            google.charts.setOnLoadCallback(cstCompInd);
-                                            google.charts.setOnLoadCallback(cstCompAta);
-                                            google.charts.setOnLoadCallback(cstCompSN);
+                                            google.charts.setOnLoadCallback(cstCompInd); /*ok*/
+                                            google.charts.setOnLoadCallback(cstCompAta);/*ok*/
+                                            google.charts.setOnLoadCallback(cstCompSN);/*ok*/
 
-                                            google.charts.setOnLoadCallback(cstNfeInd);
-                                            google.charts.setOnLoadCallback(cstNfeAta);
+                                            google.charts.setOnLoadCallback(cstNfeInd); /*ok*/
+                                            google.charts.setOnLoadCallback(cstNfeAta); /*ok*/
                                             google.charts.setOnLoadCallback(cstNfeSN);
 
 
 
-                                            /*CST Compra de industria */
+                                            /*ok */
                                             function cstCompInd()
-                                        {
+                                           {
                                              var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
                                                 ['Iguais', @Html.Raw(ViewBag.CstCompraIndustriaIgual)],
@@ -2915,6 +2982,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -2924,12 +2992,43 @@
                                             };
 
                                                 var chart = new google.visualization.PieChart(document.getElementById('cstCompInd'));
+                                                //selecionando a parte do grafico para chamar a view correspondente
+                                                function selectHandler() {
+                                                    var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                    //se vier alguma coisa
+                                                    if (selectedItem) {
+                                                        var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                        //agora analisa essa variavel para ver qual o dado está contida
+                                                        if (topping) {
+                                                            bloqueioTela();
+
+                                                            /*Função para chamar a action com os dados solicitados via ajax*/
+                                                            $.ajax({
+
+                                                                data: { id: topping },
+                                                                types: "GET",
+                                                                processData: true,
+                                                                success: function () {
+                                                                    //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                    window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompIndMassa?opcao=' + topping;
+                                                                }
+
+                                                            }); //fim ajax
+                                                        }//fim if topping
+
+                                                    }//fim if selecteditem
+
+                                                }//fim da função handler
+
+                                                //chmando a view
+                                                google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
 
                                             }
 
-                                        /*CST Compra de Simples nacional*/
+                                            /*ok*/
                                             function cstCompSN()
                                         {
                                              var data = google.visualization.arrayToDataTable([
@@ -2942,6 +3041,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -2951,14 +3051,45 @@
                                             };
 
                                                 var chart = new google.visualization.PieChart(document.getElementById('cstCompSN'));
+                                                //selecionando a parte do grafico para chamar a view correspondente
+                                                function selectHandler() {
+                                                    var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                    //se vier alguma coisa
+                                                    if (selectedItem) {
+                                                        var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                        //agora analisa essa variavel para ver qual o dado está contida
+                                                        if (topping) {
+                                                            bloqueioTela();
+
+                                                            /*Função para chamar a action com os dados solicitados via ajax*/
+                                                            $.ajax({
+
+                                                                data: { id: topping },
+                                                                types: "GET",
+                                                                processData: true,
+                                                                success: function () {
+                                                                    //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                    window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompSNMassa?opcao=' + topping;
+                                                                }
+
+                                                            }); //fim ajax
+                                                        }//fim if topping
+
+                                                    }//fim if selecteditem
+
+                                                }//fim da função handler
+
+                                                //chmando a view
+                                                google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
 
                                             }
 
-                                             /*CST Compra de Atacado*/
+                                            /*ok */
                                             function cstCompAta()
-                                        {
+                                          {
                                              var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
                                                 ['Iguais', @Html.Raw(ViewBag.CstCompraAtacadoIgual)],
@@ -2969,6 +3100,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -2978,15 +3110,43 @@
                                             };
 
                                                 var chart = new google.visualization.PieChart(document.getElementById('cstCompAta'));
+                                                //selecionando a parte do grafico para chamar a view correspondente
+                                                function selectHandler() {
+                                                    var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                    //se vier alguma coisa
+                                                    if (selectedItem) {
+                                                        var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                        //agora analisa essa variavel para ver qual o dado está contida
+                                                        if (topping) {
+                                                            bloqueioTela();
+
+                                                            /*Função para chamar a action com os dados solicitados via ajax*/
+                                                            $.ajax({
+
+                                                                data: { id: topping },
+                                                                types: "GET",
+                                                                processData: true,
+                                                                success: function () {
+                                                                    //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                    window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompAtaMassa?opcao=' + topping;
+                                                                }
+
+                                                            }); //fim ajax
+                                                        }//fim if topping
+
+                                                    }//fim if selecteditem
+
+                                                }//fim da função handler
+
+                                                //chmando a view
+                                                google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
 
                                             }
 
-
-
-
-                                            /*CST NFE Industria */
+                                            /*ok*/
                                             function cstNfeInd()
                                         {
                                              var data = google.visualization.arrayToDataTable([
@@ -2999,6 +3159,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -3008,14 +3169,45 @@
                                             };
 
                                                 var chart = new google.visualization.PieChart(document.getElementById('cstNfeInd'));
+                                                //selecionando a parte do grafico para chamar a view correspondente
+                                                function selectHandler() {
+                                                    var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                    //se vier alguma coisa
+                                                    if (selectedItem) {
+                                                        var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                        //agora analisa essa variavel para ver qual o dado está contida
+                                                        if (topping) {
+                                                            bloqueioTela();
+
+                                                            /*Função para chamar a action com os dados solicitados via ajax*/
+                                                            $.ajax({
+
+                                                                data: { id: topping },
+                                                                types: "GET",
+                                                                processData: true,
+                                                                success: function () {
+                                                                    //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                    window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeIndMassa?opcao=' + topping;
+                                                                }
+
+                                                            }); //fim ajax
+                                                        }//fim if topping
+
+                                                    }//fim if selecteditem
+
+                                                }//fim da função handler
+
+                                                //chmando a view
+                                                google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
 
                                             }
 
-                                              /*CST NFE Atacado */
+                                            /*ok */
                                             function cstNfeAta()
-                                        {
+                                            {
                                              var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
                                                 ['Iguais', @Html.Raw(ViewBag.CstNFEAtaIgual)],
@@ -3026,6 +3218,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -3035,12 +3228,42 @@
                                             };
 
                                                 var chart = new google.visualization.PieChart(document.getElementById('cstNfeAta'));
+                                                //selecionando a parte do grafico para chamar a view correspondente
+                                                function selectHandler() {
+                                                    var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                    //se vier alguma coisa
+                                                    if (selectedItem) {
+                                                        var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                        //agora analisa essa variavel para ver qual o dado está contida
+                                                        if (topping) {
+                                                            bloqueioTela();
+
+                                                            /*Função para chamar a action com os dados solicitados via ajax*/
+                                                            $.ajax({
+
+                                                                data: { id: topping },
+                                                                types: "GET",
+                                                                processData: true,
+                                                                success: function () {
+                                                                    //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                    window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeAtaMassa?opcao=' + topping;
+                                                                }
+
+                                                            }); //fim ajax
+                                                        }//fim if topping
+
+                                                    }//fim if selecteditem
+
+                                                }//fim da função handler
+
+                                                //chmando a view
+                                                google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
 
                                         }
 
-                                             /*CSosnt NFE For Simples Nacional*/
                                             function cstNfeSN()
                                             {
                                                  var data = google.visualization.arrayToDataTable([
@@ -3052,7 +3275,8 @@
                                                 ]);
 
                                             var options = {
-                                                    title: 'Relação Cliente x Matriz',
+                                                title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                     pieHole: 0.3,
                                                     pieSliceTextStyle: {
                                                         color: 'black',
@@ -3062,6 +3286,37 @@
                                                 };
 
                                                 var chart = new google.visualization.PieChart(document.getElementById('cstNfeSN'));
+                                                //selecionando a parte do grafico para chamar a view correspondente
+                                                function selectHandler() {
+                                                    var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                    //se vier alguma coisa
+                                                    if (selectedItem) {
+                                                        var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                        //agora analisa essa variavel para ver qual o dado está contida
+                                                        if (topping) {
+                                                            bloqueioTela();
+
+                                                            /*Função para chamar a action com os dados solicitados via ajax*/
+                                                            $.ajax({
+
+                                                                data: { id: topping },
+                                                                types: "GET",
+                                                                processData: true,
+                                                                success: function () {
+                                                                    //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                    window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeSNMassa?opcao=' + topping;
+                                                                }
+
+                                                            }); //fim ajax
+                                                        }//fim if topping
+
+                                                    }//fim if selecteditem
+
+                                                }//fim da função handler
+
+                                                //chmando a view
+                                                google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                                 chart.draw(data, options);
 
 
@@ -3223,13 +3478,13 @@
     <script>
 
         $(document).ready(function () {
-            
+
             //fim edição em massa
             //cstDosEdits - vindo dos graficos
             $("#CstEntradaPisCofins").change(function () {
                 $("#cstEntPC").val($("#CstEntradaPisCofins").val());
             });
-            
+
             $("#CstSaiPisCofins").change(function () {
                 $("#cstSaiPC").val($("#CstSaiPisCofins").val());
             });
@@ -3237,8 +3492,13 @@
                 $("#cstVen").val($("#CstVenda").val());
             });
 
+            $("#CstCompra").change(function () {
+                $("#cstComp").val($("#CstCompra").val());
+            });
 
-            
+
+
+
         });
     </script>
 

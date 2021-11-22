@@ -1241,8 +1241,8 @@
                                          google.charts.load("current", { packages: ["corechart"] });
                                          google.charts.setOnLoadCallback(aliEntPis); /*OK*/
                                          google.charts.setOnLoadCallback(aliSaiPis); /*ok*/
-                                         google.charts.setOnLoadCallback(aliEntCofins);/*Fazendo*/
-                                         google.charts.setOnLoadCallback(aliSaidaCofins);
+                                         google.charts.setOnLoadCallback(aliEntCofins);/*ok*/
+                                         google.charts.setOnLoadCallback(aliSaidaCofins);/*ok*/
 
                                           /*OK */
                                          function aliEntPis() {
@@ -1357,7 +1357,7 @@
                                                     chart.draw(data, options);
                                          }//fim ali saida pis
 
-                                       
+                                         /*ok */
                                          function aliEntCofins() {
                                              var data = google.visualization.arrayToDataTable([
                                                     ['Aliquota', 'Valores'],
@@ -1412,7 +1412,7 @@
                                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                              chart.draw(data, options);
                                          }//fim ali entrada cofins
-
+                                         /*ok */
                                          function aliSaidaCofins() {
                                                  var data = google.visualization.arrayToDataTable([
                                                      ['Aliquota', 'Valores'],
@@ -1493,6 +1493,7 @@
                                                  google.charts.setOnLoadCallback(prodDesc);
                                                  google.charts.setOnLoadCallback(prodNcm);
                                                  google.charts.setOnLoadCallback(prodCest);
+                                                 google.charts.setOnLoadCallback(prodCorrespondente);
 
                                                  function prodDesc() {
                                                      var data = google.visualization.arrayToDataTable([
@@ -1500,6 +1501,7 @@
                                                          ['Descrição igual', @Html.Raw(ViewBag.ProdDescIguais)],
                                                          ['Descrição diferente', @Html.Raw(ViewBag.ProdDescDif)],
                                                          ['Descrição nula', @Html.Raw(ViewBag.ProdDescNull)]
+
 
                                                      ]);
 
@@ -1657,6 +1659,58 @@
                                                      google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                                      chart.draw(data, options);
                                                  }//fim prod cest
+
+                                                 function prodCorrespondente() {
+                                                     var data = google.visualization.arrayToDataTable([
+                                                         ['Produto', 'Código de Barras'],
+                                                         ['Correspondente', @Html.Raw(ViewBag.ComCorrespondencia)],
+                                                         ['Não Correspondente', @Html.Raw(ViewBag.SemCorrespondencia)]
+
+                                                     ]);
+                                                     var options = {
+                                                         title: 'Relação Cliente x Matriz',
+                                                         sliceVisibilityThreshold: .00001,
+                                                         pieHole: 0.3,
+                                                         pieSliceTextStyle: {
+                                                             color: 'black',
+                                                             fontSize: '10'
+                                                         },
+                                                         legend: 'true'
+                                                     };
+                                                     var chart = new google.visualization.PieChart(document.getElementById('prodCorrespondente'));
+                                                     //selecionando a parte do grafico para chamar a view correspondente
+                                                     function selectHandler() {
+                                                         var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                         //se vier alguma coisa
+                                                         if (selectedItem) {
+                                                             var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                             //agora analisa essa variavel para ver qual o dado está contida
+                                                             if (topping) {
+                                                                 bloqueioTela();
+
+                                                                 /*Função para chamar a action com os dados solicitados via ajax*/
+                                                                 $.ajax({
+
+                                                                     data: { id: topping },
+                                                                     types: "GET",
+                                                                     processData: true,
+                                                                     success: function () {
+                                                                         window.location.href = '/Cliente/TributacaoEmpresa/TabelaProduto2?opcao=' + topping;
+                                                                     }
+
+                                                                 }); //fim ajax
+                                                             }//fim if topping
+
+                                                         }//fim if selecteditem
+
+                                                     }//fim da função handler
+
+                                                     //chmando a view
+                                                     google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
+                                                     chart.draw(data, options);
+
+                                                 }
 
                                              });
 
@@ -2524,6 +2578,9 @@
                             if (@ViewBag.Title == "AnaliseCST")
                             {
                                 <script src="~/Areas/Cliente/Scripts/Graficos/jquery-1.12.4.min.js"></script>
+                                @Scripts.Render("~/bundles/jquerymaskedinput")
+                                @Scripts.Render("~/bundles/jquerymask")
+                                <script src="~/Scripts/admin/jquery.blockUI.js"></script>
                                 <script src="~/Areas/Cliente/Scripts/Graficos/bootstrap.bundle.min.js"></script>
 
                                 <script>
@@ -2531,15 +2588,15 @@
                                     $(document).ready(function () {
 
                                         google.charts.load("current", { packages: ["corechart"] });
-                                        google.charts.setOnLoadCallback(cstEntPisCofins);
-                                        google.charts.setOnLoadCallback(cstSaiPisCofins);
-                                        google.charts.setOnLoadCallback(cstVendaVarejoCF);
-                                        google.charts.setOnLoadCallback(cstVendaVarejoCont);
+                                        google.charts.setOnLoadCallback(cstEntPisCofins); /*ok*/
+                                        google.charts.setOnLoadCallback(cstSaiPisCofins); /*ok*/
+                                        google.charts.setOnLoadCallback(cstVendaVarejoCF);/*ok*/
+                                        google.charts.setOnLoadCallback(cstVendaVarejoCont);/*OK*/
                                         google.charts.setOnLoadCallback(cstVendaAtaCont);
                                         google.charts.setOnLoadCallback(cstVendaAtaSN);
 
-
-                                        function cstEntPisCofins() {
+                                     /*ok*/
+                                     function cstEntPisCofins() {
                                             var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
                                                 ['Iguais', @Html.Raw(ViewBag.CstEntradaPisCofinsIgual)],
@@ -2550,6 +2607,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                 color: 'black',
@@ -2559,9 +2617,41 @@
                                             };
 
                                             var chart = new google.visualization.PieChart(document.getElementById('cstEntPisCofins'));
+                                            //selecionando a parte do grafico para chamar a view correspondente
+                                            function selectHandler() {
+                                                var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                                //se vier alguma coisa
+                                                if (selectedItem) {
+                                                    var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                    //agora analisa essa variavel para ver qual o dado está contida
+                                                    if (topping) {
+                                                        bloqueioTela();
+
+                                                        /*Função para chamar a action com os dados solicitados via ajax*/
+                                                        $.ajax({
+
+                                                            data: { id: topping },
+                                                            types: "GET",
+                                                            processData: true,
+                                                            success: function () {
+                                                                //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                                window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstEntradaPisCofinsMassa?opcao=' + topping;
+                                                            }
+
+                                                        }); //fim ajax
+                                                    }//fim if topping
+
+                                                }//fim if selecteditem
+
+                                            }//fim da função handler
+
+                                            //chmando a view
+                                            google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
                                         }
 
+                                     /*ok*/
                                      function cstSaiPisCofins() {
                                                     var data = google.visualization.arrayToDataTable([
                                                         ['CST', 'Valores'],
@@ -2573,6 +2663,7 @@
 
                                                     var options = {
                                                         title: 'Relação Cliente x Matriz',
+                                                        sliceVisibilityThreshold: .00001,
                                                         pieHole: 0.3,
                                                         pieSliceTextStyle: {
                                                         color: 'black',
@@ -2581,11 +2672,43 @@
                                                         legend: 'true'
                                                     };
 
-                                                 var chart = new google.visualization.PieChart(document.getElementById('cstSaiPisCofins'));
-                                                    chart.draw(data, options);
+                                         var chart = new google.visualization.PieChart(document.getElementById('cstSaiPisCofins'));
+                                         //selecionando a parte do grafico para chamar a view correspondente
+                                         function selectHandler() {
+                                             var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                             //se vier alguma coisa
+                                             if (selectedItem) {
+                                                 var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                 //agora analisa essa variavel para ver qual o dado está contida
+                                                 if (topping) {
+                                                     bloqueioTela();
+
+                                                     /*Função para chamar a action com os dados solicitados via ajax*/
+                                                     $.ajax({
+
+                                                         data: { id: topping },
+                                                         types: "GET",
+                                                         processData: true,
+                                                         success: function () {
+                                                             //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                             window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstSaidaPisCofinsMassa?opcao=' + topping;
+                                                         }
+
+                                                     }); //fim ajax
+                                                 }//fim if topping
+
+                                             }//fim if selecteditem
+
+                                         }//fim da função handler
+
+                                         //chmando a view
+                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
+                                         chart.draw(data, options);
                                      }
 
-                                        function cstVendaVarejoCF()
+                                     /*ok */
+                                     function cstVendaVarejoCF()
                                         {
                                              var data = google.visualization.arrayToDataTable([
                                                         ['CST', 'Valores'],
@@ -2597,6 +2720,7 @@
 
                                                     var options = {
                                                         title: 'Relação Cliente x Matriz',
+                                                        sliceVisibilityThreshold: .00001,
                                                         pieHole: 0.3,
                                                         pieSliceTextStyle: {
                                                         color: 'black',
@@ -2605,12 +2729,44 @@
                                                         legend: 'true'
                                                     };
 
-                                            var chart = new google.visualization.PieChart(document.getElementById('cstVendaVarejoCF'));
+                                         var chart = new google.visualization.PieChart(document.getElementById('cstVendaVarejoCF'));
+                                         //selecionando a parte do grafico para chamar a view correspondente
+                                         function selectHandler() {
+                                             var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                             //se vier alguma coisa
+                                             if (selectedItem) {
+                                                 var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                 //agora analisa essa variavel para ver qual o dado está contida
+                                                 if (topping) {
+                                                     bloqueioTela();
+
+                                                     /*Função para chamar a action com os dados solicitados via ajax*/
+                                                     $.ajax({
+
+                                                         data: { id: topping },
+                                                         types: "GET",
+                                                         processData: true,
+                                                         success: function () {
+                                                             //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                             window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaVarCFMassa?opcao=' + topping;
+                                                         }
+
+                                                     }); //fim ajax
+                                                 }//fim if topping
+
+                                             }//fim if selecteditem
+
+                                         }//fim da função handler
+
+                                         //chmando a view
+                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
 
-                                          }
-                                        function cstVendaVarejoCont() {
+                                        }
+                                        /*OK */
+                                     function cstVendaVarejoCont() {
                                             var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
                                                 ['Iguais', @Html.Raw(ViewBag.CstVendaVarejoContIgual)],
@@ -2621,6 +2777,7 @@
 
                                             var options = {
                                                 title: 'Relação Cliente x Matriz',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 pieSliceTextStyle: {
                                                     color: 'black',
@@ -2629,12 +2786,43 @@
                                                 legend: 'true'
                                             };
 
-                                            var chart = new google.visualization.PieChart(document.getElementById('cstVendaVarejoCont'));
+                                         var chart = new google.visualization.PieChart(document.getElementById('cstVendaVarejoCont'));
+                                         //selecionando a parte do grafico para chamar a view correspondente
+                                         function selectHandler() {
+                                             var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                             //se vier alguma coisa
+                                             if (selectedItem) {
+                                                 var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                                 //agora analisa essa variavel para ver qual o dado está contida
+                                                 if (topping) {
+                                                     bloqueioTela();
+
+                                                     /*Função para chamar a action com os dados solicitados via ajax*/
+                                                     $.ajax({
+
+                                                         data: { id: topping },
+                                                         types: "GET",
+                                                         processData: true,
+                                                         success: function () {
+                                                             //Encaminha para a action para editar reducao base de calc icms venda varejo para contribuinte
+                                                             window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaVarContMassa?opcao=' + topping;
+                                                         }
+
+                                                     }); //fim ajax
+                                                 }//fim if topping
+
+                                             }//fim if selecteditem
+
+                                         }//fim da função handler
+
+                                         //chmando a view
+                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
                                         }
 
 
-                                        function cstVendaAtaCont()
+                                     function cstVendaAtaCont()
                                         {
                                             var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
@@ -2659,7 +2847,8 @@
 
 
                                         }
-                                        function cstVendaAtaSN()
+
+                                     function cstVendaAtaSN()
                                         {
                                              var data = google.visualization.arrayToDataTable([
                                                 ['CST', 'Valores'],
@@ -3026,6 +3215,31 @@
             });
 
         }
+    </script>
+
+
+
+    <!--Mostrar descrição CST - Create da Tributação-->
+    <script>
+
+        $(document).ready(function () {
+            
+            //fim edição em massa
+            //cstDosEdits - vindo dos graficos
+            $("#CstEntradaPisCofins").change(function () {
+                $("#cstEntPC").val($("#CstEntradaPisCofins").val());
+            });
+            
+            $("#CstSaiPisCofins").change(function () {
+                $("#cstSaiPC").val($("#CstSaiPisCofins").val());
+            });
+            $("#CstVenda").change(function () {
+                $("#cstVen").val($("#CstVenda").val());
+            });
+
+
+            
+        });
     </script>
 
 

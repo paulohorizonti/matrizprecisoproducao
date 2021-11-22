@@ -68,7 +68,7 @@ namespace MatrizTributaria.Controllers
             }
             catch(Exception e)
             {
-               
+                var erro = e.ToString();
                 int par = 7;
                 return RedirectToAction("../Erro/ErroLogin", new { param = par });
             }

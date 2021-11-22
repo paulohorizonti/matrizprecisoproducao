@@ -1,20 +1,21 @@
-﻿@using PagedList.Mvc
+﻿
+@using PagedList.Mvc
 @using MatrizTributaria.Areas.Cliente.Models
 @model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
 @{
-    ViewBag.Title = "EdtCliAliqSaidaPisMassa";
+    ViewBag.Title = "EdtCliCstNfeAtaMassa";
 
 }
 
-@RenderPage("~/Areas/Cliente/Views/Acoes/CardInicial.cshtml") <!--Renderiza o card inicial-->
+@RenderPage("~/Areas/Cliente/Views/Acoes/CardInicialCst.cshtml") <!--Renderiza o card inicial-->
 
 
 <div id="card-analise" class="container pr-container-2 pr-card-cad">
     <div class="card">
         <div class="card-header">
-            ANALISE:Produto <strong>"@ViewBag.Mensagem"</strong> <a data-toggle="tooltip" data-placement="right" title="Ir para Gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("AnalisePisCofins","TributacaoEmpresa")"><i style="font-size:1.3em;" class="fas fa-chart-pie"></i>  </a>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="edtSelAliqSaiPisCli" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="edtSelAliqSaiPisCliManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
+            ANALISE:Produto <strong>"@ViewBag.Mensagem"</strong> <a data-toggle="tooltip" data-placement="right" title="Ir para Gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("AnaliseCSTEnt","TributacaoEmpresa")"><i style="font-size:1.3em;" class="fas fa-chart-pie"></i>  </a>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="edtSelCstNfeAtaCli" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="edtSelCstNfeAtaCliManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
 
         </div><!--fim do cabeçalho-->
 
@@ -27,10 +28,10 @@
                         <!--Caixa Geral-->
                         <div class="scrolling-wrapper">
                             <div style="min-width:98.5%; height:inherit;" class="box">
-                                <table id="tbl-edtAlqSaiPis" class="table table table-light table-hover thead-dark table-striped pr-table">
+                                <table id="tbl-edtCstNfeAta" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="6" class="pr-fonte2" scope="col">Analise Alíquota</th>
+                                            <th style="text-align:center; border:none;" colspan="6" class="pr-fonte2" scope="col">Analise CST</th>
 
                                         </tr>
                                         <tr class="pr-td">
@@ -47,10 +48,10 @@
                                                 Cest
                                             </th>
                                             <th>
-                                                Alíquota no Cliente
+                                                CST no Cliente
                                             </th>
                                             <th>
-                                                Alíquota no MTX
+                                                CST no MTX
                                             </th>
 
 
@@ -73,52 +74,42 @@
                                                     @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
                                                 </td>
 
-                                                @if (item.ALIQ_SAIDA_PIS == null)
+                                                @if (item.CST_DA_NFE_DE_ATA_FORN == null)
                                                 {
                                                     <td style="text-align:center; width:10%;">
-                                                        @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_PIS)
+                                                        @Html.DisplayFor(modelItem => item.CST_DA_NFE_DE_ATA_FORN)
                                                     </td>
                                                 }
                                                 else
                                                 {
-                                                    if (item.ALIQ_SAIDA_PIS > item.Aliq_Saida_Pis_INTERNO)
+                                                    if (item.CST_DA_NFE_DE_ATA_FORN != item.Cst_da_Nfe_de_Ata_FORn_INTERNO && item.CST_DA_NFE_DE_ATA_FORN != null)
                                                     {
 
                                                         <td style="text-align:center; width:10%;" class="pr-td-maior">
-                                                            @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_PIS)
+                                                            @Html.DisplayFor(modelItem => item.CST_DA_NFE_DE_ATA_FORN)
                                                         </td>
                                                     }
                                                     else
                                                     {
-                                                        if (item.ALIQ_SAIDA_PIS < item.Aliq_Saida_Pis_INTERNO)
+                                                        if (item.CST_DA_NFE_DE_ATA_FORN == item.Cst_da_Nfe_de_Ata_FORn_INTERNO && item.CST_DA_NFE_DE_ATA_FORN != null)
                                                         {
                                                             <td style="text-align:center; width:10%;" class="pr-td-menor">
-                                                                @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_PIS)
+                                                                @Html.DisplayFor(modelItem => item.CST_DA_NFE_DE_ATA_FORN)
                                                             </td>
 
                                                         }
                                                         else
                                                         {
 
-                                                            if (item.ALIQ_SAIDA_PIS == item.Aliq_Saida_Pis_INTERNO)
+                                                            if (item.Cst_da_Nfe_de_Ata_FORn_INTERNO == null && item.CST_DA_NFE_DE_ATA_FORN != null)
                                                             {
                                                                 <td style="text-align:center; width:10%;" class="pr-td-igual">
-                                                                    @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_PIS)
+                                                                    @Html.DisplayFor(modelItem => item.CST_DA_NFE_DE_ATA_FORN)
                                                                 </td>
 
                                                             }
-                                                            else
-                                                            {
-                                                                if (item.ALIQ_SAIDA_PIS != null && item.Aliq_Saida_Pis_INTERNO == null)
-                                                                {
-                                                                    <td style="text-align:center; width:10%;">
-                                                                        @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_PIS)
-                                                                    </td>
-
-                                                                }
 
 
-                                                            }
 
                                                         }
 
@@ -127,7 +118,7 @@
 
 
                                                 <td style="text-align:center; width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.Aliq_Saida_Pis_INTERNO)
+                                                    @Html.DisplayFor(modelItem => item.Cst_da_Nfe_de_Ata_FORn_INTERNO)
 
                                             </tr>
 
@@ -153,7 +144,7 @@
                     <div style="float:right;" class="p-2 pr-fontalternativa">
                         @Html.PagedListPager(
                             Model,
-                            page => Url.Action("EdtCliAliqSaidaPisMassa",
+                            page => Url.Action("EdtCliCstNfeAtaMassa",
                             new
                             {
                                 page,
