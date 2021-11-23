@@ -2456,6 +2456,7 @@
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstNfeAtaMassaManualModal.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstNfeSNMassa.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstNfeSNMassaManualModal.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CardTabelas.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />

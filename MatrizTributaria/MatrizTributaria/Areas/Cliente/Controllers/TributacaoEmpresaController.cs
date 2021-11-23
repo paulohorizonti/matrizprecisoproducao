@@ -812,486 +812,604 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         }
 
 
-        
+
+        /// <summary>
+        /// Descrição da action TabelaIcmsEntrada
+        /// </summary>
+        /// <param name="ordenacao"> Define a ordenação dos registros</param>
+        /// <param name="procuraPor"> Define se a procura é por codigo de barras ou pela descrição do produto</param>
+        /// <param name="procuraNCM"> Define a procura por ncm</param>
+        /// <param name="procuraCEST"> Define a procura pelo CEST</param>
+        /// <param name="filtroCorrente"> Define se o filtro está informado (codigo de barras ou descrição)</param>
+        ///  <param name="filtroCorrenteNCM"> Define se o filtro está informado (NCM)</param>
+        ///  <param name="filtroCorrenteCest"> Define se o filtro está informado (CEST)</param>
+        ///  <param name="pagina"> Define o número da página que esta sendo mostrada</param>
+        ///  <param name="numeroLinhas"> Define o número de linhas a serem mostradas(padrao 10)</param>
+        /// <returns>Retorna a View Tipada</returns>
         [HttpGet]
-        public ActionResult TabelaIcmsEntrada(string sortOrder, string searchString, string searchString2, string currentFilter, int? page, string LinhasNum)
+        public ActionResult TabelaIcmsEntrada(string ordenacao, string procuraPor, string procuraNCM, 
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
         {
-            /*Verificando a sessão*/
+            //Veririficar a sessão do usuario
+            if(Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home"); //manda pro login
+            }
+            //Mensagem do head do card
+            ViewBag.MsgCardHeader = "Visualização em tabelas de Icms de Entrada";
+
+            //Pegando o usuario e a empresa do mesmo - atribui à variavel user
+            string usuarioLogado = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessao de usuario caso nao exista
+             Essa variavel vai servir para buscar um usuario especifico, o mesmo que está logado no sistema
+             e salvar em uma variavel de sessao para ser usado durante todo o acesso
+             */
+            if(Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == usuarioLogado select a).FirstOrDefault();
+                // pega a empresa do usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == this.usuario.empresa.cnpj select a).FirstOrDefault();
+                //inicia a variavel de sessao
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else
+            {
+                //caso a variavel ja esteja em uso, atribui somente a empresa
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //Verificar o filtrocorrente, se estiver nulo ele busca pelo parametro procuraPor(codigo de barras ou descricao)
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor; //atribui à variavel auxiliar
+
+            /*converte em long caso seja possivel e atribui à variavel tipada: 
+             isso se faz necessário caso o usuario digitou o codigo de barras
+            ao inves da descrição do produto
+            */
+            long codBarrasL = 0; //variavel tipada
+            /*Neste momento o sistema verifica se é possivel converter o que o usuario digitou
+             em um valor long, se for significa que ele digitou um codigo de barras e a variavel do tipo bool recebe TRUE*/
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //veriica se veio parametros de pesquisa, se nao veio a variavel continua null, se veio ela recebe o que veio da view
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //Se o parametro numero de linhas vier preenchido ele atrubui a ViewBag, caso contrario continua 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 5;
+
+            //Viewbag de ordenação
+            ViewBag.Ordenacao = ordenacao;
+
+            //se a ordenação nao estiver nula ele aplica a ordencao produto descrescente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            //Atribui 1 à página caso os parametros não sejam nulos
+            pagina = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : pagina;
+
+            //Atribui os filtros correntes caso alguma procura esteja nulla (seja nula)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+            /*Atribindo as viewBags*/
+            ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está na action, quando
+             houver alterações essa lista é renovado e os dados atualizados*/
+            if(TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise; //cria a tempdata
+                TempData.Keep("analise"); //persiste
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];//o ojeto analise recebe os valores de tempdata
+                TempData.Keep("analise"); //persiste
+            }
+
+            //Action de busca: retorna a lista ja filtrada
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            //Ordenação
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a página
+            int tamanhoPagina = 0;
+
+            //ternario para tamanho da página
+            tamanhoPagina = (ViewBag.NumeroLinhas != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 5) ? ViewBag.NumeroLinhas : (int)numeroLinhas);
+
+            //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
+            int numeroPagina = (pagina ?? 1);
+            //registros
+            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
+            return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
+
+        }
+
+
+        [HttpGet]
+        public ActionResult TabelaIcmsSaida(string ordenacao, string procuraPor, string procuraNCM,
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        {
+            //Veririficar a sessão do usuario
             if (Session["usuario"] == null)
             {
-                return RedirectToAction("Login", "../Home");
+                return RedirectToAction("Login", "../Home"); //manda pro login
             }
+            //Mensagem do head do card
+            ViewBag.MsgCardHeader = "Visualização em tabelas de Icms de Saída";
 
-            /*Pegando o usuário e a empresa do usuário*/
-            string user = Session["usuario"].ToString();
-            Usuario usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
-            Empresa empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+            //Pegando o usuario e a empresa do mesmo - atribui à variavel user
+            string usuarioLogado = Session["usuario"].ToString();
 
-            //Paginação 
-            ViewBag.OrdemAtual = sortOrder;
-            ViewBag.PorProdutoDesc = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-            ViewBag.PorCatProd = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
-
-            if (searchString != null)
+            /*Inicializando a variavel de sessao de usuario caso nao exista
+             Essa variavel vai servir para buscar um usuario especifico, o mesmo que está logado no sistema
+             e salvar em uma variavel de sessao para ser usado durante todo o acesso
+             */
+            if (Session["usuarios"] == null)
             {
-                page = 1;
-                searchString = searchString.Trim();
-
-
+                this.usuario = (from a in db.Usuarios where a.nome == usuarioLogado select a).FirstOrDefault();
+                // pega a empresa do usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == this.usuario.empresa.cnpj select a).FirstOrDefault();
+                //inicia a variavel de sessao
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
             }
             else
             {
-                searchString = currentFilter;
+                //caso a variavel ja esteja em uso, atribui somente a empresa
+                this.empresa = (Empresa)Session["empresas"];
             }
 
-            if (searchString2 != null)
+            //Verificar o filtrocorrente, se estiver nulo ele busca pelo parametro procuraPor(codigo de barras ou descricao)
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor; //atribui à variavel auxiliar
+
+            /*converte em long caso seja possivel e atribui à variavel tipada: 
+             isso se faz necessário caso o usuario digitou o codigo de barras
+            ao inves da descrição do produto
+            */
+            long codBarrasL = 0; //variavel tipada
+            /*Neste momento o sistema verifica se é possivel converter o que o usuario digitou
+             em um valor long, se for significa que ele digitou um codigo de barras e a variavel do tipo bool recebe TRUE*/
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //veriica se veio parametros de pesquisa, se nao veio a variavel continua null, se veio ela recebe o que veio da view
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //Se o parametro numero de linhas vier preenchido ele atrubui a ViewBag, caso contrario continua 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 5;
+
+            //Viewbag de ordenação
+            ViewBag.Ordenacao = ordenacao;
+
+            //se a ordenação nao estiver nula ele aplica a ordencao produto descrescente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            //Atribui 1 à página caso os parametros não sejam nulos
+            pagina = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : pagina;
+
+            //Atribui os filtros correntes caso alguma procura esteja nulla (seja nula)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+            /*Atribindo as viewBags*/
+            ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está na action, quando
+             houver alterações essa lista é renovado e os dados atualizados*/
+            if (TempData["analise"] == null)
             {
-                page = 1;
-                searchString2 = searchString2.Trim();
-
-
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise; //cria a tempdata
+                TempData.Keep("analise"); //persiste
             }
             else
             {
-                searchString2 = currentFilter;
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];//o ojeto analise recebe os valores de tempdata
+                TempData.Keep("analise"); //persiste
             }
 
+            //Action de busca: retorna a lista ja filtrada
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            //Ordenação
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a página
+            int tamanhoPagina = 0;
+
+            //ternario para tamanho da página
+            tamanhoPagina = (ViewBag.NumeroLinhas != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 5) ? ViewBag.NumeroLinhas : (int)numeroLinhas);
+
+            //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
+            int numeroPagina = (pagina ?? 1);
+
+            //registros
+            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
+
+            return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
+
+        }
+
+
+        [HttpGet]
+        public ActionResult TabelaRedBasCalSaida(string ordenacao, string procuraPor, string procuraNCM,
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        {
+            //Veririficar a sessão do usuario
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home"); //manda pro login
+            }
+            //Mensagem do head do card
+            ViewBag.MsgCardHeader = "Visualização em tabelas de Redução de Base de Calc. Icms de Saída ";
+
+            //Pegando o usuario e a empresa do mesmo - atribui à variavel user
+            string usuarioLogado = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessao de usuario caso nao exista
+             Essa variavel vai servir para buscar um usuario especifico, o mesmo que está logado no sistema
+             e salvar em uma variavel de sessao para ser usado durante todo o acesso
+             */
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == usuarioLogado select a).FirstOrDefault();
+                // pega a empresa do usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == this.usuario.empresa.cnpj select a).FirstOrDefault();
+                //inicia a variavel de sessao
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else
+            {
+                //caso a variavel ja esteja em uso, atribui somente a empresa
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //Verificar o filtrocorrente, se estiver nulo ele busca pelo parametro procuraPor(codigo de barras ou descricao)
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor; //atribui à variavel auxiliar
+
+            /*converte em long caso seja possivel e atribui à variavel tipada: 
+             isso se faz necessário caso o usuario digitou o codigo de barras
+            ao inves da descrição do produto
+            */
+            long codBarrasL = 0; //variavel tipada
+            /*Neste momento o sistema verifica se é possivel converter o que o usuario digitou
+             em um valor long, se for significa que ele digitou um codigo de barras e a variavel do tipo bool recebe TRUE*/
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //veriica se veio parametros de pesquisa, se nao veio a variavel continua null, se veio ela recebe o que veio da view
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //Se o parametro numero de linhas vier preenchido ele atrubui a ViewBag, caso contrario continua 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 5;
+
+            //Viewbag de ordenação
+            ViewBag.Ordenacao = ordenacao;
+
+            //se a ordenação nao estiver nula ele aplica a ordencao produto descrescente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            //Atribui 1 à página caso os parametros não sejam nulos
+            pagina = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : pagina;
+
+            //Atribui os filtros correntes caso alguma procura esteja nulla (seja nula)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+            /*Atribindo as viewBags*/
+            ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está na action, quando
+             houver alterações essa lista é renovado e os dados atualizados*/
+            if (TempData["analise"] == null)
+            {
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise; //cria a tempdata
+                TempData.Keep("analise"); //persiste
+            }
+            else
+            {
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];//o ojeto analise recebe os valores de tempdata
+                TempData.Keep("analise"); //persiste
+            }
+
+            //Action de busca: retorna a lista ja filtrada
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+
+            //Ordenação
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a página
+            int tamanhoPagina = 0;
+
+            //ternario para tamanho da página
+            tamanhoPagina = (ViewBag.NumeroLinhas != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 5) ? ViewBag.NumeroLinhas : (int)numeroLinhas);
+
+            //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
+            int numeroPagina = (pagina ?? 1);
+
+            //registros
+            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
+
+            return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
+
+        }
+
+
+
+        [HttpGet]
+        public ActionResult TabelaRedBasCalEntrada(string ordenacao, string procuraPor, string procuraNCM,
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        {
+            //Veririficar a sessão do usuario
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home"); //manda pro login
+            }
+            //Mensagem do head do card
+            ViewBag.MsgCardHeader = "Visualização em tabelas de Redução de Base de Calc. Icms de Saída ";
+
+            //Pegando o usuario e a empresa do mesmo - atribui à variavel user
+            string usuarioLogado = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessao de usuario caso nao exista
+             Essa variavel vai servir para buscar um usuario especifico, o mesmo que está logado no sistema
+             e salvar em uma variavel de sessao para ser usado durante todo o acesso
+             */
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == usuarioLogado select a).FirstOrDefault();
+                // pega a empresa do usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == this.usuario.empresa.cnpj select a).FirstOrDefault();
+                //inicia a variavel de sessao
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else
+            {
+                //caso a variavel ja esteja em uso, atribui somente a empresa
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //Verificar o filtrocorrente, se estiver nulo ele busca pelo parametro procuraPor(codigo de barras ou descricao)
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor; //atribui à variavel auxiliar
+
+            /*converte em long caso seja possivel e atribui à variavel tipada: 
+             isso se faz necessário caso o usuario digitou o codigo de barras
+            ao inves da descrição do produto
+            */
+            long codBarrasL = 0; //variavel tipada
+            /*Neste momento o sistema verifica se é possivel converter o que o usuario digitou
+             em um valor long, se for significa que ele digitou um codigo de barras e a variavel do tipo bool recebe TRUE*/
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //veriica se veio parametros de pesquisa, se nao veio a variavel continua null, se veio ela recebe o que veio da view
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //Se o parametro numero de linhas vier preenchido ele atrubui a ViewBag, caso contrario continua 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 5;
+
+            //Viewbag de ordenação
+            ViewBag.Ordenacao = ordenacao;
+
+            //se a ordenação nao estiver nula ele aplica a ordencao produto descrescente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            //Atribui 1 à página caso os parametros não sejam nulos
+            pagina = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : pagina;
+
+            //Atribui os filtros correntes caso alguma procura esteja nulla (seja nula)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+            /*Atribindo as viewBags*/
+            ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
 
             
-            var trib = from s in db.Analise_Tributaria select s;
 
-            //busca
-            if (!String.IsNullOrEmpty(searchString))
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está na action, quando
+             houver alterações essa lista é renovado e os dados atualizados*/
+            if (TempData["analise"] == null)
             {
-
-                trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_DESCRICAO.Contains(searchString));
-                trib = trib.OrderBy(s => s.Id_Produto_INTERNO);
-
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise; //cria a tempdata
+                TempData.Keep("analise"); //persiste
             }
             else
             {
-                if (!String.IsNullOrEmpty(searchString2))
-                {
-
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_COD_BARRAS.Contains(searchString2));
-                    trib = trib.OrderBy(s => s.Id_Produto_INTERNO);
-
-
-                }
-                else
-                {
-                    //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj orderby a.PRODUTO_DESCRICAO select a).ToList();
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj);
-                    trib = trib.OrderBy(s => s.Id_Produto_INTERNO);
-
-                }
-
-
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];//o ojeto analise recebe os valores de tempdata
+                TempData.Keep("analise"); //persiste
             }
 
+            //Action de busca: retorna a lista ja filtrada
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
 
-            int pageSize = 0;
-
-            if (String.IsNullOrEmpty(LinhasNum))
+            //Ordenação
+            switch (ordenacao)
             {
-                pageSize = 5;
-            }
-            else
-            {
-
-                ViewBag.Texto = LinhasNum;
-                pageSize = Int32.Parse(LinhasNum);
-            }
-
-            int pageNumber = (page ?? 1);
-
-            return View(trib.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
-        }
-
-        [HttpGet]
-        public ActionResult TabelaIcmsSaida(string sortOrder, string searchString, string searchString2, string currentFilter, int? page, string LinhasNum)
-        {
-            /*Verificando a sessão*/
-            if (Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "../Home");
-            }
-          
-            /*Pegando o usuário e a empresa do usuário*/
-            string user = Session["usuario"].ToString();  
-            Usuario usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
-            Empresa empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
-
-            //Paginação 
-            ViewBag.OrdemAtual = sortOrder;
-            ViewBag.PorProdutoDesc = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-            ViewBag.PorCatProd = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
-
-
-            if (searchString != null)
-            {
-                page = 1;
-                searchString = searchString.Trim();
-
-            }
-            else
-            {
-                searchString = currentFilter;
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
             }
 
-            if (searchString2 != null)
-            {
-                page = 1;
-                searchString2 = searchString2.Trim();
+            //montar a página
+            int tamanhoPagina = 0;
 
-            }
-            else
-            {
-                searchString2 = currentFilter;
-            }
+            //ternario para tamanho da página
+            tamanhoPagina = (ViewBag.NumeroLinhas != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 5) ? ViewBag.NumeroLinhas : (int)numeroLinhas);
 
-            var trib = from s in db.Analise_Tributaria select s;
-            //busca
-            if (!String.IsNullOrEmpty(searchString))
-            {
-
-                trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_DESCRICAO.Contains(searchString));
-                trib = trib.OrderBy(s => s.TE_ID);
-
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(searchString2))
-                {
-
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_COD_BARRAS.Contains(searchString2));
-                    trib = trib.OrderBy(s => s.TE_ID);
-
-                }
-                else
-                {
-                    //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj orderby a.PRODUTO_DESCRICAO select a).ToList();
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj);
-                    trib = trib.OrderBy(s => s.TE_ID);
-
-                }
-
-
-            }
-
-
-
-
-            int pageSize = 0;
-
-
-            if (String.IsNullOrEmpty(LinhasNum))
-            {
-                pageSize = 5;
-            }
-            else
-            {
-
-                ViewBag.Texto = LinhasNum;
-                pageSize = Int32.Parse(LinhasNum);
-            }
-
-            int pageNumber = (page ?? 1);
-
-            return View(trib.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
-        }
-
-       
-
-        [HttpGet]
-        public ActionResult TabelaRedBasCalSaida(string sortOrder, string searchString, string searchString2, string currentFilter, int? page, string LinhasNum)
-        {
-            /*Verificando a sessão*/
-            if (Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "../Home");
-            }
-
-            /*Pegando o usuário e a empresa do usuário*/
-            string user = Session["usuario"].ToString();
-            Usuario usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
-            Empresa empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
-
-            //Paginação 
-            ViewBag.OrdemAtual = sortOrder;
-            ViewBag.PorProdutoDesc = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-            ViewBag.PorCatProd = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
-
-            if (searchString != null)
-            {
-                page = 1;
-                searchString = searchString.Trim();
-
-
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            if (searchString2 != null)
-            {
-                page = 1;
-                searchString2 = searchString2.Trim();
-
-
-            }
-            else
-            {
-                searchString2 = currentFilter;
-            }
-
+            //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
+            int numeroPagina = (pagina ?? 1);
+            //registros
+            ViewBag.Registros = (totReg != null)?totReg: analise.Count();
            
-            var trib = from s in db.Analise_Tributaria select s;
+            return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
-            //busca
-            if (!String.IsNullOrEmpty(searchString))
-            {
-
-                trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_DESCRICAO.Contains(searchString));
-                trib = trib.OrderByDescending(s => s.PRODUTO_DESCRICAO);
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(searchString2))
-                {
-
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_COD_BARRAS.Contains(searchString2));
-                    trib = trib.OrderByDescending(s => s.PRODUTO_DESCRICAO);
-
-                }
-                else
-                {
-                    //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj orderby a.PRODUTO_DESCRICAO select a).ToList();
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj);
-                    trib = trib.OrderBy(s => s.PRODUTO_DESCRICAO);
-
-                }
-
-
-            }
-
-
-
-            int pageSize = 0;
-
-            if (String.IsNullOrEmpty(LinhasNum))
-            {
-                pageSize = 6;
-            }
-            else
-            {
-
-                ViewBag.Texto = LinhasNum;
-                pageSize = Int32.Parse(LinhasNum);
-            }
-
-            int pageNumber = (page ?? 1);
-
-            return View(trib.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
         }
+
 
         [HttpGet]
-        public ActionResult TabelaRedBasCalEntrada(string sortOrder, string searchString, string searchString2, string currentFilter, int? page, string LinhasNum)
+        public ActionResult TabelaPisCofins(string ordenacao, string procuraPor, string procuraNCM,
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
         {
-            /*Verificando a sessão*/
+            //Veririficar a sessão do usuario
             if (Session["usuario"] == null)
             {
-                return RedirectToAction("Login", "../Home");
+                return RedirectToAction("Login", "../Home"); //manda pro login
             }
+            
 
-            /*Pegando o usuário e a empresa do usuário*/
-            string user = Session["usuario"].ToString();
-            Usuario usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
-            Empresa empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+            //Pegando o usuario e a empresa do mesmo - atribui à variavel user
+            string usuarioLogado = Session["usuario"].ToString();
 
-            //Paginação 
-            ViewBag.OrdemAtual = sortOrder;
-            ViewBag.PorProdutoDesc = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-            ViewBag.PorCatProd = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
-
-
-            if (searchString != null)
+            /*Inicializando a variavel de sessao de usuario caso nao exista
+             Essa variavel vai servir para buscar um usuario especifico, o mesmo que está logado no sistema
+             e salvar em uma variavel de sessao para ser usado durante todo o acesso
+             */
+            if (Session["usuarios"] == null)
             {
-                page = 1;
-                searchString = searchString.Trim();
-
-
+                this.usuario = (from a in db.Usuarios where a.nome == usuarioLogado select a).FirstOrDefault();
+                // pega a empresa do usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == this.usuario.empresa.cnpj select a).FirstOrDefault();
+                //inicia a variavel de sessao
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
             }
             else
             {
-                searchString = currentFilter;
+                //caso a variavel ja esteja em uso, atribui somente a empresa
+                this.empresa = (Empresa)Session["empresas"];
             }
 
-            if (searchString2 != null)
+            //Verificar o filtrocorrente, se estiver nulo ele busca pelo parametro procuraPor(codigo de barras ou descricao)
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor; //atribui à variavel auxiliar
+
+            /*converte em long caso seja possivel e atribui à variavel tipada: 
+             isso se faz necessário caso o usuario digitou o codigo de barras
+            ao inves da descrição do produto
+            */
+            long codBarrasL = 0; //variavel tipada
+            /*Neste momento o sistema verifica se é possivel converter o que o usuario digitou
+             em um valor long, se for significa que ele digitou um codigo de barras e a variavel do tipo bool recebe TRUE*/
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //veriica se veio parametros de pesquisa, se nao veio a variavel continua null, se veio ela recebe o que veio da view
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //Se o parametro numero de linhas vier preenchido ele atrubui a ViewBag, caso contrario continua 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 5;
+
+            //Viewbag de ordenação
+            ViewBag.Ordenacao = ordenacao;
+
+            //se a ordenação nao estiver nula ele aplica a ordencao produto descrescente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            //Atribui 1 à página caso os parametros não sejam nulos
+            pagina = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : pagina;
+
+            //Atribui os filtros correntes caso alguma procura esteja nulla (seja nula)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+            /*Atribindo as viewBags*/
+            ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+
+
+
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está na action, quando
+             houver alterações essa lista é renovado e os dados atualizados*/
+            if (TempData["analise"] == null)
             {
-                page = 1;
-                searchString2 = searchString2.Trim();
-
-
+                this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
+                TempData["analise"] = this.analise; //cria a tempdata
+                TempData.Keep("analise"); //persiste
             }
             else
             {
-                searchString2 = currentFilter;
+                this.analise = (List<AnaliseTributaria>)TempData["analise"];//o ojeto analise recebe os valores de tempdata
+                TempData.Keep("analise"); //persiste
             }
 
+            //Action de busca: retorna a lista ja filtrada
+            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
 
-            var trib = from s in db.Analise_Tributaria select s;
-
-            //busca
-            if (!String.IsNullOrEmpty(searchString))
+            //Ordenação
+            switch (ordenacao)
             {
-
-                trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_DESCRICAO.Contains(searchString));
-                trib = trib.OrderByDescending(s => s.PRODUTO_DESCRICAO);
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(searchString2))
-                {
-
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_COD_BARRAS.Contains(searchString2));
-                    trib = trib.OrderByDescending(s => s.PRODUTO_DESCRICAO);
-
-                }
-                else
-                {
-                    //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj orderby a.PRODUTO_DESCRICAO select a).ToList();
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj);
-                    trib = trib.OrderBy(s => s.PRODUTO_DESCRICAO);
-
-                }
-
-
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
             }
 
+            //montar a página
+            int tamanhoPagina = 0;
 
+            //ternario para tamanho da página
+            tamanhoPagina = (ViewBag.NumeroLinhas != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 5) ? ViewBag.NumeroLinhas : (int)numeroLinhas);
 
-            int pageSize = 0;
+            //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
+            int numeroPagina = (pagina ?? 1);
+            //registros
+            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
 
-            if (String.IsNullOrEmpty(LinhasNum))
-            {
-                pageSize = 6;
-            }
-            else
-            {
+            return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
-                ViewBag.Texto = LinhasNum;
-                pageSize = Int32.Parse(LinhasNum);
-            }
-
-            int pageNumber = (page ?? 1);
-
-            return View(trib.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
         }
 
-        [HttpGet]
-        public ActionResult TabelaPisCofins(string sortOrder, string searchString, string searchString2, string currentFilter, int? page, string LinhasNum)
-        {
-            /*Verificando a sessão*/
-            if (Session["usuario"] == null)
-            {
-                return RedirectToAction("Login", "../Home");
-            }
-
-            /*Pegando o usuário e a empresa do usuário*/
-            string user = Session["usuario"].ToString();
-            Usuario usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
-            Empresa empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
-
-            //Paginação 
-            ViewBag.OrdemAtual = sortOrder;
-            ViewBag.PorProdutoDesc = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-            ViewBag.PorCatProd = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
-
-
-            if (searchString != null)
-            {
-                page = 1;
-                searchString = searchString.Trim();
-                
-
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            if (searchString2 != null)
-            {
-                page = 1;
-                searchString2 = searchString2.Trim();
-
-
-            }
-            else
-            {
-                searchString2 = currentFilter;
-            }
-
-
-          
-
-            //List<AnaliseTributaria> trib = new List<AnaliseTributaria>();
-            var trib = from s in db.Analise_Tributaria select s;
-            //busca
-            if (!String.IsNullOrEmpty(searchString))
-            {
-
-                trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj &&  s.PRODUTO_DESCRICAO.Contains(searchString));
-                trib = trib.OrderByDescending(s => s.PRODUTO_DESCRICAO);
-                //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj && a.PRODUTO_DESCRICAO.Contains(searchString.ToUpper()) || a.PRODUTO_COD_BARRAS.Contains(searchString) orderby a.PRODUTO_DESCRICAO select a).ToList();
-
-                ViewBag.Quantidade = trib.Count();
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(searchString2))
-                {
-
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj && s.PRODUTO_COD_BARRAS.Contains(searchString2));
-                    trib = trib.OrderByDescending(s => s.PRODUTO_DESCRICAO);
-                    //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj && a.PRODUTO_DESCRICAO.Contains(searchString.ToUpper()) || a.PRODUTO_COD_BARRAS.Contains(searchString) orderby a.PRODUTO_DESCRICAO select a).ToList();
-
-                    ViewBag.Quantidade = trib.Count();
-
-                }
-                else {
-                    //trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == usuario.empresa.cnpj orderby a.PRODUTO_DESCRICAO select a).ToList();
-                    trib = trib.Where(s => s.CNPJ_EMPRESA == usuario.empresa.cnpj);
-                    trib = trib.OrderBy(s => s.PRODUTO_DESCRICAO);
-                    ViewBag.Quantidade = trib.Count();
-
-                }
-                
-
-            }
-
-
-
-            int pageSize = 0;
-
-            if (String.IsNullOrEmpty(LinhasNum))
-            {
-                pageSize = 6;
-            }
-            else
-            {
-
-                ViewBag.Texto = LinhasNum;
-                pageSize = Int32.Parse(LinhasNum);
-            }
-
-            int pageNumber = (page ?? 1);
-
-            return View(trib.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
-
-        }
 
         //[HttpGet]
         //public ActionResult TabelaProduto(string sortOrder, string procuraNome, string procuraBarras, string procuraNCM, string procuraCEST, string currentFilter, int? page, string LinhasNum)

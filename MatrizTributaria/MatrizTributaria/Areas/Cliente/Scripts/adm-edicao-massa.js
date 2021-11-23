@@ -777,10 +777,6 @@ $(document).ready(function () {
 
 
 
-
-
-
-
 /*=============== ATUALIZAÇÃO CST VENDA ATACADO PARA CONTRIBUINTE NO CLIENTE  =====================*/
 /*Alteração CST CST VENDA ATA CONTRIBUINTE NO CLIENTE*/
 $(document).ready(function () {
@@ -891,7 +887,6 @@ $(document).ready(function () {
 
 
 
-
 /*=============== ATUALIZAÇÃO CST VENDA VAR PARA CONTRIBUINTE NO CLIENTE  =====================*/
 /*Alteração CST CST VENDA VAR CONTRIBUINTE NO CLIENTE*/
 $(document).ready(function () {
@@ -999,8 +994,6 @@ $(document).ready(function () {
     }
 
 });
-
-
 
 
 
@@ -1670,9 +1663,6 @@ $(document).ready(function () {
 
 
 
-
-
-
 /*=============== ATUALIZAÇÃO ALIQUOTA ENTRADA PIS NO CLIENTE  =====================*/
 /*Alteração ALIQUOTA ENTRADA PIS NO CLIENTE*/
 $(document).ready(function () {
@@ -1780,10 +1770,6 @@ $(document).ready(function () {
     }
 
 });
-
-
-
-
 
 
 
@@ -2258,6 +2244,10 @@ $(document).ready(function () {
 
 });
 
+
+
+
+
 /*Atualizar RED BAS CALC ALIQ ICMS ST COMPRA DE INDUSTRIA MANUALMENTE*/
 $(document).ready(function () {
     toastOpcoes(); //configurar o toast
@@ -2449,10 +2439,6 @@ $(document).ready(function () {
 
 
 
-
-
-
-
 /*=============== ATUALIZAÇÃO ALIQ ICMS NFE COMPRA DE ATACADO =====================*/
 /*Alteração ALIQ ICMS NFE COMPRA DE ATACADO*/
 $(document).ready(function () {
@@ -2561,8 +2547,6 @@ $(document).ready(function () {
 
 
 
-
-
 /*=============== ATUALIZAÇÃO ALIQ ICMS NFE COMPRA DE INDUSTRIA =====================*/
 /*Alteração ALIQ ICMS NFE COMPRA DE INDUSTRIA*/
 $(document).ready(function () {
@@ -2668,8 +2652,6 @@ $(document).ready(function () {
     }
 
 });
-
-
 
 
 
