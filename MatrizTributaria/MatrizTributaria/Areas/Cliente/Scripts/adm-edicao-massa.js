@@ -1,4 +1,4 @@
-﻿/*=============== ATUALIZAÇÃO CST  NFE ATACADO =====================*/
+﻿/*=============== ATUALIZAÇÃO CST  NFE ATACADO ..... =====================*/
 /*Alteração CST NFE ATA*/
 $(document).ready(function () {
     toastOpcoes(); //configarar toast

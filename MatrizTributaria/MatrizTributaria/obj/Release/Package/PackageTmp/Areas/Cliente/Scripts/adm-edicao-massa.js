@@ -1,4 +1,898 @@
-﻿/*=============== ATUALIZAÇÃO CST VENDA VAR PARA CONTRIBUINTE NO CLIENTE  =====================*/
+﻿/*=============== ATUALIZAÇÃO CST  NFE ATACADO =====================*/
+/*Alteração CST NFE ATA*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstNfeSN"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstNfeSNCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstNfeSNCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstNfeSNMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstNfeSNCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstNfeSNCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstNfeSNMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST NFE ATA MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstNfeSNCliManual = document.getElementById("saveCstNfeSNCliManual"); //variavel para receber o botao de salvar
+    if (saveCstNfeSNCliManual) {
+        saveCstNfeSNCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstNfeSN = document.getElementById("CstCompra").value; //pegar o valor do imput
+            if (cstNfeSN) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstNfeSN: cstNfeSN },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeSNMassaManualModalPost?strDados=' + strDados + '&cstNfeSN=' + cstNfeSN;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstNfeSN: cstNfeSN },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeSNMassaManualModalPost?strDados=' + strDados + '&cstNfeSN=' + cstNfeSN;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstCompra").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+/*=============== ATUALIZAÇÃO CST  NFE ATACADO =====================*/
+/*Alteração CST NFE ATA*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstNfeAta"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstNfeAtaCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstNfeAtaCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstNfeAtaMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstNfeAtaCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstNfeAtaCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstNfeAtaMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST NFE ATA MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstNfeAtaCliManual = document.getElementById("saveCstNfeAtaCliManual"); //variavel para receber o botao de salvar
+    if (saveCstNfeAtaCliManual) {
+        saveCstNfeAtaCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstNfeAta = document.getElementById("CstCompra").value; //pegar o valor do imput
+            if (cstNfeAta) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstNfeAta: cstNfeAta },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeAtaMassaManualModalPost?strDados=' + strDados + '&cstNfeAta=' + cstNfeAta;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstNfeAta: cstNfeAta },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeAtaMassaManualModalPost?strDados=' + strDados + '&cstNfeAta=' + cstNfeAta;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstCompra").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+
+/*=============== ATUALIZAÇÃO CST  NFE INDUSTRIA =====================*/
+/*Alteração CST NFE INDUSTRIA*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstNfeInd"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstNfeIndCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstNfeIndCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstNfeIndMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstNfeIndCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstNfeIndCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstNfeIndMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST COMPRA DE COMPRA DE SIMPLES NO CLIENTE MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstNfeIndCliManual = document.getElementById("saveCstNfeIndCliManual"); //variavel para receber o botao de salvar
+    if (saveCstNfeIndCliManual) {
+        saveCstNfeIndCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstNfeInd = document.getElementById("CstCompra").value; //pegar o valor do imput
+            if (cstNfeInd) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstNfeInd: cstNfeInd },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeIndMassaManualModalPost?strDados=' + strDados + '&cstNfeInd=' + cstNfeInd;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstNfeInd: cstNfeInd },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstNfeIndMassaManualModalPost?strDados=' + strDados + '&cstNfeInd=' + cstNfeInd;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstCompra").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+/*=============== ATUALIZAÇÃO CST COMPRA ATACADO  =====================*/
+/*Alteração CST ATACADO NO CLIENTYE*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstCompAta"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstCompAtaCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstCompAtaCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstCompAtaMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstCompAtaCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstCompAtaCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstCompAtaMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST COMPRA DE COMPRA DE SIMPLES NO CLIENTE MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstCompAtaCliManual = document.getElementById("saveCstCompAtaCliManual"); //variavel para receber o botao de salvar
+    if (saveCstCompAtaCliManual) {
+        saveCstCompAtaCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstCompAta = document.getElementById("CstCompra").value; //pegar o valor do imput
+            if (cstCompAta) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstCompAta: cstCompAta },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompAtaMassaManualModalPost?strDados=' + strDados + '&cstCompAta=' + cstCompAta;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstCompAta: cstCompAta },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompAtaMassaManualModalPost?strDados=' + strDados + '&cstCompAta=' + cstCompAta;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstCompra").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+
+
+
+/*=============== ATUALIZAÇÃO CST COMPRA DE SIMPLES NACIONAL  =====================*/
+/*Alteração CST CST COMPRA DE SIMPLES NACIONAL*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstCompSN"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstCompSNCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstCompSNCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstCompSNMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstCompSNCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstCompSNCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstCompSNMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST COMPRA DE COMPRA DE SIMPLES NO CLIENTE MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstCompSNCliManual = document.getElementById("saveCstCompSNCliManual"); //variavel para receber o botao de salvar
+    if (saveCstCompSNCliManual) {
+        saveCstCompSNCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstCompSN = document.getElementById("CstCompra").value; //pegar o valor do imput
+            if (cstCompSN) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstCompSN: cstCompSN },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompSNMassaManualModalPost?strDados=' + strDados + '&cstCompSN=' + cstCompSN;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstCompSN: cstCompSN },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompSNMassaManualModalPost?strDados=' + strDados + '&cstCompSN=' + cstCompSN;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstCompra").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+
+
+
+
+
+
+/*=============== ATUALIZAÇÃO CST COMPRA DE INDÚSTRIA  =====================*/
+/*Alteração CST CST COMPRA DE INDÚSTRIA NO CLIENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstCompInd"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstCompIndCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstCompIndCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstCompIndMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstCompIndCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstCompIndCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstCompIndMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST COMPRA DE INDÚSTRIA NO CLIENTE MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstCompIndCliManual = document.getElementById("saveCstCompIndCliManual"); //variavel para receber o botao de salvar
+    if (saveCstCompIndCliManual) {
+        saveCstCompIndCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstCompInd = document.getElementById("CstCompra").value; //pegar o valor do imput
+            if (cstCompInd) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstCompInd: cstCompInd },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompIndMassaManualModalPost?strDados=' + strDados + '&cstCompInd=' + cstCompInd;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstCompInd: cstCompInd },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstCompIndMassaManualModalPost?strDados=' + strDados + '&cstCompInd=' + cstCompInd;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstCompra").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+
+
+
+
+
+
+/*=============== ATUALIZAÇÃO CST VENDA ATACADO PARA SIMPLES NACIONAL NO CLIENTE  =====================*/
+/*Alteração CST CST VENDA ATA SIMPLES NACIONAL NO CLIENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstVenAtaSN"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstVenaAtaSNCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaSNCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstVendaAtaSNMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstVenaAtaSNCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaSNCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstVendaAtaSNMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST CST VENDA ATACADO CONTRIBUINTE NO CLIENTE MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstVenAtaSNCliManual = document.getElementById("saveCstVenAtaSNCliManual"); //variavel para receber o botao de salvar
+    if (saveCstVenAtaSNCliManual) {
+        saveCstVenAtaSNCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstVenAtaSN = document.getElementById("CstVenda").value; //pegar o valor do imput
+            if (cstVenAtaSN) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstVenAtaSN: cstVenAtaSN },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaAtaSNMassaManualModalPost?strDados=' + strDados + '&cstVenAtaSN=' + cstVenAtaSN;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstVenAtaSN: cstVenAtaSN },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaAtaSNMassaManualModalPost?strDados=' + strDados + '&cstVenAtaSN=' + cstVenAtaSN;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstVenda").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+
+
+
+
+
+/*=============== ATUALIZAÇÃO CST VENDA ATACADO PARA CONTRIBUINTE NO CLIENTE  =====================*/
+/*Alteração CST CST VENDA ATA CONTRIBUINTE NO CLIENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var btnAlterarSelecionados = "";
+    var controller = "";
+
+    var tabela = document.getElementById("tbl-edtCstVenAtaCont"); //variavel para a tabela
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+
+    $('#edtSelCstVenaAtaContCli').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaContCli"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstVendaAtaContMassaModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+    //fiz alterações aqui de novo
+    $('#edtSelCstVenaAtaContCliManual').click(function () {
+        btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaContCliManual"); //botao para confirmar a edição dos selecionados
+        controller = "EdtCliCstVendaAtaContMassaManualModal"; //envia o nome da Action para a função
+        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+        alterarSelecionados(btnAlterarSelecionados, controller);
+    });
+
+});
+
+
+/*Atualizar CST CST VENDA ATACADO CONTRIBUINTE NO CLIENTE MANUALMENTE*/
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var saveCstVenAtaContCliManual = document.getElementById("saveCstVenAtaContCliManual"); //variavel para receber o botao de salvar
+    if (saveCstVenAtaContCliManual) {
+        saveCstVenAtaContCliManual.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstVenAtaCont = document.getElementById("CstVenda").value; //pegar o valor do imput
+            if (cstVenAtaCont) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, cstVenAtaCont: cstVenAtaCont },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaAtaContMassaManualModalPost?strDados=' + strDados + '&cstVenAtaCont=' + cstVenAtaCont;
+
+                    }
+
+                });
+
+
+                //fim if verificacao vazio
+            } else {
+
+                var resultado = confirm("O CST informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, cstVenAtaCont: cstVenAtaCont },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Cliente/TributacaoEmpresa/EdtCliCstVendaAtaContMassaManualModalPost?strDados=' + strDados + '&cstVenAtaCont=' + cstVenAtaCont;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de CST para o(s) produto(s) selecionado(s) abortada");
+
+                    document.getElementById("CstVenda").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
+
+
+/*=============== ATUALIZAÇÃO CST VENDA VAR PARA CONTRIBUINTE NO CLIENTE  =====================*/
 /*Alteração CST CST VENDA VAR CONTRIBUINTE NO CLIENTE*/
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
