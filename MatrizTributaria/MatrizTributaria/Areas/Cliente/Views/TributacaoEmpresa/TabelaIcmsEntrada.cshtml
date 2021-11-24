@@ -201,7 +201,7 @@
                                                 <td style="width:5%;">Aliq ST</td>
                                                 @if (item.ALIQ_ICMS_ST_COMP_DE_IND == null && item.Aliq_Icms_ST_Comp_de_Ind_INTERNO == null)
                                                 {
-                                                     <td class="text-center pr-td-maior" style="width:5%">
+                                                     <td class="text-center" style="width:5%">
                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMP_DE_IND)
                                                     </td>
 
@@ -506,11 +506,17 @@
                                                 </td>
 
 
-                                            </tr>
-
-                                            <tr class="pr-td">
+                                            </tr><tr class="pr-td">
                                                 <td style="width:5%;">Aliq</td>
-                                                @if (item.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL > item.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO)
+                                                @if(item.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && item.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO == null) 
+                                                {
+                                                 <td class="text-center" style="width:5%">
+                                                     @Html.DisplayFor(modelItem => item.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL)
+                                                 </td>
+
+                                                }
+                                                else{
+                                                     if (item.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL > item.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO)
                                                 {
                                                     <td class="text-center pr-td-maior" style="width:5%">
                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL)
@@ -547,6 +553,8 @@
 
 
                                                 }
+                                                }
+                                               
 
                                                 <td style="text-align:center; width:10%;">
                                                     @Html.DisplayFor(modelItem => item.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO)
@@ -554,50 +562,63 @@
                                                 </td>
 
                                             </tr>
-                                            <tr style="border-bottom: 2px solid #ccc;" class="pr-td">
-                                                <td style="width:5%;">Aliq ST</td>
+                                                 <tr style="border-bottom: 2px solid #ccc;" class="pr-td">
+                                                     <td style="width:5%;">Aliq ST</td>
+                                                     @if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO == null)
+                                                     {
 
-                                                @if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL > item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
-                                                {
-                                                    <td class="text-center pr-td-maior" style="width:5%">
-                                                        @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL < item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
-                                                    {
-                                                        <td class="text-center pr-td-menor" style="width:5%">
-                                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
-                                                        {
-                                                            <td class="text-center pr-td-igual" style="width:5%">
-                                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td class="text-center" style="width:5%;">
-                                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
-                                                            </td>
-                                                        }
+                                                         <td class="text-center" style="width:5%">
+                                                             @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
+                                                         </td>
 
-                                                    }
+                                                     }
+                                                     else
+                                                     {
+                                                         if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL > item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
+                                                         {
+                                                             <td class="text-center pr-td-maior" style="width:5%">
+                                                                 @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
+                                                             </td>
+                                                         }
+                                                         else
+                                                         {
+                                                             if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL < item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
+                                                             {
+                                                                 <td class="text-center pr-td-menor" style="width:5%">
+                                                                     @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
+                                                                 </td>
+                                                             }
+                                                             else
+                                                             {
+                                                                 if (item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
+                                                                 {
+                                                                     <td class="text-center pr-td-igual" style="width:5%">
+                                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
+                                                                     </td>
+                                                                 }
+                                                                 else
+                                                                 {
+                                                                     <td class="text-center" style="width:5%;">
+                                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL)
+                                                                     </td>
+                                                                 }
+
+                                                             }
 
 
 
-                                                }
+                                                         }
+
+                                                     }
 
 
-                                                <td style="text-align:center; width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
-                                                </td>
 
-                                            </tr>
+
+                                                     <td style="text-align:center; width:10%;">
+                                                         @Html.DisplayFor(modelItem => item.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO)
+                                                     </td>
+
+                                                 </tr>
                                         }
 
                                     </tbody>
@@ -941,11 +962,17 @@
                                                 </td>
 
 
-                                            </tr>
-
-                                            <tr class="pr-td">
+                                            </tr><tr class="pr-td">
                                                 <td style="width:5%;">Aliq</td>
-                                                @if (item.ALIQ_ICMS_NFE_FOR_SN > item.Aliq_Icms_NFE_For_SN_INTERNO)
+                                                @if(item.ALIQ_ICMS_NFE_FOR_SN == null && item.Aliq_Icms_NFE_For_SN_INTERNO == null) 
+                                                {
+                                                    <td class="text-center" style="width:5%">
+                                                        @Html.DisplayFor(modelItem => item.ALIQ_ICMS_NFE_FOR_SN)
+                                                    </td>
+                                                }
+                                                else 
+                                                {
+                                                     if (item.ALIQ_ICMS_NFE_FOR_SN > item.Aliq_Icms_NFE_For_SN_INTERNO)
                                                 {
                                                     <td class="text-center pr-td-maior" style="width:5%">
                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_NFE_FOR_SN)
@@ -985,6 +1012,10 @@
 
 
 
+                                                }
+
+                                               
+
                                                 <td style="text-align:center; width:10%;">
                                                     @Html.DisplayFor(modelItem => item.Aliq_Icms_NFE_For_SN_INTERNO)
 
@@ -1015,7 +1046,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de Registros: @ViewBag.Registros</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
                     </div>
 
@@ -1030,8 +1061,8 @@
                                  filtroCorrente = ViewBag.FiltroCorrente,
                                  filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                  filtroCorrenteCest = ViewBag.FiltroCorrenteCest,
-                                 numeroLinhas = ViewBag.NumeroLinhas,
-                                 totReg = ViewBag.Registros
+                                 numeroLinhas = ViewBag.NumeroLinhas
+                                
 
                              }),
                              new PagedListRenderOptions()

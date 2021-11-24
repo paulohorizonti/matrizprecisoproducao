@@ -531,7 +531,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de Registros: @ViewBag.Registros</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
                     </div>
 
@@ -546,8 +546,8 @@
                                  filtroCorrente = ViewBag.FiltroCorrente,
                                  filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                  filtroCorrenteCest = ViewBag.FiltroCorrenteCest,
-                                 numeroLinhas = ViewBag.NumeroLinhas,
-                                 totReg = ViewBag.Registros
+                                 numeroLinhas = ViewBag.NumeroLinhas
+                                 
                              }),
                              new PagedListRenderOptions()
                              {

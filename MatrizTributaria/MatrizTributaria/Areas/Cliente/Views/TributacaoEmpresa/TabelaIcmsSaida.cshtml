@@ -197,7 +197,7 @@
                                                 <td style="width:5%;">Aliq ST</td>
                                                 @if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null)
                                                 {
-                                                 <td class="text-center pr-td-maior" style="width:5%">
+                                                 <td class="text-center" style="width:5%">
                                                      @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
                                                  </td>
                                                 }
@@ -320,7 +320,7 @@
                                                 <td style="width:5%;">Aliq</td>
                                                 @if (item.ALIQ_ICMS_VENDA_VAREJO_CONT == null && item.Aliq_Icms_Venda_Varejo_Cont_INTERNO == null)
                                                 {
-                                                 <td class="text-center pr-td-maior" style="width:5%">
+                                                 <td class="text-center" style="width:5%">
                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
                                                     </td>
 
@@ -378,7 +378,7 @@
                                                 <td style="width:5%;">Aliq ST</td>
                                                 @if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && item.Aliq_Icms_ST_Venda_Varejo_Cont_INTERNO == null)
                                                 {
-                                                    <td class="text-center pr-td-maior" style="width:5%">
+                                                    <td class="text-center" style="width:5%">
                                                         @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONT)
                                                     </td>
 
@@ -814,7 +814,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de Registros: @ViewBag.Registros</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
                     </div>
 
@@ -829,8 +829,8 @@
                                  filtroCorrente = ViewBag.FiltroCorrente,
                                  filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                  filtroCorrenteCest = ViewBag.FiltroCorrenteCest,
-                                 numeroLinhas = ViewBag.NumeroLinhas,
-                                 totReg = ViewBag.Registros
+                                 numeroLinhas = ViewBag.NumeroLinhas
+                                
                              }),
                              new PagedListRenderOptions()
                              {

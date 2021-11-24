@@ -583,3 +583,4 @@ C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.pdb
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.AssemblyReference.cache
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.CopyComplete
+C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\Rotativa.dll

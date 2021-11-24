@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Rotativa;
 
 namespace MatrizTributaria.Areas.Cliente.Controllers
 {
@@ -828,7 +829,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         /// <returns>Retorna a View Tipada</returns>
         [HttpGet]
         public ActionResult TabelaIcmsEntrada(string ordenacao, string procuraPor, string procuraNCM, 
-        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas)
         {
             //Veririficar a sessão do usuario
             if(Session["usuario"] == null)
@@ -934,8 +935,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
             int numeroPagina = (pagina ?? 1);
-            //registros
-            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
+            
             return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
         }
@@ -943,7 +943,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         [HttpGet]
         public ActionResult TabelaIcmsSaida(string ordenacao, string procuraPor, string procuraNCM,
-        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas)
         {
             //Veririficar a sessão do usuario
             if (Session["usuario"] == null)
@@ -1050,8 +1050,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
             int numeroPagina = (pagina ?? 1);
 
-            //registros
-            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
+            
 
             return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
@@ -1060,7 +1059,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         [HttpGet]
         public ActionResult TabelaRedBasCalSaida(string ordenacao, string procuraPor, string procuraNCM,
-        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas)
         {
             //Veririficar a sessão do usuario
             if (Session["usuario"] == null)
@@ -1167,8 +1166,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
             int numeroPagina = (pagina ?? 1);
 
-            //registros
-            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
+           
 
             return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
@@ -1178,7 +1176,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         [HttpGet]
         public ActionResult TabelaRedBasCalEntrada(string ordenacao, string procuraPor, string procuraNCM,
-        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas)
         {
             //Veririficar a sessão do usuario
             if (Session["usuario"] == null)
@@ -1286,8 +1284,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
             int numeroPagina = (pagina ?? 1);
-            //registros
-            ViewBag.Registros = (totReg != null)?totReg: analise.Count();
+           
            
             return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
@@ -1296,7 +1293,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         [HttpGet]
         public ActionResult TabelaPisCofins(string ordenacao, string procuraPor, string procuraNCM,
-        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas, int? totReg)
+        string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, int? pagina, int? numeroLinhas)
         {
             //Veririficar a sessão do usuario
             if (Session["usuario"] == null)
@@ -1403,8 +1400,6 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             //se houver algo na vaiavel pagina ele atruib caso contrario atribui 1
             int numeroPagina = (pagina ?? 1);
-            //registros
-            ViewBag.Registros = (totReg != null) ? totReg : analise.Count();
 
             return View(analise.ToPagedList(numeroPagina, tamanhoPagina));//view tipada
 
