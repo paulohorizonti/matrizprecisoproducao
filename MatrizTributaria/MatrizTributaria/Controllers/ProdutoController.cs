@@ -14,6 +14,7 @@ namespace MatrizTributaria.Controllers
         //Objeto context
        readonly MatrizDbContext db;
         List<Produto> prod;
+        List<Produto> prodMTX = new List<Produto>();
         public ProdutoController()
         {
             db = new MatrizDbContext();
@@ -265,28 +266,26 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
-
-            /*Código de Barras*/
-            ViewBag.CodBarras = (int)(from a in db.Produtos where a.codBarras != 0 select a).Count();
-            ViewBag.CodBarrasNull = (int)(from a in db.Produtos where a.codBarras == 0 select a).Count();
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+             VerificaTempDataProd();
 
            
 
+            /*Código de Barras*/
+            ViewBag.CodBarras = this.prodMTX.Count(a=>a.codBarras !=0);
+            ViewBag.CodBarrasNull = this.prodMTX.Count(a => a.codBarras == 0);
+
+
+
             /*Cest*/
-            ViewBag.Cest = (int)(from a in db.Produtos where a.cest != null select a).Count();
-            ViewBag.CestNull = (int)(from a in db.Produtos where a.cest == null select a).Count();
+            ViewBag.Cest = this.prodMTX.Count(a => a.cest != null);
+            ViewBag.CestNull = this.prodMTX.Count(a => a.cest == null);
 
             /*Ncm*/
-            ViewBag.Ncm = (int)(from a in db.Produtos where a.ncm != null select a).Count();
-            ViewBag.NcmNull = (int)(from a in db.Produtos where a.ncm == null select a).Count();
+            ViewBag.Ncm = this.prodMTX.Count(a => a.ncm != null);
+            ViewBag.NcmNull = this.prodMTX.Count(a => a.ncm == null);
 
-            /*PAra tipar */
-            var prod1 = from s in db.Produtos where s.ncm != null select s; //variavel carregado de produtos
-            ViewBag.NCMTipado = prod1;
 
-            var prod2 = from s in db.Produtos where s.ncm == null select s; //variavel carregado de produtos
-            ViewBag.NCMTipado2 = prod2;
 
             return View();
 
@@ -345,7 +344,7 @@ namespace MatrizTributaria.Controllers
                 prod1 = prod1.Where(s=>s.ncm != null);
 
                 
-                //ViewBag.NCMTipado = prod1;
+             
                 if (!String.IsNullOrEmpty(procurarPor)) 
                 {
                     prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()) || s.ncm.Contains(procurarPor));
@@ -358,7 +357,7 @@ namespace MatrizTributaria.Controllers
             {
                 prod1 = prod1.Where(s => s.ncm == null);
 
-                //ViewBag.NCMTipado = prod1;
+              
                 if (!String.IsNullOrEmpty(procurarPor))
                 {
                     prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()) || s.ncm.Contains(procurarPor));
@@ -394,6 +393,186 @@ namespace MatrizTributaria.Controllers
 
                        
         }
+        [HttpGet]
+
+        public ActionResult EditMassaModal(string array)
+        {
+
+            string[] dadosDoCadastro = array.Split(',');
+
+            dadosDoCadastro = dadosDoCadastro.Where(item => item != "").ToArray(); //retira o 4o. elemento
+
+            prod = new List<Produto>();
+
+            for (int i = 0; i < dadosDoCadastro.Length; i++)
+            {
+                int aux = Int32.Parse(dadosDoCadastro[i]);
+                prod.Add(db.Produtos.Find(aux));
+
+
+            }
+            ViewBag.Produtos = prod;
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditMassaModalPost(string strDados, string ncm)
+        {
+            //varivael para recebe o novo ncm
+            string ncmMudar = "";
+
+            //separar a String em um array
+            string[] idProdutos = strDados.Split(',');
+
+            //retira o elemento vazio do array
+            idProdutos = idProdutos.Where(item => item != "").ToArray();
+
+            ncmMudar = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
+
+            ncmMudar = ncmMudar.Replace(".", ""); //tirar os pontos da string
+
+
+
+            //objeto produto
+            Produto prod = new Produto();
+
+            //percorrer o array, atribuir o valor de ncm e salvar o objeto
+            for (int i = 0; i < idProdutos.Length; i++)
+            {
+                int idProd = Int32.Parse(idProdutos[i]);
+                prod = db.Produtos.Find(idProd);
+                prod.ncm = ncmMudar;
+                db.SaveChanges();
+            }
+
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("GraficoAnaliseProdutos", "Produto");
+        }
+
+
+
+        //Editar CEST
+        [HttpGet]
+        public ActionResult EditCestMassa(string opcao, string ordenacao, string procurarPor, string procurarPorCest, string filtroCorrente, string filtroCorrenteCest, int? page, int? numeroLinhas)
+        {
+            /*Verificar a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+
+            }
+            //Auxilia na conversão para fazer a busca pelo codigo de barras
+            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
+             ele será atribuido, caso contrario será o valor da variavel procurar por*/
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
+
+            //converte em long caso seja possivel
+            long codBarrasL = 0;
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+
+
+            //ViewBag para número de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+            //Ordenação
+            ViewBag.Ordenacao = ordenacao;
+            ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
+
+
+            /*Verifica a opção e atribui a uma tempdata para continuar salva*/
+            if (opcao != null)
+            {
+                TempData["opcao"] = opcao;
+            }
+            else
+            {
+                opcao = TempData["opcao"].ToString();
+            }
+
+            //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+
+            if (procurarPor != null || procurarPorCest != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                procurarPor = filtroCorrente;
+                procurarPorCest = filtroCorrenteCest;
+            }
+
+            //Atribui o filtro corrente
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrente2 = procurarPorCest;
+
+            /*Para tipar */
+            var prod1 = from s in db.Produtos select s; //variavel carregado de produtos
+
+            if (opcao == "Com Cest")
+            {
+                prod1 = prod1.Where(s => s.cest != null);
+
+                if (!String.IsNullOrEmpty(procurarPor))
+                {
+                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+
+                }
+                if (!String.IsNullOrEmpty(procurarPorCest))
+                {
+                    prod1 = prod1.Where(s => s.cest.Contains(procurarPorCest));
+
+                }
+
+            }
+            else
+            {
+                prod1 = prod1.Where(s => s.cest == null);
+
+
+                //ViewBag.NCMTipado = prod1;
+                if (!String.IsNullOrEmpty(procurarPor))
+                {
+                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+
+                }
+                if (!String.IsNullOrEmpty(procurarPorCest))
+                {
+                    prod1 = prod1.Where(s => s.cest.Contains(procurarPorCest));
+
+                }
+
+            }
+
+            //Aplicar ordenação
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    prod1 = prod1.OrderByDescending(s => s.descricao);
+                    break;
+                default:
+                    prod1 = prod1.OrderBy(s => s.Id);
+                    break;
+
+
+            }
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+
+            int numeroPagina = (page ?? 1);
+
+            return View(prod1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
+
+        }
+
 
 
         [HttpGet]
@@ -414,28 +593,7 @@ namespace MatrizTributaria.Controllers
 
             return View();
         }
-
-        [HttpGet]
-        public ActionResult EditMassaModal(string array)
-        {
-            
-            string[] dadosDoCadastro = array.Split(',');
-
-            dadosDoCadastro = dadosDoCadastro.Where(item => item !="").ToArray(); //retira o 4o. elemento
-
-            prod = new List<Produto>();
-           
-            for (int i=0; i < dadosDoCadastro.Length; i++)
-            {
-                int aux = Int32.Parse(dadosDoCadastro[i]);
-                prod.Add(db.Produtos.Find(aux));
-
-
-            }
-            ViewBag.Produtos = prod;
-
-            return View();
-        }
+               
 
         [HttpGet]
         public ActionResult EditCestMassaModalPost(string strDados, string cest)
@@ -473,93 +631,9 @@ namespace MatrizTributaria.Controllers
            
         }
 
-        [HttpGet]
-        public ActionResult EditCodBarrasMassaModal(string strDados)
-        {
-            string[] dadosDoCadastro = strDados.Split(',');
-
-            dadosDoCadastro = dadosDoCadastro.Where(item => item != "").ToArray(); //retira o 4o. elemento
-
-            prod = new List<Produto>();
-
-            for (int i = 0; i < dadosDoCadastro.Length; i++)
-            {
-                int aux = Int32.Parse(dadosDoCadastro[i]);
-                prod.Add(db.Produtos.Find(aux));
-
-
-            }
-            ViewBag.Produtos = prod;
-
-            return View();
-        }
-
-        [HttpGet]
-        public ActionResult EditCodBarrasMassaModalPost(string strDados, string codBarras)
-        {
-            //varivael para recebe o novo ncm
-            string codBarrasMudar = "";
-            //separar a String em um array
-            string[] idProdutos = strDados.Split(',');
-            //retira o elemento vazio do array
-            idProdutos = idProdutos.Where(item => item != "").ToArray();
-            codBarrasMudar = codBarras != "" ? codBarras.Trim() : "0"; //ternario para remover eventuais espaços
-
-            //objeto produto
-            Produto prod = new Produto();
-
-            //percorrer o array, atribuir o valor de ncm e salvar o objeto
-            for (int i = 0; i < idProdutos.Length; i++)
-            {
-                int idProd = Int32.Parse(idProdutos[i]);
-                prod = db.Produtos.Find(idProd);
-                prod.dataAlt = DateTime.Now; //data da alteração
-                prod.codBarras = Int64.Parse(codBarrasMudar);
-                db.SaveChanges();
-            }
-
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("GraficoAnaliseProdutos", "Produto");
-
-        }
-
-        [HttpGet]
-        public ActionResult EditMassaModalPost(string strDados, string ncm)
-        {
-            //varivael para recebe o novo ncm
-            string ncmMudar = "";
-
-            //separar a String em um array
-            string[] idProdutos = strDados.Split(',');
-
-            //retira o elemento vazio do array
-            idProdutos = idProdutos.Where(item => item != "").ToArray();
-
-            ncmMudar = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
-
-            ncmMudar = ncmMudar.Replace(".", ""); //tirar os pontos da string
-
-
-
-            //objeto produto
-            Produto prod = new Produto(); 
-
-            //percorrer o array, atribuir o valor de ncm e salvar o objeto
-            for(int i = 0; i< idProdutos.Length; i++) 
-            {
-                int idProd = Int32.Parse(idProdutos[i]);
-                prod = db.Produtos.Find(idProd);
-                prod.ncm = ncmMudar;
-                db.SaveChanges();
-            }
-
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("GraficoAnaliseProdutos", "Produto");
-        }
-
         //Alterar Codigo de Barras
         [HttpGet]
-        public ActionResult EditCodBarrasMassa(string opcao, string ordenacao, string procurarPor, string filtroCorrente, int? page, int? numeroLinhas) 
+        public ActionResult EditCodBarrasMassa(string opcao, string ordenacao, string procurarPor, string filtroCorrente, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -574,11 +648,11 @@ namespace MatrizTributaria.Controllers
 
             //converte em long caso seja possivel
             long codBarrasL = 0;
-            bool canConvert = long.TryParse(codBarras, out codBarrasL); 
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
 
             //ViewBag para persistir o numero de linhas 
-            ViewBag.NumeroLinhas = (numeroLinhas != null)? numeroLinhas : 10;
-           
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
             //Ordenação
             ViewBag.Ordenacao = ordenacao;
             ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
@@ -649,14 +723,14 @@ namespace MatrizTributaria.Controllers
                 {
 
                     prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-                    
+
                 }
                 switch (ordenacao)
                 {
                     case "Produto_desc":
                         prod1 = prod1.OrderByDescending(s => s.descricao);
                         break;
-                    
+
                     default:
                         prod1 = prod1.OrderBy(s => s.Id);
                         break;
@@ -679,128 +753,84 @@ namespace MatrizTributaria.Controllers
 
         }
 
-        //Editar CEST
+
         [HttpGet]
-        public ActionResult EditCestMassa(string opcao, string ordenacao, string procurarPor, string procurarPorCest, string filtroCorrente, string filtroCorrenteCest, int? page, int? numeroLinhas)
+        public ActionResult EditCodBarrasMassaModal(string strDados)
         {
-            /*Verificar a sessão*/
-            if (Session["usuario"] == null)
+            string[] dadosDoCadastro = strDados.Split(',');
+
+            dadosDoCadastro = dadosDoCadastro.Where(item => item != "").ToArray(); //retira o 4o. elemento
+
+            prod = new List<Produto>();
+
+            for (int i = 0; i < dadosDoCadastro.Length; i++)
             {
-                return RedirectToAction("../Home/Login");
-
-            }
-            //Auxilia na conversão para fazer a busca pelo codigo de barras
-            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
-             ele será atribuido, caso contrario será o valor da variavel procurar por*/
-            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
-
-            //converte em long caso seja possivel
-            long codBarrasL = 0;
-            bool canConvert = long.TryParse(codBarras, out codBarrasL);
-
-
-
-            //ViewBag para número de linhas
-            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
-
-            //Ordenação
-            ViewBag.Ordenacao = ordenacao;
-            ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
-
-
-            /*Verifica a opção e atribui a uma tempdata para continuar salva*/
-            if (opcao != null)
-            {
-                TempData["opcao"] = opcao;
-            }
-            else
-            {
-                opcao = TempData["opcao"].ToString();
-            }
-
-            //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
-            TempData.Keep("opcao");
-           
-
-            if (procurarPor != null || procurarPorCest !=null)
-            {
-                page = 1;
-            }
-            else
-            {
-                procurarPor = filtroCorrente;
-                procurarPorCest = filtroCorrenteCest;
-            }
-
-            //Atribui o filtro corrente
-            ViewBag.FiltroCorrente = procurarPor;
-            ViewBag.FiltroCorrente2 = procurarPorCest;
-
-            /*Para tipar */
-            var prod1 = from s in db.Produtos select s; //variavel carregado de produtos
-
-            if (opcao == "Com Cest")
-            {
-                prod1 = prod1.Where(s => s.cest != null);
-
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorCest))
-                {
-                     prod1 = prod1.Where(s=>s.cest.Contains(procurarPorCest));
-
-                }
-
-            }
-            else
-            {
-                prod1 = prod1.Where(s => s.cest == null);
-
-
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorCest))
-                {
-                    prod1 = prod1.Where(s => s.cest.Contains(procurarPorCest));
-
-                }
-
-            }
-
-            //Aplicar ordenação
-            switch (ordenacao)
-            {
-                case "Produto_desc":
-                    prod1 = prod1.OrderByDescending(s => s.descricao);
-                    break;
-                default:
-                    prod1 = prod1.OrderBy(s => s.Id);
-                    break;
+                int aux = Int32.Parse(dadosDoCadastro[i]);
+                prod.Add(db.Produtos.Find(aux));
 
 
             }
-            //montar a pagina
-            int tamanhoPagina = 0;
+            ViewBag.Produtos = prod;
 
-            //Ternario para tamanho da pagina
-            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+            return View();
+        }
 
+        [HttpGet]
+        public ActionResult EditCodBarrasMassaModalPost(string strDados, string codBarras)
+        {
+            //varivael para recebe o novo ncm
+            string codBarrasMudar = "";
+            //separar a String em um array
+            string[] idProdutos = strDados.Split(',');
+            //retira o elemento vazio do array
+            idProdutos = idProdutos.Where(item => item != "").ToArray();
+            codBarrasMudar = codBarras != "" ? codBarras.Trim() : "0"; //ternario para remover eventuais espaços
 
-            int numeroPagina = (page ?? 1);
+            //objeto produto
+            Produto prod = new Produto();
 
-            return View(prod1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //percorrer o array, atribuir o valor de ncm e salvar o objeto
+            for (int i = 0; i < idProdutos.Length; i++)
+            {
+                int idProd = Int32.Parse(idProdutos[i]);
+                prod = db.Produtos.Find(idProd);
+                prod.dataAlt = DateTime.Now; //data da alteração
+                prod.codBarras = Int64.Parse(codBarrasMudar);
+                db.SaveChanges();
+            }
 
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("GraficoAnaliseProdutos", "Produto");
 
         }
 
 
+
+       
+
+      
+
+       
+        //Actions auxiliar
+        public EmptyResult VerificaTempDataProd()
+        {
+            /*PAra tipar */
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+            if (TempData["tributacaoMTX"] == null)
+            {
+                this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
+                TempData.Keep("tributacaoProdMTX"); //persiste
+            }
+            else
+            {
+                this.prodMTX = (List<Produto>)TempData["tributacaoProdMTX"];//atribui a lista os valores de tempdata
+                TempData.Keep("tributacaoProdMTX"); //persiste
+            }
+
+            return new EmptyResult();
+        }
 
 
     }

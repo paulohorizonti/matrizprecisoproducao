@@ -741,21 +741,21 @@ a:hover{
 
 /**Cor quando selecionado**/
 #table-graficos2 tr.selecionado td {
-    background-color: #A7291D;
+    background-color: #284964;
     color: #ffffff;
     font-size: 0.7em;
 }
 
 /**Cor quando selecionado**/
 .table-graficos tr.selecionado td {
-    background-color: #A7291D;
+    background-color: #284964;
     color: #ffffff;
     font-size: 0.99em;
 }
 
 /**Cor quando selecionado**/
 #table-graficos2 tr.selecionado td {
-    background-color: #A7291D;
+    background-color: #284964;
     color: #ffffff;
     font-size: 0.99em;
 }

@@ -1448,4 +1448,14 @@ function selecionaLinhas(paramTabela) {
 
 /*Liberar a tela apos a execução do codigo dentro da chamada ajax*/
 $(document).ajaxStop($.unblockUI);
-                               
+
+//esconder mensagem de alerta quando for mostrada
+$(document).ready(function () {
+    setTimeout(function () {
+        $(".alert").fadeOut("slow", function () {
+
+            $(this).alert('close');
+        });
+
+    }, 3000);
+});

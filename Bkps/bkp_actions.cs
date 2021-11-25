@@ -481,4 +481,121 @@
             return View(trib.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
 
         }
+===============================
+  [HttpGet]
+        public ActionResult EditAliqIcmsCompIndMassa(string opcao, string ordenacao, string procurarPor, string procurarPorAliq, string filtroCorrente, string filtroCorrenteAliq, int? page, int? numeroLinhas)
+        {
+            /*Verificar a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
 
+            }
+
+
+            //Auxilia na conversão para fazer a busca pelo codigo de barras
+            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
+             ele será atribuido, caso contrario será o valor da variavel procurar por*/
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
+
+            //converte em long caso seja possivel
+            long codBarrasL = 0;
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+
+            procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+            ViewBag.Ordenacao = ordenacao;
+            ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
+
+            /*Verifica a opção e atribui a uma tempdata para continuar salva*/
+            TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
+
+
+            //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            page = (procurarPor != null) || (procurarPorAliq != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procurarPorAliq = (procurarPorAliq == null) ? filtroCorrenteAliq : procurarPorAliq;
+
+
+
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrente2 = procurarPorAliq;
+
+            /*PAra tipar */
+            var trib1 = from s in db.Tributacoes select s; //variavel carregado de produtos
+
+            //ViewBag com a opcao
+            ViewBag.Opcao = opcao;
+
+            if (opcao == "Com aliquota")
+            {
+
+                trib1 = trib1.Where(s => s.aliqIcmsCompDeInd != null);
+
+                //ViewBag.NCMTipado = prod1;
+                if (!String.IsNullOrEmpty(procurarPor))
+                {
+
+                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+
+
+                }
+                if (!String.IsNullOrEmpty(procurarPorAliq))
+                {
+                    trib1 = trib1.Where(s => s.aliqIcmsCompDeInd.ToString().Contains(procurarPorAliq));
+
+                }
+
+
+            }
+            else
+            {
+                trib1 = trib1.Where(s => s.aliqIcmsCompDeInd == null);
+
+                //ViewBag.NCMTipado = prod1;
+                if (!String.IsNullOrEmpty(procurarPor))
+                {
+
+                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+
+
+                }
+                if (!String.IsNullOrEmpty(procurarPorAliq))
+                {
+                    trib1 = trib1.Where(s => s.aliqIcmsCompDeInd.ToString().Contains(procurarPorAliq));
+
+                }
+
+            }
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    trib1 = trib1.OrderByDescending(s => s.produtos.descricao);
+                    break;
+
+                default:
+                    trib1 = trib1.OrderBy(s => s.id);
+                    break;
+
+
+            }
+
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            int numeroPagina = (page ?? 1);
+
+            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            return View(trib1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+        }

@@ -175,7 +175,6 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("ALIQ_ICMS_NFE_FOR_SN")]
         public double? ALIQ_ICMS_NFE_FOR_SN { get; set; }
 
-
         [Column("TIPO_MVA")]
         public string TIPO_MVA { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿@using PagedList.Mvc
-@model PagedList.IPagedList<MatrizTributaria.Models.Tributacao>
+@model PagedList.IPagedList<MatrizTributaria.Models.TributacaoGeralView>
 @{
     ViewBag.Title = "EditAliqIcmsCompIndMassa";
 }
@@ -20,7 +20,7 @@
 
                     <div class="col-lg-12">
                         <div class="container-fluid">
-                            @using (Html.BeginForm("EditAliqIcmsCompIndMassa", "Tributacao", FormMethod.Get))
+                            @using (Html.BeginForm("EditAliqIcmsCompIndMassa", "Tributacao", FormMethod.Get, new { @class = "form-row" }))
                             {
                                 @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->
 
@@ -42,6 +42,15 @@
                                             Descrição do Produto
                                         </th>
 
+                                        <th class="align-middle">
+                                            CEST
+                                        </th>
+
+                                        <th class="align-middle">
+                                            NCM
+                                        </th>
+                                     
+
                                         <th class="align-middle text-center">
                                             Aliquota
                                         </th>
@@ -57,27 +66,33 @@
                                     @foreach (var item in Model)
                                     {
 
-                                        <tr class="pr-td">
-                                            <td style="width:3%">
-                                                @Html.DisplayFor(modelItem => item.id)
-                                            </td>
-                                            <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.produtos.codBarras)
-                                            </td>
-                                            <td style="width:18%">
-                                                @Html.DisplayFor(modelItem => item.produtos.descricao)
-                                            </td>
-                                            <td class="text-center" style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.aliqIcmsCompDeInd)
-                                            </td>
+                                    <tr class="pr-td">
+                                        <td style="width:3%">
+                                            @Html.DisplayFor(modelItem => item.ID)
+                                        </td>
+                                        <td style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
+                                        </td>
+                                        <td style="width:18%">
+                                            @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                        </td>
+                                        <td style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
+                                        </td>
+                                        <td style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
+                                        </td>
+                                        <td class="text-center" style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_COMP_DE_IND)
+                                        </td>
 
 
-                                            <td style="width:5%;" class="text-center">
-                                                @Html.DisplayFor(modelItem => item.Data)
+                                        <td style="width:5%;" class="text-center">
+                                            @Html.DisplayFor(modelItem => item.DataFormatada)
 
-                                            </td>
+                                        </td>
 
-                                        </tr>
+                                    </tr>
                                     }
                                 </tbody>
 
@@ -92,7 +107,15 @@
 
                                 <div style="float:right;" class="p-2 pr-fontalternativa">
                                     @Html.PagedListPager(
-                                    Model, page => Url.Action("EditAliqIcmsCompIndMassa", new { page, filtroCorrente = ViewBag.FiltroCorrente, filtroCorrenteAliq = ViewBag.FiltroCorrente2, numeroLinhas = ViewBag.NumeroLinhas, opcao = TempData["opcao"].ToString() }),
+                                    Model, page => Url.Action("EditAliqIcmsCompIndMassa",
+                                    new { page,
+                                        filtroCorrente = ViewBag.FiltroCorrente,
+                                        filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
+                                        numeroLinhas = ViewBag.NumeroLinhas,
+                                        filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                        filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                        opcao = TempData["opcao"].ToString()
+                                    }),
                                     new PagedListRenderOptions()
                                     {
                                         LiElementClasses = new List<string>

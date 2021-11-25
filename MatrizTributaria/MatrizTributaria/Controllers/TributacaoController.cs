@@ -15,12 +15,15 @@ namespace MatrizTributaria.Controllers
         //Objego context
        readonly MatrizDbContext db;
        List<Tributacao> trib;
+      
+       List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
         //Construtor
         public TributacaoController()
         {
             db = new MatrizDbContext();
         }
 
+       
         // GET: Tributacao
         public ActionResult Index(string sortOrder, string searchString, string currentFilter,  int? page)
         {
@@ -892,45 +895,48 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
             string user = Session["usuario"].ToString();
-           
+
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
+
             /*Aliquota ICMS Compra industria*/
-            ViewBag.AliqICMSEntradaInd = (int)(from a in db.Tributacoes where a.aliqIcmsCompDeInd != null select a).Count();
-            ViewBag.AliqICMSEntradaNulla = (int)(from a in db.Tributacoes where a.aliqIcmsCompDeInd == null select a).Count();
+             ViewBag.AliqICMSEntradaInd = this.tribMTX.Count(a=>a.ALIQ_ICMS_COMP_DE_IND !=null);
+             ViewBag.AliqICMSEntradaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMP_DE_IND == null);
 
             /*Aliquota ICMS st Compra industria*/
-            ViewBag.AliqICMSSTEntradaInd   = (int)(from a in db.Tributacoes where a.aliqIcmsSTCompDeInd != null select a).Count();
-            ViewBag.AliqICMSSTEntradaNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTCompDeInd == null select a).Count();
+            ViewBag.AliqICMSSTEntradaInd   = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND != null);
+            ViewBag.AliqICMSSTEntradaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND == null);
 
 
             /*Aliquota ICMS compra de atacado*/
-            ViewBag.AliqICMSCompraAta = (int)(from a in db.Tributacoes where a.aliqIcmsCompradeAta != null select a).Count();
-            ViewBag.AliqICMSCompraAtaNulla = (int)(from a in db.Tributacoes where a.aliqIcmsCompradeAta == null select a).Count();
+            ViewBag.AliqICMSCompraAta = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA != null);
+            ViewBag.AliqICMSCompraAtaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA == null);
 
             /*Aliquota ICMS ST compra de atacado*/
-            ViewBag.AliqICMSSTCompraAta = (int)(from a in db.Tributacoes where a.aliqIcmsSTCompraDeAta != null select a).Count();
-            ViewBag.AliqICMSSTCompraAtaNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTCompraDeAta == null select a).Count();
+            ViewBag.AliqICMSSTCompraAta      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA != null);
+            ViewBag.AliqICMSSTCompraAtaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA == null);
 
             /*Aliquota ICMS compra de Simples nacional*/
-            ViewBag.AliqICMSCompraSN = (int)(from a in db.Tributacoes where a.aliqIcmsCompradeSimpNacional != null select a).Count();
-            ViewBag.AliqICMSCompraSNNulla = (int)(from a in db.Tributacoes where a.aliqIcmsCompradeSimpNacional == null select a).Count();
+            ViewBag.AliqICMSCompraSN      = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null);
+            ViewBag.AliqICMSCompraSNNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null);
 
             /*Aliquota ICMS ST compra de Simples nacional*/
-            ViewBag.AliqICMSSTCompraSN = (int)(from a in db.Tributacoes where a.aliqIcmsSTCompradeSimpNacional != null select a).Count();
-            ViewBag.AliqICMSSTCompraSNNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTCompradeSimpNacional == null select a).Count();
+            ViewBag.AliqICMSSTCompraSN = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null);
+            ViewBag.AliqICMSSTCompraSNNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null);
 
 
             /*Aliquota ICMS NFE Compra Industria*/
-            ViewBag.AliqICMSNFEInd = (int)(from a in db.Tributacoes where a.aliqIcmsNFE != null select a).Count();
-            ViewBag.AliqICMSNfeIndNulla = (int)(from a in db.Tributacoes where a.aliqIcmsNFE == null select a).Count();
+            ViewBag.AliqICMSNFEInd = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE != null);
+            ViewBag.AliqICMSNfeIndNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE == null);
 
             /*Aliquota ICMS NFE Compra Ata*/
-            ViewBag.AliqICMSNFEAta = (int)(from a in db.Tributacoes where a.aliqIcmsNfeAta != null select a).Count();
-            ViewBag.AliqICMSNFEAtaNulla = (int)(from a in db.Tributacoes where a.aliqIcmsNfeAta == null select a).Count();
+            ViewBag.AliqICMSNFEAta = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA != null);
+            ViewBag.AliqICMSNFEAtaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == null);
 
 
             /*Aliquota ICMS NFE Compra SN*/
-            ViewBag.AliqICMSNFESN = (int)(from a in db.Tributacoes where a.aliqIcmsNfeSN != null select a).Count();
-            ViewBag.AliqICMSNFESNNulla = (int)(from a in db.Tributacoes where a.aliqIcmsNfeSN == null select a).Count();
+            ViewBag.AliqICMSNFESN = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_SN != null);
+            ViewBag.AliqICMSNFESNNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_SN == null);
 
 
             return View();
@@ -943,43 +949,45 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-            string user = Session["usuario"].ToString();
+
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
 
             /*Aliquota ICMS Venda Varejo Consumidor Final*/
-            ViewBag.AliqICMSVendaVarCF = (int)(from a in db.Tributacoes where a.aliqIcmsVendaVarejoConsFinal != null select a).Count();
-            ViewBag.AliqICMSVendaVarCFNulla = (int)(from a in db.Tributacoes where a.aliqIcmsVendaVarejoConsFinal == null select a).Count();
+            ViewBag.AliqICMSVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null);
+            ViewBag.AliqICMSVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null);
 
 
             /*Aliquota ICMS ST Venda Varejo Consumidor Final*/
-            ViewBag.AliqICMSSTVendaVarCF = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaVarejoConsFinal != null select a).Count();
-            ViewBag.AliqICMSSTVendaVarCFNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaVarejoConsFinal == null select a).Count();
+            ViewBag.AliqICMSSTVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null);
+            ViewBag.AliqICMSSTVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null);
 
 
             /*Aliquota ICMS Venda Varejo Para Contribuinte*/
-            ViewBag.AliqICMSVendaVarCont = (int)(from a in db.Tributacoes where a.aliqIcmsVendaVarejoCont != null select a).Count();
-            ViewBag.AliqICMSVendaVarContNulla = (int)(from a in db.Tributacoes where a.aliqIcmsVendaVarejoCont == null select a).Count();
+            ViewBag.AliqICMSVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null);
+            ViewBag.AliqICMSVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null);
 
             /*Aliquota ICMS ST Venda Varejo Para Contribuinte*/
-            ViewBag.AliqICMSSTVendaVarCont = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaVarejo_Cont != null select a).Count();
-            ViewBag.AliqICMSSTVendaVarContNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaVarejo_Cont == null select a).Count();
+            ViewBag.AliqICMSSTVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null);
+            ViewBag.AliqICMSSTVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null);
 
 
             /*Aliquota ICMS Venda Ata Para Contribuinte*/
-            ViewBag.AliqICMSVendaAtaCont = (int)(from a in db.Tributacoes where a.aliqIcmsVendaAtaCont != null select a).Count();
-            ViewBag.AliqICMSVendaAtaContNulla = (int)(from a in db.Tributacoes where a.aliqIcmsVendaAtaCont == null select a).Count();
+            ViewBag.AliqICMSVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null);
+            ViewBag.AliqICMSVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null);
 
             /*Aliquota ICMS ST Venda Ata Para Contribuinte*/
-            ViewBag.AliqICMSSTVendaAtaCont = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaAtaCont != null select a).Count();
-            ViewBag.AliqICMSSTVendaAtaContNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaAtaCont == null select a).Count();
+            ViewBag.AliqICMSSTVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null);
+            ViewBag.AliqICMSSTVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null);
 
 
             /*Aliquota ICMS Venda Ata Para Simples Nacional*/
-            ViewBag.AliqICMSVendaAtaSN = (int)(from a in db.Tributacoes where a.aliqIcmsVendaAtaSimpNacional != null select a).Count();
-            ViewBag.AliqICMSVendaAtaNSNulla = (int)(from a in db.Tributacoes where a.aliqIcmsVendaAtaSimpNacional == null select a).Count();
+            ViewBag.AliqICMSVendaAtaSN      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.AliqICMSVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null);
 
             /*Aliquota ICMS ST Venda Ata Para Simples Nacional*/
-            ViewBag.AliqICMSSTVendaAtaSN = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaAtaSimpNacional != null select a).Count();
-            ViewBag.AliqICMSSTVendaAtaNSNulla = (int)(from a in db.Tributacoes where a.aliqIcmsSTVendaAtaSimpNacional == null select a).Count();
+            ViewBag.AliqICMSSTVendaAtaSN     = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.AliqICMSSTVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null);
 
 
 
@@ -993,33 +1001,37 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-            
+
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
+
+
             /*Redução base calc icms compra de industria*/
-            ViewBag.RedBasCalIcmsCompInd     = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsCompraDeInd != null select a).Count();
-            ViewBag.RedBasCalIcmsCompIndNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsCompraDeInd == null select a).Count();
+            ViewBag.RedBasCalIcmsCompInd     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null);
+            ViewBag.RedBasCalIcmsCompIndNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null);
 
             /*Redução base calc icms ST compra de industria*/
-            ViewBag.RedBasCalIcmsSTCompInd     = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTCompraDeInd != null select a).Count();
-            ViewBag.RedBasCalIcmsSTCompIndNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTCompraDeInd == null select a).Count();
+            ViewBag.RedBasCalIcmsSTCompInd     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null);
+            ViewBag.RedBasCalIcmsSTCompIndNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null);
 
 
             /*Redução base calc icms compra de atacado*/
-            ViewBag.RedBasCalIcmsCompAta     = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsCompraDeAta != null select a).Count();
-            ViewBag.RedBasCalIcmsCompAtaNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsCompraDeAta == null select a).Count();
+            ViewBag.RedBasCalIcmsCompAta     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null);
+            ViewBag.RedBasCalIcmsCompAtaNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null);
 
             /*Redução base calc icms st compra de atacado*/
-            ViewBag.RedBasCalIcmsSTCompAta = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTCompraDeAta != null select a).Count();
-            ViewBag.RedBasCalIcmsSTCompAtaNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTCompraDeAta == null select a).Count();
+            ViewBag.RedBasCalIcmsSTCompAta     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null);
+            ViewBag.RedBasCalIcmsSTCompAtaNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null);
 
 
 
             /*Redução base calc icms compra de  SIMPLES NACIONAL*/
-            ViewBag.RedBasCalIcmsCompSN = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsCompradeSimpNacional != null select a).Count();
-            ViewBag.RedBasCalIcmsCompSNNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsCompradeSimpNacional == null select a).Count();
+            ViewBag.RedBasCalIcmsCompSN     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null);
+            ViewBag.RedBasCalIcmsCompSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null);
 
             /*Redução base calc icms compra de  SIMPLES NACIONAL*/
-            ViewBag.RedBasCalIcmsSTCompSN = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTCompradeSimpNacional != null select a).Count();
-            ViewBag.RedBasCalIcmsSTCompSNNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTCompradeSimpNacional == null select a).Count();
+            ViewBag.RedBasCalIcmsSTCompSN     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null);
+            ViewBag.RedBasCalIcmsSTCompSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null);
 
 
             return View();
@@ -1032,41 +1044,43 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
+
             /*Redução base calc icms venda varejo cf*/
-            ViewBag.RedBasCalIcmsVendaVarCF     = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsVendaVarejoConsFinal != null select a).Count();
-            ViewBag.RedBasCalIcmsVendaVarCFNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsVendaVarejoConsFinal == null select a).Count();
+            ViewBag.RedBasCalIcmsVendaVarCF     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null);
+            ViewBag.RedBasCalIcmsVendaVarCFNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null);
 
             /*Redução base calc icms ST venda varejo cf*/
-            ViewBag.RedBasCalIcmsSTVendaVarCF     = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTVendaVarejoConsFinal != null select a).Count();
-            ViewBag.RedBasCalIcmsSTVendaVarCFNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTVendaVarejoConsFinal == null select a).Count();
+            ViewBag.RedBasCalIcmsSTVendaVarCF     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null);
+            ViewBag.RedBasCalIcmsSTVendaVarCFNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null);
 
 
             /*Redução base de calculo ICMS venda varejo para Contribuinte*/
-            ViewBag.RedBasCalIcmsVendaVarCont = (int)(from a in db.Tributacoes where a.redBaseCalcVendaVarejoCont!= null select a).Count();
-            ViewBag.RedBasCalIcmsVendaVarContNull = (int)(from a in db.Tributacoes where a.redBaseCalcVendaVarejoCont == null select a).Count();
+            ViewBag.RedBasCalIcmsVendaVarCont     = this.tribMTX.Count(a => a.RED_BASE_CALC_VENDA_VAREJO_CONT != null);
+            ViewBag.RedBasCalIcmsVendaVarContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_VENDA_VAREJO_CONT == null);
 
             /*Redução base de calculo ICMS ST venda varejo para Contribuinte*/
-            ViewBag.RedBasCalIcmsSTVendaVarCont = (int)(from a in db.Tributacoes where a.RedBaseCalcSTVendaVarejo_Cont != null select a).Count();
-            ViewBag.RedBasCalIcmsSTVendaVarContNull = (int)(from a in db.Tributacoes where a.RedBaseCalcSTVendaVarejo_Cont == null select a).Count();
+            ViewBag.RedBasCalIcmsSTVendaVarCont     = this.tribMTX.Count(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null);
+            ViewBag.RedBasCalIcmsSTVendaVarContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null);
 
 
             /*Red Base Calc ICMS Venda Atacado para Contribuinte*/
-            ViewBag.RedBasCalIcmsVendaAtaCont = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsVendaAtaCont != null select a).Count();
-            ViewBag.RedBasCalIcmsVendaAtaContNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsVendaAtaCont == null select a).Count();
+            ViewBag.RedBasCalIcmsVendaAtaCont     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null);
+            ViewBag.RedBasCalIcmsVendaAtaContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null);
 
             /*Red Base Calc ICMS ST Venda Atacado para Contribuinte*/
-            ViewBag.RedBasCalIcmsSTVendaAtaCont = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTVendaAtaCont != null select a).Count();
-            ViewBag.RedBasCalIcmsSTVendaAtaContNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTVendaAtaCont == null select a).Count();
+            ViewBag.RedBasCalIcmsSTVendaAtaCont =     this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null);
+            ViewBag.RedBasCalIcmsSTVendaAtaContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null);
 
 
             /*Red Base Calc ICMS Venda Atacado para Simples Nacional*/
-            ViewBag.RedBasCalIcmsVendaAtaSN = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsVendaAtaSimpNacional != null select a).Count();
-            ViewBag.RedBasCalIcmsVendaAtaSNNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsVendaAtaSimpNacional == null select a).Count();
+            ViewBag.RedBasCalIcmsVendaAtaSN     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.RedBasCalIcmsVendaAtaSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null);
 
             /*Red Base Calc ICMS ST Venda Atacado para Simples Nacional*/
-            ViewBag.RedBasCalIcmsSTVendaAtaSN = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTVendaAtaSimpNacional != null select a).Count();
-            ViewBag.RedBasCalIcmsSTVendaAtaSNNull = (int)(from a in db.Tributacoes where a.redBaseCalcIcmsSTVendaAtaSimpNacional == null select a).Count();
-
+            ViewBag.RedBasCalIcmsSTVendaAtaSN = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.RedBasCalIcmsSTVendaAtaSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null);
 
 
             return View();
@@ -1079,21 +1093,25 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
 
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
+
+            
             /*Aliq Entrada Pis*/
-            ViewBag.AliEntradaPis = (int)(from a in db.Tributacoes where a.aliqEntPis != null select a).Count();
-            ViewBag.AliEntradaPisNull = (int)(from a in db.Tributacoes where a.aliqEntPis == null select a).Count();
+            ViewBag.AliEntradaPis     = this.tribMTX.Count(a => a.ALIQ_ENT_PIS != null);
+            ViewBag.AliEntradaPisNull = this.tribMTX.Count(a => a.ALIQ_ENT_PIS == null);
 
             /*Aliq Saída Pis*/
-            ViewBag.AliSaidaPis = (int)(from a in db.Tributacoes where a.aliqSaidaPis != null select a).Count();
-            ViewBag.AliSaidaPisNull = (int)(from a in db.Tributacoes where a.aliqSaidaPis == null select a).Count();
+            ViewBag.AliSaidaPis     = this.tribMTX.Count(a => a.ALIQ_SAIDA_PIS != null);
+            ViewBag.AliSaidaPisNull = this.tribMTX.Count(a => a.ALIQ_SAIDA_PIS == null);
 
             /*Ali Entrada Cofins*/
-            ViewBag.AliEntradaCofins = (int)(from a in db.Tributacoes where a.aliqEntCofins != null select a).Count();
-            ViewBag.AliEntradaCofinsNull = (int)(from a in db.Tributacoes where a.aliqEntCofins != null select a).Count();
+            ViewBag.AliEntradaCofins     = this.tribMTX.Count(a => a.ALIQ_ENT_COFINS != null);
+            ViewBag.AliEntradaCofinsNull = this.tribMTX.Count(a => a.ALIQ_ENT_COFINS == null);
 
             /*Ali Saída Cofins*/
-            ViewBag.AliSaidaCofins = (int)(from a in db.Tributacoes where a.aliqSaidaCofins != null select a).Count();
-            ViewBag.AliSaidaCofinsNull = (int)(from a in db.Tributacoes where a.aliqSaidaCofins != null select a).Count();
+            ViewBag.AliSaidaCofins     = this.tribMTX.Count(a => a.ALIQ_SAIDA_COFINS != null);
+            ViewBag.AliSaidaCofinsNull = this.tribMTX.Count(a => a.ALIQ_SAIDA_COFINS == null);
 
 
             return View();
@@ -1105,35 +1123,40 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
+
+
+           
 
             /*CST Entrada Pis/cofins */
-            ViewBag.CstEntradaPisCofins     = (int)(from a in db.Tributacoes where a.cstEntradaPisCofins != null select a).Count();
-            ViewBag.CstEntradaPisCofinsNull = (int)(from a in db.Tributacoes where a.cstEntradaPisCofins == null select a).Count();
+            ViewBag.CstEntradaPisCofins     = this.tribMTX.Count(a => a.CST_ENTRADA_PISCOFINS != null);
+            ViewBag.CstEntradaPisCofinsNull = this.tribMTX.Count(a => a.CST_ENTRADA_PISCOFINS == null);
 
             /*CST Compra de industria */
-            ViewBag.CstCompraInd = (int)(from a in db.Tributacoes where a.cstCompraDeInd != null select a).Count();
-            ViewBag.CstCompraIndNull = (int)(from a in db.Tributacoes where a.cstCompraDeInd == null select a).Count();
+            ViewBag.CstCompraInd     = this.tribMTX.Count(a => a.CST_COMPRA_DE_IND != null);
+            ViewBag.CstCompraIndNull = this.tribMTX.Count(a => a.CST_COMPRA_DE_IND == null);
 
             /*CST Compra de Atacado */
-            ViewBag.CstCompraAta = (int)(from a in db.Tributacoes where a.cstCompradeAta != null select a).Count();
-            ViewBag.CstCompraAtaNull = (int)(from a in db.Tributacoes where a.cstCompradeAta == null select a).Count();
+            ViewBag.CstCompraAta     = this.tribMTX.Count(a => a.CST_COMPRA_DE_ATA != null);
+            ViewBag.CstCompraAtaNull = this.tribMTX.Count(a => a.CST_COMPRA_DE_ATA == null);
 
             /*CST Compra de Simpes Nacional */
-            ViewBag.CstCompraSN = (int)(from a in db.Tributacoes where a.cstCompradeSimpNacional != null select a).Count();
-            ViewBag.CstCompraSNNull = (int)(from a in db.Tributacoes where a.cstCompradeSimpNacional == null select a).Count();
+            ViewBag.CstCompraSN     = this.tribMTX.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL != null);
+            ViewBag.CstCompraSNNull = this.tribMTX.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null);
 
 
             /*CST NFe Industria*/
-            ViewBag.CstNfeInd = (int)(from a in db.Tributacoes where a.cstdaNfedaIndFORN != null select a).Count();
-            ViewBag.CstNfeIndNull = (int)(from a in db.Tributacoes where a.cstdaNfedaIndFORN == null select a).Count();
+            ViewBag.CstNfeInd     = this.tribMTX.Count(a => a.CST_DA_NFE_DA_IND_FORN != null);
+            ViewBag.CstNfeIndNull = this.tribMTX.Count(a => a.CST_DA_NFE_DA_IND_FORN == null);
 
             /*CST NFe Atacado*/
-            ViewBag.CstNfeAta     = (int)(from a in db.Tributacoes where a.cstdaNfedeAtaFORn != null select a).Count();
-            ViewBag.CstNfeAtaNull = (int)(from a in db.Tributacoes where a.cstdaNfedeAtaFORn == null select a).Count();
+            ViewBag.CstNfeAta     = this.tribMTX.Count(a => a.CST_DA_NFE_DE_ATA_FORN != null);
+            ViewBag.CstNfeAtaNull = this.tribMTX.Count(a => a.CST_DA_NFE_DE_ATA_FORN == null);
 
             /*CST NFe Simples Nacional*/
-            ViewBag.CstNfeSN = (int)(from a in db.Tributacoes where a.CsosntdaNfedoSnFOR != null select a).Count();
-            ViewBag.CstNfeSNNull = (int)(from a in db.Tributacoes where a.CsosntdaNfedoSnFOR == null select a).Count();
+            ViewBag.CstNfeSN     = this.tribMTX.Count(a => a.CSOSNTDANFEDOSNFOR != null);
+            ViewBag.CstNfeSNNull = this.tribMTX.Count(a => a.CSOSNTDANFEDOSNFOR == null);
 
 
             return View();
@@ -1147,30 +1170,34 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
 
+            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+            VerificaTempData();
+
+                                
+
             /*Cst Pis Cofins Saida*/
-            ViewBag.CstSaidaPisCofins = (int)(from a in db.Tributacoes where a.cstSaidaPisCofins != null select a).Count();
-            ViewBag.CstSaidaPisCofinsNull = (int)(from a in db.Tributacoes where a.cstSaidaPisCofins == null select a).Count();
+            ViewBag.CstSaidaPisCofins     = this.tribMTX.Count(a => a.CST_SAIDA_PISCOFINS != null);
+            ViewBag.CstSaidaPisCofinsNull = this.tribMTX.Count(a => a.CST_SAIDA_PISCOFINS == null);
 
 
             /*Cst Venda Var Cons Final*/
-            ViewBag.CstVendaVarCF = (int)(from a in db.Tributacoes where a.cstVendaVarejoConsFinal != null select a).Count();
-            ViewBag.CstVendaVarCFNull = (int)(from a in db.Tributacoes where a.cstVendaVarejoConsFinal == null select a).Count();
-
+            ViewBag.CstVendaVarCF     = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL != null);
+            ViewBag.CstVendaVarCFNull = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == null);
 
             /*CST Venda Varejo para Contribuinte*/
-            ViewBag.CstVendaVarCont = (int)(from a in db.Tributacoes where a.cstVendaVarejoCont != null select a).Count();
-            ViewBag.CstVendaVarContNull = (int)(from a in db.Tributacoes where a.cstVendaVarejoCont == null select a).Count();
+            ViewBag.CstVendaVarCont     = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONT != null);
+            ViewBag.CstVendaVarContNull = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONT == null);
 
-            
+
             /*CST Venda Atacado para Contribuinte*/
-            ViewBag.CstVendaAtaCont = (int)(from a in db.Tributacoes where a.cstVendaAtaCont != null select a).Count();
-            ViewBag.CstVendaAtaContNull = (int)(from a in db.Tributacoes where a.cstVendaAtaCont == null select a).Count();
+            ViewBag.CstVendaAtaCont     = this.tribMTX.Count(a => a.CST_VENDA_ATA_CONT != null);
+            ViewBag.CstVendaAtaContNull = this.tribMTX.Count(a => a.CST_VENDA_ATA_CONT == null);
 
             /*CST Venda Atacado para Simples nacional*/
-            ViewBag.CstVendaAtaSN = (int)(from a in db.Tributacoes where a.cstVendaAtaSimpNacional != null select a).Count();
-            ViewBag.CstVendaAtaSNNull = (int)(from a in db.Tributacoes where a.cstVendaAtaSimpNacional == null select a).Count();
+            ViewBag.CstVendaAtaSN     = this.tribMTX.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.CstVendaAtaSNNull = this.tribMTX.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null);
 
-            
+
 
             return View();
 
@@ -6054,9 +6081,13 @@ namespace MatrizTributaria.Controllers
             return RedirectToAction("GfRedBCalcIcmsSaida", "Tributacao");
         }
 
-        //Edição em massa: Aliq Icms Compra de indutria
+
+
+        //Edição em massa: Aliq Icms Compra de indutria - atualizado em 25112021
         [HttpGet]
-        public ActionResult EditAliqIcmsCompIndMassa(string opcao, string ordenacao, string procurarPor, string procurarPorAliq, string filtroCorrente, string filtroCorrenteAliq, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsCompIndMassa(string opcao, string param,  string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor, 
+            string procurarPorAliq, string procuraNCM, string procuraCEST,  string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, string filtroNulo,  int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -6065,97 +6096,121 @@ namespace MatrizTributaria.Controllers
 
             }
 
+            //variavel auxiliar
+            string resultado = param;
 
+            
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
              ele será atribuido, caso contrario será o valor da variavel procurar por*/
             string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
+
 
             //converte em long caso seja possivel
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
 
 
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
+
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
+            //parametro de ordenação da tabela e ordem
             ViewBag.Ordenacao = ordenacao;
             ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
 
-            /*Verifica a opção e atribui a uma tempdata para continuar salva*/
-            TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
+
+
+
+            /*Variavel do tipo demp data para guardar a opcao: tempo de vida maior com tempdata*/
+            TempData["opcao"] = opcao ?? TempData["opcao"]; // se a opçcao for diferente de nula a tempdata recebe seu valor
             opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
 
 
             //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
             TempData.Keep("opcao");
 
-            page = (procurarPor != null) || (procurarPorAliq != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null)? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            
+            //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
             procurarPorAliq = (procurarPorAliq == null) ? filtroCorrenteAliq : procurarPorAliq;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
 
-
+            //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
-            ViewBag.FiltroCorrente2 = procurarPorAliq;
+            ViewBag.FiltroCorrenteAliq = procurarPorAliq;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
 
-            /*PAra tipar */
-            var trib1 = from s in db.Tributacoes select s; //variavel carregado de produtos
+            //Criar o temp data da lista
+            VerificaTempData();
+
+            //var trib1 = from s in db.Tributacoes select s; //variavel carregado de produtos
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
 
-            if (opcao == "Com aliquota")
+            switch (opcao)
             {
-
-                trib1 = trib1.Where(s => s.aliqIcmsCompDeInd != null);
-
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorAliq))
-                {
-                    trib1 = trib1.Where(s => s.aliqIcmsCompDeInd.ToString().Contains(procurarPorAliq));
-
-                }
-
+                case "Com aliquota":
+                    //o parametro filtronulo mostra o filtro informado, caso nao informar nennum ele sera de acordo com a opcao
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1"; //1-COM ALIQUOTA
+                    //switche do filtro
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null).ToList();
+                            break;
+                        case "2": //sem aliquota
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null).ToList();
+                            break;
+                    }
+                    break;
+                case "Sem aliquota":
+                    //o parametro filtronulo mostra o filtro informado, caso nao informar nennum ele sera de acordo com a opcao
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2"; //2-SEM ALIQUOTA
+                    //switche do filtro
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null).ToList();
+                            break;
+                        case "2": //sem aliquota
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null).ToList();
+                            break;
+                    }
+                    break;
 
             }
-            else
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+           
+            //Busca por aliquota
+            if (!String.IsNullOrEmpty(procurarPorAliq))
             {
-                trib1 = trib1.Where(s => s.aliqIcmsCompDeInd == null);
-
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorAliq))
-                {
-                    trib1 = trib1.Where(s => s.aliqIcmsCompDeInd.ToString().Contains(procurarPorAliq));
-
-                }
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND.ToString() == procurarPorAliq).ToList();
+               
 
             }
+
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    trib1 = trib1.OrderByDescending(s => s.produtos.descricao);
+                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
 
                 default:
-                    trib1 = trib1.OrderBy(s => s.id);
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
                     break;
 
 
@@ -6168,10 +6223,15 @@ namespace MatrizTributaria.Controllers
             tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
 
             int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(trib1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
+
         [HttpGet]
         public ActionResult EditAliqIcmsCompIndMassaModal(string strDados)
         {
@@ -6205,29 +6265,58 @@ namespace MatrizTributaria.Controllers
             //separar a String em um array
             string[] idTrib = strDados.Split(',');
 
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+
             //retira o elemento vazio do array
             idTrib = idTrib.Where(item => item != "").ToArray();
 
             //objeto tributação
             Tributacao trib = new Tributacao();
 
-            //percorrer o array, atribuir o valor de ncm e salvar o objeto
-            for (int i = 0; i < idTrib.Length; i++)
+            try
             {
-                int idTrb = Int32.Parse(idTrib[i]);
-                trib = db.Tributacoes.Find(idTrb);
-                trib.dataAlt = DateTime.Now; //data da alteração
-                trib.aliqIcmsCompDeInd = (aliqIcmsCompraInd != "") ? trib.aliqIcmsCompDeInd = decimal.Parse(aliqIcmsCompraInd) : null;
-                db.SaveChanges();
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.Tributacoes.Find(idTrb);
+                    trib.dataAlt = DateTime.Now; //data da alteração
+                    trib.aliqIcmsCompDeInd = (aliqIcmsCompraInd != "") ? trib.aliqIcmsCompDeInd = decimal.Parse(aliqIcmsCompraInd) : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["tributacaoMTX"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+
             //Redirecionar para a tela de graficos
-            return RedirectToAction("GraficoIcmsEntrada", "Tributacao");
+            return RedirectToAction("EditAliqIcmsCompIndMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+
+           
         }
+
+
+
+
 
         //Edição em massa: Aliq Icms St Compra de Industria
         [HttpGet]
-        public ActionResult EditAliqIcmsSTCompIndMassa(string opcao, string ordenacao, string procurarPor, string procurarPorAliq, string filtroCorrente, string filtroCorrenteAliq, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsSTCompIndMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
+            string procurarPorAliq, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, string filtroNulo, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -6236,6 +6325,8 @@ namespace MatrizTributaria.Controllers
 
             }
 
+            //variavel auxiliar
+            string resultado = param;
 
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
@@ -6247,10 +6338,14 @@ namespace MatrizTributaria.Controllers
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
 
 
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
 
             ViewBag.Ordenacao = ordenacao;
             ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
@@ -6263,70 +6358,79 @@ namespace MatrizTributaria.Controllers
             //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
             TempData.Keep("opcao");
 
-            page = (procurarPor != null) || (procurarPorAliq != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
             procurarPorAliq = (procurarPorAliq == null) ? filtroCorrenteAliq : procurarPorAliq;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
 
-
+            //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
-            ViewBag.FiltroCorrente2 = procurarPorAliq;
+            ViewBag.FiltroCorrenteAliq = procurarPorAliq;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
 
-            /*PAra tipar */
-            var trib1 = from s in db.Tributacoes select s; //variavel carregado de produtos
 
-            //ViewBag com a opcao
+            //criar o temp data da lista ou recupera-lo
+            VerificaTempData();
+
+            //ViewBag com a opcao vinda do grafico
             ViewBag.Opcao = opcao;
 
-            if (opcao == "Com aliquota")
+            switch (opcao)
             {
+                case "Com aliquota":
+                    //o parametro filtronulo mostra o filtro informado, caso nao informar nenhum ele sera de acordo com a opcao
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1"; //1-COM ALÍQUOTA
+                    //Switche do filtro
+                    switch (ViewBag.Filtro) 
+                    {
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND != null).ToList();
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == null).ToList();
+                            break;
+                    }
+                    break;
+                case "Sem aliquota":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2"; //2-SEM ALÍQUOTA
+                        switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND != null).ToList();
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == null).ToList();
+                            break;
+                    }
+                    break;
+            }
 
-                trib1 = trib1.Where(s => s.aliqIcmsSTCompDeInd != null);
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
 
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorAliq))
-                {
-                    trib1 = trib1.Where(s => s.aliqIcmsSTCompDeInd.ToString().Contains(procurarPorAliq));
-
-                }
+            //Busca por aliquota
+            if (!String.IsNullOrEmpty(procurarPorAliq))
+            {
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND.ToString() == procurarPorAliq).ToList();
 
 
             }
-            else
-            {
-                trib1 = trib1.Where(s => s.aliqIcmsSTCompDeInd == null);
 
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorAliq))
-                {
-                    trib1 = trib1.Where(s => s.aliqIcmsSTCompDeInd.ToString().Contains(procurarPorAliq));
-
-                }
-
-            }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    trib1 = trib1.OrderByDescending(s => s.produtos.descricao);
+                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
 
                 default:
-                    trib1 = trib1.OrderBy(s => s.id);
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
                     break;
 
 
@@ -6339,9 +6443,13 @@ namespace MatrizTributaria.Controllers
             tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
 
             int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(trib1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
         [HttpGet]
@@ -6379,29 +6487,56 @@ namespace MatrizTributaria.Controllers
             //separar a String em um array
             string[] idTrib = strDados.Split(',');
 
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
             //retira o elemento vazio do array
             idTrib = idTrib.Where(item => item != "").ToArray();
 
             //objeto tributação
             Tributacao trib = new Tributacao();
 
-            //percorrer o array, atribuir o valor de ncm e salvar o objeto
-            for (int i = 0; i < idTrib.Length; i++)
+            try
             {
-                int idTrb = Int32.Parse(idTrib[i]);
-                trib = db.Tributacoes.Find(idTrb);
-                trib.dataAlt = DateTime.Now; //data da alteração
-                trib.aliqIcmsSTCompDeInd = (aliqIcmsSTCompraInd != "") ? trib.aliqIcmsCompDeInd = decimal.Parse(aliqIcmsSTCompraInd) : null;
-                db.SaveChanges();
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.Tributacoes.Find(idTrb);
+                    trib.dataAlt = DateTime.Now; //data da alteração
+                    trib.aliqIcmsSTCompDeInd = (aliqIcmsSTCompraInd != "") ? trib.aliqIcmsSTCompDeInd = decimal.Parse(aliqIcmsSTCompraInd) : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["tributacaoMTX"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+
             //Redirecionar para a tela de graficos
-            return RedirectToAction("GraficoIcmsEntrada", "Tributacao");
+            return RedirectToAction("EditAliqIcmsSTCompIndMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+
+
+           
         }
+
+
 
         //Edit Aliq Icms compra de atacado
         [HttpGet]
-        public ActionResult EditAliqIcmsCompAtaMassa(string opcao, string ordenacao, string procurarPor, string procurarPorAliq, string filtroCorrente, string filtroCorrenteAliq, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsCompAtaMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
+            string procurarPorAliq, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, string filtroNulo, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -6410,6 +6545,8 @@ namespace MatrizTributaria.Controllers
 
             }
 
+            //variavel auxiliar
+            string resultado = param;
 
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
@@ -6420,7 +6557,9 @@ namespace MatrizTributaria.Controllers
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
 
-
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
 
             //numero de linhas
@@ -6437,70 +6576,78 @@ namespace MatrizTributaria.Controllers
             //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
             TempData.Keep("opcao");
 
-            page = (procurarPor != null) || (procurarPorAliq != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
             procurarPorAliq = (procurarPorAliq == null) ? filtroCorrenteAliq : procurarPorAliq;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
 
-
+            //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
-            ViewBag.FiltroCorrente2 = procurarPorAliq;
+            ViewBag.FiltroCorrenteAliq = procurarPorAliq;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
 
-            /*PAra tipar */
-            var trib1 = from s in db.Tributacoes select s; //variavel carregado de produtos
+            //criar o temp data da lista ou recupera-lo
+            VerificaTempData();
+
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
 
-            if (opcao == "Com aliquota")
+            switch (opcao)
             {
+                case "Com aliquota":
+                    //o parametro filtronulo mostra o filtro informado, caso nao informar nenhum ele sera de acordo com a opcao
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1"; //1-COM ALÍQUOTA
+                    //Switche do filtro
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null).ToList();
+                            break;
+                    }
+                    break;
+                case "Sem aliquota":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2"; //2-SEM ALÍQUOTA
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null).ToList();
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null).ToList();
+                            break;
+                    }
+                    break;
+            }
 
-                trib1 = trib1.Where(s => s.aliqIcmsCompradeAta != null);
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
 
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorAliq))
-                {
-                    trib1 = trib1.Where(s => s.aliqIcmsCompradeAta.ToString().Contains(procurarPorAliq));
-
-                }
-
+            //Busca por aliquota
+            if (!String.IsNullOrEmpty(procurarPorAliq))
+            {
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA.ToString() == procurarPorAliq).ToList();
 
             }
-            else
-            {
-                trib1 = trib1.Where(s => s.aliqIcmsCompradeAta == null);
 
-                //ViewBag.NCMTipado = prod1;
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    trib1 = (codBarrasL != 0) ? trib1.Where(s => s.produtos.codBarras.ToString().Contains(codBarrasL.ToString())) : trib1 = trib1.Where(s => s.produtos.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-
-                }
-                if (!String.IsNullOrEmpty(procurarPorAliq))
-                {
-                    trib1 = trib1.Where(s => s.aliqIcmsCompradeAta.ToString().Contains(procurarPorAliq));
-
-                }
-
-            }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    trib1 = trib1.OrderByDescending(s => s.produtos.descricao);
+                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
 
                 default:
-                    trib1 = trib1.OrderBy(s => s.id);
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
                     break;
 
 
@@ -6513,9 +6660,14 @@ namespace MatrizTributaria.Controllers
             tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
 
             int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(trib1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
         [HttpGet]
@@ -6552,25 +6704,50 @@ namespace MatrizTributaria.Controllers
             //separar a String em um array
             string[] idTrib = strDados.Split(',');
 
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
+
+
             //retira o elemento vazio do array
             idTrib = idTrib.Where(item => item != "").ToArray();
 
             //objeto tributação
             Tributacao trib = new Tributacao();
 
-            //percorrer o array, atribuir o valor de ncm e salvar o objeto
-            for (int i = 0; i < idTrib.Length; i++)
+            try
             {
-                int idTrb = Int32.Parse(idTrib[i]);
-                trib = db.Tributacoes.Find(idTrb);
-                trib.dataAlt = DateTime.Now; //data da alteração
-                trib.aliqIcmsCompradeAta = (aliqIcmsCompraAta != "") ? trib.aliqIcmsCompradeAta = decimal.Parse(aliqIcmsCompraAta) : null;
-                db.SaveChanges();
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < idTrib.Length; i++)
+                {
+                    int idTrb = Int32.Parse(idTrib[i]);
+                    trib = db.Tributacoes.Find(idTrb);
+                    trib.dataAlt = DateTime.Now; //data da alteração
+                    trib.aliqIcmsCompradeAta = (aliqIcmsCompraAta != "") ? trib.aliqIcmsCompradeAta = decimal.Parse(aliqIcmsCompraAta) : null;
+
+                    db.SaveChanges();
+                    regSalvos++;
+
+                }
+
+                TempData["tributacaoMTX"] = null; //recarrega a lista
+                resultado = "Registro Salvo com Sucesso!!";
+
+            }
+            catch (Exception e)
+            {
+                resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+
             //Redirecionar para a tela de graficos
-            return RedirectToAction("GraficoIcmsEntrada", "Tributacao");
+            return RedirectToAction("EditAliqIcmsCompAtaMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+
         }
+
+
+
 
         //Edit Aliq icms st compra de atacado
         [HttpGet]
@@ -8993,8 +9170,51 @@ namespace MatrizTributaria.Controllers
             return RedirectToAction("GraficoIcmsSaida", "Tributacao");
         }
 
-        
 
+
+        //actions auxiliares // ponto de ajuste: busca por aliquota
+        private List<TributacaoGeralView> ProcurarPor(long? codBarrasL, string procurarPor,  string procuraCEST, string procuraNCM, List<TributacaoGeralView> tribMTX)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                tribMTX = (codBarrasL != 0) ? (tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().Contains(codBarrasL.ToString()))).ToList() : tribMTX = (tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().Contains(procurarPor.ToUpper()))).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                tribMTX = tribMTX.Where(s => s.CEST_PRODUTO == procuraCEST).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                tribMTX = tribMTX.Where(s => s.NCM_PRODUTO == procuraNCM).ToList();
+
+            }
+           
+            return tribMTX;
+        }
+
+        //retorno vazio para verificar a tempdata
+
+        public EmptyResult VerificaTempData()
+        {
+            /*PAra tipar */
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+            if (TempData["tributacaoMTX"] == null)
+            {
+                this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+                TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+                TempData.Keep("tributacaoMTX"); //persiste
+            }
+            else
+            {
+                this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                TempData.Keep("tributacaoMTX"); //persiste
+            }
+
+            return new EmptyResult();
+        }
 
     }//fim controller
 

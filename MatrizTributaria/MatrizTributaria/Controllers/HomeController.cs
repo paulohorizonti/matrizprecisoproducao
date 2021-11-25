@@ -15,6 +15,8 @@ namespace MatrizTributaria.Controllers
         List<AnaliseTributaria> analise = new List<AnaliseTributaria>();
         List<AnaliseTributaria> trib = new List<AnaliseTributaria>();
         List<AnaliseTributaria2> trib2 = new List<AnaliseTributaria2>();
+        List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
+        List<Produto> prodMTX = new List<Produto>();
 
         Usuario usuario;
         Empresa empresa;
@@ -127,6 +129,37 @@ namespace MatrizTributaria.Controllers
                         this.analise = (List<AnaliseTributaria>)TempData["analise"];
                         TempData.Keep("analise");
                     }
+
+                    /*Montar a temp-data*/
+                    /*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
+                    if (TempData["tributacaoMTX"] == null)
+                    {
+                        //carrega a lista analise usando o cnpj da empresa do usuario
+                        this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+                        TempData["tributacaoMTX"] = this.tribMTX; //cria
+                        TempData.Keep("tributacaoMTX"); //salva
+                    }
+                    else //não estando nula apenas atribui à lista o valor carregado em tempdata
+                    {
+                        this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                        TempData.Keep("tributacaoMTX");
+                    }
+
+                    /*Temp data do produto*/
+
+                    if (TempData["tributacaoProdMTX"] == null)
+                    {
+                        this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                        TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
+                        TempData.Keep("tributacaoProdMTX"); //persiste
+                    }
+                    else
+                    {
+                        this.prodMTX = (List<Produto>)TempData["tributacaoProdMTX"];//atribui a lista os valores de tempdata
+                        TempData.Keep("tributacaoProdMTX"); //persiste
+                    }
+
+
                 }
                 else
                 {
@@ -149,6 +182,7 @@ namespace MatrizTributaria.Controllers
                 Session["email"] = null;
 
                 TempData["analise"] = null;
+                TempData["tributacaoMTX"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
                 return RedirectToAction("Index");
