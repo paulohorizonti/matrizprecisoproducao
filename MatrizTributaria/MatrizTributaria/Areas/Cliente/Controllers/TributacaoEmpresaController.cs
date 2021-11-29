@@ -803,6 +803,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 if(tribEmpProd.Count() > 0)
                 {
                     contador++;
+                    this.tribEmpProd = (List<TributacaoEmpresa>)TempData["analise2"];
                 }
             }
             //atribui a viewBag os valores que possuem e nao possuem correspondencia

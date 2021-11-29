@@ -17,6 +17,7 @@ namespace MatrizTributaria.Controllers
         List<AnaliseTributaria2> trib2 = new List<AnaliseTributaria2>();
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
         List<Produto> prodMTX = new List<Produto>();
+        Usuario user;
 
         Usuario usuario;
         Empresa empresa;
@@ -84,7 +85,20 @@ namespace MatrizTributaria.Controllers
         {
             string hashTxtSenha = null;
             var hash = new Hash(SHA512.Create());
-            Usuario user = (from u in db.Usuarios where u.email.Equals(usuario.email) select u).FirstOrDefault<Usuario>();
+            
+            try
+            {
+                this.user = db.Usuarios.Where(x => x.email == usuario.email).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                var erro = e.ToString();
+                int par = 7;
+                return RedirectToAction("../Erro/ErroLogin", new { param = par });
+            }
+
+            //Usuario user = db.Usuarios.Where(x => x.email == usuario.email).FirstOrDefault();
+            //Usuario user = (from u in db.Usuarios where u.email.Equals(usuario.email) select u).FirstOrDefault<Usuario>();
             if (user == null)
             {
                 Session["usuario"] = null;
@@ -109,9 +123,39 @@ namespace MatrizTributaria.Controllers
                     Session["nivel"] = user.nivel.descricao;
 
                     string usuarioSessao = Session["usuario"].ToString(); //pega o usuário da sessão
-                    string empresaUsuario = Session["cnpjEmp"].ToString(); 
-                    this.usuario = (from a in db.Usuarios where a.nome == usuarioSessao select a).FirstOrDefault(); //pega o usuario
-                    this.empresa = (from a in db.Empresas where a.cnpj == empresaUsuario select a).FirstOrDefault(); //empresa
+                    string empresaUsuario = Session["cnpjEmp"].ToString();
+                    //this.usuario = (from a in db.Usuarios where a.nome == usuarioSessao select a).FirstOrDefault(); //pega o usuario
+
+
+                    try
+                    {
+                        this.usuario = db.Usuarios.Where(x => x.nome == usuarioSessao).FirstOrDefault();
+                    }
+                    catch (Exception e)
+                    {
+                        var erro = e.ToString();
+                        int par = 7;
+                        return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                    }
+
+
+
+
+                    //this.empresa = (from a in db.Empresas where a.cnpj == empresaUsuario select a).FirstOrDefault(); //empresa
+
+                    try
+                    {
+                        this.empresa = db.Empresas.Where(x => x.cnpj == empresaUsuario).FirstOrDefault();
+                    }
+                    catch (Exception e)
+                    {
+                        var erro = e.ToString();
+                        int par = 7;
+                        return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                    }
+
+
+                   
                     Session["usuarios"] = usuario;
                     Session["empresas"] = empresa;
 
@@ -120,7 +164,21 @@ namespace MatrizTributaria.Controllers
                     if (TempData["analise"] == null)
                     {
                         //carrega a lista analise usando o cnpj da empresa do usuario
-                        this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a).ToList();
+                        //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a).ToList();
+
+
+                        try
+                        {
+                            this.analise = db.Analise_Tributaria.Where(x => x.CNPJ_EMPRESA == empresa.cnpj).ToList();
+                        }
+                        catch (Exception e)
+                        {
+                            var erro = e.ToString();
+                            int par = 7;
+                            return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                        }
+
+                        
                         TempData["analise"] = this.analise; //cria
                         TempData.Keep("analise"); //salva
                     }
@@ -135,7 +193,18 @@ namespace MatrizTributaria.Controllers
                     if (TempData["tributacaoMTX"] == null)
                     {
                         //carrega a lista analise usando o cnpj da empresa do usuario
-                        this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+                        //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+                        try
+                        {
+                            this.tribMTX = db.Tributacao_GeralView.ToList();
+                        }
+                        catch (Exception e)
+                        {
+                            var erro = e.ToString();
+                            int par = 7;
+                            return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                        }
+                      
                         TempData["tributacaoMTX"] = this.tribMTX; //cria
                         TempData.Keep("tributacaoMTX"); //salva
                     }
@@ -149,7 +218,19 @@ namespace MatrizTributaria.Controllers
 
                     if (TempData["tributacaoProdMTX"] == null)
                     {
-                        this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                        //this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                        try
+                        {
+                            this.prodMTX = db.Produtos.ToList();
+                        }
+                        catch (Exception e)
+                        {
+                            var erro = e.ToString();
+                            int par = 7;
+                            return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                        }
+
+                      
                         TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
                         TempData.Keep("tributacaoProdMTX"); //persiste
                     }
