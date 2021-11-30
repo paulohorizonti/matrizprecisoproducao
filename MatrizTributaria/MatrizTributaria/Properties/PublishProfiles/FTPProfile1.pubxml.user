@@ -8,7 +8,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA2PM/V8SvIUSPsBtIDH7z5wAAAAACAAAAAAAQZgAAAAEAACAAAAAIVAiFJVOxbYhhcvXUF5yfKHOMoRu9PgV12d52ySLaRAAAAAAOgAAAAAIAACAAAADUY0UcVZHVMmRirvurV04KFQDGVPzJJiU9AkrdqgngySAAAACgpFyP96G3xemUYDnLwVIqLglpbxTbZxAfGQfuUOPIBkAAAADwHv+YqMgaxzcUcPTs7IHm2EGp8Sj2JeuGrZkFHFi4BcqfDzVt5eOC8oI1KB/6T38OaZmojirNJMH729Jf3CCG</EncryptedPassword>
     <_PublishTargetUrl>ftp://WIN5097.site4now.net/mtxprincipal</_PublishTargetUrl>
-    <History>True|2021-11-29T19:55:17.6643125Z;True|2021-11-29T14:03:33.2118572-03:00;True|2021-11-16T20:03:47.1364790-03:00;True|2021-11-09T20:44:38.0691412-03:00;True|2021-11-04T20:59:06.9045641-03:00;True|2021-11-03T19:42:00.6003211-03:00;False|2021-10-29T17:57:28.9789765-03:00;False|2021-10-26T20:24:17.5552721-03:00;False|2021-10-25T20:22:17.8096802-03:00;False|2021-10-20T10:52:29.0694563-03:00;False|2021-10-20T10:41:18.4827330-03:00;False|2021-10-20T10:29:07.9843566-03:00;False|2021-10-20T10:09:03.8220308-03:00;False|2021-10-20T03:19:52.7459122-03:00;False|2021-10-19T09:56:25.8381547-03:00;False|2021-10-18T16:43:16.6737605-03:00;False|2021-10-18T13:49:48.4533584-03:00;False|2021-10-18T11:52:45.4272598-03:00;False|2021-10-18T11:05:36.1663812-03:00;False|2021-10-18T10:50:57.7869411-03:00;False|2021-10-14T16:00:41.4746338-03:00;False|2021-10-13T16:39:26.4680028-03:00;False|2021-10-07T12:04:37.8762284-03:00;False|2021-09-28T17:16:05.7619610-03:00;False|2021-09-28T13:38:00.8444108-03:00;False|2021-09-22T00:51:04.1664496-03:00;False|2021-09-21T21:06:36.2544441-03:00;False|2021-09-21T11:37:15.1512948-03:00;False|2021-09-10T19:05:56.3525670-03:00;False|2021-09-10T15:24:41.1765437-03:00;False|2021-09-10T15:23:42.6747394-03:00;False|2021-09-10T15:22:22.9881609-03:00;</History>
+    <History>True|2021-11-30T02:49:30.6172505Z;True|2021-11-29T16:55:17.6643125-03:00;True|2021-11-29T14:03:33.2118572-03:00;True|2021-11-16T20:03:47.1364790-03:00;True|2021-11-09T20:44:38.0691412-03:00;True|2021-11-04T20:59:06.9045641-03:00;True|2021-11-03T19:42:00.6003211-03:00;False|2021-10-29T17:57:28.9789765-03:00;False|2021-10-26T20:24:17.5552721-03:00;False|2021-10-25T20:22:17.8096802-03:00;False|2021-10-20T10:52:29.0694563-03:00;False|2021-10-20T10:41:18.4827330-03:00;False|2021-10-20T10:29:07.9843566-03:00;False|2021-10-20T10:09:03.8220308-03:00;False|2021-10-20T03:19:52.7459122-03:00;False|2021-10-19T09:56:25.8381547-03:00;False|2021-10-18T16:43:16.6737605-03:00;False|2021-10-18T13:49:48.4533584-03:00;False|2021-10-18T11:52:45.4272598-03:00;False|2021-10-18T11:05:36.1663812-03:00;False|2021-10-18T10:50:57.7869411-03:00;False|2021-10-14T16:00:41.4746338-03:00;False|2021-10-13T16:39:26.4680028-03:00;False|2021-10-07T12:04:37.8762284-03:00;False|2021-09-28T17:16:05.7619610-03:00;False|2021-09-28T13:38:00.8444108-03:00;False|2021-09-22T00:51:04.1664496-03:00;False|2021-09-21T21:06:36.2544441-03:00;False|2021-09-21T11:37:15.1512948-03:00;False|2021-09-10T19:05:56.3525670-03:00;False|2021-09-10T15:24:41.1765437-03:00;False|2021-09-10T15:23:42.6747394-03:00;False|2021-09-10T15:22:22.9881609-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -102,13 +102,13 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>07/22/2021 08:36:28</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseCSTEnt.cshtml">
-      <publishTime>04/08/2021 17:01:28</publishTime>
+      <publishTime>08/04/2021 17:01:28</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseIcmsEntrada.cshtml">
       <publishTime>07/21/2021 11:53:08</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnalisePisCofins.cshtml">
-      <publishTime>04/08/2021 09:37:26</publishTime>
+      <publishTime>08/04/2021 09:37:26</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseProd.cshtml">
       <publishTime>11/17/2021 17:46:03</publishTime>
@@ -126,13 +126,13 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/11/2021 15:04:42</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsCompAtaMassaManualModal.cshtml">
-      <publishTime>10/11/2021 08:58:30</publishTime>
+      <publishTime>11/10/2021 08:58:30</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsCompIndMassa.cshtml">
       <publishTime>11/11/2021 15:05:06</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsCompIndMassaManualModal.cshtml">
-      <publishTime>07/10/2021 16:09:28</publishTime>
+      <publishTime>10/07/2021 16:09:28</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsCompSNMassa.cshtml">
       <publishTime>11/11/2021 11:04:37</publishTime>
@@ -162,7 +162,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/11/2021 15:06:05</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsSTCompAtaMassaManualModal.cshtml">
-      <publishTime>10/11/2021 10:04:26</publishTime>
+      <publishTime>11/10/2021 10:04:26</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsSTCompIndMassa.cshtml">
       <publishTime>11/11/2021 15:06:36</publishTime>
@@ -174,13 +174,13 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/11/2021 15:07:00</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsSTCompSNMassaManualModal.cshtml">
-      <publishTime>10/11/2021 11:36:11</publishTime>
+      <publishTime>11/10/2021 11:36:11</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsSTVenAtaContMassaManualModal.cshtml">
-      <publishTime>01/11/2021 10:24:24</publishTime>
+      <publishTime>11/01/2021 10:24:24</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsSTVenAtaSNMassaManualModal.cshtml">
-      <publishTime>01/11/2021 12:18:46</publishTime>
+      <publishTime>11/01/2021 12:18:46</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsSTVendaAtaContMassa.cshtml">
       <publishTime>11/11/2021 15:07:44</publishTime>
@@ -198,10 +198,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>10/29/2021 15:18:32</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVenAtaContMassaManualModal.cshtml">
-      <publishTime>01/11/2021 09:06:33</publishTime>
+      <publishTime>11/01/2021 09:06:33</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVenAtaSNMassaManualModal.cshtml">
-      <publishTime>01/11/2021 11:22:46</publishTime>
+      <publishTime>11/01/2021 11:22:46</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVendaAtaContMassa.cshtml">
       <publishTime>11/11/2021 15:18:17</publishTime>
@@ -228,19 +228,19 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/12/2021 08:38:48</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteCestMassaManualModal.cshtml">
-      <publishTime>01/10/2021 08:42:40</publishTime>
+      <publishTime>10/01/2021 08:42:40</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteNcmMassa.cshtml">
-      <publishTime>09/11/2021 11:11:08</publishTime>
+      <publishTime>11/09/2021 11:11:08</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteNcmMassaManualModal.cshtml">
       <publishTime>10/20/2021 17:49:51</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteProdMassa.cshtml">
-      <publishTime>09/11/2021 11:11:10</publishTime>
+      <publishTime>11/09/2021 11:11:10</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteProdMassaManualModal.cshtml">
-      <publishTime>08/11/2021 17:42:20</publishTime>
+      <publishTime>11/08/2021 17:42:20</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqEntCofinsMassa.cshtml">
       <publishTime>11/16/2021 16:07:25</publishTime>
@@ -294,49 +294,49 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/11/2021 15:25:35</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaManualModal.cshtml">
-      <publishTime>09/11/2021 16:00:34</publishTime>
+      <publishTime>11/09/2021 16:00:34</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenAtaSNMassa.cshtml">
       <publishTime>11/11/2021 15:26:03</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenAtaSNMassaManualModal.cshtml">
-      <publishTime>09/11/2021 17:31:23</publishTime>
+      <publishTime>11/09/2021 17:31:23</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenVarCFMassa.cshtml">
       <publishTime>11/11/2021 15:26:30</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenVarCFMassaManualModal.cshtml">
-      <publishTime>03/11/2021 11:46:06</publishTime>
+      <publishTime>11/03/2021 11:46:06</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenVarContMassa.cshtml">
       <publishTime>11/11/2021 15:26:53</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTVenVarContMassaManualModal.cshtml">
-      <publishTime>09/11/2021 14:41:21</publishTime>
+      <publishTime>11/09/2021 14:41:21</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenAtaContMassa.cshtml">
       <publishTime>11/11/2021 15:27:21</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenAtaContMassaManualModal.cshtml">
-      <publishTime>09/11/2021 15:20:28</publishTime>
+      <publishTime>11/09/2021 15:20:28</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenAtaSNMassa.cshtml">
       <publishTime>11/11/2021 15:27:53</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenAtaSNMassaManualModal.cshtml">
-      <publishTime>09/11/2021 16:41:55</publishTime>
+      <publishTime>11/09/2021 16:41:55</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenVarCFMassa.cshtml">
       <publishTime>11/11/2021 15:28:20</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenVarCFMassaManualModal.cshtml">
-      <publishTime>03/11/2021 10:35:13</publishTime>
+      <publishTime>11/03/2021 10:35:13</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenVarContMassa.cshtml">
       <publishTime>11/11/2021 15:28:43</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsVenVarContMassaManualModal.cshtml">
-      <publishTime>09/11/2021 10:51:33</publishTime>
+      <publishTime>11/09/2021 10:51:33</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqSaiCofinsMassa.cshtml">
       <publishTime>11/16/2021 17:10:26</publishTime>
@@ -423,7 +423,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/18/2021 17:44:46</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/Index.cshtml">
-      <publishTime>08/11/2021 08:43:48</publishTime>
+      <publishTime>11/08/2021 08:43:48</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaIcmsEntrada.cshtml">
       <publishTime>11/24/2021 10:58:05</publishTime>
@@ -453,10 +453,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>05/10/2021 11:36:28</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.dll">
-      <publishTime>10/09/2013 16:29:20</publishTime>
+      <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.pdb">
-      <publishTime>10/09/2013 16:29:20</publishTime>
+      <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/BouncyCastle.Crypto.dll">
       <publishTime>01/31/2019 19:53:56</publishTime>
@@ -474,58 +474,58 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/13/2020 20:57:28</publishTime>
     </File>
     <File Include="bin/K4os.Compression.LZ4.dll">
-      <publishTime>03/07/2019 22:59:30</publishTime>
+      <publishTime>07/03/2019 22:59:30</publishTime>
     </File>
     <File Include="bin/K4os.Compression.LZ4.Streams.dll">
-      <publishTime>03/07/2019 22:59:32</publishTime>
+      <publishTime>07/03/2019 22:59:32</publishTime>
     </File>
     <File Include="bin/K4os.Hash.xxHash.dll">
-      <publishTime>03/07/2019 20:39:02</publishTime>
+      <publishTime>07/03/2019 20:39:02</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>11/29/2021 14:41:49</publishTime>
+      <publishTime>11/29/2021 21:37:04</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>11/29/2021 14:41:49</publishTime>
+      <publishTime>11/29/2021 21:37:04</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>06/27/2017 12:59:34</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.DependencyCollector.dll">
-      <publishTime>12/02/2021 18:40:28</publishTime>
+      <publishTime>02/12/2021 18:40:28</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.DependencyCollector.pdb">
-      <publishTime>12/02/2021 18:40:00</publishTime>
+      <publishTime>02/12/2021 18:40:00</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.PerfCounterCollector.dll">
-      <publishTime>12/02/2021 18:50:04</publishTime>
+      <publishTime>02/12/2021 18:50:04</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.PerfCounterCollector.pdb">
-      <publishTime>12/02/2021 18:49:38</publishTime>
+      <publishTime>02/12/2021 18:49:38</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.ServerTelemetryChannel.dll">
-      <publishTime>12/02/2021 18:37:56</publishTime>
+      <publishTime>02/12/2021 18:37:56</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.ServerTelemetryChannel.pdb">
-      <publishTime>12/02/2021 18:37:24</publishTime>
+      <publishTime>02/12/2021 18:37:24</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Web.dll">
-      <publishTime>12/02/2021 18:52:44</publishTime>
+      <publishTime>02/12/2021 18:52:44</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Web.pdb">
-      <publishTime>12/02/2021 18:52:20</publishTime>
+      <publishTime>02/12/2021 18:52:20</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.WindowsServer.dll">
-      <publishTime>12/02/2021 18:52:14</publishTime>
+      <publishTime>02/12/2021 18:52:14</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.WindowsServer.pdb">
-      <publishTime>12/02/2021 18:51:50</publishTime>
+      <publishTime>02/12/2021 18:51:50</publishTime>
     </File>
     <File Include="bin/Microsoft.ApplicationInsights.dll">
-      <publishTime>12/02/2021 18:35:32</publishTime>
+      <publishTime>02/12/2021 18:35:32</publishTime>
     </File>
     <File Include="bin/Microsoft.ApplicationInsights.pdb">
-      <publishTime>12/02/2021 18:35:02</publishTime>
+      <publishTime>02/12/2021 18:35:02</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
       <publishTime>11/25/2019 10:57:50</publishTime>
@@ -537,7 +537,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/25/2019 10:57:50</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.TelemetryCorrelation.dll">
-      <publishTime>02/07/2020 21:36:22</publishTime>
+      <publishTime>07/02/2020 21:36:22</publishTime>
     </File>
     <File Include="bin/Microsoft.Bcl.AsyncInterfaces.dll">
       <publishTime>11/15/2019 08:38:12</publishTime>
@@ -546,7 +546,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/15/2019 08:38:12</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
-      <publishTime>05/09/2018 16:10:50</publishTime>
+      <publishTime>09/05/2018 16:10:50</publishTime>
     </File>
     <File Include="bin/Microsoft.EntityFrameworkCore.Abstractions.dll">
       <publishTime>12/14/2019 20:11:16</publishTime>
@@ -630,7 +630,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/28/2018 11:00:08</publishTime>
     </File>
     <File Include="bin/pt-br/System.Web.Optimization.resources.dll">
-      <publishTime>11/02/2014 13:28:42</publishTime>
+      <publishTime>02/11/2014 13:28:42</publishTime>
     </File>
     <File Include="bin/pt-br/System.Web.Razor.resources.dll">
       <publishTime>11/28/2018 11:00:30</publishTime>
@@ -645,7 +645,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/28/2018 11:04:44</publishTime>
     </File>
     <File Include="bin/Remotion.Linq.dll">
-      <publishTime>06/02/2018 22:25:00</publishTime>
+      <publishTime>02/06/2018 22:25:00</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>08/08/2018 05:38:48</publishTime>
@@ -687,10 +687,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>08/08/2018 12:09:42</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.DiaSymReader.Native.amd64.dll">
-      <publishTime>05/12/2017 10:36:44</publishTime>
+      <publishTime>12/05/2017 10:36:44</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.DiaSymReader.Native.x86.dll">
-      <publishTime>05/12/2017 10:36:44</publishTime>
+      <publishTime>12/05/2017 10:36:44</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.Managed.Core.targets">
       <publishTime>08/08/2018 12:09:42</publishTime>
@@ -699,85 +699,85 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>08/08/2018 12:09:42</publishTime>
     </File>
     <File Include="bin/roslyn/Microsoft.Win32.Primitives.dll">
-      <publishTime>05/11/2016 19:55:32</publishTime>
+      <publishTime>11/05/2016 19:55:32</publishTime>
     </File>
     <File Include="bin/roslyn/System.AppContext.dll">
-      <publishTime>05/11/2016 19:55:34</publishTime>
+      <publishTime>11/05/2016 19:55:34</publishTime>
     </File>
     <File Include="bin/roslyn/System.Collections.Immutable.dll">
       <publishTime>05/16/2018 03:29:34</publishTime>
     </File>
     <File Include="bin/roslyn/System.Console.dll">
-      <publishTime>05/11/2016 19:55:48</publishTime>
+      <publishTime>11/05/2016 19:55:48</publishTime>
     </File>
     <File Include="bin/roslyn/System.Diagnostics.DiagnosticSource.dll">
-      <publishTime>05/11/2016 19:55:52</publishTime>
+      <publishTime>11/05/2016 19:55:52</publishTime>
     </File>
     <File Include="bin/roslyn/System.Diagnostics.FileVersionInfo.dll">
-      <publishTime>05/11/2016 19:55:56</publishTime>
+      <publishTime>11/05/2016 19:55:56</publishTime>
     </File>
     <File Include="bin/roslyn/System.Diagnostics.StackTrace.dll">
-      <publishTime>05/11/2016 19:55:52</publishTime>
+      <publishTime>11/05/2016 19:55:52</publishTime>
     </File>
     <File Include="bin/roslyn/System.Globalization.Calendars.dll">
-      <publishTime>05/11/2016 19:56:02</publishTime>
+      <publishTime>11/05/2016 19:56:02</publishTime>
     </File>
     <File Include="bin/roslyn/System.IO.Compression.dll">
-      <publishTime>05/11/2016 19:56:08</publishTime>
+      <publishTime>11/05/2016 19:56:08</publishTime>
     </File>
     <File Include="bin/roslyn/System.IO.Compression.ZipFile.dll">
-      <publishTime>05/11/2016 19:56:04</publishTime>
+      <publishTime>11/05/2016 19:56:04</publishTime>
     </File>
     <File Include="bin/roslyn/System.IO.FileSystem.dll">
-      <publishTime>05/11/2016 19:56:08</publishTime>
+      <publishTime>11/05/2016 19:56:08</publishTime>
     </File>
     <File Include="bin/roslyn/System.IO.FileSystem.Primitives.dll">
-      <publishTime>05/11/2016 19:56:08</publishTime>
+      <publishTime>11/05/2016 19:56:08</publishTime>
     </File>
     <File Include="bin/roslyn/System.Net.Http.dll">
-      <publishTime>05/11/2016 19:56:30</publishTime>
+      <publishTime>11/05/2016 19:56:30</publishTime>
     </File>
     <File Include="bin/roslyn/System.Net.Sockets.dll">
-      <publishTime>05/11/2016 19:56:34</publishTime>
+      <publishTime>11/05/2016 19:56:34</publishTime>
     </File>
     <File Include="bin/roslyn/System.Reflection.Metadata.dll">
       <publishTime>05/16/2018 03:29:44</publishTime>
     </File>
     <File Include="bin/roslyn/System.Runtime.InteropServices.RuntimeInformation.dll">
-      <publishTime>05/11/2016 19:57:00</publishTime>
+      <publishTime>11/05/2016 19:57:00</publishTime>
     </File>
     <File Include="bin/roslyn/System.Security.Cryptography.Algorithms.dll">
-      <publishTime>05/11/2016 19:57:14</publishTime>
+      <publishTime>11/05/2016 19:57:14</publishTime>
     </File>
     <File Include="bin/roslyn/System.Security.Cryptography.Encoding.dll">
-      <publishTime>05/11/2016 19:57:08</publishTime>
+      <publishTime>11/05/2016 19:57:08</publishTime>
     </File>
     <File Include="bin/roslyn/System.Security.Cryptography.Primitives.dll">
-      <publishTime>05/11/2016 19:57:18</publishTime>
+      <publishTime>11/05/2016 19:57:18</publishTime>
     </File>
     <File Include="bin/roslyn/System.Security.Cryptography.X509Certificates.dll">
-      <publishTime>05/11/2016 19:57:18</publishTime>
+      <publishTime>11/05/2016 19:57:18</publishTime>
     </File>
     <File Include="bin/roslyn/System.Text.Encoding.CodePages.dll">
-      <publishTime>05/11/2016 19:57:20</publishTime>
+      <publishTime>11/05/2016 19:57:20</publishTime>
     </File>
     <File Include="bin/roslyn/System.Threading.Tasks.Extensions.dll">
-      <publishTime>05/11/2016 19:57:24</publishTime>
+      <publishTime>11/05/2016 19:57:24</publishTime>
     </File>
     <File Include="bin/roslyn/System.ValueTuple.dll">
-      <publishTime>05/11/2016 19:57:30</publishTime>
+      <publishTime>11/05/2016 19:57:30</publishTime>
     </File>
     <File Include="bin/roslyn/System.Xml.ReaderWriter.dll">
-      <publishTime>05/11/2016 19:57:36</publishTime>
+      <publishTime>11/05/2016 19:57:36</publishTime>
     </File>
     <File Include="bin/roslyn/System.Xml.XmlDocument.dll">
-      <publishTime>05/11/2016 19:57:34</publishTime>
+      <publishTime>11/05/2016 19:57:34</publishTime>
     </File>
     <File Include="bin/roslyn/System.Xml.XPath.dll">
-      <publishTime>05/11/2016 19:57:40</publishTime>
+      <publishTime>11/05/2016 19:57:40</publishTime>
     </File>
     <File Include="bin/roslyn/System.Xml.XPath.XDocument.dll">
-      <publishTime>05/11/2016 19:57:34</publishTime>
+      <publishTime>11/05/2016 19:57:34</publishTime>
     </File>
     <File Include="bin/roslyn/vbc.exe">
       <publishTime>08/08/2018 05:38:48</publishTime>
@@ -828,7 +828,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/28/2018 13:59:46</publishTime>
     </File>
     <File Include="bin/System.Web.Optimization.dll">
-      <publishTime>11/02/2014 16:26:04</publishTime>
+      <publishTime>02/11/2014 16:26:04</publishTime>
     </File>
     <File Include="bin/System.Web.Razor.dll">
       <publishTime>11/28/2018 14:00:12</publishTime>
@@ -6039,7 +6039,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>04/14/2021 08:52:25</publishTime>
     </File>
     <File Include="Content/img/1480.gif">
-      <publishTime>06/08/2021 11:03:55</publishTime>
+      <publishTime>08/06/2021 11:03:55</publishTime>
     </File>
     <File Include="Content/img/add.png">
       <publishTime>03/23/2021 08:53:08</publishTime>
@@ -6153,7 +6153,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>04/14/2021 08:56:08</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>02/09/2021 15:20:44</publishTime>
+      <publishTime>09/02/2021 15:20:44</publishTime>
     </File>
     <File Include="Content/solid.css">
       <publishTime>03/23/2021 08:53:08</publishTime>
@@ -6426,13 +6426,13 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/25/2021 10:56:46</publishTime>
     </File>
     <File Include="Scripts/admin/adm-script.js">
-      <publishTime>01/11/2021 12:59:11</publishTime>
+      <publishTime>11/01/2021 12:59:11</publishTime>
     </File>
     <File Include="Scripts/admin/jquery-ui.js">
       <publishTime>07/12/2021 15:01:34</publishTime>
     </File>
     <File Include="Scripts/admin/jquery.blockUI.js">
-      <publishTime>06/08/2021 10:54:14</publishTime>
+      <publishTime>08/06/2021 10:54:14</publishTime>
     </File>
     <File Include="Scripts/animsition.min.js">
       <publishTime>04/14/2021 08:59:29</publishTime>
@@ -7236,10 +7236,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>08/09/2021 16:21:33</publishTime>
     </File>
     <File Include="Views/Acoes/Botoes.cshtml">
-      <publishTime>02/09/2021 10:38:59</publishTime>
+      <publishTime>09/02/2021 10:38:59</publishTime>
     </File>
     <File Include="Views/Acoes/botoes2.cshtml">
-      <publishTime>01/11/2021 12:53:38</publishTime>
+      <publishTime>11/01/2021 12:53:38</publishTime>
     </File>
     <File Include="Views/Acoes/BtnSalvarCancelar .cshtml">
       <publishTime>03/23/2021 08:53:08</publishTime>
@@ -7254,7 +7254,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>07/15/2021 15:21:26</publishTime>
     </File>
     <File Include="Views/CategoriaProduto/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:44</publishTime>
+      <publishTime>08/04/2021 08:43:44</publishTime>
     </File>
     <File Include="Views/CategoriaProduto/Edit.cshtml">
       <publishTime>04/07/2021 10:20:52</publishTime>
@@ -7269,7 +7269,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>04/08/2021 09:52:06</publishTime>
     </File>
     <File Include="Views/ClassificacaoNatReceita/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:46</publishTime>
+      <publishTime>08/04/2021 08:43:46</publishTime>
     </File>
     <File Include="Views/ClassificacaoNatReceita/Edit.cshtml">
       <publishTime>04/08/2021 09:36:32</publishTime>
@@ -7293,13 +7293,13 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>09/28/2021 10:09:16</publishTime>
     </File>
     <File Include="Views/CstPisCofinsEntrada/Create.cshtml">
-      <publishTime>01/07/2021 09:27:51</publishTime>
+      <publishTime>07/01/2021 09:27:51</publishTime>
     </File>
     <File Include="Views/CstPisCofinsEntrada/Delete.cshtml">
       <publishTime>04/09/2021 09:51:24</publishTime>
     </File>
     <File Include="Views/CstPisCofinsEntrada/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:46</publishTime>
+      <publishTime>08/04/2021 08:43:46</publishTime>
     </File>
     <File Include="Views/CstPisCofinsEntrada/Edit.cshtml">
       <publishTime>05/31/2021 09:11:10</publishTime>
@@ -7314,7 +7314,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>04/09/2021 10:32:18</publishTime>
     </File>
     <File Include="Views/CstPisCofinsSaida/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:46</publishTime>
+      <publishTime>08/04/2021 08:43:46</publishTime>
     </File>
     <File Include="Views/CstPisCofinsSaida/Edit.cshtml">
       <publishTime>05/31/2021 09:12:16</publishTime>
@@ -7326,10 +7326,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>06/09/2021 17:09:39</publishTime>
     </File>
     <File Include="Views/Empresa/Delete.cshtml">
-      <publishTime>03/04/2021 21:42:31</publishTime>
+      <publishTime>04/03/2021 21:42:31</publishTime>
     </File>
     <File Include="Views/Empresa/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:46</publishTime>
+      <publishTime>08/04/2021 08:43:46</publishTime>
     </File>
     <File Include="Views/Empresa/Edit.cshtml">
       <publishTime>06/09/2021 17:53:48</publishTime>
@@ -7341,7 +7341,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>11/16/2021 13:06:19</publishTime>
     </File>
     <File Include="Views/Erro/Index.cshtml">
-      <publishTime>06/09/2021 16:23:14</publishTime>
+      <publishTime>09/06/2021 16:23:14</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>03/23/2021 08:53:08</publishTime>
@@ -7365,13 +7365,13 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>04/07/2021 09:06:47</publishTime>
     </File>
     <File Include="Views/Legislacao/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:46</publishTime>
+      <publishTime>08/04/2021 08:43:46</publishTime>
     </File>
     <File Include="Views/Legislacao/Edit.cshtml">
       <publishTime>04/07/2021 08:59:30</publishTime>
     </File>
     <File Include="Views/Legislacao/Index.cshtml">
-      <publishTime>01/09/2021 11:16:42</publishTime>
+      <publishTime>09/01/2021 11:16:42</publishTime>
     </File>
     <File Include="Views/NaturezaReceita/Create.cshtml">
       <publishTime>06/08/2021 11:30:27</publishTime>
@@ -7380,7 +7380,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>05/28/2021 15:51:29</publishTime>
     </File>
     <File Include="Views/NaturezaReceita/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:46</publishTime>
+      <publishTime>08/04/2021 08:43:46</publishTime>
     </File>
     <File Include="Views/NaturezaReceita/Edit.cshtml">
       <publishTime>05/26/2021 16:26:48</publishTime>
@@ -7395,10 +7395,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>05/11/2021 14:28:52</publishTime>
     </File>
     <File Include="Views/Nivel/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:43:47</publishTime>
+      <publishTime>08/04/2021 08:43:47</publishTime>
     </File>
     <File Include="Views/Nivel/Edit.cshtml">
-      <publishTime>03/04/2021 22:25:01</publishTime>
+      <publishTime>04/03/2021 22:25:01</publishTime>
     </File>
     <File Include="Views/Nivel/Index.cshtml">
       <publishTime>09/28/2021 10:05:46</publishTime>
@@ -7422,25 +7422,25 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>05/28/2021 16:22:20</publishTime>
     </File>
     <File Include="Views/Produto/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:42:03</publishTime>
+      <publishTime>08/04/2021 08:42:03</publishTime>
     </File>
     <File Include="Views/Produto/Edit.cshtml">
       <publishTime>05/31/2021 09:08:03</publishTime>
     </File>
     <File Include="Views/Produto/EditCestMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Produto/EditCestMassaModal.cshtml">
       <publishTime>10/20/2021 17:49:14</publishTime>
     </File>
     <File Include="Views/Produto/EditCodBarrasMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Produto/EditCodBarrasMassaModal.cshtml">
       <publishTime>08/16/2021 10:53:09</publishTime>
     </File>
     <File Include="Views/Produto/EditMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Produto/EditMassaModal.cshtml">
       <publishTime>08/16/2021 10:58:47</publishTime>
@@ -7461,7 +7461,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>04/08/2021 15:29:48</publishTime>
     </File>
     <File Include="Views/SetorProdutos/Detalhes.cshtml">
-      <publishTime>04/08/2021 08:41:52</publishTime>
+      <publishTime>08/04/2021 08:41:52</publishTime>
     </File>
     <File Include="Views/SetorProdutos/Edit.cshtml">
       <publishTime>04/08/2021 15:33:15</publishTime>
@@ -7620,67 +7620,67 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>08/25/2021 16:18:28</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraIndustriaMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraIndustriaMassaModal.cshtml">
       <publishTime>08/25/2021 11:55:22</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraSNMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraSNMassaModal.cshtml">
       <publishTime>08/26/2021 15:22:13</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeAtaMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeAtaMassaModal.cshtml">
       <publishTime>08/27/2021 09:15:26</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeIndMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeIndMassaModal.cshtml">
       <publishTime>08/26/2021 17:40:26</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeSNMassa.cshtml">
-      <publishTime>02/09/2021 09:59:28</publishTime>
+      <publishTime>09/02/2021 09:59:28</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeSNMassaModal.cshtml">
       <publishTime>08/27/2021 10:58:02</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsEntradaMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsEntradaMassaModal.cshtml">
       <publishTime>08/24/2021 16:40:38</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsSaidaMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsSaidaMassaModal.cshtml">
       <publishTime>08/24/2021 11:53:36</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaContMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaContMassaModal.cshtml">
       <publishTime>08/19/2021 11:43:42</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaSNMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaSNMassaModal.cshtml">
       <publishTime>08/19/2021 15:49:21</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarCFMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarCFMassaModal.cshtml">
       <publishTime>08/18/2021 11:43:54</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarContMassa.cshtml">
-      <publishTime>02/09/2021 09:59:27</publishTime>
+      <publishTime>09/02/2021 09:59:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarContMassaModal.cshtml">
       <publishTime>08/18/2021 15:51:54</publishTime>
@@ -7725,64 +7725,64 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>09/22/2021 16:33:57</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsSTVendaAtaContMassaModal.cshtml">
-      <publishTime>01/09/2021 17:16:38</publishTime>
+      <publishTime>09/01/2021 17:16:38</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsSTVendaVarCFMassa.cshtml">
       <publishTime>09/22/2021 16:34:09</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsSTVendaVarCFMassaModal.cshtml">
-      <publishTime>01/09/2021 15:11:46</publishTime>
+      <publishTime>09/01/2021 15:11:46</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsSTVendaVarContMassa.cshtml">
       <publishTime>09/22/2021 16:34:23</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsSTVendaVarContMassaModal.cshtml">
-      <publishTime>01/09/2021 16:16:14</publishTime>
+      <publishTime>09/01/2021 16:16:14</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaAtaContMassa.cshtml">
       <publishTime>09/22/2021 16:34:35</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaAtaContMassaModal.cshtml">
-      <publishTime>01/09/2021 17:05:41</publishTime>
+      <publishTime>09/01/2021 17:05:41</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaAtaSNMassa.cshtml">
       <publishTime>09/22/2021 16:34:46</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaAtaSNMassaModal.cshtml">
-      <publishTime>02/09/2021 16:01:32</publishTime>
+      <publishTime>09/02/2021 16:01:32</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaVarCFMassa.cshtml">
       <publishTime>09/22/2021 16:34:57</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaVarCFMassaModal.cshtml">
-      <publishTime>01/09/2021 09:47:54</publishTime>
+      <publishTime>09/01/2021 09:47:54</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaVarContMassa.cshtml">
       <publishTime>09/22/2021 16:35:09</publishTime>
     </File>
     <File Include="Views/Tributacao/EditRedBCIcmsVendaVarContMassaModal.cshtml">
-      <publishTime>01/09/2021 15:48:19</publishTime>
+      <publishTime>09/01/2021 15:48:19</publishTime>
     </File>
     <File Include="Views/Tributacao/GfRedBCalcIcmsEntrada.cshtml">
-      <publishTime>03/08/2021 15:33:51</publishTime>
+      <publishTime>08/03/2021 15:33:51</publishTime>
     </File>
     <File Include="Views/Tributacao/GfRedBCalcIcmsSaida.cshtml">
-      <publishTime>01/09/2021 08:26:50</publishTime>
+      <publishTime>09/01/2021 08:26:50</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoAliPisCofins.cshtml">
-      <publishTime>04/08/2021 17:32:51</publishTime>
+      <publishTime>08/04/2021 17:32:51</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoCstEntrada.cshtml">
       <publishTime>08/24/2021 16:55:49</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoCstSaida.cshtml">
-      <publishTime>05/08/2021 17:30:14</publishTime>
+      <publishTime>08/05/2021 17:30:14</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoIcmsEntrada.cshtml">
-      <publishTime>02/08/2021 11:14:22</publishTime>
+      <publishTime>08/02/2021 11:14:22</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoIcmsSaida.cshtml">
-      <publishTime>03/08/2021 08:59:19</publishTime>
+      <publishTime>08/03/2021 08:59:19</publishTime>
     </File>
     <File Include="Views/Tributacao/Index.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -7791,10 +7791,10 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>05/17/2021 17:11:33</publishTime>
     </File>
     <File Include="Views/Usuario/Create.cshtml">
-      <publishTime>02/06/2021 16:15:36</publishTime>
+      <publishTime>06/02/2021 16:15:36</publishTime>
     </File>
     <File Include="Views/Usuario/Delete.cshtml">
-      <publishTime>03/04/2021 21:33:45</publishTime>
+      <publishTime>04/03/2021 21:33:45</publishTime>
     </File>
     <File Include="Views/Usuario/Detalhes.cshtml">
       <publishTime>04/14/2021 17:13:54</publishTime>
@@ -7803,7 +7803,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>07/19/2021 14:19:51</publishTime>
     </File>
     <File Include="Views/Usuario/Erro.cshtml">
-      <publishTime>04/05/2021 09:42:19</publishTime>
+      <publishTime>05/04/2021 09:42:19</publishTime>
     </File>
     <File Include="Views/Usuario/Index.cshtml">
       <publishTime>09/28/2021 09:33:46</publishTime>
@@ -7818,7 +7818,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
       <publishTime>03/23/2021 08:53:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/29/2021 11:46:04</publishTime>
+      <publishTime>11/29/2021 21:37:10</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>03/23/2021 08:53:08</publishTime>

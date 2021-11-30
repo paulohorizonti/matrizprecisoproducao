@@ -388,8 +388,6 @@ C:\Users\usuario\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria
 C:\Users\usuario\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.CopyComplete
 C:\Users\usuario\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.dll
 C:\Users\usuario\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.pdb
-C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.AssemblyReference.cache
-C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.CoreCompileInputs.cache
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\MatrizTributaria.dll.config
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\MatrizTributaria.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\MatrizTributaria.pdb
@@ -490,7 +488,6 @@ C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\PagedList.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\PagedList.Mvc.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\Remotion.Linq.dll
-C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\Rotativa.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\System.Buffers.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\System.Collections.Immutable.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\System.ComponentModel.Annotations.dll
@@ -581,6 +578,8 @@ C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\pt-br\System.Web.WebPages.resources.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\pt-br\System.Web.WebPages.Deployment.resources.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\pt-br\System.Web.WebPages.Razor.resources.dll
+C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.CoreCompileInputs.cache
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.CopyComplete
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.pdb
+C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Debug\MatrizTributaria.csproj.AssemblyReference.cache

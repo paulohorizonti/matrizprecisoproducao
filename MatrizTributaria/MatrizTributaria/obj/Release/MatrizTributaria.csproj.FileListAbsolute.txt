@@ -193,4 +193,3 @@ C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Release\MatrizTributaria.dll
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Release\MatrizTributaria.pdb
 C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\obj\Release\MatrizTributaria.csproj.CopyComplete
-C:\Users\preciso\source\repos\MatrizTributaria\MatrizTributaria\MatrizTributaria\bin\Rotativa.dll

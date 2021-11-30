@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2021-10-18T14:58:38.7385224Z;</History>
+    <History>True|2021-11-30T11:44:15.2295504Z;True|2021-11-30T08:08:59.1245403-03:00;True|2021-10-18T11:58:38.7385224-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -480,10 +480,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/03/2019 20:39:02</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>11/29/2021 08:09:51</publishTime>
+      <publishTime>11/30/2021 08:44:01</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>11/29/2021 08:09:51</publishTime>
+      <publishTime>11/30/2021 08:44:01</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>06/27/2017 12:59:34</publishTime>
@@ -7809,7 +7809,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/23/2021 08:53:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/29/2021 08:09:56</publishTime>
+      <publishTime>11/30/2021 08:44:06</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>03/23/2021 08:53:08</publishTime>

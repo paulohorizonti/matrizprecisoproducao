@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using Rotativa;
+
 
 namespace MatrizTributaria.Areas.Cliente.Controllers
 {
@@ -33,7 +33,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         }
 
         [HttpGet]
-        public object AnaliseTributaria()
+        public ActionResult AnaliseTributaria()
         {
             string usuarioSessao = ""; //variavel auxiliar
             if (Session["usuario"] == null)
@@ -144,6 +144,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         public ActionResult AnaliseRedBaseCalSai()
         {
             string usuarioSessao = ""; //variavel auxiliar
+
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("Login", "../Home");
