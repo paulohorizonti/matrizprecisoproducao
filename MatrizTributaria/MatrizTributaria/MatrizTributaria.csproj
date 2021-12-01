@@ -2868,6 +2868,7 @@
     <Content Include="Views\Tributacao\EditAliqIcmsSTVenAtaSNMassaModal.cshtml" />
     <Content Include="Views\Acoes\CamposComuns.cshtml" />
     <Content Include="Views\Erro\ErroLogin.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsCST.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

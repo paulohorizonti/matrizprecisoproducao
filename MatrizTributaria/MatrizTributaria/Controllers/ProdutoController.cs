@@ -819,7 +819,9 @@ namespace MatrizTributaria.Controllers
              na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
             if (TempData["tributacaoMTX"] == null)
             {
-                this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                //this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                this.prodMTX = db.Produtos.ToList();
+               
                 TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
                 TempData.Keep("tributacaoProdMTX"); //persiste
             }

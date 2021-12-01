@@ -13,30 +13,34 @@
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="container-fluid ml-1 mt-1">
-                            <div class="form-group row">
 
-                                <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="linhas">Escolha novo CST para os produtos abaixo:</label>
-                                <div class="col-lg-1 mr-1">
-                                    @Html.DropDownList("cstVenAtaSN", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown mt-1" })
-                                </div>
-                                <div class="col-lg-7">
-                                    <input type="text" class="form-control form-control-sm mt-1" name="cstVenAtaSN" id="cstVeAtaSN" style="min-width:100%;" readonly />
+                    <div class="form-group col-lg-2 p-2">
+                        <label class="pr-fontalternativa">Escolha CST</label>
+                        <div class="input-group input-group-sm">
+                            <!--input-->
+                            @Html.DropDownList("cstVenAtaSN", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown" })
 
-                                </div>
-                                <div class="col-lg-1 ml-1 mt-1">
-                                    <button id="salvarCstVenAtaSN" type="submit" class="btn btn-secondary pr-botoes-fundo border-0" data-toggle="tooltip" data-placement="right" title="Salvar CST em Massa">
-                                        <i style="font-size:1.3em;" class="fas fa-save"></i>
-                                    </button>
-                                </div>
-
-                            </div>
 
                         </div>
                     </div>
+                    <div class="form-group col-lg-8 p-2">
+                        <label class="pr-fontalternativa">Descrição CST</label>
+                        <div class="input-group input-group-sm">
+                            <!--input-->
+
+                            <input type="text" class="form-control form-control-sm" name="cstVenAtaSN" id="cstVeAtaSN"  readonly />
+
+                            <div class="input-group-append">
+                                <!--botao-->
+                                <button id="salvarCstVenAtaSN" type="submit" class="btn btn-secondary pr-botoes-fundo" data-toggle="tooltip" data-placement="right" title="Salvar CST em Massa">
+                                    <i style="font-size:1.3em;" class="fas fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
                 <div class="row">
