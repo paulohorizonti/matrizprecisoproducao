@@ -1,6 +1,6 @@
 ﻿
 @using PagedList.Mvc
-@model PagedList.IPagedList<MatrizTributaria.Models.Tributacao>
+@model PagedList.IPagedList<MatrizTributaria.Models.TributacaoGeralView>
 @{
     ViewBag.Title = "EditAliqIcmsSTCompAtaMassa";
 }
@@ -10,8 +10,8 @@
         <div class="card-header">
             Alterar Aliquota Icms ST de compra de Atacado : Registros  "@ViewBag.Opcao"
             @RenderPage("~/Views/Acoes/BotaoHome.cshtml") <!--Renderiza os botões de ação-->
-            <a href='javascript:history.go(-1)' data-toggle="tooltip" data-placement="right" title="Voltar aos Gráficos" type="button" id="voltar" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.5em;" class="fas fa-chart-pie"></i></a>   
-        <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="editarSelecionadosAliqIcmsSTCompAta" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-edit"></i></button>
+            <a href='javascript:history.go(-1)' data-toggle="tooltip" data-placement="right" title="Voltar aos Gráficos" type="button" id="voltar" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.5em;" class="fas fa-chart-pie"></i></a>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="editarSelecionadosAliqIcmsSTCompAta" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-edit"></i></button>
 
         </div><!--fim do cabeçalho-->
         <div class="card-body">
@@ -43,7 +43,13 @@
                                         <th class="align-middle">
                                             Descrição do Produto
                                         </th>
+                                        <th class="align-middle">
+                                            CEST
+                                        </th>
 
+                                        <th class="align-middle">
+                                            NCM
+                                        </th>
                                         <th class="align-middle text-center">
                                             Aliquota
                                         </th>
@@ -61,21 +67,26 @@
 
                                         <tr class="pr-td">
                                             <td style="width:3%">
-                                                @Html.DisplayFor(modelItem => item.id)
+                                                @Html.DisplayFor(modelItem => item.ID)
                                             </td>
                                             <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.produtos.codBarras)
+                                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
                                             </td>
                                             <td style="width:18%">
-                                                @Html.DisplayFor(modelItem => item.produtos.descricao)
+                                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
                                             </td>
                                             <td class="text-center" style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.aliqIcmsSTCompraDeAta)
+                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_COMPRA_DE_ATA)
                                             </td>
 
-
                                             <td style="width:5%;" class="text-center">
-                                                @Html.DisplayFor(modelItem => item.Data)
+                                                @Html.DisplayFor(modelItem => item.DataFormatada)
 
                                             </td>
 
@@ -94,7 +105,17 @@
 
                                 <div style="float:right;" class="p-2 pr-fontalternativa">
                                     @Html.PagedListPager(
-                                    Model, page => Url.Action("EditAliqIcmsSTCompAtaMassa", new { page, filtroCorrente = ViewBag.FiltroCorrente, filtroCorrenteAliq = ViewBag.FiltroCorrente2, numeroLinhas = ViewBag.NumeroLinhas, opcao = TempData["opcao"].ToString() }),
+                                    Model, page => Url.Action("EditAliqIcmsSTCompAtaMassa",
+                                    new
+                                         {
+                                        page,
+                                        filtroCorrente = ViewBag.FiltroCorrente,
+                                        filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
+                                        numeroLinhas = ViewBag.NumeroLinhas,
+                                        filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                        filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                        opcao = TempData["opcao"].ToString()
+                                    }),
                                     new PagedListRenderOptions()
                                     {
                                         LiElementClasses = new List<string>
@@ -117,5 +138,8 @@
 
             </div><!--Fim do container do body do card-->
         </div><!--fim do body do card-->
+        <div class="card-footer">
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.3em;" class="fas fa-user-edit"></i> = Edição em massa informando Alíquota manualmente <br />
+        </div>
     </div><!--Fim do card-->
 </div><!--Fim do container-->

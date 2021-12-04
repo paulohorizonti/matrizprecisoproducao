@@ -1,5 +1,5 @@
 ﻿@using PagedList.Mvc
-@model PagedList.IPagedList<MatrizTributaria.Models.Tributacao>
+@model PagedList.IPagedList<MatrizTributaria.Models.TributacaoGeralView>
 @{
     ViewBag.Title = "EditAliqIcmsVenAtaContMassa";
 }
@@ -42,6 +42,13 @@
                                         <th class="align-middle">
                                             Descrição do Produto
                                         </th>
+                                        <th class="align-middle">
+                                            CEST
+                                        </th>
+
+                                        <th class="align-middle">
+                                            NCM
+                                        </th>
 
                                         <th class="align-middle text-center">
                                             Aliquota
@@ -60,21 +67,27 @@
 
                                         <tr class="pr-td">
                                             <td style="width:3%">
-                                                @Html.DisplayFor(modelItem => item.id)
+                                                @Html.DisplayFor(modelItem => item.ID)
                                             </td>
                                             <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.produtos.codBarras)
+                                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
                                             </td>
                                             <td style="width:18%">
-                                                @Html.DisplayFor(modelItem => item.produtos.descricao)
+                                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
                                             </td>
                                             <td class="text-center" style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.aliqIcmsVendaAtaCont)
+                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_ATA_CONT)
                                             </td>
 
 
                                             <td style="width:5%;" class="text-center">
-                                                @Html.DisplayFor(modelItem => item.Data)
+                                                @Html.DisplayFor(modelItem => item.DataFormatada)
 
                                             </td>
 
@@ -93,7 +106,17 @@
 
                                 <div style="float:right;" class="p-2 pr-fontalternativa">
                                     @Html.PagedListPager(
-                                    Model, page => Url.Action("EditAliqIcmsVenAtaContMassa", new { page, filtroCorrente = ViewBag.FiltroCorrente, filtroCorrenteAliq = ViewBag.FiltroCorrente2, numeroLinhas = ViewBag.NumeroLinhas, opcao = TempData["opcao"].ToString() }),
+                                    Model, page => Url.Action("EditAliqIcmsVenAtaContMassa",
+                                    new
+                                         {
+                                        page,
+                                        filtroCorrente = ViewBag.FiltroCorrente,
+                                        filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
+                                        numeroLinhas = ViewBag.NumeroLinhas,
+                                        filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                        filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                        opcao = TempData["opcao"].ToString()
+                                    }),
                                     new PagedListRenderOptions()
                                     {
                                         LiElementClasses = new List<string>
@@ -116,5 +139,8 @@
 
             </div><!--Fim do container do body do card-->
         </div><!--fim do body do card-->
+        <div class="card-footer">
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.3em;" class="fas fa-user-edit"></i> = Edição em massa informando Alíquota manualmente <br />
+        </div>
     </div><!--Fim do card-->
 </div><!--Fim do container-->

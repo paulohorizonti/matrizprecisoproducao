@@ -33,6 +33,7 @@ $(document).ready(function () {
 
 
 });
+
 //Alterar selecionados icms ST venda atacado para simples nacional
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
@@ -46,6 +47,8 @@ $(document).ready(function () {
     //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
     alterarSelecionados(btnAlterarSelecionados, controller);
 });
+
+
 //Alterar selecionados icms ST venda atacado para simples nacional
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
@@ -59,6 +62,9 @@ $(document).ready(function () {
     //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
     alterarSelecionados(btnAlterarSelecionados, controller);
 });
+
+
+
 
 //Alterar selecionados icms ST venda atacado para contribuinte
 $(document).ready(function () {

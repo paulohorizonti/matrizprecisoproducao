@@ -221,7 +221,7 @@ $(document).ready(function () {
                     processData: true,
                     success: function () {
 
-                        window.location.href = '/Tributacao/EditAliqIcmsSTVenAtaContMassaModalPost?strDados=' + strDados + '&aliqIcmsVendAtaSN=' + aliqIcmsVendAtaSN;
+                        window.location.href = '/Tributacao/EditAliqIcmsVenAtaSNMassaModalPost?strDados=' + strDados + '&aliqIcmsVendAtaSN=' + aliqIcmsVendAtaSN;
 
                     }
 
@@ -251,7 +251,7 @@ $(document).ready(function () {
                         processData: true,
                         success: function () {
 
-                            window.location.href = '/Tributacao/EditAliqIcmsSTVenAtaContMassaModalPost?strDados=' + strDados + '&aliqIcmsVendAtaSN=' + aliqIcmsVendAtaSN;
+                            window.location.href = '/Tributacao/EditAliqIcmsVenAtaSNMassaModalPost?strDados=' + strDados + '&aliqIcmsVendAtaSN=' + aliqIcmsVendAtaSN;
 
                         }
 

@@ -2089,6 +2089,7 @@
     <Content Include="Content\img\map-marker.png" />
     <Content Include="Content\img\preciso.ico" />
     <Content Include="Content\img\salvar.png" />
+    <Content Include="Content\img\preciso_mtx_sem_fundo.png" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
