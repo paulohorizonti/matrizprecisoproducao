@@ -1,17 +1,16 @@
-﻿
-@using PagedList.Mvc
+﻿@using PagedList.Mvc
 @model PagedList.IPagedList<MatrizTributaria.Models.TributacaoGeralView>
 @{
-    ViewBag.Title = "EditAliqIcmsNfeIndMassa";
+    ViewBag.Title = "EditRedBCIcmsSTVendaAtaSNMassa";
 }
 
 <div class="container pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
-            Alterar Aliquota Icms Nfe compra de Ind : Registros  "@ViewBag.Opcao"
+            Alterar Red. Base de Calc. Aliquota Icms ST venda no atacado para Simples Nacional: Registros  "@ViewBag.Opcao"
             @RenderPage("~/Views/Acoes/BotaoHome.cshtml") <!--Renderiza os botões de ação-->
-            <a data-toggle="tooltip" data-placement="right" title="Ir para gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GraficoIcmsEntrada","Tributacao")"><i style="font-size:1.5em;" class="fas fa-chart-pie"></i>  </a>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="editarSelecionadosAliqIcmsNfeCompInd" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-edit"></i></button>
+            <a data-toggle="tooltip" data-placement="right" title="Ir para gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GfRedBCalcIcmsSaida","Tributacao")"><i style="font-size:1.5em;" class="fas fa-chart-pie"></i>  </a>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="edtSelRedAliqIcmsSTVendaAtaSN" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-edit"></i></button>
 
         </div><!--fim do cabeçalho-->
         <div class="card-body">
@@ -21,14 +20,14 @@
 
                     <div class="col-lg-12">
                         <div class="container-fluid">
-                            @using (Html.BeginForm("EditAliqIcmsCompSNMassa", "Tributacao", FormMethod.Get))
+                            @using (Html.BeginForm("EditRedBCIcmsSTVendaAtaSNMassa", "Tributacao", FormMethod.Get))
                             {
                                 @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->
 
 
                             }
                             <!--Tabela-->
-                            <table style="border-bottom: 1px solid #021e36;" class="table table-striped table-hover table-graficos" id="table-graficosAliqIcmsNfeCompInd">
+                            <table style="border-bottom: 1px solid #021e36;" class="table table-striped table-hover table-graficos" id="table-graficosRedAliqIcmsVenAtaSN">
 
                                 <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
 
@@ -50,6 +49,7 @@
                                         <th class="align-middle">
                                             NCM
                                         </th>
+
                                         <th class="align-middle text-center">
                                             Aliquota
                                         </th>
@@ -65,32 +65,33 @@
                                     @foreach (var item in Model)
                                     {
 
-                                    <tr class="pr-td">
-                                        <td style="width:3%">
-                                            @Html.DisplayFor(modelItem => item.ID)
-                                        </td>
-                                        <td style="width:5%">
-                                            @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
-                                        </td>
-                                        <td style="width:18%">
-                                            @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
-                                        </td>
-                                        <td style="width:5%">
-                                            @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
-                                        </td>
-                                        <td style="width:5%">
-                                            @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
-                                        </td>
-                                        <td class="text-center" style="width:5%">
-                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_NFE)
-                                        </td>
+                                        <tr class="pr-td">
+                                            <td style="width:3%">
+                                                @Html.DisplayFor(modelItem => item.ID)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
+                                            </td>
+                                            <td style="width:18%">
+                                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
+                                            </td>
+                                            <td style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
+                                            </td>
+                                            <td class="text-center" style="width:5%">
+                                                @Html.DisplayFor(modelItem => item.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL)
+                                            </td>
 
-                                        <td style="width:5%;" class="text-center">
-                                            @Html.DisplayFor(modelItem => item.DataFormatada)
 
-                                        </td>
+                                            <td style="width:5%;" class="text-center">
+                                                @Html.DisplayFor(modelItem => item.DataFormatada)
 
-                                    </tr>
+                                            </td>
+
+                                        </tr>
                                     }
                                 </tbody>
 
@@ -105,10 +106,10 @@
 
                                 <div style="float:right;" class="p-2 pr-fontalternativa">
                                     @Html.PagedListPager(
-                                    Model, page => Url.Action("EditAliqIcmsNfeIndMassa",
+                                    Model, page => Url.Action("EditAliqIcmsNfeSNMassa",
                                     new
                                     {
-                                        page,
+                                             page,
                                         filtroCorrente = ViewBag.FiltroCorrente,
                                         filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
                                         numeroLinhas = ViewBag.NumeroLinhas,
@@ -138,5 +139,8 @@
 
             </div><!--Fim do container do body do card-->
         </div><!--fim do body do card-->
+        <div class="card-footer">
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.3em;" class="fas fa-user-edit"></i> = Edição em massa informando Alíquota manualmente <br />
+        </div>
     </div><!--Fim do card-->
 </div><!--Fim do container-->

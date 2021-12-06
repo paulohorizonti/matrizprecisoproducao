@@ -264,7 +264,8 @@ namespace MatrizTributaria.Controllers
 
                 TempData["analise"] = null;
                 TempData["tributacaoMTX"] = null;
-                Session["usuarios"] = null;
+                TempData["tributacaoProdMTX"] = null;
+               Session["usuarios"] = null;
                 Session["empresas"] = null;
                 return RedirectToAction("Index");
             }
@@ -274,6 +275,14 @@ namespace MatrizTributaria.Controllers
             }
 
 
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

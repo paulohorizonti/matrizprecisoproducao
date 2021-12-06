@@ -293,6 +293,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -345,6 +346,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -397,6 +399,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -449,6 +452,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -501,6 +505,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -553,6 +558,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -613,6 +619,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -665,6 +672,7 @@
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
@@ -703,7 +711,7 @@
 
                     //chmando a view
                     google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
-                        chart.draw(data, options);
+                    chart.draw(data, options);
                 }
 
                 /*Aliq ICMS NFE Compra SN*/
@@ -712,18 +720,19 @@
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSNFESN)],
                             ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNFESNNulla)]
-
+                                                               
                         ]);
 
                         var options = {
                             title: 'Dados da Matriz Tributária',
+                            sliceVisibilityThreshold: .00001,
                             pieHole: 0.3,
                             pieSliceTextStyle: {
                             color: 'black',
                                 fontSize: '10'
                             },
                             legend: 'true',
-                            sliceVisibilityThreshold: 0.011
+                            
                         };
 
                     var chart = new google.visualization.PieChart(document.getElementById('aliIcmsNFESN'));
@@ -799,6 +808,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -851,6 +861,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -904,6 +915,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -957,6 +969,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1009,6 +1022,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1062,6 +1076,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1114,6 +1129,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1166,6 +1182,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1247,6 +1264,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1299,6 +1317,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1351,6 +1370,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1403,6 +1423,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1455,6 +1476,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1507,6 +1529,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1589,6 +1612,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1641,6 +1665,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1693,6 +1718,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1745,6 +1771,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1798,6 +1825,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1850,6 +1878,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1903,6 +1932,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1955,6 +1985,7 @@
 
                                 var options = {
                                     title: 'Dados da Matriz Tributária',
+                                    sliceVisibilityThreshold: .00001,
                                     pieHole: 0.3,
                                     pieSliceTextStyle: {
                                     color: 'black',
@@ -1964,6 +1995,35 @@
                                 };
 
                             var chart = new google.visualization.PieChart(document.getElementById('redBCIcmsSTVenAtaSN'));
+                            //selecionando a parte do grafico para chamar a view correspondente
+                            function selectHandler() {
+                                var selectedItem = chart.getSelection()[0]; //pegando qual opção foi selecionada no grafico
+                                //se vier alguma coisa
+                                if (selectedItem) {
+                                    var topping = data.getValue(selectedItem.row, 0); //pega o valor do item selecionado e atribui à variavel topping
+
+                                    //agora analisa essa variavel para ver qual o dado está contida
+                                    if (topping) {
+                                        bloqueioTela();
+                                        /*Função para chamar a action com os dados solicitados via ajax*/
+                                        $.ajax({
+
+                                            data: { id: topping },
+                                            types: "GET",
+                                            processData: true,
+                                            success: function () {
+                                                window.location.href = '/Tributacao/EditRedBCIcmsSTVendaAtaSNMassa?opcao=' + topping;
+                                            }
+
+                                        }); //fim ajax
+                                    }//fim if topping
+
+                                }//fim if selecteditem
+
+                            }//fim da função handler
+
+                            //chmando a view
+                            google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                 chart.draw(data, options);
                             }
                         });
@@ -2057,6 +2117,7 @@
 
                                         var options = {
                                             title: 'Dados da Matriz Tributária',
+                                            sliceVisibilityThreshold: .00001,
                                             pieHole: 0.3,
                                             pieSliceTextStyle: {
                                             color: 'black',
@@ -2109,6 +2170,7 @@
 
                                         var options = {
                                             title: 'Dados da Matriz Tributária',
+                                            sliceVisibilityThreshold: .00001,
                                             pieHole: 0.3,
                                             pieSliceTextStyle: {
                                             color: 'black',
@@ -2161,6 +2223,7 @@
 
                                         var options = {
                                             title: 'Dados da Matriz Tributária',
+                                            sliceVisibilityThreshold: .00001,
                                             pieHole: 0.3,
                                             pieSliceTextStyle: {
                                             color: 'black',
@@ -2240,6 +2303,7 @@
 
                                             var options = {
                                                 title: 'Dados da Matriz Tributária',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 legend: {
                                                     textStyle: { fontSize: 8 },
@@ -2298,6 +2362,7 @@
 
                                             var options = {
                                                 title: 'Dados da Matriz Tributária',
+                                                sliceVisibilityThreshold: .00001,
                                                 pieHole: 0.3,
                                                 legend: {
                                                     textStyle: { fontSize: 8 },
@@ -3263,6 +3328,7 @@
                                                     ViewBag.Title == "EditRedBCIcmsVendaAtaContMassa" ||
                                                     ViewBag.Title == "EditRedBCIcmsSTVendaAtaContMassa" ||
                                                     ViewBag.Title == "EditRedBCIcmsVendaAtaSNMassa" ||
+                                                    ViewBag.Title == "EditRedBCIcmsSTVendaAtaSNMassa" || 
                                                     ViewBag.Title == "EditAliqIcmsCompIndMassa" ||
                                                     ViewBag.Title == "EditAliqIcmsSTCompIndMassa" ||
                                                     ViewBag.Title == "EditAliqIcmsCompAtaMassa" ||

@@ -1428,6 +1428,85 @@ $(document).ready(function () {
 
 });
 
+
+//Salvar Red Base Calc Venda Atacado para simples nacional
+//Salvar Red Base Calc Venda atacado para simples nacional
+$(document).ready(function () {
+    toastOpcoes(); //configurar o toast
+    var botaoSalvarRedBCSTVendaAtaSN = document.getElementById("salvarRedBasCalcSTVendaAtaSN"); //variavel para receber o botao de salvar
+    if (botaoSalvarRedBCSTVendaAtaSN) {
+        botaoSalvarRedBCSTVendaAtaSN.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var aliqRedBasCalcSTVendaAtaSN = document.getElementById("aliqIcmsStVendaAtaSN").value; //pegar o valor do imput
+            if (aliqRedBasCalcSTVendaAtaSN) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+                //agora o ajax
+                $.ajax({
+
+                    data: { strDados: strDados, aliqRedBasCalcSTVendaAtaSN: aliqRedBasCalcSTVendaAtaSN },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Tributacao/EditRedBCIcmsSTVendaAtaSNMassaModalPost?strDados=' + strDados + '&aliqRedBasCalcSTVendaAtaSN=' + aliqRedBasCalcSTVendaAtaSN;
+
+                    }
+
+                });
+                //fim if verificacao vazio
+            } else {
+                //toastr.error("Selecione um CST!"); //caso nao escolha um cst uma exceção é lançada
+                //return false;
+                var resultado = confirm("A alíquota informada foi NULO ou 0 (ZERO), deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, aliqRedBasCalcSTVendaAtaSN: aliqRedBasCalcSTVendaAtaSN },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Tributacao/EditRedBCIcmsSTVendaAtaSNMassaModalPost?strDados=' + strDados + '&aliqRedBasCalcSTVendaAtaSN=' + aliqRedBasCalcSTVendaAtaSN;
+
+                        }
+
+                    });
+
+                } else {
+                    toastr.warning("Atribuição de Alíquota de Redução da base de calc. icms ST  de venda para atacado para Simples Nacional para o(s) produto(s) selecionado(s) abortada");
+                    /* alert("Atribuição de NCM para os produtos selecionados abortada");*/
+                    document.getElementById("aliqIcmsStVendaAtaSN").focus();
+                }
+
+            }
+
+        });
+    }
+
+});
+
+
 //Salvar Red Base Calc Venda atacado para simples nacional
 $(document).ready(function () {
     toastOpcoes(); //configurar o toast

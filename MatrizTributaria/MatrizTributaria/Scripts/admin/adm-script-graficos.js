@@ -237,6 +237,7 @@ $(document).ready(function () {
     //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
     alterarSelecionados(btnAlterarSelecionados, controller);
 });
+
 //Alterar selecionados icms compra de atacado
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
@@ -279,7 +280,24 @@ $(document).ready(function () {
     alterarSelecionados(btnAlterarSelecionados, controller);
 });
 
-//Alterar Selecionado red bas calc icms st venda ata para simples nacional
+
+//Alterar Selecionado red bas calc st icms  venda ata para simples nacional
+$(document).ready(function () {
+    toastOpcoes(); //configarar toast
+    var controller = "EditRedBCIcmsSTVendaAtaSNMassaModal"; //envia o nome da Action para a função
+    var tabela = document.getElementById("table-graficosRedAliqIcmsVenAtaSN"); //variavel para a tabela
+    var btnAlterarSelecionados = document.getElementById("edtSelRedAliqIcmsSTVendaAtaSN"); //botao para confirmar a edição dos selecionados
+
+    //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
+    selecionaLinhas(tabela);
+
+    //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+    alterarSelecionados(btnAlterarSelecionados, controller);
+});
+
+
+
+//Alterar Selecionado red bas calc icms  venda ata para simples nacional
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
     var controller = "EditRedBCIcmsVendaAtaSNMassaModal"; //envia o nome da Action para a função
@@ -559,6 +577,7 @@ $(document).ready(function () {
     alterarSelecionados(btnAlterarSelecionados, controller);
 
 });
+
 //Altear Selecionados CST NFe Ind
 $(document).ready(function () {
     toastOpcoes(); //configarar toast
@@ -1260,7 +1279,6 @@ function minuscula(z) {
     v = z.value.toLowerCase();
     z.value = v;
 }
-
 
     //mascaras
     $(document).ready(function () {

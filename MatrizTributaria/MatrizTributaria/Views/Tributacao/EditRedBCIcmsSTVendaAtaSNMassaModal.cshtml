@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<MatrizTributaria.Models.Tributacao>
 @{
-    ViewBag.Title = "EditAliqIcmsNfeAtaMassaModal";
+    ViewBag.Title = "EditRedBCIcmsSTVendaAtaSNMassaModal";
 }
 
 <div class="container pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
-            Alterar Aliquota Icms Nfe compra de Atacado
+            Alterar Red. Base Cald. ICMS ST Venda Atacado para Simples Nacional
             <a href='javascript:history.go(-1)' data-toggle="tooltip" data-placement="right" title="Voltar à tabela" type="button" id="voltar" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.5em;" class="fas fa-undo"></i></a>
 
         </div><!--fim do cabeçalho-->
@@ -15,46 +15,23 @@
             <div class="container-fluid">
                 <div class="row">
 
+
                     <div class="form-group col-lg-2 p-2">
                         <label class="pr-fontalternativa">Digite a nova alíquota</label>
                         <div class="input-group input-group-sm">
                             <!--input-->
 
-                            <input type="text" class="form-control form-control-sm pr-aliq" name="aliqIcmsNfeCompraAta" id="aliqIcmsNfeCompraAta" />
+                            <input type="text" class="form-control form-control-sm pr-aliq" name="aliqIcmsStVendaAtaSN" id="aliqIcmsStVendaAtaSN" />
 
                             <div class="input-group-append">
                                 <!--botao-->
-                                <button id="salvarAliqIcmsNfeCompAta" type="submit" class="btn btn-secondary pr-botoes-fundo" data-toggle="tooltip" data-placement="right" title="Salvar Alíquota em Massa">
+                                <button id="salvarRedBasCalcSTVendaAtaSN" type="submit" class="btn btn-secondary pr-botoes-fundo" data-toggle="tooltip" data-placement="right" title="Salvar Alíquota em Massa">
                                     <i style="font-size:1.3em;" class="fas fa-save"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-
-
-                    @*<div class="col-12">
-                        <div class="container-fluid ml-1 mt-1">
-                            <div class="form-group row">
-
-                                <label class="col-form-label col-lg-3 pl-1  pr-fontalternativa" for="linhas">Digite a nova alíquota para os produtos abaixo:</label>
-
-                                <div class="col-lg-3">
-                                    <input type="text" class="form-control form-control-sm mt-1 pr-aliq" name="aliqIcmsNfeCompraAta" id="aliqIcmsNfeCompraAta" style="min-width:100%;" />
-
-                                </div>
-                                <div class="col-lg-2 ml-1 mt-1">
-                                    <button id="salvarAliqIcmsNfeCompAta" type="submit" class="btn btn-secondary pr-botoes-fundo border-0" data-toggle="tooltip" data-placement="right" title="Salvar Alíquota em Massa">
-                                        <i style="font-size:1.3em;" class="fas fa-save"></i>
-                                    </button>
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-                    </div>*@
 
 
 
@@ -94,7 +71,7 @@
                                                     @Html.DisplayFor(modelItem => item.produtos.descricao)
                                                 </td>
                                                 <td class="text-center" style="width:5%">
-                                                    @Html.DisplayFor(modelItem => item.aliqIcmsNfeAta)
+                                                    @Html.DisplayFor(modelItem => item.redBaseCalcIcmsSTVendaAtaSimpNacional)
                                                 </td>
 
                                                 <td style="width:5%;" class="text-center">

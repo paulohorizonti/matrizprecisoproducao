@@ -631,6 +631,7 @@
 
                                     var options = {
                                         title: 'Relação Cliente x Matriz',
+                                        sliceVisibilityThreshold: .00001,
                                         pieHole: 0.3,
                                         pieSliceTextStyle: {
                                         color: 'black',
@@ -1110,7 +1111,7 @@
                                                         ['Maiores', @Html.Raw(ViewBag.AliqICMSNFESNMaior)],
                                                         ['Menores', @Html.Raw(ViewBag.AliqICMSNFESNMenor)],
                                                         ['Iguais', @Html.Raw(ViewBag.AliqICMSNFESNIguais)],
-                                                ['Nulas MTX', @Html.Raw(ViewBag.AliqICMSNFESNNullaInterno)],
+                                                        ['Nulas MTX', @Html.Raw(ViewBag.AliqICMSNFESNNullaInterno)],
                                                         ['Nulas Cliente', @Html.Raw(ViewBag.AliqICMSNFESNNullaExterno)]
                                                     ]);
 
@@ -1155,7 +1156,7 @@
 
                                             //chmando a view
                                             google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
-                                                    chart.draw(data, options);
+                                           chart.draw(data, options);
                                         }
 
                                         /*OK*/
