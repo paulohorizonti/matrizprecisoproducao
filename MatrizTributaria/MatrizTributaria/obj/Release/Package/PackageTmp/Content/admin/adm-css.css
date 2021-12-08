@@ -283,10 +283,26 @@ table.dataTable thead th, table.dataTable thead td {
 }
 /**Cor quando selecionado**/
 #tablepr tr.selecionado td {
-    background-color: #021E36;
+    background-color: #284964;
     color: #ffffff;
-    font-size: 0.7em;
+    font-size: 0.99em;
 }
+
+
+/**Cor quando passar por cima**/
+#tablepr-user tr:hover td {
+    background-color: #A7291D;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 0.99em;
+}
+/**Cor quando selecionado**/
+#tablepr-user tr.selecionado td {
+    background-color: #284964;
+    color: #ffffff;
+    font-size: 0.99em;
+}
+
 
 /**Cor quando selecionado**/
 #tablepr-2 tr.selecionado td {
