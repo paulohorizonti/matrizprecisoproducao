@@ -2873,6 +2873,7 @@
     <Content Include="Views\Tributacao\EditRedBCIcmsSTVendaAtaSNMassa.cshtml" />
     <Content Include="Views\Tributacao\EditRedBCIcmsSTVendaAtaSNMassaModal.cshtml" />
     <Content Include="Views\Acoes\CamposComunsUsuario.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsProdutos .cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

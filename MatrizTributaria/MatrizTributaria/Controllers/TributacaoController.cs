@@ -13,17 +13,15 @@ namespace MatrizTributaria.Controllers
     public class TributacaoController : Controller
     {
         //Objego context
-       readonly MatrizDbContext db;
-       List<Tributacao> trib;
+        readonly MatrizDbContext db = new MatrizDbContext();
+
+        List<Tributacao> trib;
         List<Tributacao> tributacao = new List<Tributacao>();
 
+        //List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
-        //Construtor
-        public TributacaoController()
-        {
-            db = new MatrizDbContext();
-        }
-
+        
+       
        
         // GET: Tributacao
         public ActionResult Index(string sortOrder, string searchString, string currentFilter,  int? page)
@@ -51,19 +49,19 @@ namespace MatrizTributaria.Controllers
             /*PAra tipar */
             /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
              na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
-            if (TempData["tributacaoMTX"] == null)
-            {
-                //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-                this.tribMTX = db.Tributacao_GeralView.ToList();
-                TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
-                TempData.Keep("tributacaoMTX"); //persiste
-            }
-            else
-            {
-                this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
-                TempData.Keep("tributacaoMTX"); //persiste
-            }
-
+            //if (TempData["tributacaoMTX"] == null)
+            //{
+            //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+            //    this.tribMTX = db.Tributacao_GeralView.ToList();
+            //    TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+            //    TempData.Keep("tributacaoMTX"); //persiste
+            //}
+            //else
+            //{
+            //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+            //    TempData.Keep("tributacaoMTX"); //persiste
+            //}
+            VerificaTempData();
             //lista de produtos
             //var listaProdutos = db.Produtos.ToList();
             int paginaTamanho = 4;
@@ -567,21 +565,7 @@ namespace MatrizTributaria.Controllers
             }
 
 
-            /*ViewBagDiferente para pins cofins*/
-            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
-            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
-
-            /*ViewBags com os dados necessários para preencher as dropbox na view*/
-            ViewBag.Setor = db.SetorProdutos;
-            ViewBag.NatReceita = db.NaturezaReceitas;
-
-            ViewBag.FundLegal = db.Legislacoes;
-            ViewBag.CstIcms = db.CstIcmsGerais;
-            ViewBag.FundLegalPC = db.Legislacoes;
-            ViewBag.FundLegalSaida = db.Legislacoes;
-            ViewBag.FundLegalEndrada = db.Legislacoes;
-            ViewBag.Legislacao = db.Legislacoes;
-            ViewBag.CstGeral = db.CstIcmsGerais;
+           
 
             ViewBag.DataAlt = DateTime.Now;
 
@@ -965,8 +949,10 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
 
-            //chmar action auxiliar para verificar e carregar a tempdata com a lista
+           
+
             VerificaTempData();
+
 
             /*Aliquota ICMS Venda Varejo Consumidor Final*/
             ViewBag.AliqICMSVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null);
@@ -1501,9 +1487,23 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
 
-            //criar o temp data da lista ou recupera-lo
-            VerificaTempData();
+            ////criar o temp data da lista ou recupera-lo
+            ////VerificaTempData();
+            //if (TempData["tributacaoMTX"] == null)
+            //{
+            //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+            //    this.tribMTX = db.Tributacao_GeralView.ToList();
+            //    TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+            //    TempData.Keep("tributacaoMTX"); //persiste
+            //}
+            //else
+            //{
+            //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+            //    TempData.Keep("tributacaoMTX"); //persiste
+            //}
 
+            this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
+        
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
 
@@ -1713,7 +1713,7 @@ namespace MatrizTributaria.Controllers
 
 
 
-            //criar o temp data da lista ou recupera-lo
+            ////criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
             //ViewBag com a opcao
@@ -8518,7 +8518,7 @@ namespace MatrizTributaria.Controllers
         //Edit aliq Icms Venda Varejo consumidor final - ATUALIZADO VERSAO FINAL
         [HttpGet]
         public ActionResult EditAliqIcmsVenVarCFMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
+            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
             string filtroCorrenteCEST, string filtroNulo, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
@@ -8547,6 +8547,10 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
 
+            procuraSetor = (procuraSetor == "") ? null : procuraSetor;
+            procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
+            procuraSetor = (procuraSetor != null) ? procuraSetor : null;
+
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
@@ -8562,7 +8566,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) ||(procuraSetor != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -8570,12 +8574,22 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
+          
+            procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteAliq = procurarPorAliq;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
+
+            ViewBag.FiltroCorrenteSetor = procuraSetor;
+
+            //converter o valor da procura por setor em inteiro
+            if (procuraSetor != null)
+            {
+                ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
+            }
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -8624,6 +8638,12 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL.ToString() == procurarPorAliq).ToList();
 
             }
+            //Busca por setor
+            if (!String.IsNullOrEmpty(procuraSetor))
+            {
+                this.tribMTX = this.tribMTX.Where(s => s.ID_SETOR.ToString() == procuraSetor).ToList();
+
+            }
 
 
             switch (ordenacao)
@@ -8650,7 +8670,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -8737,7 +8757,7 @@ namespace MatrizTributaria.Controllers
         //Edit Aliq ICMs ST Venda Varejo Consumidor finnal - ATUALIZADA PARA VERSÃO FINAL
         [HttpGet]
         public ActionResult EditAliqIcmsSTVenVarCFMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
+            string procurarPorAliq, string procuraNCM, string procuraCEST, string filtroCorrente, string procuraSetor, string filtroSetor, string filtroCorrenteAliq, string filtroCorrenteNCM,
             string filtroCorrenteCEST, string filtroNulo, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
@@ -8763,6 +8783,9 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
 
+            procuraSetor = (procuraSetor == "") ? null : procuraSetor;
+            procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
+            procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -8789,12 +8812,23 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
 
+
+            procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
+
+            
+
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteAliq = procurarPorAliq;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
 
+            ViewBag.FiltroCorrenteSetor = procuraSetor;
+            //converter o valor da procura por setor em inteiro
+            if (procuraSetor != null)
+            {
+                ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
+            }
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
@@ -8842,6 +8876,13 @@ namespace MatrizTributaria.Controllers
 
             }
 
+            //Busca por setor
+            if (!String.IsNullOrEmpty(procuraSetor))
+            {
+                this.tribMTX = this.tribMTX.Where(s => s.ID_SETOR.ToString() == procuraSetor).ToList();
+
+            }
+
 
             switch (ordenacao)
             {
@@ -8867,6 +8908,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList();
 
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view

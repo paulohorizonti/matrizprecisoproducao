@@ -1,4 +1,49 @@
-﻿$(document).ready(function () {
+﻿//MUDAR DADOS DE NCM EM MASSA: 10/12/2021
+$(document).ready(function () {
+    var btnAlterar = document.getElementById("mesmoNCM"); //botao
+    //se for instanciado
+    if (btnAlterar) {
+        //click do botao
+        btnAlterar.addEventListener("click", function () {
+            var selecao = document.getElementById("selAlterar"); //pegar o elemento select
+            var value = selecao.options[selecao.selectedIndex].value; //pegar o valor do select
+
+            if (value == 1) {
+                document.getElementById('mudarValores2').style.display = 'none';
+                document.getElementById('mudarValores1').style.display = 'none';
+                document.getElementById('mudarValores0').style.display = 'none';
+                
+                document.getElementById("selAlterar").focus();
+                
+               
+            } else {
+                document.getElementById('mudarValores2').style.display = 'flex';
+                document.getElementById('mudarValores1').style.display = 'flex';
+                document.getElementById('mudarValores0').style.display = 'block';
+                document.getElementById("selAlterar").focus();
+                
+            }
+           
+        });
+    }
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+$(document).ready(function () {
     var a = document.querySelector(".pr-titulo"); //pegar o nome do controler
     var controller = a.innerText;
     var btnEnviar = document.getElementById("enviarIdProd") //Botão responsavel por pegar o id do produto e passar para controller

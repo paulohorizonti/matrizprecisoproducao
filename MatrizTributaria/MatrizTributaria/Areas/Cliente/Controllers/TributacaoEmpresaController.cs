@@ -27,6 +27,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         Usuario usuario;
         Empresa empresa;
 
+      
+
         private void Write(string texto)
         {
             Debug.Write(texto + "\n");
@@ -2383,7 +2385,9 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         //Alterações em massa produto: CEST
         [HttpGet]
-        public ActionResult EditClienteCestMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        public ActionResult EditClienteCestMassa(string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor,
+            string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM,
+            string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
         {
             /*Verificando a sessão*/
             if (Session["usuario"] == null)
@@ -2393,8 +2397,10 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.Mensagem = "CEST no Cliente X CEST no MTX";
 
             string resultado = param;
+
             /*Pegando o usuário e a empresa do usuário*/
             string user = Session["usuario"].ToString();
+
             if (Session["usuarios"] == null)
             {
                 this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
@@ -2448,8 +2454,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteCest = procuraCEST;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
 
-            /*Para tipar*/
-            //var analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a);
+            ///*Para tipar*/
+            ////var analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a);
             if (TempData["analise"] == null)
             {
                 this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
@@ -2461,6 +2467,16 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 this.analise = (List<AnaliseTributaria>)TempData["analise"];
                 TempData.Keep("analise");
             }
+            //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).
+            //this.analise = context.Funcionarios.AsNoTracking().ToList();
+
+            /*Alteração feita para teste - 08122021*/
+            //this.analise = db.Analise_Tributaria.AsNoTracking().ToList();
+            //this.analise = this.analise.Where(a => a.CNPJ_EMPRESA == this.empresa.cnpj).ToList();
+
+            //this.analise = db.Analise_Tributaria.AsNoTracking().ToList();
+
+
 
 
             ViewBag.Opcao = opcao;

@@ -339,6 +339,9 @@ select,
 textarea {
     max-width: 280px;
 }
+.prn-select {
+    max-width: 100% !important;
+}
 
 /*So para inputs*/
 .pr-inputs{
@@ -724,7 +727,7 @@ a:hover{
     background-color: #A7291D;
     cursor: pointer;
     color: #ffffff;
-    font-size: 0.9em;
+    font-size: 0.99em;
 }
 
 .table-graficos tr:hover td {

@@ -1,6 +1,6 @@
 ﻿@using PagedList.Mvc
 @using MatrizTributaria.Models
-@model PagedList.IPagedList<MatrizTributaria.Models.Produto>
+@model PagedList.IPagedList<MatrizTributaria.Models.TributacaoGeralView>
 @{
     ViewBag.Title = "EditMassa";
 }
@@ -24,68 +24,9 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditMassa", "Produto", FormMethod.Get))
                             {
-
-                                <div style="margin-top:20px;" class="form-group row">
-
-
-                                    <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="produtoFor">Descrição ou NCM:</label>
-
-                                    <div class="col-lg-8">
-                                        @Html.TextBox("procurarPor", null, new { @class = "pr-fontalternativa   form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do produto ou seu NCM", style = "width:100%;", id = "btnClick" })
-                                    </div>
-                                    <div class="col-lg-2 pl-1">
-                                        <button type="submit" class="btn btn-secondary pr-botoes-fundo border-0">
-                                            <i style="font-size:1.3em;" class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <div class="form-group row">
-
-                                    <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="linhas">Linhas:</label>
-                                    <div class="col-lg-1">
-                                        <select class="pr-fontalternativa form-control form-control-sm" id="numeroLinhas" name="numeroLinhas">
-                                            @if (ViewBag.NumeroLinhas == 10)
-                                            {
+                @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->}
 
 
-                                                <option selected>10</option>
-                                                <option>20</option>
-                                                <option>30</option>
-                                            }
-                                            else
-                                            {
-                                                if (ViewBag.NumeroLinhas == 20)
-                                                {
-
-                                                    <option>10</option>
-                                                    <option selected>20</option>
-                                                    <option>30</option>
-                                                }
-                                                else
-                                                {
-                                                    <option>10</option>
-                                                    <option>20</option>
-                                                    <option selected>30</option>
-                                                }
-                                            }
-
-                                        </select>
-                                    </div>
-                                    <div class="class-col-lg-2 pl-1">
-                                        <button type="submit" class="btn btn-secondary pr-botoes-fundo border-0">
-                                            <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
-                                        </button>
-                                    </div>
-
-
-
-                                </div>
-
-
-
-
-                            }
                             <!--Tabela-->
                             <table style="border-bottom: 1px solid #111;" class="table table-striped table-hover" id="table-graficos2">
                                 <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
@@ -101,10 +42,10 @@
                                             @Html.ActionLink("Produto", "EditMassa", new { filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, ordenacao = ViewBag.ParametroProduto, opcao = TempData["opcao"].ToString() })
 
                                         </th>
-
+                                        <th scope="col">Setor</th>
                                         <th scope="col">Cest</th>
                                         <th scope="col">NCM</th>
-                                        <th scope="col" class="text-center">Última alteração</th>
+                                        <th scope="col" class="text-center">Alterado</th>
 
                                     </tr>
                                 </thead>
@@ -112,30 +53,33 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                    <tr class="pr-td">
-                                        <td style="width:5%">
-                                            @Html.DisplayFor(modelItem => item.Id)
-                                        </td>
-                                        <td style="width:10%">
-                                            @Html.DisplayFor(modelItem => item.codBarras)
-                                        </td>
-                                        <td style="width:20%">
-                                            @Html.DisplayFor(modelItem => item.descricao)
-                                        </td>
+                        <tr class="pr-td">
+                            <td style="width:5%">
+                                @Html.DisplayFor(modelItem => item.ID_PRODUTO)
+                            </td>
+                            <td style="width:8%">
+                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
+                            </td>
+                            <td style="width:20%">
+                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                            </td>
+                            <td style="width:22%">
+                                @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
+                            </td>
 
-                                        <td style="width:15%;">
-                                            @item.cest
-                                        </td>
-                                        <td style="width:15%;">
-                                            @item.ncm
-                                        </td>
-                                        <td style="width:10%;" class="text-center">
-                                            @item.Data
-                                        </td>
+                            <td style="width:5%;">
+                                @item.CEST_PRODUTO
+                            </td>
+                            <td style="width:5%;">
+                                @item.NCM_PRODUTO
+                            </td>
+                            <td style="width:5%;" class="text-center">
+                                @item.DataFormatada
+                            </td>
 
 
-                                    </tr>
-                                    }
+                        </tr>
+}
                                 </tbody>
 
                             </table>
@@ -149,16 +93,26 @@
 
                                 <div style="float:right;" class="p-2 pr-fontalternativa">
                                     @Html.PagedListPager(
-                                    Model, page => Url.Action("EditMassa", new { page, ordenacao = ViewBag.Ordenacao, numeroLinhas = ViewBag.NumeroLinhas, filtroCorrente = ViewBag.FiltroCorrente, opcao = TempData["opcao"].ToString() }),
-                                    new PagedListRenderOptions()
-                                    {
-                                        LiElementClasses = new List<string>
-                                        {
+                                                        Model, page => Url.Action("EditMassa",
+                                                        new
+                                                        {
+                                                            page,
+                                                            filtroCorrente = ViewBag.FiltroCorrente,
+                                                            numeroLinhas = ViewBag.NumeroLinhas,
+                                                            filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                                            filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                                            filtroSetor = ViewBag.FiltroCorrenteSetor,
+                                                            opcao = TempData["opcao"].ToString()
+                                                        }),
+                                                        new PagedListRenderOptions()
+                                                        {
+                                                            LiElementClasses = new List<string>
+                                                            {
                                             "page-item"
-                                        }
-                                    }
+}
+                                                        }
 
-                                    )
+                                                        )
 
 
                                 </div>
@@ -176,6 +130,9 @@
 
             </div><!--Fim do container do body do card-->
         </div><!--fim do body do card-->
+        <div class="card-footer">
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.3em;" class="fas fa-user-edit"></i> = Edição em massa informando Dados MANUALMENTE <br />
+        </div>
     </div><!--Fim do card-->
 </div><!--Fim do container-->
 

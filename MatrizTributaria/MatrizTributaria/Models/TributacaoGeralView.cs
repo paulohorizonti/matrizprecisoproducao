@@ -213,6 +213,9 @@ namespace MatrizTributaria.Models
         [Column("DESCRICAO_PRODUTO")]
         public string DESCRICAO_PRODUTO { get; set; }
 
+        [Column("DESCRICAO_SETOR_PRODUTO")]
+        public string DESCRICAO_SETOR_PRODUTO { get; set; }
+
         [Column("CEST_PRODUTO")]
         public string CEST_PRODUTO { get; set; }
 

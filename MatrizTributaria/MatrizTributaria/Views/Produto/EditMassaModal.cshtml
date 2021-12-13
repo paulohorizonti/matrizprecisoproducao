@@ -15,38 +15,167 @@
         <div class="card-body">
             <div class="container">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="container-fluid ml-1 mt-1">
-                            <div class="form-group row">
 
-                                <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="linhas">Digite o novo NCM para os produtos abaixo:</label>
-                                <div class="col-lg-6">
-                                    <input type="text" class="form-control form-control-sm mt-1" placeholder="NCM aqui" name="ncm" id="ncm" onkeypress="return onlynumber();" size=10 maxlength=10 />
-                                </div>
-                                <div class="col-lg-2 ml-1 mt-1">
-                                    <button id="salvarNCM" type="submit" class="btn btn-secondary pr-botoes-fundo border-0" data-toggle="tooltip" data-placement="right" title="Salvar NCM em Massa">
-                                       
-                                        <i style="font-size:1.3em;" class="fas fa-save"></i>
-                                    </button>
-                                </div>
+                    <div class="form-group col-lg-2 p-2 mb-0">
+                        <label class="pr-fontalternativa">Digite o novo NCM</label>
+                        <div class="input-group input-group-sm">
+                            <!--input-->
 
+                            <input type="text" class="form-control form-control-sm" placeholder="NCM aqui" name="ncm" id="ncm" onkeypress="return onlynumber();" size=10 maxlength=10 />
 
+                            <div class="input-group-append">
+                                <!--botao-->
+                                <button id="salvarNCM" type="submit" class="btn btn-secondary pr-botoes-fundo" data-toggle="tooltip" data-placement="right" title="Salvar NCM em Massa">
+
+                                    <i style="font-size:1.3em;" class="fas fa-save"></i>
+                                </button>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-2 p-2 mb-0">
+                        <label class="pr-fontalternativa">Dados referente ao NCM</label>
+                        <div class="input-group input-group-sm">
+                            <!--input-->
+
+                            <select id="selAlterar" class="pr-fontalternativa form-control form-control-sm" style="max-width:100% !important;">
+
+                                <option value="1">Não Alterar</option>
+                                <option value="2">Alterar</option>
+
+
+                            </select>
+
+                            <div class="input-group-append">
+                                <!--botao-->
+                                <button id="mesmoNCM" type="submit" class="btn btn-secondary pr-botoes-fundo" data-toggle="tooltip" data-placement="right" title="Salvar NCM em Massa">
+
+                                    <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-8 p-2 mb-0" style="display:none" id="mudarValores0">
+                        <label class="pr-fontalternativa">Natureza da Receita</label>
+                        <div class="input-group input-group-sm">
+
+                            @Html.DropDownList("CodReceita", new SelectList(ViewBag.NatReceita, "id", "descricao"), "Escolha a Natureza da Receita", new { @class = "form-control form-control-sm dropdown", @style = "max-width:100% !important;" })
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+                <!--Campos para serem alterados-->
+              
+
+                <div class="row" style="display:none" id="mudarValores1">
+
+                    <div class="form-group col-lg-12 p-2 mb-0">
+
+                        <div class="card p-1">
+                            <div class="card-header">
+                                Pis/Cofins
+                            </div>
+                            <div class="card-body">
+                                <fieldset class="pr-fonte-label p-1" style="border: 1px solid #ccc; margin-top:5px;">
+                                    <legend class="pr-fontalternativa">Entrada</legend>
+                                    <div class="form-row">
+                                        <div class="col-lg-2">
+                                            <label class="pr-fonte-label" for="idCstEntPC">Cst Pis/Cofins E</label>
+                                            <div class="input-group">
+                                                @Html.DropDownList("CstEntPisCofins", new SelectList(ViewBag.CstEntradaPisCofins, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstEntPC" })
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="pr-fonte-label" for="idCstEntPC">Descrição</label>
+                                            <input type="text" class="form-control form-control-sm" name="cstEntradaPisCofins" id="cstESPC" style="min-width:100%;" readonly />
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <label class="pr-fonte-label" for="alpE">Aliq Pis E</label>
+                                            <input type="text" class="form-control form-control-sm decimal" name="alpE" id="alpE" style="min-width:100%;" />
+
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <label class="pr-fonte-label" for="alcE">Aliq Cofins E</label>
+                                            @Html.TextBox("AliqCofinsE", new { @class = "form-control form-control-sm decimal", onkeyup = "maiuscula(this);", name = "alcE", id = "alcE", placeholder = "Aliquota Cofins Entrada" })
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </fieldset>
+                            </div>
+
+
 
 
                         </div>
                     </div>
-                   
+
                 </div>
+
+
+                <div class="row" style="display:none" id="mudarValores2">
+
+                    <div class="form-group col-lg-4 p-2 mb-0">
+
+                        <div class="card">
+                            <div class="card-header">
+                                PRIMEIRO CARD
+                            </div>
+                            <div class="card-body">
+                                corpo do card
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-lg-4 p-2 mb-0">
+                        <div class="card">
+                            <div class="card-header">
+                                SEGUNDO CARD
+                            </div>
+                            <div class="card-body">
+                                corpo do card
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4 p-2 mb-0">
+                        <div class="card">
+                            <div class="card-header">
+                                TERCEIRO CARD
+                            </div>
+                            <div class="card-body">
+                                corpo do card
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
                 <div class="row">
-                    
+
                     <div class="col-lg-12">
                         <div class="container-fluid">
 
                             <div class="overflow-auto" style="max-width: 100%; max-height: 500px;">
 
                                 <table id="table-editmassa" class="table table-sm table-striped">
-                                    <caption>Produtos que receberão o novo NCM : <label id="lab"/> </caption> 
+                                    <caption>Produtos que receberão o novo NCM : <label id="lab" /> </caption>
                                     <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
                                         <tr>
                                             <th scope="col">ID</th>
@@ -61,30 +190,30 @@
                                     <tbody>
                                         @foreach (var item in ViewBag.Produtos)
                                         {
-                                            <tr class="pr-td">
-                                                <td style="width:5%">
-                                                   @item.Id
-                                                </td>
-                                                <td style="width:10%">
-                                                   @item.codBarras
-                                                </td>
-                                                <td style="width:20%">
-                                                    @item.descricao
-                                                </td>
+                            <tr class="pr-td">
+                                <td style="width:5%">
+                                    @item.Id
+                                </td>
+                                <td style="width:10%">
+                                    @item.codBarras
+                                </td>
+                                <td style="width:20%">
+                                    @item.descricao
+                                </td>
 
-                                                <td style="width:15%;">
-                                                    @item.cest
-                                                </td>
-                                                <td style="width:15%;">
-                                                    @item.ncm
-                                                </td>
-                                                <td style="width:10%;" class="text-center">
-                                                    @item.Data
-                                                </td>
+                                <td style="width:15%;">
+                                    @item.cest
+                                </td>
+                                <td style="width:15%;">
+                                    @item.ncm
+                                </td>
+                                <td style="width:10%;" class="text-center">
+                                    @item.Data
+                                </td>
 
 
-                                            </tr>
-                                        }
+                            </tr>
+}
 
                                     </tbody>
                                 </table>
@@ -96,7 +225,8 @@
                         </div><!--Fim do container da coluna-->
                     </div><!--Fim da primeira coluna 12-->
 
-                </div><!--fim da linha-->
+                </div>
+            </div><!--fim da linha-->
 
             </div><!--fim do container do body do card-->
 

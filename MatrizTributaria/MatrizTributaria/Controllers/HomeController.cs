@@ -159,87 +159,87 @@ namespace MatrizTributaria.Controllers
                     Session["usuarios"] = usuario;
                     Session["empresas"] = empresa;
 
-                    /*Montar a temp-data*/
-                    /*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
-                    if (TempData["analise"] == null)
-                    {
-                        //carrega a lista analise usando o cnpj da empresa do usuario
-                        //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a).ToList();
+                    ///*Montar a temp-data*/
+                    ///*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
+                    //if (TempData["analise"] == null)
+                    //{
+                    //    //carrega a lista analise usando o cnpj da empresa do usuario
+                    //    //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a).ToList();
 
 
-                        try
-                        {
-                            this.analise = db.Analise_Tributaria.Where(x => x.CNPJ_EMPRESA == empresa.cnpj).ToList();
-                        }
-                        catch (Exception e)
-                        {
-                            var erro = e.ToString();
-                            int par = 7;
-                            return RedirectToAction("../Erro/ErroLogin", new { param = par });
-                        }
+                    //    try
+                    //    {
+                    //        this.analise = db.Analise_Tributaria.Where(x => x.CNPJ_EMPRESA == empresa.cnpj).ToList();
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        var erro = e.ToString();
+                    //        int par = 7;
+                    //        return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                    //    }
 
-                        
-                        TempData["analise"] = this.analise; //cria
-                        TempData.Keep("analise"); //salva
-                    }
-                    else //não estando nula apenas atribui à lista o valor carregado em tempdata
-                    {
-                        this.analise = (List<AnaliseTributaria>)TempData["analise"];
-                        TempData.Keep("analise");
-                    }
 
-                    /*Montar a temp-data*/
-                    /*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
-                    if (TempData["tributacaoMTX"] == null)
-                    {
-                        //carrega a lista analise usando o cnpj da empresa do usuario
-                        //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-                        try
-                        {
-                            this.tribMTX = db.Tributacao_GeralView.ToList();
-                        }
-                        catch (Exception e)
-                        {
-                            var erro = e.ToString();
-                            int par = 7;
-                            return RedirectToAction("../Erro/ErroLogin", new { param = par });
-                        }
-                      
-                        TempData["tributacaoMTX"] = this.tribMTX; //cria
-                        TempData.Keep("tributacaoMTX"); //salva
-                    }
-                    else //não estando nula apenas atribui à lista o valor carregado em tempdata
-                    {
-                        this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
-                        TempData.Keep("tributacaoMTX");
-                    }
+                    //    TempData["analise"] = this.analise; //cria
+                    //    TempData.Keep("analise"); //salva
+                    //}
+                    //else //não estando nula apenas atribui à lista o valor carregado em tempdata
+                    //{
+                    //    this.analise = (List<AnaliseTributaria>)TempData["analise"];
+                    //    TempData.Keep("analise");
+                    //}
+
+                    ///*Montar a temp-data*/
+                    ///*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
+                    //if (TempData["tributacaoMTX"] == null)
+                    //{
+                    //    //carrega a lista analise usando o cnpj da empresa do usuario
+                    //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+                    //    try
+                    //    {
+                    //        this.tribMTX = db.Tributacao_GeralView.ToList();
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        var erro = e.ToString();
+                    //        int par = 7;
+                    //        return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                    //    }
+
+                    //    TempData["tributacaoMTX"] = this.tribMTX; //cria
+                    //    TempData.Keep("tributacaoMTX"); //salva
+                    //}
+                    //else //não estando nula apenas atribui à lista o valor carregado em tempdata
+                    //{
+                    //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                    //    TempData.Keep("tributacaoMTX");
+                    //}
 
                     /*Temp data do produto*/
 
-                    if (TempData["tributacaoProdMTX"] == null)
-                    {
-                        //this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
-                        try
-                        {
-                            this.prodMTX = db.Produtos.ToList();
-                        }
-                        catch (Exception e)
-                        {
-                            var erro = e.ToString();
-                            int par = 7;
-                            return RedirectToAction("../Erro/ErroLogin", new { param = par });
-                        }
+                    //if (TempData["tributacaoProdMTX"] == null)
+                    //{
+                    //    //this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
+                    //    try
+                    //    {
+                    //        this.prodMTX = db.Produtos.ToList();
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        var erro = e.ToString();
+                    //        int par = 7;
+                    //        return RedirectToAction("../Erro/ErroLogin", new { param = par });
+                    //    }
 
-                      
-                        TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
-                        TempData.Keep("tributacaoProdMTX"); //persiste
-                    }
-                    else
-                    {
-                        this.prodMTX = (List<Produto>)TempData["tributacaoProdMTX"];//atribui a lista os valores de tempdata
-                        TempData.Keep("tributacaoProdMTX"); //persiste
-                    }
 
+                    //    TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
+                    //    TempData.Keep("tributacaoProdMTX"); //persiste
+                    //}
+                    //else
+                    //{
+                    //    this.prodMTX = (List<Produto>)TempData["tributacaoProdMTX"];//atribui a lista os valores de tempdata
+                    //    TempData.Keep("tributacaoProdMTX"); //persiste
+                    //}
+                    
 
                 }
                 else
@@ -261,11 +261,10 @@ namespace MatrizTributaria.Controllers
                 Session["usuario"] = null;
                 Session["empresa"] = null;
                 Session["email"] = null;
-
                 TempData["analise"] = null;
                 TempData["tributacaoMTX"] = null;
                 TempData["tributacaoProdMTX"] = null;
-               Session["usuarios"] = null;
+                Session["usuarios"] = null;
                 Session["empresas"] = null;
                 return RedirectToAction("Index");
             }

@@ -69,51 +69,14 @@ else
 
         <div class="form-group col-lg-6 p-1">
             <label class="pr-fontalternativa">Setor</label>
-
             <div class="input-group input-group-sm">
-                @if (ViewBag.FiltroCorrenteSetor == null)
+                @if (ViewBag.FiltroCorrenteCEST == null)
                 {
-
-                <select class = "form-control form-control-sm dropdown prn-select" id="ProcuraSetor" name="ProcuraSetor">
-                    <option value="null">Escolha um Setor</option>
-                    @foreach (var item in ViewBag.SetorProdutos)
-                    {
-                        if (item.id == ViewBag.FiltroCorrenteSetorInt)
-                        {
-                            <option selected value="@item.id">@item.descricao</option>
-                        }
-                        else
-                        {
-                            <option value="@item.id">@item.descricao</option>
-                        }
-
-                    }
-                </select>
-
-
-                    @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@
-
-                }
-                else
+                @Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), "SETOR", new { @class = "form-control form-control-sm dropdown prn-select" })
+                } else
                 {
-            <select class = "form-control form-control-sm dropdown prn-select" id="ProcuraSetor" name="ProcuraSetor">
-                <option value="null">Escolha um Setor</option>
-                @foreach (var item in ViewBag.SetorProdutos)
-                {
-                    if (item.id == ViewBag.FiltroCorrenteSetorInt)
-                    {
-                        <option selected value="@item.id">@item.descricao</option>
-                    }
-                    else
-                    {
-                        <option value="@item.id">@item.descricao</option>
-                    }
-
-                }
-            </select>
-
-                    @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@
-                }
+                    @Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), "SETOR", new { @class = "form-control form-control-sm dropdown prn-select" })
+                 }
                 <div class="input-group-append">
                     <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
                         <i style="font-size:1.3em;" class="fas fa-search"></i>
