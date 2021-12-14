@@ -107,6 +107,12 @@ namespace MatrizTributaria.Controllers
             }
             else
             {
+                if(usuario.senha == null)
+                {
+                    Session["usuario"] = null;
+                    ViewBag.Message = "Por favor digite sua senha";
+                    return View();
+                }
                 hashTxtSenha = hash.CriptografarSenha(usuario.senha);
 
                 if (user.senha.Equals(hashTxtSenha) || user.senha.Equals(usuario.senha))

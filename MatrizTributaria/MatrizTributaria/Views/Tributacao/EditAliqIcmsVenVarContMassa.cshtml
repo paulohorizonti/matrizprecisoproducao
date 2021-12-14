@@ -43,6 +43,9 @@
                                             Descrição do Produto
                                         </th>
                                         <th class="align-middle">
+                                            SETOR
+                                        </th>
+                                        <th class="align-middle">
                                             CEST
                                         </th>
 
@@ -73,6 +76,9 @@
                                         </td>
                                         <td style="width:18%">
                                             @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                        </td>
+                                        <td style="width:18%">
+                                            @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
                                         </td>
                                         <td style="width:5%">
                                             @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
@@ -114,6 +120,7 @@
                                         numeroLinhas = ViewBag.NumeroLinhas,
                                         filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                         filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                        filtroSetor = ViewBag.FiltroCorrenteSetor,
                                         opcao = TempData["opcao"].ToString()
                                     }),
                                     new PagedListRenderOptions()

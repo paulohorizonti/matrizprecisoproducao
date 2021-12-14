@@ -564,9 +564,12 @@ namespace MatrizTributaria.Controllers
                 ViewBag.CstNfeSNfor = cstGeral10.descricao;
             }
 
-
-           
-
+            ViewBag.Setor = db.SetorProdutos;
+            ViewBag.NatReceita = db.NaturezaReceitas;
+            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
+            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
+            ViewBag.CstGeral = db.CstIcmsGerais;
+            ViewBag.FundLegalPC = db.Legislacoes;
             ViewBag.DataAlt = DateTime.Now;
 
             return View(tributacao);
@@ -8995,7 +8998,7 @@ namespace MatrizTributaria.Controllers
         //Edit Aliq ICMs Venda Varejo para contribuinte - ATUALIZADO VERSAO FINAL
         [HttpGet]
         public ActionResult EditAliqIcmsVenVarContMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
+            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq, string filtroCorrenteNCM,
             string filtroCorrenteCEST, string filtroNulo, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
@@ -9022,6 +9025,10 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
 
+            procuraSetor = (procuraSetor == "") ? null : procuraSetor;
+            procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
+            procuraSetor = (procuraSetor != null) ? procuraSetor : null;
+
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
@@ -9045,12 +9052,22 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
+            procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
+
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteAliq = procurarPorAliq;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
+
+            ViewBag.FiltroCorrenteSetor = procuraSetor;
+
+            //converter o valor da procura por setor em inteiro
+            if (procuraSetor != null)
+            {
+                ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
+            }
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -9100,6 +9117,12 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT.ToString() == procurarPorAliq).ToList();
 
             }
+            //Busca por setor
+            if (!String.IsNullOrEmpty(procuraSetor))
+            {
+                this.tribMTX = this.tribMTX.Where(s => s.ID_SETOR.ToString() == procuraSetor).ToList();
+
+            }
 
 
             switch (ordenacao)
@@ -9126,6 +9149,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList();
 
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view

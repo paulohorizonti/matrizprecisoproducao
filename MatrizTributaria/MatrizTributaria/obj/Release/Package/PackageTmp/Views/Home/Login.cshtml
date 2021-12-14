@@ -42,31 +42,34 @@
 
                                     @if (ViewBag.Message == "Usuário não encontrato!")
                                     {
-                                        <div id="alerta" class="alert alert-danger" role="alert">
-                                            @ViewBag.Message
-                                        </div>
-                                    }
+                                <div id="alerta" class="alert alert-danger" role="alert">
+                                    @ViewBag.Message
+                                </div>}
                                     @if (ViewBag.Message == "Senha incorreta!")
                                     {
-                                        <div id="alerta" class="alert alert-danger" role="alert">
-                                            @ViewBag.Message
-                                        </div>
-                                    }
+                                <div id="alerta" class="alert alert-danger" role="alert">
+                                    @ViewBag.Message
+                                </div>}
+
+                                    @if (ViewBag.Message == "Por favor digite sua senha")
+                                    {
+                                <div id="alerta" class="alert alert-danger" role="alert">
+                                    @ViewBag.Message
+                                </div>
+                                }
 
                                     @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "user" }))
                                     {
-                                        <div class="form-group">
-                                            @Html.TextBoxFor(m => m.email, new { @class = "form-control form-control-user", placeholder = "Digite seu email(login)", id = "exampleInputEmail" })
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.email, new { @class = "form-control form-control-user", placeholder = "Digite seu email(login)", id = "exampleInputEmail" })
 
-                                        </div>
-                                        <div class="form-group">
-                                            @Html.PasswordFor(m => m.senha, new { @class = "form-control form-control-user", id = "exampleInputPassword", placeholder = "Digite sua senha" })
+                                </div>
+                                                <div class="form-group">
+                                                    @Html.PasswordFor(m => m.senha, new { @class = "form-control form-control-user", id = "exampleInputPassword", placeholder = "Digite sua senha" })
 
-                                        </div>
+                                                </div>
 
-                                        <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>
-                                       
-                                    }
+                                                                <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>}
 
                                     <form class="user">
                                     </form>

@@ -43,6 +43,9 @@
                                             Descrição do Produto
                                         </th>
                                         <th class="align-middle">
+                                            SETOR
+                                        </th>
+                                        <th class="align-middle">
                                             CEST
                                         </th>
 
@@ -66,33 +69,36 @@
                                     @foreach (var item in Model)
                                     {
 
-                                        <tr class="pr-td">
-                                            <td style="width:3%">
-                                                @Html.DisplayFor(modelItem => item.ID)
-                                            </td>
-                                            <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
-                                            </td>
-                                            <td style="width:18%">
-                                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
-                                            </td>
-                                            <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
-                                            </td>
-                                            <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
-                                            </td>
-                                            <td class="text-center" style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
-                                            </td>
+                                    <tr class="pr-td">
+                                        <td style="width:3%">
+                                            @Html.DisplayFor(modelItem => item.ID)
+                                        </td>
+                                        <td style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
+                                        </td>
+                                        <td style="width:18%">
+                                            @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                        </td>
+                                        <td style="width:18%">
+                                            @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
+                                        </td>
+                                        <td style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
+                                        </td>
+                                        <td style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
+                                        </td>
+                                        <td class="text-center" style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
+                                        </td>
 
 
-                                            <td style="width:5%;" class="text-center">
-                                                @Html.DisplayFor(modelItem => item.DataFormatada)
+                                        <td style="width:5%;" class="text-center">
+                                            @Html.DisplayFor(modelItem => item.DataFormatada)
 
-                                            </td>
+                                        </td>
 
-                                        </tr>
+                                    </tr>
                                     }
                                 </tbody>
 
@@ -109,13 +115,14 @@
                                     @Html.PagedListPager(
                                     Model, page => Url.Action("EditAliqIcmsSTVenVarCFMassa",
                                     new
-                                         {
+                                    {
                                         page,
                                         filtroCorrente = ViewBag.FiltroCorrente,
                                         filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
                                         numeroLinhas = ViewBag.NumeroLinhas,
                                         filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                         filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                        filtroSetor = ViewBag.FiltroCorrenteSetor,
                                         opcao = TempData["opcao"].ToString()
                                     }),
                                     new PagedListRenderOptions()

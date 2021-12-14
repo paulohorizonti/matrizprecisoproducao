@@ -40,9 +40,6 @@ $(document).ready(function () {
 
 
 
-
-
-
 $(document).ready(function () {
     var a = document.querySelector(".pr-titulo"); //pegar o nome do controler
     var controller = a.innerText;

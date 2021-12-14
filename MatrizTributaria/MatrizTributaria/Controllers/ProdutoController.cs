@@ -305,7 +305,7 @@ namespace MatrizTributaria.Controllers
 
         //EditNCM
         [HttpGet]
-        public ActionResult EditMassa(string opcao, string param, string ordenacao, string qtdSalvos, string procuraNCM, string procuraCEST,
+        public ActionResult EditMassa(string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
             string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string filtroCorrenteNCM,
             string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo) 
         {
@@ -448,6 +448,7 @@ namespace MatrizTributaria.Controllers
             //Mensagens de retorno
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList();
 
 
@@ -499,6 +500,293 @@ namespace MatrizTributaria.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult EditMassaNCMModal(string id, string ncm)
+        {
+            //receber os dados do ncm para alterar
+            string ncmAlterar = ncm;
+            ViewBag.NCM = ncmAlterar;
+
+            /*ViewBagDiferente para pins cofins*/
+            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
+            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
+
+            /*ViewBags com os dados necessários para preencher as dropbox na view*/
+            ViewBag.Setor = db.SetorProdutos;
+            ViewBag.NatReceita = db.NaturezaReceitas;
+
+            ViewBag.FundLegal = db.Legislacoes;
+            ViewBag.CstIcms = db.CstIcmsGerais;
+            ViewBag.FundLegalPC = db.Legislacoes;
+            ViewBag.FundLegalSaida = db.Legislacoes;
+            ViewBag.FundLegalEndrada = db.Legislacoes;
+            ViewBag.Legislacao = db.Legislacoes;
+            ViewBag.CstGeral = db.CstIcmsGerais;
+
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditMassaNCMModalPost(string ncm, string fecp, string CodReceita, string CstSaidaPisCofins, string aliqSaidaPis, string aliqSaidaCofins,
+            string IdFundamentoLegal, string CstVendaVarejoConsFinal, string alVeVarCF, string alVeVarCFSt, string rBcVeVarCF, string rBcSTVeVarCF, 
+            string CstVendaVarejoCont, string alVeVarCont, string alVeVarContSt, string rBcVeVarCont, string rBcSTVeVarCont, string CstVendaAtaCont,
+            string aliqIcmsVendaAtaCont, string aliqIcmsSTVendaAtaCont, string redBaseCalcIcmsVendaAtaCont, string redBaseCalcIcmsSTVendaAtaCont, 
+            string CstVendaAtaSimpNacional, string alVSN, string alVSNSt, string rBcVSN, string rBcSTVSN, string IdFundLegalSaidaICMS)
+        {
+            int regSalvos = 0;
+            int regNSalvos = 0;
+            int regParaSalvar = 0;
+            string retorno = "";
+            //buscar os cst pela descrição
+            int? cstSaidaPisCofins       = (CstSaidaPisCofins       == "") ? null : (int?)(long)(from a in db.CstPisCofinsSaidas where a.descricao == CstSaidaPisCofins select a.codigo).FirstOrDefault();
+            int? cstVendaVarejoConsFinal = (CstVendaVarejoConsFinal == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaVarejoConsFinal select a.codigo).FirstOrDefault();
+            int? cstVendaVarejoCont      = (CstVendaVarejoCont      == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaVarejoCont select a.codigo).FirstOrDefault();
+            int? cstVendaAtaCont         = (CstVendaAtaCont         == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaAtaCont select a.codigo).FirstOrDefault();
+            int? cstVendaAtaSimpNacional = (CstVendaAtaSimpNacional == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaAtaSimpNacional select a.codigo).FirstOrDefault();
+            //natureza da reeita
+            int? codNatRec = 0;
+
+            if (CodReceita == "")
+            {
+                codNatRec = null;
+            }
+            else
+            {
+                codNatRec = int.Parse(CodReceita);
+            }
+
+            //Fundamento Legal cofins
+            int? fundLegalCofins = 0;
+            if(IdFundamentoLegal == "")
+            {
+                fundLegalCofins = null;
+            }
+            else
+            {
+                fundLegalCofins = int.Parse(IdFundamentoLegal);
+            }
+
+            //fundamento legal icms saida
+            int? fundLegalIcmsSaida = 0;
+            if(IdFundLegalSaidaICMS == "")
+            {
+                fundLegalIcmsSaida = null;
+            }
+            else
+            {
+                fundLegalIcmsSaida = int.Parse(IdFundLegalSaidaICMS);
+            }
+
+            
+            
+            //Aa aliquotas podem estar com a virgula, na hora de salvar o sistema passa para decimal
+            string buscaNCM = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
+
+            buscaNCM = buscaNCM.Replace(".", ""); //tirar os pontos da string
+
+            VerificaTempData();
+
+            if (!String.IsNullOrEmpty(buscaNCM))
+            {
+                tribMTX = tribMTX.Where(s => s.NCM_PRODUTO == buscaNCM).ToList();
+
+            }
+
+            //foreach para atualizar os produtos
+            //retira o elemento vazio do array
+           //objeto produto
+            Tributacao tributaCao = new Tributacao();
+
+            //percorrer o array, atribuir o valor de ncm e salvar o objeto
+            for (int i = 0; i < tribMTX.Count; i++)
+            {
+                int? idTrib = (tribMTX[i].ID); //pega o id do registro da tributação a ser alterada
+                tributaCao = db.Tributacoes.Find(idTrib); //busca a tributação pelo seu id
+
+                //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
+                if(cstSaidaPisCofins != null)
+                {
+                    tributaCao.cstSaidaPisCofins = cstSaidaPisCofins;
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(cstVendaVarejoConsFinal != null)
+                {
+                    tributaCao.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if (cstVendaVarejoCont !=null) 
+                {
+
+                    tributaCao.cstVendaVarejoCont = cstVendaVarejoCont;
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(cstVendaAtaCont != null)
+                {
+                    tributaCao.cstVendaAtaCont = cstVendaAtaCont;
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(cstVendaAtaSimpNacional != null)
+                {
+                    tributaCao.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if (fecp != "")
+                {
+                    tributaCao.fecp = decimal.Parse(fecp);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                
+                if(codNatRec != null)
+                {
+                    tributaCao.codNatReceita = codNatRec;
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(aliqSaidaPis != "")
+                {
+                    tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if (aliqSaidaCofins != "")
+                {
+                    tributaCao.aliqSaidaCofins = decimal.Parse(aliqSaidaCofins);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if (fundLegalCofins != null)
+                {
+                    tributaCao.idFundamentoLegal = (fundLegalCofins);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                
+                if(alVeVarCF != "")
+                {
+                    tributaCao.aliqIcmsVendaVarejoConsFinal = decimal.Parse(alVeVarCF);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(alVeVarCFSt != "")
+                {
+                    tributaCao.aliqIcmsSTVendaVarejoConsFinal = decimal.Parse(alVeVarCFSt);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(rBcVeVarCF != "")
+                {
+                    tributaCao.redBaseCalcIcmsVendaVarejoConsFinal = decimal.Parse(rBcVeVarCF);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(rBcSTVeVarCF != "")
+                {
+                    tributaCao.redBaseCalcIcmsSTVendaVarejoConsFinal = decimal.Parse(rBcSTVeVarCF);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(alVeVarCont != "")
+                {
+                    tributaCao.aliqIcmsVendaVarejoCont = decimal.Parse(alVeVarCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(alVeVarContSt != "")
+                {
+                    tributaCao.aliqIcmsSTVendaVarejo_Cont = decimal.Parse(alVeVarContSt);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(rBcVeVarCont != "")
+                {
+                    tributaCao.redBaseCalcVendaVarejoCont = decimal.Parse(rBcVeVarCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(rBcSTVeVarCont != "")
+                {
+                    tributaCao.RedBaseCalcSTVendaVarejo_Cont = decimal.Parse(rBcSTVeVarCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(aliqIcmsVendaAtaCont != "")
+                {
+                    tributaCao.aliqIcmsVendaAtaCont = decimal.Parse(aliqIcmsVendaAtaCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(aliqIcmsSTVendaAtaCont != "")
+                {
+                    tributaCao.aliqIcmsSTVendaAtaCont = decimal.Parse(aliqIcmsSTVendaAtaCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if (redBaseCalcIcmsVendaAtaCont != "")
+                {
+                    tributaCao.redBaseCalcIcmsVendaAtaCont = decimal.Parse(redBaseCalcIcmsVendaAtaCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(redBaseCalcIcmsSTVendaAtaCont != "")
+                {
+                    tributaCao.redBaseCalcIcmsSTVendaAtaCont = decimal.Parse(redBaseCalcIcmsSTVendaAtaCont);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if (alVSN != "")
+                {
+                    tributaCao.aliqIcmsVendaAtaSimpNacional = decimal.Parse(alVSN);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(alVSNSt != "")
+                {
+                    tributaCao.aliqIcmsSTVendaAtaSimpNacional = decimal.Parse(alVSNSt);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if (rBcVSN != "")
+                {
+                    tributaCao.redBaseCalcIcmsVendaAtaSimpNacional = decimal.Parse(rBcVSN);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if(rBcSTVSN != "")
+                {
+                    tributaCao.redBaseCalcIcmsSTVendaAtaSimpNacional = decimal.Parse(rBcSTVSN);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+                if (fundLegalIcmsSaida != null)
+                {
+                    tributaCao.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
+                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                }
+
+                if(regParaSalvar != 0)
+                {
+                    try
+                    {
+                        db.SaveChanges();
+                        regSalvos++;
+                        retorno = "Registro Salvo com Sucesso!!";
+                    }
+                    catch (Exception e)
+                    {
+                        regNSalvos++;
+                    }
+                }
+                else
+                {
+                   retorno = "Nenhum item do  registro alterado";
+                    //Redirecionar para registros
+                    return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                }
+
+                
+               
+            }
+
+            
+            //Redirecionar para registros
+            return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+        }
         [HttpGet]
         public ActionResult EditMassaModalPost(string strDados, string ncm)
         {
