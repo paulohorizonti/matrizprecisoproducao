@@ -307,7 +307,7 @@ namespace MatrizTributaria.Controllers
         [HttpGet]
         public ActionResult EditMassa(string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
             string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string filtroCorrenteNCM,
-            string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo) 
+            string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtroCorrenteAudNCM) 
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -332,8 +332,8 @@ namespace MatrizTributaria.Controllers
             //verifica se veio parametros
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+            auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "2";
 
-            
 
 
             procuraSetor = (procuraSetor == "") ? null : procuraSetor;
@@ -366,6 +366,7 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
 
+            auditadosNCM = (auditadosNCM == null) ? filtroCorrenteAudNCM : auditadosNCM; //todos os que não foram auditados
 
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
 
@@ -373,7 +374,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
-
+            ViewBag.FiltroCorrenteAuditado = auditadosNCM; 
             ViewBag.FiltroCorrenteSetor = procuraSetor;
             if(procuraSetor != null)
             {
@@ -382,6 +383,20 @@ namespace MatrizTributaria.Controllers
            
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
+
+            switch (auditadosNCM)
+            {
+                case "0": //SOMENTE OS NÃO AUDITADOS
+                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 0).ToList();
+                    break;
+                case "1": //SOMENTE OS AUDITADOS
+                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 1).ToList();
+                    break;
+                case "2": //TODOS
+                    this.tribMTX = this.tribMTX.Where(s => s.ID !=null).ToList();
+                    break;
+            }
+
 
             switch (opcao)
             {
@@ -761,6 +776,8 @@ namespace MatrizTributaria.Controllers
 
                 if(regParaSalvar != 0)
                 {
+                    tributaCao.auditadoPorNCM = 1; //marca como auditado
+                    tributaCao.dataAlt = DateTime.Now; //data da alteração
                     try
                     {
                         db.SaveChanges();
@@ -782,7 +799,11 @@ namespace MatrizTributaria.Controllers
                 
                
             }
-
+            //zera a tempdata caso tenha salvo algum registros
+            if(regSalvos > 0)
+            {
+                TempData["tributacaoMTX"] = null;//cria a temp data e popula
+            }
             
             //Redirecionar para registros
             return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });

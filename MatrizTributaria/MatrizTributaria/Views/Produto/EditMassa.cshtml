@@ -24,70 +24,168 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditMassa", "Produto", FormMethod.Get))
                             {
-                @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->}
+                                @RenderPage("~/Views/Acoes/CamposComunsNCM.cshtml") <!--Renderiza os botões de ação-->}
+
+                            <div style="overflow-x:auto !important;">
+                                <table style="border-bottom: 1px solid #111; display: block; overflow-x: auto; white-space: nowrap;" class="table table-striped table-hover" id="table-graficos2">
+                                    <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
+                                        <tr>
+                                            <th style="text-align:center; border:none;" colspan="7" class="pr-fonte2 pr-thtd prn-borderEspecial" scope="col">PRODUTO</th>
+                                            <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2 pr-thtd prn-borderEspecial" scope="col">ICMS Venda no varejo para Consumidor Final</th>
+                                            <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2 pr-thtd prn-borderEspecial" scope="col">ICMS Venda no varejo para Contribuinte</th>
+                                            <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2 pr-thtd prn-borderEspecial" scope="col">ICMS Venda no atacado para Contribuinte</th>
+                                            <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2 pr-thtd prn-borderEspecial" scope="col">ICMS Venda no atacado para Simples Nacional</th>
 
 
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">
+                                                Id
+                                            </th>
+                                            <th scope="col">
+                                                Código de Barras
+                                            </th>
+                                            <th scope="col" class="pr-actionlink">
+                                                <i style="font-size:1.1em;" class="fas fa-sort pr-actionlink"></i>
+                                                @Html.ActionLink("Produto", "EditMassa", new { filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, ordenacao = ViewBag.ParametroProduto, opcao = TempData["opcao"].ToString() })
+
+                                            </th>
+                                            <th scope="col">Setor</th>
+                                            <th scope="col">Cest</th>
+                                            <th scope="col">NCM</th>
+                                            <th scope="col" class="text-center prn-borderEspecial3">Auditado</th>
+                                            <th scope="col" class="text-center">CST</th>
+                                            <th scope="col" class="text-center">Aliq(%)</th>
+                                            <th scope="col" class="text-center">Aliq ST(%)</th>
+                                            <th scope="col" class="text-center">Red.(%)</th>
+                                            <th scope="col" class="text-center prn-borderEspecial3">Red. ST(%)</th>
+                                            <th scope="col" class="text-center">CST</th>
+                                            <th scope="col" class="text-center">Aliq(%)</th>
+                                            <th scope="col" class="text-center">Aliq ST(%)</th>
+                                            <th scope="col" class="text-center">Red.(%)</th>
+                                            <th scope="col" class="text-center prn-borderEspecial3">Red. ST(%)</th>
+                                            <th scope="col" class="text-center">CST</th>
+                                            <th scope="col" class="text-center">Aliq(%)</th>
+                                            <th scope="col" class="text-center">Aliq ST(%)</th>
+                                            <th scope="col" class="text-center">Red.(%)</th>
+                                            <th scope="col" class="text-center prn-borderEspecial3">Red. ST(%)</th>
+                                            <th scope="col" class="text-center">CST</th>
+                                            <th scope="col" class="text-center">Aliq(%)</th>
+                                            <th scope="col" class="text-center">Aliq ST(%)</th>
+                                            <th scope="col" class="text-center">Red.(%)</th>
+                                            <th scope="col" class="text-center prn-borderEspecial3">Red. ST(%)</th>
+
+                                        </tr>
+                                    </thead>
+                                    <!--Corpo da Tabela-->
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                        <tr class="pr-td">
+                                            <td style="width:5%" class="text-center prn-borderEspecial2">
+                                                @Html.DisplayFor(modelItem => item.ID_PRODUTO)
+                                            </td>
+                                            <td style="width:8%" class="text-left prn-borderEspecial2">
+                                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
+                                            </td>
+                                            <td style="width:20%" class="text-left prn-borderEspecial2">
+                                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                            </td>
+                                            <td style="width:50%" class="text-left prn-borderEspecial2">
+                                                @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
+                                            </td>
+
+                                            <td style="width:10%;" class="text-center prn-borderEspecial2">
+                                                @item.CEST_PRODUTO
+                                            </td>
+                                            <td style="width:10%;" class="text-center prn-borderEspecial2">
+                                                @item.NCM_PRODUTO
+                                            </td>
+                                            <td style="width:4%;" class="text-center prn-borderEspecial2">
+                                                @if (@item.AUDITADO_POR_NCM == 1)
+                                                {
+                                                    <span>SIM</span> }
+                                                else
+                                                {
+                                                    <span>NÃO</span>}
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.CST_VENDA_VAREJO_CONS_FINAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.CST_VENDA_VAREJO_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_VENDA_VAREJO_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_ST_VENDA_VAREJO_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_VENDA_VAREJO_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ST_VENDA_VAREJO_CONT
+                                            </td>
+
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.CST_VENDA_ATA_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_VENDA_ATA_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_ST_VENDA_ATA_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ICMS_VENDA_ATA_CONT
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT
+                                            </td>
+
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.CST_VENDA_ATA_SIMP_NACIONAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL
+                                            </td>
+                                            <td style="width:5%;" class="text-center prn-borderEspecial2">
+                                                @item.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL
+                                            </td>
+
+
+                                        </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
                             <!--Tabela-->
-                            <table style="border-bottom: 1px solid #111;" class="table table-striped table-hover" id="table-graficos2">
-                                <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
-                                    <tr>
-                                        <th scope="col">
-                                            Id
-                                        </th>
-                                        <th scope="col">
-                                            Código de Barras
-                                        </th>
-                                        <th scope="col" class="pr-actionlink">
-                                            <i style="font-size:1.1em;" class="fas fa-sort pr-actionlink"></i>
-                                            @Html.ActionLink("Produto", "EditMassa", new { filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, ordenacao = ViewBag.ParametroProduto, opcao = TempData["opcao"].ToString() })
-
-                                        </th>
-                                        <th scope="col">Setor</th>
-                                        <th scope="col">Cest</th>
-                                        <th scope="col">NCM</th>
-                                        <th scope="col" class="text-center">Alterado</th>
-
-                                    </tr>
-                                </thead>
-                                <!--Corpo da Tabela-->
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                        <tr class="pr-td">
-                            <td style="width:5%">
-                                @Html.DisplayFor(modelItem => item.ID_PRODUTO)
-                            </td>
-                            <td style="width:8%">
-                                @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
-                            </td>
-                            <td style="width:20%">
-                                @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
-                            </td>
-                            <td style="width:22%">
-                                @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
-                            </td>
-
-                            <td style="width:5%;">
-                                @item.CEST_PRODUTO
-                            </td>
-                            <td style="width:5%;">
-                                @item.NCM_PRODUTO
-                            </td>
-                            <td style="width:5%;" class="text-center">
-                                @item.DataFormatada
-                            </td>
-
-
-                        </tr>
-}
-                                </tbody>
-
-                            </table>
+                       
                             <!--Rodape-->
                             <div class="d-flex">
                                 <div class="mr-auto p-2">
                                     <p class="pr-fontanternativa">
-                                        <span class="pr-fontalternativa"> Página @(Model.PageCount<Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                                        <span class="pr-fontalternativa"> Página @(Model.PageCount<Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - - Total de registros: @Model.TotalItemCount</span>
                                     </p>
                                 </div>
 
@@ -102,6 +200,7 @@
                                                             filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                                             filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
                                                             filtroSetor = ViewBag.FiltroCorrenteSetor,
+                                                            filtroCorrenteAudNCM = ViewBag.FiltroCorrenteAuditado,
                                                             opcao = TempData["opcao"].ToString()
                                                         }),
                                                         new PagedListRenderOptions()
@@ -135,6 +234,3 @@
         </div>
     </div><!--Fim do card-->
 </div><!--Fim do container-->
-
-
-

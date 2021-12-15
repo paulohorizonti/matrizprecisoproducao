@@ -424,6 +424,12 @@ aside {
     background-color: #021e36;
     margin: 0.1rem;
 }
+.boxTable {
+    min-width: 100%;
+    height: 100px;
+     
+    margin: 0.1rem;
+}
 
 .scrolling-wrapper {
     display: flex;
@@ -783,6 +789,7 @@ a:hover{
     display:none;
 }
 
+
 .swal-button {
     background-color: #021E36 !important;
     color: #FFF;
@@ -855,4 +862,28 @@ li.page-item.active > a {
 
 .select-cst{
     max-width:100% !important;
+}
+
+.table-graficosMostra tr:hover td {
+    background-color: #A7291D;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 0.99em;
+}
+
+.prn-borderEspecial {
+    border-right: 1px solid #fff !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    border-left: none !important;
+}
+.prn-borderEspecial2 {
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+    border-top: none;
+    border-left: none;
+}
+.prn-borderEspecial3 {
+    border-right: 1px solid #fff;
+  
 }

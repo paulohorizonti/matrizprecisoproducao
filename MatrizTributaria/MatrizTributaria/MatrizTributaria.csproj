@@ -2875,6 +2875,7 @@
     <Content Include="Views\Acoes\CamposComunsUsuario.cshtml" />
     <Content Include="Views\Acoes\CamposComunsProdutos .cshtml" />
     <Content Include="Views\Produto\EditMassaNCMModal.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsNCM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

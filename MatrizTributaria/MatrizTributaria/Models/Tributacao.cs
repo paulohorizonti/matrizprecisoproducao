@@ -226,6 +226,9 @@ namespace MatrizTributaria.Models
         [Column("Regime_2560")]
         public Nullable<sbyte> regime2560 { get; set; }
 
+        [Column("Auditado_porNCM")]
+        public Nullable<sbyte> auditadoPorNCM { get; set; }
+
         [Column("DataCad")]
         public DateTime? dataCad { get; set; }
 

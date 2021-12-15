@@ -9,17 +9,26 @@ $(document).ready(function () {
             var value = selecao.options[selecao.selectedIndex].value; //pegar o valor do select
 
             if (value == 1) {
-                document.getElementById('mudarValores2').style.display = 'none';
-                document.getElementById('mudarValores1').style.display = 'none';
-                document.getElementById('mudarValores0').style.display = 'none';
+               
+               
+              
+                document.getElementById('mudarValoresNatRec').style.display = 'none';
+                document.getElementById('mudarValoresSetorFecp').style.display = 'none';
+               
+               
+
+                document.getElementById('mudarValoresTab').style.display = 'none';
                 
+             
                 document.getElementById("selAlterar").focus();
                 
                
             } else {
-                document.getElementById('mudarValores2').style.display = 'flex';
-                document.getElementById('mudarValores1').style.display = 'flex';
-                document.getElementById('mudarValores0').style.display = 'block';
+                document.getElementById('mudarValoresTab').style.display = 'block';
+                
+                
+                document.getElementById('mudarValoresNatRec').style.display = 'flex';
+                document.getElementById('mudarValoresSetorFecp').style.display = 'block';
                 document.getElementById("selAlterar").focus();
                 
             }

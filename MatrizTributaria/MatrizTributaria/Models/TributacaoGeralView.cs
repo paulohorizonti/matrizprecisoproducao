@@ -203,6 +203,9 @@ namespace MatrizTributaria.Models
         [Column("CREDITO_OUTORGADO")]
         public int? CREDITO_OUTORGADO { get; set; }
 
+        [Column("AUDITADO_POR_NCM")]
+        public int? AUDITADO_POR_NCM { get; set; }
+
         [Column("VALOR_MVA_ATACADO")]
         public double? VALOR_MVA_ATACADO { get; set; }
 
