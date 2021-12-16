@@ -25,6 +25,10 @@ namespace MatrizTributaria.Models
         [Column("ID_SETOR")]
         public int? ID_SETOR { get; set; }
 
+        
+        [Column("ID_CATEGORIA")]
+        public int? ID_CATEGORIA { get; set; }
+
         [Column("FECP")]
         public double? FECP { get; set; }
 
@@ -218,6 +222,10 @@ namespace MatrizTributaria.Models
 
         [Column("DESCRICAO_SETOR_PRODUTO")]
         public string DESCRICAO_SETOR_PRODUTO { get; set; }
+
+        
+        [Column("CATEGORIA_DESCRICAO")]
+        public string CATEGORIA_DESCRICAO { get; set; }
 
         [Column("CEST_PRODUTO")]
         public string CEST_PRODUTO { get; set; }

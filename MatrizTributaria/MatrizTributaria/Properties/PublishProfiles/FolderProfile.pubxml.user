@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2021-12-10T20:45:01.4386867Z;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
+    <History>True|2021-12-16T13:06:31.3141668Z;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -477,10 +477,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>12/15/2021 17:14:11</publishTime>
+      <publishTime>12/16/2021 17:45:33</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>12/15/2021 17:14:11</publishTime>
+      <publishTime>12/16/2021 17:45:33</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -843,7 +843,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Content/admin/adm-css.css">
-      <publishTime>12/15/2021 14:42:26</publishTime>
+      <publishTime>12/16/2021 15:48:37</publishTime>
     </File>
     <File Include="Content/all-min.css">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7305,7 +7305,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsNCM.cshtml">
-      <publishTime>12/15/2021 09:00:46</publishTime>
+      <publishTime>12/16/2021 17:39:35</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsProdutos .cshtml">
       <publishTime>12/09/2021 15:25:25</publishTime>
@@ -7491,7 +7491,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Produto/Edit.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/16/2021 12:10:56</publishTime>
     </File>
     <File Include="Views/Produto/EditCestMassa.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7506,10 +7506,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Produto/EditMassa.cshtml">
-      <publishTime>12/15/2021 15:05:42</publishTime>
+      <publishTime>12/16/2021 17:29:12</publishTime>
     </File>
     <File Include="Views/Produto/EditMassaModal.cshtml">
-      <publishTime>12/15/2021 17:10:37</publishTime>
+      <publishTime>12/16/2021 09:36:36</publishTime>
     </File>
     <File Include="Views/Produto/EditMassaModal2.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7893,7 +7893,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/15/2021 17:14:15</publishTime>
+      <publishTime>12/16/2021 10:06:21</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>12/06/2021 17:53:07</publishTime>

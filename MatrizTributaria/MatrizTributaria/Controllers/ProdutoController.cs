@@ -175,6 +175,14 @@ namespace MatrizTributaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id, codinterno, codbarras, descricao, cest, ncm, datacad, dataalt, idcategoria, status")] Produto model)
         {
+            //Aa aliquotas podem estar com a virgula, na hora de salvar o sistema passa para decimal
+            string buscaNCM = model.ncm != null ? model.ncm.Trim() : null; //ternario para remover eventuais espaços
+            if(model.ncm != null)
+            {
+                model.ncm = buscaNCM.Replace(".", ""); //tirar os pontos da string
+            }    
+           
+
             if (ModelState.IsValid)
             {
                 var produto = db.Produtos.Find(model.Id);
@@ -188,7 +196,7 @@ namespace MatrizTributaria.Controllers
                 produto.cest = model.cest;
                 produto.codBarras = model.codBarras;
                 produto.codInterno = model.codInterno;
-                produto.descricao = model.descricao;
+                produto.descricao = model.descricao.ToUpper();
                 produto.ncm = model.ncm;
                 produto.idCategoria = model.idCategoria;
                 produto.status = model.status;
@@ -196,6 +204,7 @@ namespace MatrizTributaria.Controllers
 
 
                 db.SaveChanges();
+                TempData["tributacaoMTX"] = null;
                 return RedirectToAction("Index");
             }
             ViewBag.Categorias = db.CategoriaProdutos;
@@ -306,8 +315,9 @@ namespace MatrizTributaria.Controllers
         //EditNCM
         [HttpGet]
         public ActionResult EditMassa(string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
-            string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string filtroCorrenteNCM,
-            string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtroCorrenteAudNCM) 
+            string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string procuraCate, string filtroCate, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtraPor, string filtroFiltraPor,
+            string filtroCorrenteAudNCM) 
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -334,8 +344,27 @@ namespace MatrizTributaria.Controllers
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
             auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "2";
 
+            filtraPor = (filtraPor != null) ? filtraPor : "Setor"; //padrão é por setor
 
+            if(filtraPor != "Setor")
+            {
+               
+                ViewBag.FiltrarPor = "Categoria";
+                procuraSetor = null;
+            }
+            else
+            {
+                ViewBag.FiltrarPor = "Setor";
+                procuraCate = null;
+            }
 
+           
+            //categoria
+            procuraCate = (procuraCate == "") ? null : procuraCate;
+            procuraCate = (procuraCate == "null") ? null : procuraCate;
+            procuraCate = (procuraCate != null) ? procuraCate : null;
+
+            //setor
             procuraSetor = (procuraSetor == "") ? null : procuraSetor;
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
@@ -344,11 +373,10 @@ namespace MatrizTributaria.Controllers
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
 
-            ViewBag.Ordenacao = ordenacao;
-            ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
+          
 
-            ViewBag.Ordenacao = ordenacao;
-            ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
 
             /*Verifica a opção e atribui a uma tempdata para continuar salva*/
             TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
@@ -359,7 +387,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) ||(procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -370,17 +398,26 @@ namespace MatrizTributaria.Controllers
 
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
 
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
             ViewBag.FiltroCorrenteAuditado = auditadosNCM; 
             ViewBag.FiltroCorrenteSetor = procuraSetor;
-            if(procuraSetor != null)
+            ViewBag.FiltroCorrenteCate = procuraCate;
+            ViewBag.FiltroFiltraPor = filtraPor;
+
+            if (procuraSetor != null)
             {
                 ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
             }
-           
+            if (procuraCate != null)
+            {
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+            }
+
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
@@ -439,14 +476,26 @@ namespace MatrizTributaria.Controllers
               
 
             }
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                this.tribMTX = this.tribMTX.Where(s => s.ID_CATEGORIA.ToString() == procuraCate).ToList();
+
+
+            }
             switch (ordenacao)
             {
                 case "Produto_desc":
                     this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
-
-                default:
+                case "Produto_asc":
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    break;
+                case "Id_desc":
                     this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    break;
+                default:
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
 
 
@@ -465,6 +514,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList();
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().ToList();
 
 
 
@@ -552,6 +602,7 @@ namespace MatrizTributaria.Controllers
             int regSalvos = 0;
             int regNSalvos = 0;
             int regParaSalvar = 0;
+
             string retorno = "";
             //buscar os cst pela descrição
             int? cstSaidaPisCofins       = (CstSaidaPisCofins       == "") ? null : (int?)(long)(from a in db.CstPisCofinsSaidas where a.descricao == CstSaidaPisCofins select a.codigo).FirstOrDefault();
@@ -791,7 +842,7 @@ namespace MatrizTributaria.Controllers
                 }
                 else
                 {
-                   retorno = "Nenhum item do  registro alterado";
+                    retorno = "Nenhum item do  registro alterado";
                     //Redirecionar para registros
                     return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
                 }
@@ -811,6 +862,14 @@ namespace MatrizTributaria.Controllers
         [HttpGet]
         public ActionResult EditMassaModalPost(string strDados, string ncm)
         {
+            //variaveis de auxilio
+            int regSalvos = 0;
+            int regNSalvos = 0;
+            
+
+            string retorno = "";
+
+
             //varivael para recebe o novo ncm
             string ncmMudar = "";
 
@@ -834,12 +893,39 @@ namespace MatrizTributaria.Controllers
             {
                 int idProd = Int32.Parse(idProdutos[i]);
                 prod = db.Produtos.Find(idProd);
-                prod.ncm = ncmMudar;
-                db.SaveChanges();
+                if (prod !=null)
+                {
+                    
+
+                    prod.ncm = ncmMudar;
+                    prod.dataAlt = DateTime.Now; //data da alteração
+                    try
+                    {
+                        db.SaveChanges();
+                        regSalvos++;
+                    }
+                    catch(Exception e)
+                    {
+                        regNSalvos++;
+                    }
+                   
+                }
+                
+            }
+            if(regSalvos > 0)
+            {
+                retorno = "Registro Salvo com Sucesso!!";
+                TempData["tributacaoMTX"] = null;//cria a temp data e popula
+            }
+            else
+            {
+                retorno = "Nenhum item do  registro alterado";
+                //Redirecionar para registros
+                return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
             }
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("GraficoAnaliseProdutos", "Produto");
+            //Redirecionar para registros
+            return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
         }
 
 

@@ -34,7 +34,7 @@
                                                             </div>
                                                             <div class="col-lg-10 mb-3">
                                                                 <label class="pr-fonte-label" for="descricao">Descrição:</label>
-                                                                @Html.TextBoxFor(m => m.descricao, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);" })
+                                                                @Html.TextBoxFor(m => m.descricao, new { @class = "form-control form-control-sm" })
                                                                 @Html.ValidationMessageFor(m => m.descricao, "", new { @class = "text-danger" })
                                                             </div>
 

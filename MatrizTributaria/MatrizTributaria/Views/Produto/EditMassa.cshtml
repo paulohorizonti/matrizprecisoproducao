@@ -39,18 +39,37 @@
 
                                         </tr>
                                         <tr>
-                                            <th scope="col">
-                                                Id
+                                            <th scope="col" class="pr-actionlink">
+                                                ID
                                             </th>
                                             <th scope="col">
                                                 Código de Barras
                                             </th>
                                             <th scope="col" class="pr-actionlink">
-                                                <i style="font-size:1.1em;" class="fas fa-sort pr-actionlink"></i>
-                                                @Html.ActionLink("Produto", "EditMassa", new { filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, ordenacao = ViewBag.ParametroProduto, opcao = TempData["opcao"].ToString() })
+
+                                                @if (ViewBag.ParametroProduto == "Produto_asc")
+                                                {
+                                                    <i style="font-size:1.1em;" class="fas fa-sort-up pr-actionlink"></i>
+                                                    @Html.ActionLink("Produtos", "EditMassa", new { filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, ordenacao = "Produto_desc", opcao = TempData["opcao"].ToString() })
+
+                                                }
+                                                else
+                                                {
+                                                    <i style="font-size:1.1em;" class="fas fa-sort-down pr-actionlink"></i>
+                                                    @Html.ActionLink("Produtos", "EditMassa", new { filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, ordenacao = "Produto_asc", opcao = TempData["opcao"].ToString() })
+
+                                                }
 
                                             </th>
-                                            <th scope="col">Setor</th>
+                                            @if (ViewBag.FiltrarPor == "Setor")
+                                            {
+                                                <th scope="col">Setor</th>
+                                            }
+                                            else
+                                            {
+                                                <th scope="col">Categoria</th>
+                                            }
+                                          
                                             <th scope="col">Cest</th>
                                             <th scope="col">NCM</th>
                                             <th scope="col" class="text-center prn-borderEspecial3">Auditado</th>
@@ -91,9 +110,18 @@
                                             <td style="width:20%" class="text-left prn-borderEspecial2">
                                                 @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
                                             </td>
-                                            <td style="width:50%" class="text-left prn-borderEspecial2">
-                                                @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
-                                            </td>
+                                            @if (ViewBag.FiltrarPor == "Setor")
+                                            {
+                                                <td style="width:50%" class="text-left prn-borderEspecial2">
+                                                    @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="width:50%" class="text-left prn-borderEspecial2">
+                                                    @Html.DisplayFor(modelItem => item.CATEGORIA_DESCRICAO)
+                                                </td>
+                                            }
 
                                             <td style="width:10%;" class="text-center prn-borderEspecial2">
                                                 @item.CEST_PRODUTO
@@ -201,6 +229,9 @@
                                                             filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
                                                             filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                             filtroCorrenteAudNCM = ViewBag.FiltroCorrenteAuditado,
+                                                            ordenacao = ViewBag.ParametroProduto,
+                                                            filtroCate = ViewBag.FiltroCorrenteCate,
+                                                            filtraPor = ViewBag.FiltroFiltraPor,
                                                             opcao = TempData["opcao"].ToString()
                                                         }),
                                                         new PagedListRenderOptions()
