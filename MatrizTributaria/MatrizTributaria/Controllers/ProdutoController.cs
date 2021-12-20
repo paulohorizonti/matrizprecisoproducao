@@ -526,7 +526,6 @@ namespace MatrizTributaria.Controllers
 
         }
         [HttpGet]
-
         public ActionResult EditMassaModal(string array)
         {
 
