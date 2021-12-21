@@ -172,6 +172,7 @@ namespace MatrizTributaria.Controllers
                 }
                 catch (Exception e)
                 {
+                    string ex = e.ToString();
                     regSalvos = 0;
                     resultado = "Não foi possivel salvar o registro!!";
                    

@@ -22,7 +22,7 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditAliqIcmsSTVenVarCFMassa", "Tributacao", FormMethod.Get))
                             {
-                                @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->
+                                @RenderPage("~/Views/Acoes/CamposComunsIcmsSaida.cshtml") <!--Renderiza os botões de ação-->
 
 
                             }
@@ -87,21 +87,23 @@
                                         {
                                             <th scope="col">Categoria</th>
                                         }
-                                        <th class="align-middle">
+                                        <th class="align-middle text-center">
                                             CEST
                                         </th>
 
-                                        <th class="align-middle">
+                                        <th class="align-middle text-center">
                                             NCM
                                         </th>
 
-
+                                        <th class="align-middle text-center">
+                                            CST
+                                        </th>
                                         <th class="align-middle text-center">
                                             Aliquota
                                         </th>
 
 
-                                       
+
                                     </tr>
                                 </thead>
                                 <!--Corpo da Tabela-->
@@ -109,8 +111,8 @@
                                     @foreach (var item in Model)
                                     {
 
-                                    <tr class="pr-td" class="prn-borderEspecial2">
-                                        <td style="width:3%">
+                                    <tr class="pr-td" >
+                                        <td style="width:3%" class="prn-borderEspecial2">
                                             @Html.DisplayFor(modelItem => item.ID)
                                         </td>
                                         <td style="width:10%" class="prn-borderEspecial2">
@@ -121,13 +123,13 @@
                                         </td>
                                         @if (ViewBag.FiltrarPor == "Setor")
                                         {
-                                            <td style="width:35%" class="text-left prn-borderEspecial2">
+                                            <td style="width:30%" class="text-left prn-borderEspecial2">
                                                 @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
                                             </td>
                                         }
                                         else
                                         {
-                                            <td style="width:35%" class="text-left prn-borderEspecial2">
+                                            <td style="width:30%" class="text-left prn-borderEspecial2">
                                                 @Html.DisplayFor(modelItem => item.CATEGORIA_DESCRICAO)
                                             </td>
                                         }
@@ -137,7 +139,10 @@
                                         <td style="width:5%" class="prn-borderEspecial2">
                                             @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
                                         </td>
-                                        <td class="text-center prn-borderEspecial2" style="width:5%" >
+                                        <td style="width:5%" class="text-center prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.CST_VENDA_VAREJO_CONS_FINAL)
+                                        </td>
+                                        <td class="text-center prn-borderEspecial2" style="width:5%">
                                             @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
                                         </td>
 

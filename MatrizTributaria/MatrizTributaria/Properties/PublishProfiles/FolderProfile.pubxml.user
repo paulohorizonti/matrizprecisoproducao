@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2021-12-16T13:06:31.3141668Z;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
+    <History>True|2021-12-20T20:43:31.9641928Z;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -477,10 +477,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>12/16/2021 17:45:33</publishTime>
+      <publishTime>12/20/2021 17:43:15</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>12/16/2021 17:45:33</publishTime>
+      <publishTime>12/20/2021 17:43:15</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7299,7 +7299,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComuns.cshtml">
-      <publishTime>12/14/2021 17:14:42</publishTime>
+      <publishTime>12/20/2021 14:06:40</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsCST.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7569,103 +7569,103 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsCompAtaMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 16:30:48</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsCompAtaMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsCompIndMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 16:11:14</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsCompIndMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsCompSNMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 17:14:39</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsCompSNMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsNfeAtaMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 17:38:29</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsNfeAtaMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsNfeIndMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 17:22:39</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsNfeIndMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsNfeSNMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 17:32:52</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsNfeSNMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTCompAtaMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 16:51:10</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTCompAtaMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTCompIndMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 17:10:44</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTCompIndMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTCompSNMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 17:11:35</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTCompSNMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenAtaContMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 14:36:45</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenAtaContMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenAtaSNMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 15:15:11</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenAtaSNMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenVarCFMassa.cshtml">
-      <publishTime>12/13/2021 11:36:51</publishTime>
+      <publishTime>12/20/2021 11:55:37</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenVarCFMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenVarContMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 11:57:53</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsSTVenVarContMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenAtaContMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 12:04:41</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenAtaContMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenAtaSNMassa.cshtml">
-      <publishTime>12/06/2021 17:53:07</publishTime>
+      <publishTime>12/20/2021 14:53:39</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenAtaSNMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenVarCFMassa.cshtml">
-      <publishTime>12/10/2021 08:40:48</publishTime>
+      <publishTime>12/20/2021 11:51:14</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenVarCFMassaModal.cshtml">
       <publishTime>12/10/2021 09:18:33</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenVarContMassa.cshtml">
-      <publishTime>12/13/2021 21:40:51</publishTime>
+      <publishTime>12/20/2021 11:56:46</publishTime>
     </File>
     <File Include="Views/Tributacao/EditAliqIcmsVenVarContMassaModal.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>

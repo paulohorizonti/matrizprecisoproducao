@@ -22,7 +22,7 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditAliqIcmsVenVarCFMassa", "Tributacao", FormMethod.Get))
                             {
-                                @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->
+                                @RenderPage("~/Views/Acoes/CamposComunsIcmsSaida.cshtml") <!--Renderiza os botões de ação-->
 
 
                             }
@@ -43,11 +43,11 @@
                                             @if (ViewBag.ParametroProduto == "Produto_asc")
                                             {
                                                 <i style="font-size:1.1em;" class="fas fa-sort-up pr-actionlink"></i>
-                                                @Html.ActionLink("Produtos", "EditAliqIcmsVenVarCFMassa", 
-                                                new 
+                                                @Html.ActionLink("Produtos", "EditAliqIcmsVenVarCFMassa",
+                                                new
                                                 {
-                                                    filtroCorrente = ViewBag.FiltroCorrente, 
-                                                    numeroLinhas = ViewBag.NumeroLinhas, 
+                                                    filtroCorrente = ViewBag.FiltroCorrente,
+                                                    numeroLinhas = ViewBag.NumeroLinhas,
                                                     ordenacao = "Produto_desc",
                                                     filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
                                                     filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
@@ -55,17 +55,19 @@
                                                     filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                     filtroCate = ViewBag.FiltroCorrenteCate,
                                                     filtraPor = ViewBag.FiltroFiltraPor,
-                                                    opcao = TempData["opcao"].ToString() })
+                                                    filtraCST = ViewBag.FiltroCST,
+                                                    opcao = TempData["opcao"].ToString()
+                                                     })
 
-                                                }
+                                            }
                                             else
                                             {
                                                 <i style="font-size:1.1em;" class="fas fa-sort-down pr-actionlink"></i>
-                                                @Html.ActionLink("Produtos", "EditAliqIcmsVenVarCFMassa", 
-                                                new 
-                                                { 
-                                                    filtroCorrente = ViewBag.FiltroCorrente, 
-                                                    numeroLinhas = ViewBag.NumeroLinhas, 
+                                                @Html.ActionLink("Produtos", "EditAliqIcmsVenVarCFMassa",
+                                                new
+                                                {
+                                                    filtroCorrente = ViewBag.FiltroCorrente,
+                                                    numeroLinhas = ViewBag.NumeroLinhas,
                                                     ordenacao = "Produto_asc",
                                                     filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
                                                     filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
@@ -73,7 +75,9 @@
                                                     filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                     filtroCate = ViewBag.FiltroCorrenteCate,
                                                     filtraPor = ViewBag.FiltroFiltraPor,
-                                                    opcao = TempData["opcao"].ToString() })
+                                                    filtraCST = ViewBag.FiltroCST,
+                                                    opcao = TempData["opcao"].ToString()
+                                                     })
 
                                             }
 
@@ -86,12 +90,15 @@
                                         {
                                             <th scope="col">Categoria</th>
                                         }
-                                        <th class="align-middle">
+                                        <th class="align-middle text-center">
                                             CEST
                                         </th>
 
-                                        <th class="align-middle">
+                                        <th class="align-middle text-center">
                                             NCM
+                                        </th>
+                                        <th class="align-middle text-center">
+                                            CST
                                         </th>
 
                                         <th class="align-middle text-center">
@@ -99,7 +106,7 @@
                                         </th>
 
 
-                                       
+
                                     </tr>
                                 </thead>
                                 <!--Corpo da Tabela-->
@@ -119,13 +126,13 @@
                                         </td>
                                         @if (ViewBag.FiltrarPor == "Setor")
                                         {
-                                            <td style="width:35%" class="text-left prn-borderEspecial2">
+                                            <td style="width:30%" class="text-left prn-borderEspecial2">
                                                 @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
                                             </td>
                                         }
                                         else
                                         {
-                                            <td style="width:35%" class="text-left prn-borderEspecial2">
+                                            <td style="width:30%" class="text-left prn-borderEspecial2">
                                                 @Html.DisplayFor(modelItem => item.CATEGORIA_DESCRICAO)
                                             </td>
                                         }
@@ -135,12 +142,15 @@
                                         <td style="width:5%" class="prn-borderEspecial2">
                                             @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
                                         </td>
+                                        <td style="width:5%" class="prn-borderEspecial2 text-center">
+                                            @Html.DisplayFor(modelItem => item.CST_VENDA_VAREJO_CONS_FINAL)
+                                        </td>
                                         <td class="text-center prn-borderEspecial2" style="width:5%">
                                             @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL)
                                         </td>
 
 
-                                       
+
 
                                     </tr>
                                     }
@@ -170,6 +180,7 @@
                                         ordenacao = ViewBag.ParametroProduto,
                                         filtroCate = ViewBag.FiltroCorrenteCate,
                                         filtraPor = ViewBag.FiltroFiltraPor,
+                                        filtraCST = ViewBag.FiltroCST,
                                         opcao = TempData["opcao"].ToString()
                                     }),
                                     new PagedListRenderOptions()

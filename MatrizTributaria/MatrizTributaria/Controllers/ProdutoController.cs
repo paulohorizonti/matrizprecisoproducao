@@ -836,6 +836,7 @@ namespace MatrizTributaria.Controllers
                     }
                     catch (Exception e)
                     {
+                        string exC = e.ToString();
                         regNSalvos++;
                     }
                 }
@@ -905,6 +906,7 @@ namespace MatrizTributaria.Controllers
                     }
                     catch(Exception e)
                     {
+                        string ex = e.ToString();
                         regNSalvos++;
                     }
                    
