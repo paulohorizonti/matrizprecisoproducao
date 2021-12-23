@@ -4,7 +4,7 @@
     ViewBag.Title = "EditAliqIcmsVenAtaContMassa";
 }
 
-<div class="container pr-container pr-card-cad">
+<div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
             Alterar Aliquota Icms Venda Atacado para Contribuinte : Registros  "@ViewBag.Opcao"
@@ -14,7 +14,7 @@
 
         </div><!--fim do cabeçalho-->
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
 
                 <div class="row">
 
@@ -22,7 +22,7 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditAliqIcmsVenAtaContMassa", "Tributacao", FormMethod.Get))
                             {
-                                @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->
+                                @RenderPage("~/Views/Acoes/CamposComunsIcmsSaida.cshtml") <!--Renderiza os botões de ação-->
 
 
                             }
@@ -55,6 +55,7 @@
                                                    filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                    filtroCate = ViewBag.FiltroCorrenteCate,
                                                    filtraPor = ViewBag.FiltroFiltraPor,
+                                                   filtraCST = ViewBag.FiltroCST,
                                                    opcao = TempData["opcao"].ToString()
                                                })
 
@@ -74,6 +75,7 @@
                                                    filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                    filtroCate = ViewBag.FiltroCorrenteCate,
                                                    filtraPor = ViewBag.FiltroFiltraPor,
+                                                   filtraCST = ViewBag.FiltroCST,
                                                    opcao = TempData["opcao"].ToString()
                                                })
 
@@ -81,8 +83,8 @@
 
 
 
-                                           
-                                            </th>
+
+                                        </th>
                                         @if (ViewBag.FiltrarPor == "Setor")
                                         {
                                             <th scope="col">Setor</th>
@@ -97,6 +99,9 @@
 
                                         <th class="align-middle">
                                             NCM
+                                        </th>
+                                        <th class="align-middle text-center">
+                                            CST
                                         </th>
 
                                         <th class="align-middle text-center">
@@ -139,12 +144,15 @@
                                         <td style="width:5%" class="prn-borderEspecial2">
                                             @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
                                         </td>
+                                        <td style="width:5%" class="text-center prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.CST_VENDA_ATA_CONT)
+                                        </td>
                                         <td class="text-center prn-borderEspecial2" style="width:5%">
                                             @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_ATA_CONT)
                                         </td>
 
 
-                                       
+
 
                                     </tr>
                                     }
@@ -174,6 +182,7 @@
                                         ordenacao = ViewBag.ParametroProduto,
                                         filtroCate = ViewBag.FiltroCorrenteCate,
                                         filtraPor = ViewBag.FiltroFiltraPor,
+                                        filtraCST = ViewBag.FiltroCST,
                                         opcao = TempData["opcao"].ToString()
                                     }),
                                     new PagedListRenderOptions()

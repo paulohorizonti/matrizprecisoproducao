@@ -150,6 +150,7 @@ table.dataTable thead th, table.dataTable thead td {
     margin-top: 2px;
     width: 100%;
     transition: margin-left 0.5s;
+    overflow-x: hidden;
 }
 
 @media(max-width:640px) {

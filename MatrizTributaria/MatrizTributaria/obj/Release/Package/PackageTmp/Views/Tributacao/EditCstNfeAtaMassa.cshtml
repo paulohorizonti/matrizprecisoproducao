@@ -3,8 +3,7 @@
 @{
     ViewBag.Title = "EditCstNfeAtaMassa";
 }
-
-<div class="container pr-container pr-card-cad">
+<div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
             Alterar Cst Nfe de Atacado : Registros  "@ViewBag.Opcao"
@@ -14,7 +13,7 @@
 
         </div><!--fim do cabeçalho-->
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
 
                 <div class="row">
 
@@ -22,19 +21,19 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditCstNfeAtaMassa", "Tributacao", FormMethod.Get))
                             {
-                                <div style="margin-top:20px;" class="form-group row">
+                <div style="margin-top:20px;" class="form-group row">
 
-                                    <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="produtoFor">Descrição ou CST:</label>
+                    <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="produtoFor">Descrição ou CST:</label>
 
-                                    <div class="col-lg-8">
-                                        @Html.TextBox("procurarPor", null, new { @class = "pr-fontalternativa   form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do produto ou CST", style = "width:100%;", id = "cstCompInd" })
-                                    </div>
-                                    <div class="col-lg-2 pl-1">
-                                        <button type="submit" class="btn btn-secondary pr-botoes-fundo border-0">
-                                            <i style="font-size:1.3em;" class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                    <div class="col-lg-8">
+                        @Html.TextBox("procurarPor", null, new { @class = "pr-fontalternativa   form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do produto ou CST", style = "width:100%;", id = "cstCompInd" })
+                    </div>
+                    <div class="col-lg-2 pl-1">
+                        <button type="submit" class="btn btn-secondary pr-botoes-fundo border-0">
+                            <i style="font-size:1.3em;" class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
                                 <div style="margin-top:-5px;" class="form-group row">
 
                                     <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="linhas">Linhas:</label>
@@ -43,26 +42,23 @@
                                             @if (ViewBag.NumeroLinhas == 10)
                                             {
 
-                                                <option selected>10</option>
+                            <option selected>10</option>
                                                 <option>20</option>
-                                                <option>30</option>
-                                            }
-                                            else
-                                            {
-                                                if (ViewBag.NumeroLinhas == 20)
-                                                {
+                                                                    <option>30</option> }
+                                                                                    else
+                                                                                    {
+                                                                                        if (ViewBag.NumeroLinhas == 20)
+                                                                                        {
 
-                                                    <option>10</option>
-                                                    <option selected>20</option>
-                                                    <option>30</option>
-                                                }
-                                                else
-                                                {
-                                                    <option>10</option>
-                                                    <option>20</option>
-                                                    <option selected>30</option>
-                                                }
-                                            }
+                                                                    <option>10</option>
+                                                                                            <option selected>20</option>
+                                                                                                                    <option>30</option> }
+                                                                                                                                        else
+                                                                                                                                        {
+                                                                                                                    <option>10</option>
+                                                                                                                                            <option>20</option>
+                                                                                                                                                                    <option selected>30</option>}
+                                                                                                                                                                                    }
                                         </select>
                                     </div>
                                     <div class="class-col-lg-2 pl-1">
@@ -72,9 +68,7 @@
                                     </div>
 
 
-                                </div>
-
-                            }
+                                </div>}
                             <!--Tabela-->
                             <table style="border-bottom: 1px solid #021e36;" class="table table-striped table-hover table-graficos" id="table-graficosNfeAta">
 
@@ -109,37 +103,35 @@
                                     @foreach (var item in Model)
                                     {
 
-                                        <tr class="pr-td">
-                                            <td style="width:3%">
-                                                @Html.DisplayFor(modelItem => item.id)
-                                            </td>
-                                            <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.produtos.codBarras)
-                                            </td>
-                                            <td style="width:18%">
-                                                @Html.DisplayFor(modelItem => item.produtos.descricao)
-                                            </td>
-                                            <td class="text-center" style="width:4%">
-                                                @Html.DisplayFor(modelItem => item.cstdaNfedeAtaFORn)
-                                            </td>
-                                            <td class="text-left" style="width:22%">
-                                                @foreach (var it in ViewBag.CstGeral)
-                                                {
-                                                    if (item.cstdaNfedeAtaFORn == it.codigo)
-                                                    {
-                                                        @it.descricao
-                                                    }
+                        <tr class="pr-td">
+                            <td style="width:3%">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td style="width:5%">
+                                @Html.DisplayFor(modelItem => item.produtos.codBarras)
+                            </td>
+                            <td style="width:18%">
+                                @Html.DisplayFor(modelItem => item.produtos.descricao)
+                            </td>
+                            <td class="text-center" style="width:4%">
+                                @Html.DisplayFor(modelItem => item.cstdaNfedeAtaFORn)
+                            </td>
+                            <td class="text-left" style="width:22%">
+                                @foreach (var it in ViewBag.CstGeral)
+                                {
+                                    if (item.cstdaNfedeAtaFORn == it.codigo)
+                                    {
+                @it.descricao}
 
-                                                }
-                                            </td>
+                                }
+                            </td>
 
-                                            <td style="width:5%;" class="text-center">
-                                                @Html.DisplayFor(modelItem => item.Data)
+                            <td style="width:5%;" class="text-center">
+                                @Html.DisplayFor(modelItem => item.Data)
 
-                                            </td>
+                            </td>
 
-                                        </tr>
-                                    }
+                        </tr>}
                                 </tbody>
 
                             </table>
@@ -153,16 +145,16 @@
 
                                 <div style="float:right;" class="p-2 pr-fontalternativa">
                                     @Html.PagedListPager(
-                                    Model, page => Url.Action("EditCstNfeAtaMassa", new { page, filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, opcao = TempData["opcao"].ToString() }),
-                                    new PagedListRenderOptions()
-                                    {
-                                        LiElementClasses = new List<string>
-                                        {
+                                         Model, page => Url.Action("EditCstNfeAtaMassa", new { page, filtroCorrente = ViewBag.FiltroCorrente, numeroLinhas = ViewBag.NumeroLinhas, opcao = TempData["opcao"].ToString() }),
+                                         new PagedListRenderOptions()
+                                         {
+                                             LiElementClasses = new List<string>
+                                             {
                                             "page-item"
-                                        }
-                                    }
+                     }
+                                         }
 
-                                    )
+                                         )
 
 
                                 </div>

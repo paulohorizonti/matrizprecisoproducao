@@ -230,10 +230,10 @@
                 <div class="input-group input-group-sm">
                     @if (ViewBag.FiltroCorrenteAliq == null)
                     {
-                        @Html.TextBox("ProcurarPorAliq", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite Alíquota" }) }
+                        @Html.TextBox("ProcurarPorAliq", null, new { @class = "form-control form-control-sm decimal", onkeyup = "maiuscula(this);", placeholder = "Digite Alíquota" }) }
                     else
                     {
-                        @Html.TextBox("ProcurarPorAliq", (string)ViewBag.FiltroCorrenteAliq, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite Alíquota" })}
+                        @Html.TextBox("ProcurarPorAliq", (string)ViewBag.FiltroCorrenteAliq, new { @class = "form-control form-control-sm decimal", onkeyup = "maiuscula(this);", placeholder = "Digite Alíquota" })}
                     <div class="input-group-append">
                         <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonNcm">
                             <i style="font-size:1.3em;" class="fas fa-search"></i>

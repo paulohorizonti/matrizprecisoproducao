@@ -3188,6 +3188,7 @@ $(document).ready(function () {
             var dados = {}; //variavel auxiliar para receber o ID
             var strDados = ""; //variavel auxiliar para receber o ID sem espaços
             var cstVendAtaSN = document.getElementById("cstVenAtaSN").value; //pegar o valor do imput
+            var origem = document.getElementById("ori").value; //pegar o valor do imput
             //verificar se o valor do imput está diferente de vazio
             if (cstVendAtaSN != "") {
                 for (var i = 0; i < selecionados.length; i++) {
@@ -3201,12 +3202,12 @@ $(document).ready(function () {
                 //agora o ajax
                 $.ajax({
 
-                    data: { strDados: strDados, cstVendAtaSN: cstVendAtaSN },
+                    data: { strDados: strDados, cstVendAtaSN: cstVendAtaSN, origem : origem },
                     types: "GET",
                     processData: true,
                     success: function () {
 
-                        window.location.href = '/Tributacao/EditCstVendaAtaSNMassaModalPost?strDados=' + strDados + '&cstVendAtaSN=' + cstVendAtaSN;
+                        window.location.href = '/Tributacao/EditCstVendaAtaSNMassaModalPost?strDados=' + strDados + '&cstVendAtaSN=' + cstVendAtaSN+'&origem=' + origem;
 
                     }
 

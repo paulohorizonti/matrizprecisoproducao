@@ -4,7 +4,7 @@
 }
 
 
-<div class="container pr-container pr-card-cad">
+<div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
             Alterar Cst Venda no Atacado para Simples Nacional
@@ -29,8 +29,9 @@
                         <label class="pr-fontalternativa">Descrição CST</label>
                         <div class="input-group input-group-sm">
                             <!--input-->
-
-                            <input type="text" class="form-control form-control-sm" name="cstVenAtaSN" id="cstVeAtaSN"  readonly />
+                            <input type="hidden" id="ori" name="ori" value=@ViewBag.Origem>
+                            
+                            <input type="text" class="form-control form-control-sm" name="cstVenAtaSN" id="cstVeAtaSN" readonly />
 
                             <div class="input-group-append">
                                 <!--botao-->

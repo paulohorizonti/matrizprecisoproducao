@@ -2210,7 +2210,7 @@ namespace MatrizTributaria.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditCstVendaAtaSNMassaModal(string strDados)
+        public ActionResult EditCstVendaAtaSNMassaModal(string strDados, int? origem)
         {
             if (Session["usuario"] == null)
             {
@@ -2227,11 +2227,12 @@ namespace MatrizTributaria.Controllers
             }
             //ViewBag.Tributos = trib;
             ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.Origem = origem;
             return View(trib);
         }
 
         [HttpGet]
-        public ActionResult EditCstVendaAtaSNMassaModalPost(string strDados, string cstVendAtaSN)
+        public ActionResult EditCstVendaAtaSNMassaModalPost(string strDados, string cstVendAtaSN, int? origem)
         {
             if (Session["usuario"] == null)
             {
@@ -2280,7 +2281,14 @@ namespace MatrizTributaria.Controllers
             
             //Redirecionar para a tela de graficos
             //Redirecionar para a tela de graficos
-            return RedirectToAction("EditCstVendaAtaSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+            if(origem == 1)
+            {
+                return RedirectToAction("EditAliqIcmsSTVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+            }
+            else
+            {
+                return RedirectToAction("EditCstVendaAtaSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+            }
 
         }
 
@@ -10326,7 +10334,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -10407,6 +10415,7 @@ namespace MatrizTributaria.Controllers
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
             this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
@@ -10539,7 +10548,8 @@ namespace MatrizTributaria.Controllers
         [HttpGet]
         public ActionResult EditAliqIcmsVenVarContMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
             string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor,
+            string procuraCST, string filtraCST, int? page, int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -10591,6 +10601,10 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -10608,7 +10622,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -10617,6 +10631,9 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -10628,6 +10645,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -10638,6 +10658,10 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
 
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -10680,12 +10704,19 @@ namespace MatrizTributaria.Controllers
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
             this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == pAlq).ToList();
 
+            }
+
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST).ToList();
             }
 
             switch (ordenacao)
@@ -10719,7 +10750,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -10807,7 +10838,7 @@ namespace MatrizTributaria.Controllers
         public ActionResult EditAliqIcmsSTVenVarContMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
             string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
             string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor,
-            int? page, int? numeroLinhas)
+            string procuraCST, string filtraCST, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -10815,10 +10846,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
 
             }
-
             //variavel auxiliar
             string resultado = param;
-
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
              ele será atribuido, caso contrario será o valor da variavel procurar por*/
@@ -10827,6 +10856,7 @@ namespace MatrizTributaria.Controllers
             //converte em long caso seja possivel
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
 
             //verifica se veio parametros
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
@@ -10847,7 +10877,6 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltrarPor = "Setor";
                 procuraCate = null;
             }
-
             //categoria
             procuraCate = (procuraCate == "") ? null : procuraCate;
             procuraCate = (procuraCate == "null") ? null : procuraCate;
@@ -10858,12 +10887,18 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
+
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
             //ordenação
             ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
             ViewBag.ParametroProduto = ordenacao;
+
 
             /*Verifica a opção e atribui a uma tempdata para continuar salva*/
             TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
@@ -10874,7 +10909,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -10883,6 +10918,9 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -10893,6 +10931,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteSetor = procuraSetor;
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
+            //cst
+            ViewBag.FiltroCST = procuraCST;
 
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
@@ -10903,13 +10943,17 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
+
 
             switch (opcao)
             {
@@ -10948,9 +10992,15 @@ namespace MatrizTributaria.Controllers
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == pAlq).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
 
             }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST).ToList();
+            }
+
 
             switch (ordenacao)
             {
@@ -10983,7 +11033,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -11069,8 +11119,8 @@ namespace MatrizTributaria.Controllers
         [HttpGet]
         public ActionResult EditAliqIcmsVenAtaContMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
             string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, 
-            int? page, int? numeroLinhas)
+            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor,
+            string procuraCST, string filtraCST, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -11078,10 +11128,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
 
             }
-
             //variavel auxiliar
             string resultado = param;
-
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
              ele será atribuido, caso contrario será o valor da variavel procurar por*/
@@ -11090,6 +11138,7 @@ namespace MatrizTributaria.Controllers
             //converte em long caso seja possivel
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
 
             //verifica se veio parametros
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
@@ -11110,8 +11159,6 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltrarPor = "Setor";
                 procuraCate = null;
             }
-
-
             //categoria
             procuraCate = (procuraCate == "") ? null : procuraCate;
             procuraCate = (procuraCate == "null") ? null : procuraCate;
@@ -11122,6 +11169,10 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -11140,14 +11191,18 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
-                                                                                                                                                                                      //atrbui filtro corrente caso alguma procura esteja nulla
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
             procurarPorAliq = (procurarPorAliq == null) ? filtroCorrenteAliq : procurarPorAliq;
             procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -11158,6 +11213,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteSetor = procuraSetor;
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
+            //cst
+            ViewBag.FiltroCST = procuraCST;
 
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
@@ -11168,13 +11225,17 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
+
 
             switch (opcao)
             {
@@ -11214,9 +11275,16 @@ namespace MatrizTributaria.Controllers
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == pAlq).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
 
             }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+            }
+
+
             switch (ordenacao)
             {
                 case "Produto_desc":
@@ -11248,7 +11316,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -11334,10 +11402,10 @@ namespace MatrizTributaria.Controllers
 
         //Edit Aliq ICMs ST venda atacado para contribuinte  - ATUALIZAÇÃO VERSÃO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsSTVenAtaContMassa(string opcao, string filtroOpcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
+        public ActionResult EditAliqIcmsSTVenAtaContMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
             string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
             string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor,
-            int? page, int? numeroLinhas)
+            string procuraCST, string filtraCST, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -11345,10 +11413,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
 
             }
-
             //variavel auxiliar
             string resultado = param;
-
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
              ele será atribuido, caso contrario será o valor da variavel procurar por*/
@@ -11357,6 +11423,7 @@ namespace MatrizTributaria.Controllers
             //converte em long caso seja possivel
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
 
             //verifica se veio parametros
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
@@ -11387,6 +11454,11 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
+
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
@@ -11404,7 +11476,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -11413,6 +11485,9 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -11423,6 +11498,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteSetor = procuraSetor;
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
+            //cst
+            ViewBag.FiltroCST = procuraCST;
 
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
@@ -11433,13 +11510,17 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
+
             switch (opcao)
             {
                 case "Com aliquota":
@@ -11478,9 +11559,15 @@ namespace MatrizTributaria.Controllers
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == pAlq).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
 
             }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+            }
+
 
             switch (ordenacao)
             {
@@ -11500,7 +11587,6 @@ namespace MatrizTributaria.Controllers
 
             }
 
-
             //montar a pagina
             int tamanhoPagina = 0;
 
@@ -11514,7 +11600,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -11604,8 +11690,8 @@ namespace MatrizTributaria.Controllers
         [HttpGet]
         public ActionResult EditAliqIcmsVenAtaSNMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
             string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, 
-            int? page, int? numeroLinhas)
+            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor,
+            string procuraCST, string filtraCST, int? page, int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -11615,7 +11701,6 @@ namespace MatrizTributaria.Controllers
             }
             //variavel auxiliar
             string resultado = param;
-
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
              ele será atribuido, caso contrario será o valor da variavel procurar por*/
@@ -11624,6 +11709,7 @@ namespace MatrizTributaria.Controllers
             //converte em long caso seja possivel
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
 
             //verifica se veio parametros
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
@@ -11644,7 +11730,6 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltrarPor = "Setor";
                 procuraCate = null;
             }
-
             //categoria
             procuraCate = (procuraCate == "") ? null : procuraCate;
             procuraCate = (procuraCate == "null") ? null : procuraCate;
@@ -11655,6 +11740,10 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -11673,7 +11762,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -11682,6 +11771,9 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -11692,6 +11784,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteSetor = procuraSetor;
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
+            //cst
+            ViewBag.FiltroCST = procuraCST;
 
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
@@ -11702,13 +11796,17 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
+
 
             switch (opcao)
             {
@@ -11747,9 +11845,15 @@ namespace MatrizTributaria.Controllers
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == pAlq).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
 
             }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+            }
+
 
             switch (ordenacao)
             {
@@ -11782,7 +11886,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -11871,7 +11975,8 @@ namespace MatrizTributaria.Controllers
         [HttpGet]
         public ActionResult EditAliqIcmsSTVenAtaSNMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
             string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor,
+             string procuraCST, string filtraCST, int? page, int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -11924,6 +12029,11 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
+
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
@@ -11941,7 +12051,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -11950,6 +12060,9 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -11961,6 +12074,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -11970,7 +12086,10 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
@@ -12017,6 +12136,11 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL.ToString() == procurarPorAliq).ToList();
 
             }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+            }
 
 
             switch (ordenacao)
@@ -12049,7 +12173,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist

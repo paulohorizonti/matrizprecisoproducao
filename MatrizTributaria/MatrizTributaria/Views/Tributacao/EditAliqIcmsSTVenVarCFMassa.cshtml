@@ -4,7 +4,7 @@
     ViewBag.Title = "EditAliqIcmsSTVenVarCFMassa";
 }
 
-<div class="container pr-container pr-card-cad">
+<div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
             Alterar Aliquota Icms <strong>ST</strong> Venda Varejo para Consumidor Final : Registros  "@ViewBag.Opcao"
@@ -14,7 +14,7 @@
 
         </div><!--fim do cabeçalho-->
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
 
                 <div class="row">
 
@@ -55,6 +55,7 @@
                                                    filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                    filtroCate = ViewBag.FiltroCorrenteCate,
                                                    filtraPor = ViewBag.FiltroFiltraPor,
+                                                   filtraCST = ViewBag.FiltroCST,
                                                    opcao = TempData["opcao"].ToString()
                                                })
 
@@ -74,6 +75,7 @@
                                                    filtroSetor = ViewBag.FiltroCorrenteSetor,
                                                    filtroCate = ViewBag.FiltroCorrenteCate,
                                                    filtraPor = ViewBag.FiltroFiltraPor,
+                                                   filtraCST = ViewBag.FiltroCST,
                                                    opcao = TempData["opcao"].ToString()
                                                })
 
@@ -175,6 +177,7 @@
                                         ordenacao = ViewBag.ParametroProduto,
                                         filtroCate = ViewBag.FiltroCorrenteCate,
                                         filtraPor = ViewBag.FiltroFiltraPor,
+                                        filtraCST = ViewBag.FiltroCST,
                                         opcao = TempData["opcao"].ToString()
                                     }),
                                     new PagedListRenderOptions()

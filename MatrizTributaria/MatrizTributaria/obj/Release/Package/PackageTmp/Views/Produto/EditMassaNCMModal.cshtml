@@ -2,7 +2,7 @@
 @{ ViewBag.Title = "EditMassaNCMModal"; }
 
 
-<div class="container pr-container pr-card-cad">
+<div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
             Alterar dados pelo NCM de Produtos em Massa
@@ -12,7 +12,7 @@
 
         <div class="card-body">
             
-            <div class="container">
+            <div class="container-fluid">
                 @using (Html.BeginForm("EditMassaNCMModalPost", "Produto", FormMethod.Get)) {
 
                 <div class="row">
