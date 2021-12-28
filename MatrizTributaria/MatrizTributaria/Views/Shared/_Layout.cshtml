@@ -1,8 +1,9 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Language" content="pt-br">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="~/Content/img/preciso.ico" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
@@ -720,7 +721,7 @@
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSNFESN)],
                             ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNFESNNulla)]
-                                                               
+
                         ]);
 
                         var options = {
@@ -732,7 +733,7 @@
                                 fontSize: '10'
                             },
                             legend: 'true',
-                            
+
                         };
 
                     var chart = new google.visualization.PieChart(document.getElementById('aliIcmsNFESN'));
@@ -3260,7 +3261,7 @@
                                         @Scripts.Render("~/bundles/jquery")
                                         @Scripts.Render("~/bundles/jquerydatatables")
                                         <script src="~/Scripts/admin/adm-script-graficos.js"></script>
-                                         <script src="~/Scripts/toastr.min.js"></script>
+                                        <script src="~/Scripts/toastr.min.js"></script>
                                         @Scripts.Render("~/bundles/wztooltip")
                                         @Scripts.Render("~/bundles/jquerymaskedinput")
                                         @Scripts.Render("~/bundles/jquerymask")
@@ -3276,7 +3277,7 @@
                                             @Scripts.Render("~/bundles/jquery")
                                             @Scripts.Render("~/bundles/jquerydatatables")
                                             <script src="~/Scripts/admin/adm-script-graficos.js"></script>
-                                             <script src="~/Scripts/toastr.min.js"></script>
+                                            <script src="~/Scripts/toastr.min.js"></script>
                                             @Scripts.Render("~/bundles/wztooltip")
                                             @Scripts.Render("~/bundles/jquerymaskedinput")
                                             @Scripts.Render("~/bundles/jquerymask")
@@ -3330,7 +3331,7 @@
                                                     ViewBag.Title == "EditRedBCIcmsVendaAtaContMassa" ||
                                                     ViewBag.Title == "EditRedBCIcmsSTVendaAtaContMassa" ||
                                                     ViewBag.Title == "EditRedBCIcmsVendaAtaSNMassa" ||
-                                                    ViewBag.Title == "EditRedBCIcmsSTVendaAtaSNMassa" || 
+                                                    ViewBag.Title == "EditRedBCIcmsSTVendaAtaSNMassa" ||
                                                     ViewBag.Title == "EditAliqIcmsCompIndMassa" ||
                                                     ViewBag.Title == "EditAliqIcmsSTCompIndMassa" ||
                                                     ViewBag.Title == "EditAliqIcmsCompAtaMassa" ||
@@ -3370,9 +3371,14 @@
                                                     @Scripts.Render("~/bundles/jquerydatatables")
                                                     @Scripts.Render("~/bundles/adm-script")<!--Script do administrador -->
                                                     <script src="~/Scripts/toastr.min.js"></script>
+
                                                     @Scripts.Render("~/bundles/wztooltip")
                                                     @Scripts.Render("~/bundles/jquerymaskedinput")
+                                                    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+
                                                     @Scripts.Render("~/bundles/jquerymask")
+                                                    <script src="~/Scripts/jquery.mask.min.js"></script>
+                                                   
                                                     <script src="~/Scripts/admin/jquery.blockUI.js"></script>
                                                     @Scripts.Render("~/bundles/popper")
                                                     @Scripts.Render("~/bundles/bootstrap")
@@ -3398,7 +3404,16 @@
                                                             $("#campoTelefone").mask("(999) 999-9999");
 
                                                         });
+
+                                                        $(document).ready(function () {
+                                                            $('input[type="text"]').each(function () {
+                                                                var val = $(this).val().replace('.', ',');
+                                                                $(this).val(val);
+                                                            });
+                                                        });
+
                                                     </script>
+                                                   
 
 
                                                 }

@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2021-12-20T20:43:31.9641928Z;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
+    <History>True|2021-12-28T17:51:11.9311422Z;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -477,10 +477,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>12/23/2021 12:58:27</publishTime>
+      <publishTime>12/28/2021 14:50:48</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>12/23/2021 12:58:27</publishTime>
+      <publishTime>12/28/2021 14:50:48</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7866,7 +7866,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/23/2021 10:02:21</publishTime>
     </File>
     <File Include="Views/Tributacao/Index.cshtml">
-      <publishTime>12/23/2021 09:03:07</publishTime>
+      <publishTime>12/28/2021 12:02:35</publishTime>
     </File>
     <File Include="Views/Tributacao/ProcuraProduto.cshtml">
       <publishTime>12/06/2021 17:53:07</publishTime>
@@ -7899,7 +7899,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/06/2021 17:53:07</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/16/2021 10:06:21</publishTime>
+      <publishTime>12/28/2021 14:50:53</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>12/06/2021 17:53:07</publishTime>

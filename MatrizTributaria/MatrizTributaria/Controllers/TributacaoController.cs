@@ -21,88 +21,262 @@ namespace MatrizTributaria.Controllers
         
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
 
-        
 
-        // GET: Tributacao
-        public ActionResult Index(string sortOrder, string searchString, string currentFilter,  int? page)
+
+        // GET: Tributacao - ANTERIOR A 27122021
+        //public ActionResult Index(string sortOrder, string searchString, string currentFilter,  int? page)
+        //{
+
+        //    if (Session["usuario"] == null)
+        //    {
+        //        return RedirectToAction("../Home/Login");
+        //    }
+        //    ViewBag.CurrentSort = sortOrder;
+        //    ViewBag.ProdutoParam = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
+
+
+        //    if (searchString != null)
+        //    {
+        //        page = 1;
+        //    }
+        //    else
+        //    {
+        //        searchString = currentFilter;
+        //    }
+        //    ViewBag.CurrentFilter = searchString;
+
+        //    //var tributacao = from s in db.Tributacoes select s;
+        //    /*PAra tipar */
+        //    /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+        //     na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+        //    //if (TempData["tributacaoMTX"] == null)
+        //    //{
+        //    //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+        //    //    this.tribMTX = db.Tributacao_GeralView.ToList();
+        //    //    TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+        //    //    TempData.Keep("tributacaoMTX"); //persiste
+        //    //}
+        //    //else
+        //    //{
+        //    //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+        //    //    TempData.Keep("tributacaoMTX"); //persiste
+        //    //}
+        //    VerificaTempData();
+        //    //lista de produtos
+        //    //var listaProdutos = db.Produtos.ToList();
+        //    //int paginaTamanho = 4;
+        //    //int paginaNumero = 1;
+
+        //    //Viewbag da lista de produtos
+        //    //ViewBag.Produtos = listaProdutos.ToPagedList(paginaNumero, paginaTamanho);
+
+        //    //var produtos = from s in db.Produtos select s; //variavel carregado de produtos
+        //    //ViewBag.ddlProdutos = new SelectList(produtos, "ProdutoId", "NomeDoProduto");//lista
+
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        this.tribMTX = this.tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToUpper().Contains(searchString.ToUpper()) || s.ID.ToString().ToUpper().Contains(searchString.ToUpper())).ToList();
+
+        //    }
+
+        //    switch (ViewBag.ProdutoParam)
+        //    {
+        //        case "Produto_desc":
+        //            this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList(); //ordenar pelo id do registro da tabela
+        //            break;
+        //        case "NatRec":
+        //            this.tribMTX = this.tribMTX.OrderBy(s => s.COD_NAT_RECEITA).ToList();
+        //            break;
+        //        case "NatRec_desc":
+        //            this.tribMTX = this.tribMTX.OrderByDescending(s => s.COD_NAT_RECEITA).ToList();
+        //            break;
+        //        default:
+        //            this.tribMTX = this.tribMTX.OrderByDescending(s => s.ID).ToList();
+        //            break;
+        //    }
+        //    int pageSize = 10;
+        //    int pageNumber = (page ?? 1);
+
+
+
+        //    return View(this.tribMTX.ToPagedList(pageNumber, pageSize));
+        //}
+
+        //detalhe
+        public ActionResult Index(string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM,
+            string procuraCEST, string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string procuraCate,
+            string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtronulo, 
+            string auditadosNCM, string filtraPor, string filtroCorrenteAudNCM, string procurarPorAliq, string filtroCorrenteAliq,
+            string procuraCST, string filtraCST)
         {
 
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("../Home/Login");
             }
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.ProdutoParam = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-           
+            //variavel auxiliar
+            string resultado = param;
+            //Auxilia na conversão para fazer a busca pelo codigo de barras
+            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
+             ele será atribuido, caso contrario será o valor da variavel procurar por*/
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
 
-            if (searchString != null)
+            //converte em long caso seja possivel
+            long codBarrasL = 0;
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+            auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "2";
+            procurarPorAliq = (procurarPorAliq != null) ? procurarPorAliq.Replace(",", ".") : null;
+
+            //Seleção por setor ou categoria
+            filtraPor = (filtraPor != null) ? filtraPor : "Setor"; //padrão é por setor
+
+            if (filtraPor != "Setor")
             {
-                page = 1;
+
+                ViewBag.FiltrarPor = "Categoria";
+                procuraSetor = null;
             }
             else
             {
-                searchString = currentFilter;
+                ViewBag.FiltrarPor = "Setor";
+                procuraCate = null;
             }
-            ViewBag.CurrentFilter = searchString;
 
-            //var tributacao = from s in db.Tributacoes select s;
-            /*PAra tipar */
-            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
-             na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
-            //if (TempData["tributacaoMTX"] == null)
-            //{
-            //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-            //    this.tribMTX = db.Tributacao_GeralView.ToList();
-            //    TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
-            //    TempData.Keep("tributacaoMTX"); //persiste
-            //}
-            //else
-            //{
-            //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
-            //    TempData.Keep("tributacaoMTX"); //persiste
-            //}
-            VerificaTempData();
-            //lista de produtos
-            //var listaProdutos = db.Produtos.ToList();
-            //int paginaTamanho = 4;
-            //int paginaNumero = 1;
+            //categoria
+            procuraCate = (procuraCate == "") ? null : procuraCate;
+            procuraCate = (procuraCate == "null") ? null : procuraCate;
+            procuraCate = (procuraCate != null) ? procuraCate : null;
 
-            //Viewbag da lista de produtos
-            //ViewBag.Produtos = listaProdutos.ToPagedList(paginaNumero, paginaTamanho);
+            //setor
+            procuraSetor = (procuraSetor == "") ? null : procuraSetor;
+            procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
+            procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
-            //var produtos = from s in db.Produtos select s; //variavel carregado de produtos
-            //ViewBag.ddlProdutos = new SelectList(produtos, "ProdutoId", "NomeDoProduto");//lista
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
-            if (!String.IsNullOrEmpty(searchString))
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+            //ordenação
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procurarPorAliq = (procurarPorAliq == null) ? filtroCorrenteAliq : procurarPorAliq;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+            procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
+            //View pag para filtros
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrenteAliq = procurarPorAliq;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
+            ViewBag.FiltroCorrenteAuditado = auditadosNCM;
+            ViewBag.FiltroCorrenteSetor = procuraSetor;
+            ViewBag.FiltroCorrenteCate = procuraCate;
+            ViewBag.FiltroFiltraPor = filtraPor;
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+            //converter o valor da procura por setor ou categoria em inteiro
+            if (procuraSetor != null)
             {
-                this.tribMTX = this.tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToUpper().Contains(searchString.ToUpper()) || s.ID.ToString().ToUpper().Contains(searchString.ToUpper())).ToList();
-                
+                ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
             }
-            
-            switch (ViewBag.ProdutoParam)
+            if (procuraCate != null)
+            {
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+            }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
+
+            VerificaTempData();
+
+            //buscar os auditados
+            switch (auditadosNCM)
+            {
+                case "0"://somente os não auditados
+                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 0).ToList();
+                    break;
+                case "1": //somente os auditados
+                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 1).ToList();
+                    break;
+                case "2": //todos
+                    this.tribMTX = this.tribMTX.Where(s => s.ID !=null).ToList();
+                    break;
+            }
+
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            //Busca por aliquota
+            if (!String.IsNullOrEmpty(procurarPorAliq))
+            {
+                double pAlq = Convert.ToDouble(procurarPorAliq);
+                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+
+            }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+            }
+
+            switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList(); //ordenar pelo id do registro da tabela
+                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
-                case "NatRec":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.COD_NAT_RECEITA).ToList();
+                case "Produto_asc":
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
-                case "NatRec_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.COD_NAT_RECEITA).ToList();
+                case "Id_desc":
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.ID).ToList();
+                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
                     break;
+
+
             }
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
 
-            
 
-            return View(this.tribMTX.ToPagedList(pageNumber, pageSize));
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            int numeroPagina = (page ?? 1);
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.Opcao = "Com aliquota"; //sempre mostrar o campo de busca por aliquota
+
+            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            return View(this.tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+           
         }
 
-        //detalhe
         public ActionResult Detalhes(int? id)
         {
             if (Session["usuario"] == null)
@@ -786,7 +960,16 @@ namespace MatrizTributaria.Controllers
             tributacao.creditoOutorgado = model.creditoOutorgado;
             tributacao.dataAlt = model.dataAlt;
 
-            db.SaveChanges();
+            try {
+                db.SaveChanges();
+                TempData["tributacaoMTX"] = null;
+
+            }
+            catch (Exception e) {
+                return RedirectToAction("Index");
+
+            }
+           
             return RedirectToAction("Index");
 
         }
@@ -955,16 +1138,20 @@ namespace MatrizTributaria.Controllers
            
 
             VerificaTempData();
-
+            //this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != 60).ToList();
 
             /*Aliquota ICMS Venda Varejo Consumidor Final*/
-            ViewBag.AliqICMSVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null);
-            ViewBag.AliqICMSVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null);
+            ViewBag.AliqICMSVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60); //tirar o cst = 60
+            ViewBag.AliqICMSVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60); //tirar o cst = 60
 
-
+           
             /*Aliquota ICMS ST Venda Varejo Consumidor Final*/ /*Alteração feita para filtrar por CST = 60*/
             ViewBag.AliqICMSSTVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60);
             ViewBag.AliqICMSSTVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60);
+
+
+
+
 
 
             /*Aliquota ICMS Venda Varejo Para Contribuinte*/
@@ -10201,7 +10388,7 @@ namespace MatrizTributaria.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditAliqIcmsVenVarCFMassaModalPost(string strDados, string aliqIcmsVenVarCF)
+        public ActionResult EditAliqIcmsVenVarCFMassaModalPost(string strDados, decimal? aliqIcmsVenVarCF)
         {
             if (Session["usuario"] == null)
             {
@@ -10209,7 +10396,7 @@ namespace MatrizTributaria.Controllers
             }
 
             //trocando o ponto por virgula
-            aliqIcmsVenVarCF = aliqIcmsVenVarCF.Replace(".", ",");
+            //aliqIcmsVenVarCF = aliqIcmsVenVarCF.Replace(".", ",");
 
             //separar a String em um array
             string[] idTrib = strDados.Split(',');
@@ -10233,7 +10420,7 @@ namespace MatrizTributaria.Controllers
                     int idTrb = Int32.Parse(idTrib[i]);
                     trib = db.Tributacoes.Find(idTrb);
                     trib.dataAlt = DateTime.Now; //data da alteração
-                    trib.aliqIcmsVendaVarejoConsFinal = (aliqIcmsVenVarCF != "") ? trib.aliqIcmsVendaVarejoConsFinal = decimal.Parse(aliqIcmsVenVarCF) : null;
+                    trib.aliqIcmsVendaVarejoConsFinal = (aliqIcmsVenVarCF != null) ? trib.aliqIcmsVendaVarejoConsFinal = aliqIcmsVenVarCF : null;
                     db.SaveChanges();
                     regSalvos++;
 

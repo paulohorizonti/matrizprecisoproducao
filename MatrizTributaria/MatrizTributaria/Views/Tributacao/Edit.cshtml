@@ -358,7 +358,7 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVeVarCF">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm decimal ", name = "alVeVarCF", id = "alVeVarCF", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm", name = "alVeVarCF", id = "alVeVarCF", placeholder = "Digite Aliquota (%)", onkeypress = "return onlynumberDecimal();" })
                                                 </div>
 
                                                 <div class="col-lg-2">
