@@ -803,8 +803,7 @@
                                 var data = google.visualization.arrayToDataTable([
                                     ['Aliquota', 'Valores'],
                                     ['Com aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarCF)],
-                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarCFNulla)],
-                                    ['Isenta' , @Html.Raw(ViewBag.AliqICMSVendaVarCFIsenta)]
+                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarCFNulla)]
 
                                 ]);
 
@@ -905,14 +904,13 @@
                                 chart.draw(data, options);
                         }
 
-                    AliqICMSVendaVarContIsenta
+
                         /*Aliq ICMS Venda Varejo para Contribuinte*/
                         function aliIcmsVendVarCont() {
                                 var data = google.visualization.arrayToDataTable([
                                     ['Aliquota', 'Valores'],
                                     ['Com aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarCont)],
-                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarContNulla)],
-                                    ['Isenta', @Html.Raw(ViewBag.AliqICMSVendaVarContIsenta)]
+                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarContNulla)]
 
                                 ]);
 
@@ -1019,8 +1017,7 @@
                                 var data = google.visualization.arrayToDataTable([
                                     ['Aliquota', 'Valores'],
                                     ['Com aliquota', @Html.Raw(ViewBag.AliqICMSVendaAtaCont)],
-                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaAtaContNulla)],
-                                    ['Isenta', @Html.Raw(ViewBag.AliqICMSVendaAtaContIsenta)]
+                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaAtaContNulla)]
 
                                 ]);
 
@@ -1127,8 +1124,7 @@
                                 var data = google.visualization.arrayToDataTable([
                                     ['Aliquota', 'Valores'],
                                     ['Com aliquota', @Html.Raw(ViewBag.AliqICMSVendaAtaSN)],
-                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaAtaNSNulla)],
-                                    ['Isenta', @Html.Raw(ViewBag.AliqICMSVendaAtaSNIsenta)]
+                                    ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaAtaNSNulla)]
 
                                 ]);
 

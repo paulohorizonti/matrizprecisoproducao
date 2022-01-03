@@ -1138,56 +1138,47 @@ namespace MatrizTributaria.Controllers
            
 
             VerificaTempData();
-
+            //this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != 60).ToList();
 
             /*Aliquota ICMS Venda Varejo Consumidor Final*/
-            ViewBag.AliqICMSVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40); //tirar o cst = 60
-            ViewBag.AliqICMSVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40); //tirar o cst = 60
-            ViewBag.AliqICMSVendaVarCFIsenta = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40);
-           
+            ViewBag.AliqICMSVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60); //tirar o cst = 60
+            ViewBag.AliqICMSVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60); //tirar o cst = 60
 
+           
             /*Aliquota ICMS ST Venda Varejo Consumidor Final*/ /*Alteração feita para filtrar por CST = 60*/
             ViewBag.AliqICMSSTVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60);
             ViewBag.AliqICMSSTVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60);
 
 
 
+
+
+
             /*Aliquota ICMS Venda Varejo Para Contribuinte*/
-            ViewBag.AliqICMSVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40);
-            ViewBag.AliqICMSVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40);
-            ViewBag.AliqICMSVendaVarContIsenta = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONT == 40);
-
-
+            ViewBag.AliqICMSVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null);
+            ViewBag.AliqICMSVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null);
 
             /*Aliquota ICMS ST Venda Varejo Para Contribuinte*/
-            ViewBag.AliqICMSSTVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60);
-            ViewBag.AliqICMSSTVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60);
-
-
-
-
+            ViewBag.AliqICMSSTVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null);
+            ViewBag.AliqICMSSTVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null);
 
 
             /*Aliquota ICMS Venda Ata Para Contribuinte*/
-            ViewBag.AliqICMSVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40);
-            ViewBag.AliqICMSVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40);
-            ViewBag.AliqICMSVendaAtaContIsenta = this.tribMTX.Count(a => a.CST_VENDA_ATA_CONT == 40);
-
-
+            ViewBag.AliqICMSVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null);
+            ViewBag.AliqICMSVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null);
 
             /*Aliquota ICMS ST Venda Ata Para Contribuinte*/
-            ViewBag.AliqICMSSTVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60);
-            ViewBag.AliqICMSSTVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60);
+            ViewBag.AliqICMSSTVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null);
+            ViewBag.AliqICMSSTVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null);
 
 
             /*Aliquota ICMS Venda Ata Para Simples Nacional*/
-            ViewBag.AliqICMSVendaAtaSN      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40);
-            ViewBag.AliqICMSVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40);
-            ViewBag.AliqICMSVendaAtaSNIsenta = this.tribMTX.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == 40);
+            ViewBag.AliqICMSVendaAtaSN      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.AliqICMSVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null);
 
             /*Aliquota ICMS ST Venda Ata Para Simples Nacional*/
-            ViewBag.AliqICMSSTVendaAtaSN     = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null  && a.CST_VENDA_ATA_SIMP_NACIONAL == 60);
-            ViewBag.AliqICMSSTVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60);
+            ViewBag.AliqICMSSTVendaAtaSN     = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null);
+            ViewBag.AliqICMSSTVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null);
 
 
 
@@ -10293,18 +10284,13 @@ namespace MatrizTributaria.Controllers
                     //Switche do filtro
                     switch (ViewBag.Filtro)
                     {
-                         /*Aliquota ICMS Venda Varejo Consumidor Final*/
-           
-
                         case "1":
-                           this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL !=60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null).ToList();
                             break;
                     }
                     break;
@@ -10313,30 +10299,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null).ToList();
-                            break;
-                    }
-                    break;
-                case "Isenta":
-                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //3-senta
-                    switch (ViewBag.Filtro)
-                    {
-                        case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40).ToList();
-                            break;
-                        case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null).ToList();
                             break;
                     }
                     break;
@@ -10707,7 +10675,7 @@ namespace MatrizTributaria.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditAliqIcmsSTVenVarCFMassaModalPost(string strDados, decimal? aliqIcmsSTVenVarCF)
+        public ActionResult EditAliqIcmsSTVenVarCFMassaModalPost(string strDados, string aliqIcmsSTVenVarCF)
         {
             if (Session["usuario"] == null)
             {
@@ -10715,7 +10683,7 @@ namespace MatrizTributaria.Controllers
             }
 
             //trocando o ponto por virgula
-            //aliqIcmsSTVenVarCF = aliqIcmsSTVenVarCF.Replace(".", ",");
+            aliqIcmsSTVenVarCF = aliqIcmsSTVenVarCF.Replace(".", ",");
 
             //separar a String em um array
             string[] idTrib = strDados.Split(',');
@@ -10738,7 +10706,7 @@ namespace MatrizTributaria.Controllers
                     int idTrb = Int32.Parse(idTrib[i]);
                     trib = db.Tributacoes.Find(idTrb);
                     trib.dataAlt = DateTime.Now; //data da alteração
-                    trib.aliqIcmsSTVendaVarejoConsFinal = (aliqIcmsSTVenVarCF != null) ? trib.aliqIcmsVendaVarejoConsFinal = aliqIcmsSTVenVarCF : null;
+                    trib.aliqIcmsSTVendaVarejoConsFinal = (aliqIcmsSTVenVarCF != "") ? trib.aliqIcmsVendaVarejoConsFinal = decimal.Parse(aliqIcmsSTVenVarCF) : null;
                     db.SaveChanges();
                     regSalvos++;
 
@@ -10898,14 +10866,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -10914,30 +10878,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null).ToList();
-                            break;
-                    }
-                    break;
-                case "Isenta":
-                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //2-SEM ALÍQUOTA
-                    switch (ViewBag.Filtro)
-                    {
-                        case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40).ToList();
-                            break;
-                        case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -11207,10 +11151,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -11219,10 +11163,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -11489,14 +11433,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -11505,30 +11445,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null).ToList();
-                            break;
-                    }
-                    break;
-                case "Isenta":
-                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //2-SEM ALÍQUOTA
-                    switch (ViewBag.Filtro)
-                    {
-                        case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40).ToList();
-                            break;
-                        case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -11797,10 +11717,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -11809,10 +11729,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null).ToList();
                             break;
                     }
                     break;
@@ -12084,14 +12004,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null).ToList();
                             break;
                     }
                     break;
@@ -12100,30 +12016,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null).ToList();
-                            break;
-                    }
-                    break;
-                case "Isenta":
-                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //2-SEM ALÍQUOTA
-                    switch (ViewBag.Filtro)
-                    {
-                        case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40).ToList();
-                            break;
-                        case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40).ToList();
-                            break;
-                        case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null).ToList();
                             break;
                     }
                     break;
