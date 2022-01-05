@@ -1,0 +1,696 @@
+﻿@model MatrizTributaria.Models.Tributacao
+@{
+    ViewBag.Title = "Tributacao";
+}
+
+<div class="container-fluid pr-container pr-card-cad">
+    <div class="card mt-2">
+        <div class="card-header">
+            Cadastro de Tributação - DETALHES
+        </div><!--fim do cabeçalho-->
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="container">
+                            <div class="form-group row">
+                                <div class="col-md-offset-2 col-md-12">
+                                    <div style="background-color: ButtonFace; border-radius:0.4em; width:100%;" class="mb-2">
+                                        <div id="pr-botoes" class="btn-group border-0" role="group" aria-label="Grupo de botões com dropdown aninhado">
+                                            @*<a href="@Url.Action("Index", "Tributacao")" class="btn btn-secondary pr-botoes-fundo border-0 "><i style="font-size:1.5em;" class="fas fa-directions"></i>Voltar</a>*@
+                                            <a href='javascript:history.go(-1)' class="btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.5em;" class="fas fa-directions"></i>Voltar</a>
+                                            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary pr-botoes-fundo border-0 "><i style="font-size:1.5em;" class="fas fa-home"></i>Inicio</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <div class="col-lg-6">
+                                    <div class="form-group row col-lg-12 pl-3 ">
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="reg">Registro:</label>
+                                        <div class="col-lg-2">
+                                            @Html.TextBoxFor(m => m.id, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row col-lg-12 pl-3 ">
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="descricao">Id Produto:</label>
+                                        <div class="col-lg-2">
+                                            @Html.TextBoxFor(m => m.produtos.Id, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row col-lg-12 pl-3 ">
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="descricao">Produto:</label>
+                                        <div class="col-lg-10">
+                                            @Html.TextBoxFor(m => m.produtos.descricao, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group row col-lg-12 pl-3 ">
+
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="descricao">Setor:</label>
+                                        <div class="col-lg-6">
+                                            @Html.TextBoxFor(m => m.setorProdutos.descricao, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group row col-lg-12 pl-3">
+
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="ncm">C. Interno:</label>
+                                        <div class="col-lg-4">
+                                            <input class="form-control pr-fonte" disabled="disabled" id="codInterno" name="codInterno" type="text" value="@ViewBag.CodInterno" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row col-lg-12 pl-3">
+
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="codBarras">Cod. Barras:</label>
+                                        <div class="col-lg-4">
+                                            <input class="form-control pr-fonte" disabled="disabled" id="codBarras" name="codBarras" type="text" value="@ViewBag.CodBarras" />
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group row col-lg-12 pl-3">
+
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="cest">CEST:</label>
+                                        <div class="col-lg-4">
+                                            <input class="form-control pr-fonte" disabled="disabled" id="cest" name="cest" type="text" value="@ViewBag.Cest" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row col-lg-12 pl-3">
+
+                                        <label class="col-form-label col-lg-2 pl-1  pr-fontalternativa" for="ncm">NCM:</label>
+                                        <div class="col-lg-4">
+                                            <input class="form-control pr-fonte" disabled="disabled" id="ncm" name="ncm" type="text" value="@ViewBag.Ncm" />
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group row col-lg-12 pl-3">
+
+                                    <div class="scrolling-wrapper">
+                                        <div style="min-width:500px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="4" class="pr-fonte2" scope="col">Origem</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="pr-fonte2" scope="col">Estado</th>
+                                                        <th class="pr-fonte2" scope="col">Natureza da Receita</th>
+
+                                                        <th class="pr-fonte2" scope="col">FECP</th>
+                                                        <th class="pr-fonte2" scope="col">Desc.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.estado, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.naturezaReceita.id, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.fecp, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            <a tabindex="0" class="btn btn-secondary pr-botoes-fundo border-0" role="button" data-toggle="popover" data-trigger="focus" title="Descrição Nat. Rec." data-content="@ViewBag.NaturezaReceita"> <i class="fas fa-eye"></i></a>
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="box" style="height: inherit;">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="4" class="pr-fonte2" scope="col">PIS</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="pr-fonte2" scope="col">Cst PIS E</th>
+                                                        <th class="pr-fonte2" scope="col">Aliq. Ent. Pis</th>
+                                                        <th class="pr-fonte2" scope="col">Cst PIS S</th>
+                                                        <th class="pr-fonte2" scope="col">Aliq. Saida Pis</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstEntradaPisCofins, new { @class = "form-control pr-fonte", @disabled = "disabled", @id="cstEPis" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqEntPis, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.cstSaidaPisCofins, new { @class = "form-control pr-fonte", @disabled = "disabled", @id = "cstSPis" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqSaidaPis, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:500px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Cofins</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Aliq. Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Cst Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Aliq. Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Legislação</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstEntradaPisCofins, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqEntCofins, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+
+                                                            @Html.TextBoxFor(m => m.cstSaidaPisCofins, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqSaidaCofins, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            <a tabindex="0" class="btn btn-secondary pr-botoes-fundo border-0" role="button" data-toggle="popover" data-trigger="focus" title="Legislação aplicável" data-content="@ViewBag.FundLegalPC"><i class="fas fa-eye"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div style="min-width:600px; height:inherit;" class="box">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Venta Atacado para Contribuinte</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+
+                                                            @Html.TextBoxFor(m => m.cstVendaAtaCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsVendaAtaCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTVendaAtaCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaAtaCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaAtaCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:600px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Venda Atacado para Simples Nacional</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstVendaAtaSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsVendaAtaSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTVendaAtaSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaAtaSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaAtaSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:600px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Venda Varejo para Contribuinte</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstVendaVarejoCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTVendaVarejo_Cont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcVendaVarejoCont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.RedBaseCalcSTVendaVarejo_Cont, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:600px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Venda Varejo para Consumidor Final</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Saída</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstVendaVarejoConsFinal, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoConsFinal, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTVendaVarejoConsFinal, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaVarejoConsFinal, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaVarejoConsFinal, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:150px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Fundamento Legal</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="pr-fonte text-center" scope="col">ICMS Saída</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-center" scope="row">
+                                                            <a tabindex="0" class="btn btn-secondary pr-botoes-fundo border-0" role="button" data-toggle="popover" data-trigger="focus" title="Legislação aplicável" data-content="@ViewBag.FundLegalSaida"><i class="fas fa-eye"></i></a>
+                                                        </th>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:600px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Compra de Industria</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstCompraDeInd, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsCompDeInd, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTCompDeInd, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeInd, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeInd, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:600px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Compra de Atacado</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstCompradeAta, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsCompradeAta, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTCompraDeAta, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeAta, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeAta, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:590px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="7" class="pr-fonte2" scope="col">Compra de Simples Nacional</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst</th>
+                                                         <th class="pr-fonte2" scope="col">Icms Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Icms ST Entrada</th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo </th>
+                                                         <th class="pr-fonte2" scope="col">Red. B. Calculo St</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstCompradeSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsCompradeSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsSTCompradeSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsCompradeSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompradeSimpNacional, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:150px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Fundamento Legal</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="pr-fonte text-center" scope="col">ICMS Entrada</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-center" scope="row">
+                                                            <a tabindex="0" class="btn btn-secondary pr-botoes-fundo border-0" role="button" data-toggle="popover" data-trigger="focus" title="Legislação aplicável" data-content="@ViewBag.FundLegalEndrada"><i class="fas fa-eye"></i></a>
+                                                        </th>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:370px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Fornecedor com NFE</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Cst Nfe Ind</th>
+                                                         <th class="pr-fonte2" scope="col">Cst Nfe Ata</th>
+                                                         <th class="pr-fonte2" scope="col">Csosn Nfe SN</th>
+                                                         <th class="pr-fonte2" scope="col">Aliq. Icms Nfe </th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <tr>
+
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.cstdaNfedaIndFORN, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.cstdaNfedeAtaFORn, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.CsosntdaNfedoSnFOR, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.aliqIcmsNFE, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div style="min-width:1200px; height:inherit;" class="box">
+
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:center; border:none;" colspan="7" class="pr-fonte2" scope="col">Margem de Valor Agregado (MVA)</th>
+                                                    </tr>
+                                                    <tr>
+                                                         <th class="pr-fonte2" scope="col">Tipo MVA</th>
+                                                         <th class="pr-fonte2" scope="col">Valor MVA Ind</th>
+                                                         <th class="pr-fonte2" scope="col">Valor MVA Ata </th>
+                                                         <th class="pr-fonte2" scope="col">Inicio Vigencia MVA</th>
+                                                         <th class="pr-fonte2" scope="col">Fim Vigencia MVA </th>
+                                                         <th class="pr-fonte2" scope="col">Crédito outorgado? </th>
+                                                         <th class="pr-fonte2" scope="col">Regime 2560? </th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            @Html.TextBoxFor(m => m.tipoMVA, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </th>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.valorMVAInd, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.valorMVAAtacado, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control pr-fonte" disabled="disabled" id="dataInicioVigencia" name="dataInicioVigencia" type="text" value="@Convert.ToDateTime(@ViewBag.DataInicio ).ToShortDateString()" />
+
+
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.fimVigenciaMVA, new { @class = "form-control pr-fonte", @disabled = "disabled" })
+
+                                                        </td>
+                                                        <td class="pr-fonte text-center">
+                                                            @if (@ViewBag.CreditoOutorgado == 1)
+                                                            {
+                                                                <div class="text-center" style="background-color: #e9ecef; height:33px; border-radius:5px;">
+
+                                                                    <i style="font-size:1.8em;" class="fas fa-check-square mt-1"></i>
+
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="text-center" style="background-color:#e9ecef; height:33px; border-radius:5px;">
+                                                                    <i style="font-size:1.8em;" class="fas fa-ban mt-1"></i>
+
+
+                                                                </div>
+                                                            }
+
+                                                        </td>
+                                                        <td class="pr-fonte text-center">
+                                                            @if (@ViewBag.Regime2560 == 1)
+                                                            {
+                                                                <div class="text-center" style="background-color: #e9ecef; height:33px; border-radius:5px;">
+
+                                                                    <i style="font-size:1.8em;" class="fas fa-check-square mt-1"></i>
+
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="text-center" style="background-color:#e9ecef; height:33px; border-radius:5px;">
+                                                                    <i style="font-size:1.8em;" class="fas fa-ban mt-1"></i>
+                                                                </div>
+                                                            }
+                                                        </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div> <!--Fim div-->
+
+
+
+                            </div><!--fim do container da tabela-->
+                        </div><!--Fim da coluna de 10-->
+                    </div><!--fim da linha-->
+                </div><!--Fim do container do body do card-->
+            </div><!--fim do body do card-->
+        </div><!--Fim do card-->
+    </div><!--Fim do container-->
+</div>
