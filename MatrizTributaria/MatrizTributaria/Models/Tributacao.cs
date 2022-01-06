@@ -13,16 +13,16 @@ namespace MatrizTributaria.Models
         [Column("Id")]
         public int id{ get; set; }
 
-        [Required(ErrorMessage = "O campo ESTADO é OBRIGATÓRIO", AllowEmptyStrings = false)]
+        
         [Column("Estado")]
         public string estado { get; set; }
        
-        [Required(ErrorMessage = "O campo Id do Produto é obrigatório", AllowEmptyStrings = false)]
+       
         [ForeignKey("produtos")]
         [Column("Id_Produto")]
         public int idProduto { get; set; }
 
-        [Required(ErrorMessage = "O campo Id do Setor é obrigatório", AllowEmptyStrings = false)]
+       
         [ForeignKey("setorProdutos")]
         [Column("Id_Setor")]
         public int idSetor { get; set; }
