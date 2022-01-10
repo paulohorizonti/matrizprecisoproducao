@@ -2878,6 +2878,7 @@
     <Content Include="Views\Acoes\CamposComunsNCM.cshtml" />
     <Content Include="Views\Acoes\CamposComunsIcmsSaida.cshtml" />
     <Content Include="Views\Acoes\CamposComunsIcmsEntrada.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsCadProdutos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

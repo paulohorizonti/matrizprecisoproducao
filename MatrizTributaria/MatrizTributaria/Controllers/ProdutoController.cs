@@ -20,71 +20,199 @@ namespace MatrizTributaria.Controllers
         {
             db = new MatrizDbContext();
         }
-        // GET: Produto
-        public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page, string linhasNum)
+        public ActionResult Index(string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
+            string procuraNCM, string procuraCEST,  string filtroCorrente,  string procuraCate, string filtroCate, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
         {
+            /*Verificar a sessão*/
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("../Home/Login");
-            }
 
-            // ViewBag.NumLinhas = linhasNum;
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.ProdutoParam = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
-            ViewBag.CatProduto = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
+            }
+            //variavel auxiliar
+            string resultado = param;
+            //Auxilia na conversão para fazer a busca pelo codigo de barras
+            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
+             ele será atribuido, caso contrario será o valor da variavel procurar por*/
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
 
-            if (searchString != null)
+            //converte em long caso seja possivel
+            long codBarrasL = 0;
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+            //categoria
+            procuraCate = (procuraCate == "") ? null : procuraCate;
+            procuraCate = (procuraCate == "null") ? null : procuraCate;
+            procuraCate = (procuraCate != null) ? procuraCate : null;
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+            //ordenação
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) ||  (procuraCEST != null) || (procuraNCM != null)  || (procuraCate != null)  ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            
+            //atrbui filtro corrente caso alguma procura esteja nulla
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+           
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //View pag para filtros
+            ViewBag.FiltroCorrente = procurarPor;
+           
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
+
+          
+            ViewBag.FiltroCorrenteCate = procuraCate;
+            ViewBag.FiltroFiltraPor = filtraPor;
+            //converter o valor da procura por setor ou categoria em inteiro
+           
+            if (procuraCate != null)
             {
-                page = 1;
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-            else
-            {
-                searchString = currentFilter;
-            }
-            ViewBag.CurrentFilter = searchString;
 
             var produtos = from s in db.Produtos select s;
-            if (!String.IsNullOrEmpty(searchString))
-            {
 
-                produtos = produtos.Where(s => s.descricao.ToString().ToUpper().Contains(searchString.ToUpper()) || s.categoriaProduto.descricao.ToString().ToUpper().Contains(searchString.ToUpper()));
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                produtos = (codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper())));
+
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                produtos = produtos.Where(s => s.cest == procuraCEST);
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                produtos = produtos.Where(s => s.ncm == procuraNCM);
+
+            }
+                       
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                produtos = produtos.Where(s => s.idCategoria.ToString() == procuraCate);
 
 
             }
-            switch (sortOrder)
+            switch (ordenacao)
             {
                 case "Produto_desc":
-                    produtos = produtos.OrderByDescending(s => s.Id);
+                    produtos = produtos.OrderByDescending(s => s.descricao);
                     break;
-                case "CatProd":
-                    produtos = produtos.OrderBy(s => s.idCategoria);
+                case "Produto_asc":
+                    produtos = produtos.OrderBy(s => s.descricao);
                     break;
-                case "CatProd_desc":
-                    produtos = produtos.OrderByDescending(s => s.idCategoria);
-                    break;
-                default:
+                case "Id_desc":
                     produtos = produtos.OrderBy(s => s.Id);
                     break;
+                default:
+                    produtos = produtos.OrderBy(s => s.descricao);
+                    break;
+
+
             }
-            int pageSize = 0;
+            //montar a pagina
+            int tamanhoPagina = 0;
 
-            if (String.IsNullOrEmpty(linhasNum))
-            {
-                pageSize = 10;
-            }
-            else
-            {
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
 
-                ViewBag.Texto = linhasNum;
-                pageSize = Int32.Parse(linhasNum);
-            }
+            int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+          
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+           
+
+            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            return View(produtos.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
 
-            int pageNumber = (page ?? 1);
 
-            //var produtos = db.Produtos.ToList();
-            return View(produtos.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
+
         }
+        // GET: Produto
+        //public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page, string linhasNum)
+        //{
+        //    if (Session["usuario"] == null)
+        //    {
+        //        return RedirectToAction("../Home/Login");
+        //    }
+
+        //    // ViewBag.NumLinhas = linhasNum;
+        //    ViewBag.CurrentSort = sortOrder;
+        //    ViewBag.ProdutoParam = String.IsNullOrEmpty(sortOrder) ? "Produto_desc" : "";
+        //    ViewBag.CatProduto = sortOrder == "CatProd" ? "CatProd_desc" : "CatProd";
+
+        //    if (searchString != null)
+        //    {
+        //        page = 1;
+        //    }
+        //    else
+        //    {
+        //        searchString = currentFilter;
+        //    }
+        //    ViewBag.CurrentFilter = searchString;
+
+        //    var produtos = from s in db.Produtos select s;
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+
+        //        produtos = produtos.Where(s => s.descricao.ToString().ToUpper().Contains(searchString.ToUpper()) || s.categoriaProduto.descricao.ToString().ToUpper().Contains(searchString.ToUpper()));
+
+
+        //    }
+        //    switch (sortOrder)
+        //    {
+        //        case "Produto_desc":
+        //            produtos = produtos.OrderByDescending(s => s.Id);
+        //            break;
+        //        case "CatProd":
+        //            produtos = produtos.OrderBy(s => s.idCategoria);
+        //            break;
+        //        case "CatProd_desc":
+        //            produtos = produtos.OrderByDescending(s => s.idCategoria);
+        //            break;
+        //        default:
+        //            produtos = produtos.OrderBy(s => s.Id);
+        //            break;
+        //    }
+        //    int pageSize = 0;
+
+        //    if (String.IsNullOrEmpty(linhasNum))
+        //    {
+        //        pageSize = 10;
+        //    }
+        //    else
+        //    {
+
+        //        ViewBag.Texto = linhasNum;
+        //        pageSize = Int32.Parse(linhasNum);
+        //    }
+
+
+        //    int pageNumber = (page ?? 1);
+
+        //    //var produtos = db.Produtos.ToList();
+        //    return View(produtos.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
+        //}
         public ActionResult Detalhes(int? id)
         {
             if (Session["usuario"] == null)
@@ -167,7 +295,8 @@ namespace MatrizTributaria.Controllers
             }
 
             ViewBag.DataAlt = DateTime.Now;
-            ViewBag.Categorias = db.CategoriaProdutos;
+            ViewBag.Categorias = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            //ViewBag.Categorias = db.CategoriaProdutos;
             return View(produto);
         }
 
@@ -180,8 +309,10 @@ namespace MatrizTributaria.Controllers
             if(model.ncm != null)
             {
                 model.ncm = buscaNCM.Replace(".", ""); //tirar os pontos da string
-            }    
-           
+            }
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
 
             if (ModelState.IsValid)
             {
@@ -190,6 +321,8 @@ namespace MatrizTributaria.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
+                
+
                 model.dataAlt = DateTime.Now;
 
                 produto.Id = model.Id;
@@ -202,13 +335,24 @@ namespace MatrizTributaria.Controllers
                 produto.status = model.status;
                 produto.dataAlt = model.dataAlt;
 
+                try{
+                    db.SaveChanges();
+                    TempData["tributacaoMTX"] = null;
+                    regSalvos++;
+                    resultado = "Registro Salvo com Sucesso!!";
 
-                db.SaveChanges();
-                TempData["tributacaoMTX"] = null;
-                return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    resultado = "Problemas ao salvar o registro: " + e.ToString();
+                }
+                
+                //return RedirectToAction("Index");
             }
-            ViewBag.Categorias = db.CategoriaProdutos;
-            return View(model);
+            //ViewBag.Categorias = db.CategoriaProdutos;
+            ViewBag.Categorias = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            //Redirecionar para a tela de graficos
+            return RedirectToAction("Index", new { param = resultado, qtdSalvos = regSalvos });
         }
 
 

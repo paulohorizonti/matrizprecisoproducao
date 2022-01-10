@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2022-01-06T12:42:32.9088717Z;True|2022-01-04T19:47:37.2239780-03:00;True|2021-12-28T14:51:11.9311422-03:00;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
+    <History>True|2022-01-10T12:08:59.5729983Z;True|2022-01-06T09:42:32.9088717-03:00;True|2022-01-04T19:47:37.2239780-03:00;True|2021-12-28T14:51:11.9311422-03:00;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -477,10 +477,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>01/06/2022 09:42:17</publishTime>
+      <publishTime>01/10/2022 10:28:48</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>01/06/2022 09:42:17</publishTime>
+      <publishTime>01/10/2022 10:28:48</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7301,6 +7301,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Acoes/CamposComuns.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
+    <File Include="Views/Acoes/CamposComunsCadProdutos.cshtml">
+      <publishTime>01/10/2022 10:08:24</publishTime>
+    </File>
     <File Include="Views/Acoes/CamposComunsCST.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
@@ -7527,7 +7530,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Produto/Index.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/10/2022 10:27:53</publishTime>
     </File>
     <File Include="Views/SetorProdutos/Create.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7548,7 +7551,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/10/2022 10:24:27</publishTime>
     </File>
     <File Include="Views/Tributacao/Create.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
