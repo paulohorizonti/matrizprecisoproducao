@@ -81,7 +81,7 @@ namespace MatrizTributaria.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login([Bind(Include = "email, senha")] Usuario usuario)
+        public ActionResult Login([Bind(Include = "email, senha, primeiro_acesso")] Usuario usuario)
         {
             string hashTxtSenha = null;
             var hash = new Hash(SHA512.Create());
@@ -114,6 +114,14 @@ namespace MatrizTributaria.Controllers
                     return View();
                 }
                 hashTxtSenha = hash.CriptografarSenha(usuario.senha);
+
+               if(this.user.primeiro_acesso == 1)
+                {
+                    //chamar o modal na view
+                    ViewBag.Message = "PRIMEIRO ACESSO";
+                    return View();
+                }
+
 
                 if (user.senha.Equals(hashTxtSenha) || user.senha.Equals(usuario.senha))
                 {
@@ -161,7 +169,6 @@ namespace MatrizTributaria.Controllers
                     }
 
 
-                   
                     Session["usuarios"] = usuario;
                     Session["empresas"] = empresa;
 

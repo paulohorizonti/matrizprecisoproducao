@@ -33,7 +33,7 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image">
-                        </div>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center" width="300px;" height="45px;">
@@ -42,34 +42,33 @@
 
                                     @if (ViewBag.Message == "Usuário não encontrato!")
                                     {
-                                <div id="alerta" class="alert alert-danger" role="alert">
-                                    @ViewBag.Message
-                                </div>}
+                        <div id="alerta" class="alert alert-danger" role="alert">
+                            @ViewBag.Message
+                        </div>}
                                     @if (ViewBag.Message == "Senha incorreta!")
                                     {
-                                <div id="alerta" class="alert alert-danger" role="alert">
-                                    @ViewBag.Message
-                                </div>}
+                        <div id="alerta" class="alert alert-danger" role="alert">
+                            @ViewBag.Message
+                        </div>}
 
                                     @if (ViewBag.Message == "Por favor digite sua senha")
                                     {
-                                <div id="alerta" class="alert alert-danger" role="alert">
-                                    @ViewBag.Message
-                                </div>
-                                }
+                        <div id="alerta" class="alert alert-danger" role="alert">
+                            @ViewBag.Message
+                        </div>}
 
                                     @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "user" }))
                                     {
-                                <div class="form-group">
-                                    @Html.TextBoxFor(m => m.email, new { @class = "form-control form-control-user", placeholder = "Digite seu email(login)", id = "exampleInputEmail" })
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.email, new { @class = "form-control form-control-user", placeholder = "Digite seu email(login)", id = "exampleInputEmail" })
 
-                                </div>
-                                                <div class="form-group">
-                                                    @Html.PasswordFor(m => m.senha, new { @class = "form-control form-control-user", id = "exampleInputPassword", placeholder = "Digite sua senha" })
+                        </div>
+                                        <div class="form-group">
+                                            @Html.PasswordFor(m => m.senha, new { @class = "form-control form-control-user", id = "exampleInputPassword", placeholder = "Digite sua senha" })
 
-                                                </div>
+                                        </div>
 
-                                                                <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>}
+                                                        <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>}
 
                                     <form class="user">
                                     </form>
@@ -143,6 +142,45 @@
         </div>
     </div>
 
+    @if(ViewBag.Message == "PRIMEIRO ACESSO")
+            {
+                <script>
+                    function abreModal() {
+                        $("#modalPrimeiroAcesso").modal({
+                            show: true
+                        });
+                    }
+
+                    setTimeout(abreModal, 1000);
+                </script>
+            }
+
+    <!--Modal Primeiro acesso-->
+    <div class="modal fade" id="modalPrimeiroAcesso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:#a7291d; font-weight:900;">Notas sobre a versão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><h3 class="pr-fonte-label" style="color:#a7291d; font-weight:600;">Versão: @ViewBag.Versao</h3></p>
+                    <ul>
+                        <li style="color:#a7291d"><h5 class="pr-fonte-label" style="color:#a7291d">@ViewBag.Nota</h5></li>
+                    </ul>
+                    <p></p>
+                    <p></p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     @Scripts.Render("~/bundles/login")
