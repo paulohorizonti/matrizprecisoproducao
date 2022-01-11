@@ -124,6 +124,8 @@ namespace MatrizTributaria.Controllers
             model.dataCad = DateTime.Now;
             model.dataAlt = DateTime.Now;
             model.ativo = 1; //ativando o registro no cadastro
+            model.primeiro_acesso = 0; //validar esse requisito
+            //ativando o registro no cadastro
             if (ModelState.IsValid)
             {
                
@@ -151,6 +153,7 @@ namespace MatrizTributaria.Controllers
                     senha = hash.CriptografarSenha(model.senha),
 
                     ativo = model.ativo,
+                    primeiro_acesso = model.primeiro_acesso,
                     dataCad = model.dataCad,
                     dataAlt = model.dataAlt,
                     idNivel = model.idNivel,

@@ -30,6 +30,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
 
             }
+           
+            procurarPor = (procurarPor != null) ? procurarPor.Trim() : procurarPor;
             //variavel auxiliar
             string resultado = param;
             //Auxilia na conversão para fazer a busca pelo codigo de barras
@@ -89,7 +91,7 @@ namespace MatrizTributaria.Controllers
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                produtos = (codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper())));
+                produtos = (codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToUpper().Contains(procurarPor.ToUpper())));
 
             }
             if (!String.IsNullOrEmpty(procuraCEST))

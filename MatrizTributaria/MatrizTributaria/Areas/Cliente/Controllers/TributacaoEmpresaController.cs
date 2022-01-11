@@ -15,6 +15,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
     public class TributacaoEmpresaController : Controller
     {
         readonly private MatrizDbContext db = new MatrizDbContext();
+        List<Usuario> listUser = new List<Usuario>();
 
         //listas para analise
         List<AnaliseTributaria> analise = new List<AnaliseTributaria>();
@@ -23,11 +24,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         List<TributacaoEmpresa> tribEmpProd = new List<TributacaoEmpresa>(); //Lista para tributacao empresas
 
 
-
         Usuario usuario;
         Empresa empresa;
-
-      
 
         private void Write(string texto)
         {
@@ -1600,7 +1598,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     TempData.Keep("trib");
                 }
                 //procura diferenciado para tabela de  produto
-                trib = ProcuraPorTabelaProduto(filtroDados, parFiltro, trib);
+                trib = ProcuraPorTabelaProduto(filtroDados, parFiltro, this.trib);
 
 
                 int tamaanhoPagina = 0;
@@ -22252,6 +22250,64 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             return analise;
         }
         
+   
+        public ActionResult Usuario(string param, string ordenacao, string qtdSalvos, string procurarPor, string procuraEmpresa,
+           string filtroCorrente, string filtroEmpresa, int? page, int? numeroLinhas)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+            }
+
+
+            //variavel auxiliar
+            string resultado = param;
+
+            procurarPor = (filtroCorrente != null) ? filtroCorrente : procurarPor; //procura por nome
+            procuraEmpresa = (procuraEmpresa != null) ? procuraEmpresa : null;
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+            ViewBag.Ordenacao = ordenacao;
+            ViewBag.ParametroNome = String.IsNullOrEmpty(ordenacao) ? "Nome_desc" : ""; //Se nao vier nula a ordenacao aplicar por nome decrescente
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procuraEmpresa != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procuraEmpresa = (procuraEmpresa == null) ? filtroEmpresa : procuraEmpresa;
+
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrenteEmpresa = procuraEmpresa;
+            int IdEmp = (int)Session["idEmpresa"];
+            this.listUser = db.Usuarios.ToList();
+            this.listUser = this.listUser.Where(s => s.empresa.id == IdEmp).ToList();
+
+            //procura
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                this.listUser = listUser.Where(s => s.nome.Contains(procurarPor)).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraEmpresa))
+            {
+                listUser = listUser.Where(s => s.empresa.id.ToString() == procuraEmpresa).ToList();
+            }
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+            int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+
+            ViewBag.Empresas = db.Empresas.ToList();
+            return View(listUser.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

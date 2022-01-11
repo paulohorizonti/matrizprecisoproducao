@@ -22,19 +22,19 @@ namespace MatrizTributaria.Models
         [Column("email")]
         public string email { get; set; }
 
-        [Required(ErrorMessage = "O campo Sexo é obrigatório", AllowEmptyStrings = false)]
+        //[Required(ErrorMessage = "O campo Sexo é obrigatório", AllowEmptyStrings = false)]
         [Column("sexo")]
         public string sexo { get; set; }
 
-        [Required(ErrorMessage = "O campo logradouro é obrigatório", AllowEmptyStrings = false)]
+        //[Required(ErrorMessage = "O campo logradouro é obrigatório", AllowEmptyStrings = false)]
         [Column("logradouro")]
         public string logradouro { get; set; }
 
-        [Required(ErrorMessage = "O campo número é obrigatório, caso não exista digiar: 0", AllowEmptyStrings = false)]
+        //[Required(ErrorMessage = "O campo número é obrigatório, caso não exista digiar: 0", AllowEmptyStrings = false)]
         [Column("numero")]
         public string numero { get; set; }
 
-        [Required(ErrorMessage = "O campo CEP é obrigatório", AllowEmptyStrings = false)]
+        //[Required(ErrorMessage = "O campo CEP é obrigatório", AllowEmptyStrings = false)]
         [Column("cep")]
         public string cep { get; set; }
 
@@ -59,11 +59,11 @@ namespace MatrizTributaria.Models
         [Column("telefone")]
         public string telefone { get; set; }
 
-        [Required(ErrorMessage = "Campo Cidade é obrigatório")]
+        //[Required(ErrorMessage = "Campo Cidade é obrigatório")]
         [Column("cidade")]
         public string cidade { get; set; }
 
-        [Required(ErrorMessage = "Campo Estado é obrigatório")]
+        //[Required(ErrorMessage = "Campo Estado é obrigatório")]
         [Column("estado")]
         public string estado { get; set; }
 

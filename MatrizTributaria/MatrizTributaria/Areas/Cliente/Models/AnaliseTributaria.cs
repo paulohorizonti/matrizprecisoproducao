@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MatrizTributaria.Areas.Cliente.Models
 {
-    [Table("ANALISE_TRIBUTARIA")]
+    [Table("analise_tributaria")]
     public class AnaliseTributaria
     {
         [Column("TE_ID")]

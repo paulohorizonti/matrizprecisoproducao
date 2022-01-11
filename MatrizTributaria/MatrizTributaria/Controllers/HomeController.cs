@@ -59,7 +59,7 @@ namespace MatrizTributaria.Controllers
 
             return View();
         }
-        public ActionResult Login()
+        public ActionResult Login(string param)
         {
             try
             {
@@ -75,7 +75,14 @@ namespace MatrizTributaria.Controllers
                 int par = 7;
                 return RedirectToAction("../Erro/ErroLogin", new { param = par });
             }
-           
+            if(param != "")
+            {
+                if (param != null)
+                {
+                    ViewBag.Message = param;
+                }
+                
+            }
            
             return View();
         }
@@ -115,17 +122,19 @@ namespace MatrizTributaria.Controllers
                 }
                 hashTxtSenha = hash.CriptografarSenha(usuario.senha);
 
-               if(this.user.primeiro_acesso == 1)
-                {
-                    //chamar o modal na view
-                    ViewBag.Message = "PRIMEIRO ACESSO";
-                    return View();
-                }
+              
 
 
                 if (user.senha.Equals(hashTxtSenha) || user.senha.Equals(usuario.senha))
                 {
-                  
+                    if (this.user.primeiro_acesso == 1)
+                    {
+                        //chamar o modal na view
+                        ViewBag.Message = "PRIMEIRO ACESSO";
+                        ViewBag.Identificador = this.user.id;
+                        return View();
+                    }
+
                     ViewBag.Message = "Bem vindo : " + user.nome;
 
                     Session["usuario"] = user.nome;
@@ -266,6 +275,79 @@ namespace MatrizTributaria.Controllers
             }
 
             return RedirectToAction("Index","Home");
+        }
+
+        //alteração de senha usuario
+      
+        public ActionResult LoginAlterar(int? identif, string senhaProv, string novaSenha, string senhaRep)
+        {
+            string hashTxtSenha = null;
+            int? Identif = identif;
+            string NovaSenha = novaSenha;
+            string SenhaRep = senhaRep;
+
+            TempData["identificador"] = Identif ?? TempData["identificador"]; //se opção != null
+            Identif = (Identif == null) ? (int?)TempData["identificador"] : Identif;
+            TempData.Keep("identificador");
+           
+
+            if (Identif == null)
+            {
+                string par = "Usuário não encontrato!";
+                return RedirectToAction("Login", "Home", new { param = par });
+            }
+            else
+            {
+                var hash = new Hash(SHA512.Create());
+                var usuario = db.Usuarios.Find(Identif);
+                
+                hashTxtSenha = hash.CriptografarSenha(senhaProv);
+
+                //verifica se a senha padrao esta correta
+                if (usuario.senha.Equals(hashTxtSenha) || usuario.senha.Equals(senhaProv)) 
+                {
+                    //verifica se as senhas batem
+                    if (novaSenha != senhaRep)
+                    {
+                        string par = "As senhas digitadas não são iguais!";
+                        return RedirectToAction("Login", "Home", new { param = par });
+                    }
+                    else
+                    {
+                        //aqui
+                        //criptografar senha
+                        usuario.senha = hash.CriptografarSenha(novaSenha);
+                        usuario.primeiro_acesso = 0;
+                        usuario.ativo = 1;
+                        usuario.dataAlt = DateTime.Now;
+                
+
+                        try
+                        {
+                            db.SaveChanges();
+                            string par = "Senha alterada com sucesso. Efetue o login.";
+                            return RedirectToAction("Login", "Home", new { param = par });
+                        }
+                        catch
+                        {
+                            string par = "Problemas ao salvar a senha, tente novamente.";
+                            return RedirectToAction("Login", "Home", new { param = par });
+                        }
+
+
+                    }
+                }
+                else
+                {
+                    string par = "Senha provisória incorreta";
+                    return RedirectToAction("Login", "Home", new { param = par });
+                }
+
+                
+
+            }
+
+            return null;
         }
         public ActionResult LogOut()
         {

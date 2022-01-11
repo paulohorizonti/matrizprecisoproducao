@@ -39,36 +39,108 @@
                                     <div class="text-center" width="300px;" height="45px;">
                                         <img class="mb-4" src="~/Content/img/preciso_mtx_sem_fundo.png" alt="Logo" style="width:100%;">
                                     </div>
+                                    @if(ViewBag.Message == "Problemas ao salvar a senha, tente novamente.")
+            {
+                                <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @ViewBag.Message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+            }
+
+
+                                    @if (ViewBag.Message == "Senha alterada com sucesso. Efetue o login.")
+                                    {
+                                <div id="alerta-modal" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @ViewBag.Message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                    }
 
                                     @if (ViewBag.Message == "Usuário não encontrato!")
                                     {
-                        <div id="alerta" class="alert alert-danger" role="alert">
-                            @ViewBag.Message
-                        </div>}
+                                <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @ViewBag.Message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                       }
                                     @if (ViewBag.Message == "Senha incorreta!")
                                     {
-                        <div id="alerta" class="alert alert-danger" role="alert">
-                            @ViewBag.Message
-                        </div>}
+                                <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @ViewBag.Message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                    }
 
                                     @if (ViewBag.Message == "Por favor digite sua senha")
                                     {
-                        <div id="alerta" class="alert alert-danger" role="alert">
-                            @ViewBag.Message
-                        </div>}
+                                <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <span>@ViewBag.Message</span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                    }
+
+
+
+                                    @if (ViewBag.Message == "As senhas digitadas não são iguais!")
+                                    {
+                                        @*<div id="alerta" class="alert alert-danger" role="alert">
+                @ViewBag.Message
+            </div>*@
+
+                                        <script>
+                                            function abreModal() {
+                                                $("#modalPrimeiroAcesso").modal({
+                                                    show: true
+                                                });
+                                            }
+
+                                            setTimeout(abreModal, 1000);
+                                        </script>
+
+                                    }
+                                    @if (ViewBag.Message == "Senha provisória incorreta")
+                                    {
+                                        @*<div id="alerta" class="alert alert-danger" role="alert">
+                @ViewBag.Message
+            </div>*@
+
+                                        <script>
+                                            function abreModal() {
+                                                $("#modalPrimeiroAcesso").modal({
+                                                    show: true
+                                                });
+                                            }
+
+                                            setTimeout(abreModal, 1000);
+                                        </script>
+
+                                    }
+
+
 
                                     @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "user" }))
                                     {
-                        <div class="form-group">
-                            @Html.TextBoxFor(m => m.email, new { @class = "form-control form-control-user", placeholder = "Digite seu email(login)", id = "exampleInputEmail" })
+                                        <div class="form-group">
+                                            @Html.TextBoxFor(m => m.email, new { @class = "form-control form-control-user", placeholder = "Digite seu email(login)", id = "exampleInputEmail" })
 
-                        </div>
+                                        </div>
                                         <div class="form-group">
                                             @Html.PasswordFor(m => m.senha, new { @class = "form-control form-control-user", id = "exampleInputPassword", placeholder = "Digite sua senha" })
 
                                         </div>
 
-                                                        <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>}
+                                        <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>
+                                    }
 
                                     <form class="user">
                                     </form>
@@ -157,28 +229,83 @@
 
     <!--Modal Primeiro acesso-->
     <div class="modal fade" id="modalPrimeiroAcesso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="max-width:300px !important;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel" style="color:#a7291d; font-weight:900;">Notas sobre a versão</h5>
+                    <span class="modal-title" id="exampleModalLabel" style="color:#a7291d; font-weight:900;">Alteração de senha</span><br/>
+
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <p><h3 class="pr-fonte-label" style="color:#a7291d; font-weight:600;">Versão: @ViewBag.Versao</h3></p>
-                    <ul>
-                        <li style="color:#a7291d"><h5 class="pr-fonte-label" style="color:#a7291d">@ViewBag.Nota</h5></li>
-                    </ul>
-                    <p></p>
-                    <p></p>
-
+                @using (Html.BeginForm("LoginAlterar", "Home", FormMethod.Post, new { @class = "user" }))
+                {
+            <div class="modal-body">
+                @if (ViewBag.Message == "As senhas digitadas não são iguais!")
+                {
+                <div id="alerta-modal" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @ViewBag.Message
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-
-                </div>
+                }
+                @if (ViewBag.Message == "Senha provisória incorreta")
+                {
+            <div id="alerta-modal" class="alert alert-danger alert-dismissible fade show" role="alert">
+                @ViewBag.Message
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+                }
+                
+                <input type="hidden" name="identif" value="@ViewBag.Identificador" id="identif" />
+                <div class="container-fluid">
+
+
+                    <div class="row">
+                        <div class="form-group col-lg-12 p-1">
+                            <label class="pr-fontalternativa">Senha Provisória</label>
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-sm" type="password" placeholder="Digite a sua senha provisória" id="senhaProv" name="senhaProv" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 p-1">
+                            <label class="pr-fontalternativa">Nova Senha</label>
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-sm" type="password" placeholder="Digite sua nova senha" id="novaSenha" name="novaSenha" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 p-1">
+                            <label class="pr-fontalternativa">Repita a Nova Senha</label>
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-sm" type="password" placeholder="Repita sua nova senha" id="senhaRep" name="senhaRep" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </div>
+                    <div class="modal-footer">
+                        <button type="submit" style="border-radius: 10rem;" class="btn btn-primary pr-login-salvar"><span style="font-weight:500;">Salvar</span></button>
+
+                        <button type="button" style="border-radius: 10rem;" class="btn btn-secondary pr-btn-login-close" data-dismiss="modal">Fechar</button>
+
+                    </div>
+                }
+                </div>
         </div>
     </div>
 
@@ -194,6 +321,18 @@
 
             document.getElementById("alerta").style.display = 'block';
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $(".alert").fadeOut("slow", function () {
+
+                    $(this).alert('close');
+                });
+
+            }, 5000);
+        });
     </script>
 </body>
 </html>

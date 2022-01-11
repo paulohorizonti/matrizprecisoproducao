@@ -7,7 +7,7 @@ using System.Web;
 
 namespace MatrizTributaria.Areas.Cliente.Models
 {
-    [Table("ANALISE_TRIBUTARIA_2")]
+    [Table("analise_tributaria_2")]
     public class AnaliseTributaria2
     {
         [Column("TE_ID")]
