@@ -14,6 +14,7 @@ namespace MatrizTributaria.Models
         public virtual DbSet<Usuario> Usuarios { get; set; }
         public virtual DbSet<Nivel> Niveis { get; set; }
         public virtual DbSet<Empresa> Empresas { get; set; }
+        public virtual DbSet<Estado> Estados { get; set; }
 
         public virtual DbSet<Versao> Versoes { get; set; }
 

@@ -26,7 +26,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 Session["usuario"] = null;
                 Session["empresa"] = null;
                 Session["email"] = null;
-
+                TempData["usuarioEmpresa"] = null;
                 TempData["analise"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;

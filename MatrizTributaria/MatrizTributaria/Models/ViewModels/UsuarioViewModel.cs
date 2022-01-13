@@ -25,7 +25,7 @@ namespace MatrizTributaria.Models.ViewModels
         [Required(ErrorMessage = "O campo logradouro é obrigatório", AllowEmptyStrings = false)]
         public string logradouro { get; set; }
 
-        [Required(ErrorMessage = "O campo número é obrigatório, caso não exista digiar: 0", AllowEmptyStrings = false)]
+       
         public string numero { get; set; }
 
         [Required(ErrorMessage = "O campo CEP é obrigatório", AllowEmptyStrings = false)]
@@ -53,45 +53,13 @@ namespace MatrizTributaria.Models.ViewModels
         public string cidade { get; set; }
 
         [Required(ErrorMessage = "Campo Estado é obrigatório")]
-        public EstadosEnun estado { get; set; }
+        public string estado { get; set; }
 
         [Required(ErrorMessage = "Campo Empresa é obrigatório")]
         public int idEmpresa { get; set; }
-
-       
         public sbyte primeiro_acesso { get; set; }
 
     }
 
-    public enum EstadosEnun
-    {
-        AC,
-        AL,
-        AP,
-        AM,
-        BA,
-        CE,
-        DF,
-        ES,
-        GO,
-        MA,
-        MT,
-        MS,
-        MG,
-        PA,
-        PB,
-        PR,
-        PE,
-        PI,
-        RJ,
-        RN,
-        RS,
-        RO,
-        RR,
-        SC,
-        SP,
-        SE,
-        TO
-
-    }
+    
 }

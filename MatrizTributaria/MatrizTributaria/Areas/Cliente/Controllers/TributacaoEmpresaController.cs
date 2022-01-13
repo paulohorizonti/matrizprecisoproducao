@@ -8,7 +8,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-
+using MatrizTributaria.Models.ViewModels;
+using System.Security.Cryptography;
 
 namespace MatrizTributaria.Areas.Cliente.Controllers
 {
@@ -16,7 +17,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
     {
         readonly private MatrizDbContext db = new MatrizDbContext();
         List<Usuario> listUser = new List<Usuario>();
-
+        List<Empresa> listempresa = new List<Empresa>(); //listar a empresa
         //listas para analise
         List<AnaliseTributaria> analise = new List<AnaliseTributaria>();
         List<AnaliseTributaria> trib = new List<AnaliseTributaria>();
@@ -27,6 +28,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         Usuario usuario;
         Empresa empresa;
 
+        int IdEmp = 0; 
         private void Write(string texto)
         {
             Debug.Write(texto + "\n");
@@ -22281,9 +22283,10 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteEmpresa = procuraEmpresa;
-            int IdEmp = (int)Session["idEmpresa"];
-            this.listUser = db.Usuarios.ToList();
-            this.listUser = this.listUser.Where(s => s.empresa.id == IdEmp).ToList();
+
+             IdEmp = (int)Session["idEmpresa"]; //id da empresa do usuario
+
+            VerificaTempUser(IdEmp);
 
             //procura
             if (!String.IsNullOrEmpty(procurarPor))
@@ -22304,10 +22307,248 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
 
-            ViewBag.Empresas = db.Empresas.ToList();
+            
+            var userEmpresa= (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+           
+
+            ViewBag.Empresas = userEmpresa;
+
+            
+
+
             return View(listUser.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
         }
+
+
+
+        public ActionResult CreateUsuarioCliente()
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+            }
+
+            IdEmp = (int)Session["idEmpresa"]; //id da empresa do usuario
+
+            ViewBag.Niveis = db.Niveis;
+            var userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+            ViewBag.Empresas = userEmpresa;
+
+            //Array values = Enum.GetValues(typeof(MatrizTributaria.Models.EstadosEnun));
+
+            //ViewBag.Estados = values;
+            ViewBag.Estados = db.Estados;
+
+            var model = new UsuarioViewModelCliente();
+            return View(model);
+          
+        }
+        
+    
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateUsuarioCliente(UsuarioViewModelCliente model)
+        {
+            //variavel auxiliar para guardar o resultado
+            IdEmp = (int)Session["idEmpresa"]; //id da empresa do usuario
+            var userEmpresa = "";
+            string resultado = "";
+            int regSalvos = 0;
+            var hash = new Hash(SHA512.Create());
+            //iformando a data do dia da criação do registro
+            model.dataCad = DateTime.Now;
+            model.dataAlt = DateTime.Now;
+            model.ativo = 1; //ativando o registro no cadastro
+            model.primeiro_acesso = 1; //validar esse requisito
+            //ativando o registro no cadastro
+           
+
+                //verificar se existe o usuario no banco
+                var users = from s in db.Usuarios select s; //select na tabela
+                                                            //where: Pegar somente o registro do cnpj da empresa do usuario (da sessão)
+                users = users.Where(s => s.email.Contains(model.email));
+
+                if (users.Count() > 0)
+                {
+                    ViewBag.MensagemErro = "E-mail já utilizado em outro usuário";
+                    ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                    ViewBag.Empresas = userEmpresa;
+
+                    return View();
+                }
+                if(model.nome == null)
+                {
+                    ViewBag.MensagemErro = "Campo nome é obrigatório";
+                    ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                    ViewBag.Empresas = userEmpresa;
+
+                    return View();
+                }
+            if (model.email == null)
+            {
+                ViewBag.MensagemErro = "Campo e-mail é obrigatório";
+                ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                ViewBag.Empresas = userEmpresa;
+
+                return View();
+            }
+            if (model.cidade == null)
+            {
+                ViewBag.MensagemErro = "Campo cidade é obrigatório";
+                ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                ViewBag.Empresas = userEmpresa;
+
+                return View();
+            }
+            if (model.sexo == null)
+            {
+                ViewBag.MensagemErro = "Campo sexo é obrigatório";
+                ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                ViewBag.Empresas = userEmpresa;
+
+                return View();
+            }
+            if (model.senha == null)
+            {
+                ViewBag.MensagemErro = "Campo senha é obrigatório";
+                ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                ViewBag.Empresas = userEmpresa;
+
+                return View();
+            }
+            if (model.estado.Equals(""))
+            {
+                ViewBag.MensagemErro = "Campo estado é obrigatório";
+                ViewBag.Niveis = db.Niveis;
+                ViewBag.Estados = db.Estados;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+                ViewBag.Empresas = userEmpresa;
+                ViewBag.Estados = db.Estados;
+
+                return View();
+            }
+            if (model.idNivel == 0)
+            {
+                ViewBag.MensagemErro = "Campo nível é obrigatório";
+                ViewBag.Niveis = db.Niveis;
+                userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+                ViewBag.Estados = db.Estados;
+
+                ViewBag.Empresas = userEmpresa;
+
+                return View();
+            }
+            var usuario = new Usuario()
+            {
+
+                nome = model.nome,
+                email = model.email,
+                sexo = model.sexo,
+                logradouro = model.logradouro,
+                numero = model.numero,
+                cep = model.cep,
+                //criptografar senha
+                senha = hash.CriptografarSenha(model.senha),
+
+                ativo = model.ativo,
+                primeiro_acesso = model.primeiro_acesso,
+                dataCad = model.dataCad,
+                dataAlt = model.dataAlt,
+                idNivel = model.idNivel,
+                telefone = model.telefone,
+                cidade = model.cidade,
+                estado = model.estado.ToString(),
+                idEmpresa = IdEmp
+
+            };
+
+                try
+                {
+                    db.Usuarios.Add(usuario);
+                    db.SaveChanges();
+                    regSalvos++;
+                    resultado = "Registro Salvo com Sucesso!!";
+                   TempData["usuarioEmpresa"] = null;
+                   TempData.Keep("usuarioEmpresa");
+
+
+
+            }
+                catch (Exception e)
+                {
+                    string ex = e.ToString();
+                    regSalvos = 0;
+                    resultado = "Não foi possivel salvar o registro!!";
+
+                }
+
+
+            ViewBag.Niveis = db.Niveis;
+            ViewBag.Estados = db.Estados;
+            userEmpresa = (from s in db.Empresas where s.id == IdEmp select s.fantasia).FirstOrDefault().ToString(); //pega o usuario
+
+
+            ViewBag.Empresas = userEmpresa;
+            ViewBag.Estados = db.Estados;
+
+            return RedirectToAction("Usuario", new { param = resultado, qtdSalvos = regSalvos });
+            
+        }
+
+        private EmptyResult VerificaTempUser(int empId)
+        {
+            /*PAra tipar */
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+            if (TempData["usuarioEmpresa"] == null)
+            {
+                
+                this.listUser = db.Usuarios.ToList();
+                this.listUser = this.listUser.Where(a => a.idEmpresa == empId).ToList();
+                TempData["usuarioEmpresa"] = this.listUser; //cria a temp data e popula
+                TempData.Keep("usuarioEmpresa"); //persiste
+            }
+            else
+            {
+                this.listUser = (List<Usuario>)TempData["usuarioEmpresa"];//atribui a lista os valores de tempdata
+                TempData.Keep("usuarioEmpresa"); //persiste
+            }
+
+            return new EmptyResult();
+
+            
+            
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

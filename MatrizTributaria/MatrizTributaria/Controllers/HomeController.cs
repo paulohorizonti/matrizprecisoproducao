@@ -359,6 +359,7 @@ namespace MatrizTributaria.Controllers
                 TempData["analise"] = null;
                 TempData["tributacaoMTX"] = null;
                 TempData["tributacaoProdMTX"] = null;
+                TempData["usuarioEmpresa"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
                 return RedirectToAction("Index");

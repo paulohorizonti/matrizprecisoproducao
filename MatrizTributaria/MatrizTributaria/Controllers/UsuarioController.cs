@@ -178,9 +178,15 @@ namespace MatrizTributaria.Controllers
                     string ex = e.ToString();
                     regSalvos = 0;
                     resultado = "Não foi possivel salvar o registro!!";
-                   
+                  
                 }
-               
+
+            }
+            else
+            {
+                ViewBag.Niveis = db.Niveis;
+                ViewBag.Empresas = db.Empresas;
+                return View();
             }
             ViewBag.Niveis = db.Niveis;
             ViewBag.Empresas = db.Empresas;
