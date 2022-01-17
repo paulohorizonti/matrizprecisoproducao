@@ -243,6 +243,12 @@ table.dataTable thead th, table.dataTable thead td {
     margin-top:-1px;
 }
 
+#alerta-modal {
+    margin-bottom: 0.3rem;
+    margin-top: -1px;
+    font-size:0.8em;
+}
+
 #prn-container{
     margin-top:0.2rem;
 }
@@ -643,7 +649,42 @@ aside {
         -o-transition: 0.9s ease-in;
         transition: 0.9s ease-in;
     }
-
+.pr-btn-login-close {
+    color: #fff;
+    border: none;
+    border-color: none;
+    background-image: linear-gradient(180deg, #5A1F00 10%, #A7291D 100%);
+    -webkit-transition: 0.5s ease-in;
+    -moz-transition: 0.9s ease-in;
+    -o-transition: 0.9s ease-in;
+    transition: 0.9s ease-in;
+}
+    .pr-btn-login-close:hover {
+        border: none;
+        background-image: linear-gradient( 180deg, #03632e 20%, #3c566d 100%);
+        -webkit-transition: 0.5s ease-in;
+        -moz-transition: 0.9s ease-in;
+        -o-transition: 0.9s ease-in;
+        transition: 0.9s ease-in;
+    }
+.pr-login-salvar {
+    color: #fff;
+    border: none;
+    border-color: none;
+    background-image: linear-gradient(180deg, #021E36 20%, #3c566d 100%);
+    -webkit-transition: 0.5s ease-in;
+    -moz-transition: 0.9s ease-in;
+    -o-transition: 0.9s ease-in;
+    transition: 0.9s ease-in;
+}
+    .pr-login-salvar:hover {
+        border: none;
+        background-image: linear-gradient( 180deg, #03632e 20%, #3c566d 100%);
+        -webkit-transition: 0.5s ease-in;
+        -moz-transition: 0.9s ease-in;
+        -o-transition: 0.9s ease-in;
+        transition: 0.9s ease-in;
+    }
 .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
     font-weight: 600;
     color: #370904;
