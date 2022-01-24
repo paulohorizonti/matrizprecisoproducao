@@ -13,11 +13,19 @@ namespace MatrizTributaria.Models
         [Column("ID")]
         public int? ID { get; set; }
 
-        [Column("UF")]
-        public string UF { get; set; }
+        //[Column("UF")]
+        //public string UF { get; set; }
 
-        [Column("ESTADO")]
-        public string ESTADO { get; set; }
+        //[Column("ESTADO")]
+        //public string ESTADO { get; set; }
+
+
+        [Column("UF_ORIGEM")]
+        public string UF_ORIGEM { get; set; }
+
+        [Column("UF_DESTINO")]
+        public string UF_DESTINO { get; set; }
+                
 
         [Column("ID_PRODUTO")]
         public int? ID_PRODUTO { get; set; }

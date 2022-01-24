@@ -8,9 +8,16 @@ namespace MatrizTributaria.Models.ViewModels
 
         public int id { get; set; }
 
-       
-        [Required(ErrorMessage = "O campo Estado é obrigatório", AllowEmptyStrings = false)]
-        public string estado { get; set; }
+
+        //[Required(ErrorMessage = "O campo Estado é obrigatório", AllowEmptyStrings = false)]
+        //public string estado { get; set; }
+
+        [Required(ErrorMessage = "O campo UF Origem é obrigatório", AllowEmptyStrings = false)]
+        public string UF_Origem { get; set; }
+
+        [Required(ErrorMessage = "O campo UF Destino é obrigatório", AllowEmptyStrings = false)]
+        public string UF_Destino { get; set; }
+
 
         [Required(ErrorMessage = "O campo Id do Produto é obrigatório", AllowEmptyStrings = false)]
         public int idProduto { get; set; }

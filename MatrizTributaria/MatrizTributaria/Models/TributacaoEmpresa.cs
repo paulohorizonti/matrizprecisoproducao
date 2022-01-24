@@ -201,8 +201,15 @@ namespace MatrizTributaria.Models
         public DateTime? DT_ALTERACAO { get; set; }
 
 
-        [Column("ESTADO")]
-        public string ESTADO { get; set; }
+        //[Column("ESTADO")]
+        //public string ESTADO { get; set; }
+        [Column("UF_ORIGEM")]
+        public string UF_ORIGEM { get; set; }
+
+        [Column("UF_DESTINO")]
+        public string UF_DESTINO { get; set; }
+
+
 
 
 

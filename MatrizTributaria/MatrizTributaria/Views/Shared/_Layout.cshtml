@@ -288,7 +288,8 @@
                         var data = google.visualization.arrayToDataTable([
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSEntradaInd)],
-                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSEntradaNulla)]
+                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSEntradaNulla)],
+                            ['Isenta', @Html.Raw(ViewBag.AliqICMSEntradaIndIsenta)]
 
                         ]);
 
@@ -394,7 +395,8 @@
                         var data = google.visualization.arrayToDataTable([
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSCompraAta)],
-                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSCompraAtaNulla)]
+                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSCompraAtaNulla)],
+                            ['Isenta', @Html.Raw(ViewBag.AliqICMSCompraAtaIsenta)]
 
                         ]);
 
@@ -500,7 +502,8 @@
                         var data = google.visualization.arrayToDataTable([
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSCompraSN)],
-                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSCompraSNNulla)]
+                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSCompraSNNulla)],
+                             ['Isenta', @Html.Raw(ViewBag.AliqICMSCompraSNIsenta)]
 
                         ]);
 
@@ -614,7 +617,8 @@
                         var data = google.visualization.arrayToDataTable([
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSNFEInd)],
-                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNfeIndNulla)]
+                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNfeIndNulla)],
+                            ['Isenta', @Html.Raw(ViewBag.AliqICMSNfeIndIsenta)]
 
                         ]);
 
@@ -667,7 +671,8 @@
                         var data = google.visualization.arrayToDataTable([
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSNFEAta)],
-                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNFEAtaNulla)]
+                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNFEAtaNulla)],
+                             ['Isenta', @Html.Raw(ViewBag.AliqICMSNFEAtaIsenta)]
 
                         ]);
 
@@ -720,7 +725,8 @@
                         var data = google.visualization.arrayToDataTable([
                             ['Aliquota', 'Valores'],
                             ['Com aliquota', @Html.Raw(ViewBag.AliqICMSNFESN)],
-                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNFESNNulla)]
+                            ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSNFESNNulla)],
+                            ['Isenta', @Html.Raw(ViewBag.AliqICMSNFESNIsenta)]
 
                         ]);
 
@@ -907,7 +913,6 @@
                                 chart.draw(data, options);
                         }
 
-                    AliqICMSVendaVarContIsenta
                         /*Aliq ICMS Venda Varejo para Contribuinte*/
                         function aliIcmsVendVarCont() {
                                 var data = google.visualization.arrayToDataTable([
@@ -915,6 +920,7 @@
                                     ['Com aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarCont)],
                                     ['Sem aliquota', @Html.Raw(ViewBag.AliqICMSVendaVarContNulla)],
                                     ['Isenta', @Html.Raw(ViewBag.AliqICMSVendaVarContIsenta)]
+                                    
 
                                 ]);
 

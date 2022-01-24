@@ -48,15 +48,15 @@
     <div class="row">
 
         <!--Parte de procura-->
-        <div class="form-group col-lg-6 p-1">
+        <div class="form-group col-lg-4 p-1">
             <label class="pr-fontalternativa">Produto</label>
             <div class="input-group input-group-sm">
                 @if (ViewBag.FiltroCorrente == null)
                 {
-                    @Html.TextBox("ProcurarPor", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite produto ou cód. de barras" }) }
-                else
-                {
-                    @Html.TextBox("ProcurarPor", (string)ViewBag.FiltroCorrente, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite produto ou cód. de barras" })}
+    @Html.TextBox("ProcurarPor", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite produto ou cód. de barras" }) }
+else
+{
+    @Html.TextBox("ProcurarPor", (string)ViewBag.FiltroCorrente, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite produto ou cód. de barras" })}
                 <div class="input-group-append">
                     <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addon2">
                         <i style="font-size:1.3em;" class="fas fa-search"></i>
@@ -64,125 +64,152 @@
                 </div><!--fim do appende-->
             </div><!--fim div input-->
         </div><!--fim coluna de 5-->
-
-
         <!--Mudança para escolher por categoria-->
         @if (ViewBag.FiltrarPor == "Setor")
         {
-            <div class="form-group col-lg-6 p-1">
-                <label class="pr-fontalternativa">Setor</label>
+    <div class="form-group col-lg-4 p-1">
+        <label class="pr-fontalternativa">Setor</label>
 
-                <div class="input-group input-group-sm">
-                    @if (ViewBag.FiltroCorrenteSetor == null)
-                    {
+        <div class="input-group input-group-sm">
+            @if (ViewBag.FiltroCorrenteSetor == null)
+            {
 
-                        <select class="form-control form-control-sm dropdown prn-select" id="ProcuraSetor" name="ProcuraSetor">
-                            <option value="null">Escolha um Setor</option>
-                            @foreach (var item in ViewBag.SetorProdutos)
-                            {
-                                if (item.id == ViewBag.FiltroCorrenteSetorInt)
-                                {
-                                    <option selected value="@item.id">@item.descricao</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.id">@item.descricao</option>
-                                }
-
-                            }
-                        </select>
-
-
-                        @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@
-
-                    }
-                    else
-                    {
-                        <select class="form-control form-control-sm dropdown prn-select" id="ProcuraSetor" name="ProcuraSetor">
-                            <option value="null">Escolha um Setor</option>
-                            @foreach (var item in ViewBag.SetorProdutos)
-                            {
-                                if (item.id == ViewBag.FiltroCorrenteSetorInt)
-                                {
-                                    <option selected value="@item.id">@item.descricao</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.id">@item.descricao</option>
-                                }
-
-                            }
-                        </select>
-
-                        @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@
-                    }
-                    <div class="input-group-append">
-                        <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
-                            <i style="font-size:1.3em;" class="fas fa-search"></i>
-                        </button>
-                    </div><!--fim do appende-->
-                </div><!--fim div input-->
-            </div><!--fim coluna 2-->
-        }
-        else
+    <select class="form-control form-control-sm dropdown prn-select" id="ProcuraSetor" name="ProcuraSetor">
+        <option value="null">Escolha um Setor</option>
+        @foreach (var item in ViewBag.SetorProdutos)
         {
-            <div class="form-group col-lg-6 p-1">
-                <label class="pr-fontalternativa">Categoria</label>
-
-                <div class="input-group input-group-sm">
-                    @if (ViewBag.FiltroCorrenteCate == null)
-                    {
-
-                        <select class="form-control form-control-sm dropdown prn-select" id="ProcuraCate" name="ProcuraCate">
-                            <option value="null">Escolha uma Categoria</option>
-                            @foreach (var item in ViewBag.CategoriaProdutos)
+            if (item.id == ViewBag.FiltroCorrenteSetorInt)
+            {
+    <option selected value="@item.id">@item.descricao</option> }
+                            else
                             {
-                                if (item.id == ViewBag.FiltroCorrenteCateInt)
-                                {
-                                    <option selected value="@item.id">@item.descricao</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.id">@item.descricao</option>
-                                }
+    <option value="@item.id">@item.descricao</option>}
 
-                            }
-                        </select>
-
-
-                        @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@
-
-                    }
+                        }
+    </select> @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@ }
                     else
                     {
-                        <select class="form-control form-control-sm dropdown prn-select" id="ProcuraCate" name="ProcuraCate">
-                            <option value="null">Escolha uma Categoria</option>
-                            @foreach (var item in ViewBag.CategoriaProdutos)
+    <select class="form-control form-control-sm dropdown prn-select" id="ProcuraSetor" name="ProcuraSetor">
+        <option value="null">Escolha um Setor</option>
+        @foreach (var item in ViewBag.SetorProdutos)
+        {
+            if (item.id == ViewBag.FiltroCorrenteSetorInt)
+            {
+    <option selected value="@item.id">@item.descricao</option> }
+                            else
                             {
-                                if (item.id == ViewBag.FiltroCorrenteCateInt)
-                                {
-                                    <option selected value="@item.id">@item.descricao</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.id">@item.descricao</option>
-                                }
+    <option value="@item.id">@item.descricao</option>}
 
-                            }
-                        </select>
+                        }
+    </select> @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@}
+            <div class="input-group-append">
+                <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
+                    <i style="font-size:1.3em;" class="fas fa-search"></i>
+                </button>
+            </div><!--fim do appende-->
+        </div><!--fim div input-->
+    </div><!--fim coluna 2--> }
+                else
+                {
+    <div class="form-group col-lg-4 p-1">
+        <label class="pr-fontalternativa">Categoria</label>
 
-                        @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@
+        <div class="input-group input-group-sm">
+            @if (ViewBag.FiltroCorrenteCate == null)
+            {
+
+    <select class="form-control form-control-sm dropdown prn-select" id="ProcuraCate" name="ProcuraCate">
+        <option value="null">Escolha uma Categoria</option>
+        @foreach (var item in ViewBag.CategoriaProdutos)
+        {
+            if (item.id == ViewBag.FiltroCorrenteCateInt)
+            {
+    <option selected value="@item.id">@item.descricao</option> }
+                            else
+                            {
+    <option value="@item.id">@item.descricao</option>}
+
+                        }
+    </select> @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@ }
+                    else
+                    {
+    <select class="form-control form-control-sm dropdown prn-select" id="ProcuraCate" name="ProcuraCate">
+        <option value="null">Escolha uma Categoria</option>
+        @foreach (var item in ViewBag.CategoriaProdutos)
+        {
+            if (item.id == ViewBag.FiltroCorrenteCateInt)
+            {
+    <option selected value="@item.id">@item.descricao</option> }
+                            else
+                            {
+    <option value="@item.id">@item.descricao</option>}
+
+                        }
+    </select> @*@Html.DropDownList("ProcuraSetor", new SelectList(ViewBag.SetorProdutos, "id", "descricao"), null, new { @class = "form-control form-control-sm dropdown prn-select" })*@}
+            <div class="input-group-append">
+                <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
+                    <i style="font-size:1.3em;" class="fas fa-search"></i>
+                </button>
+            </div><!--fim do appende-->
+        </div><!--fim div input-->
+    </div><!--fim coluna 2-->}
+
+        <!--UF ORIGEM E DESTINO-->
+        <div class="form-group col-lg-2 pt-1">
+            <label class="pr-fontalternativa">UF Origem</label>
+
+            <div class="input-group input-group-sm">
+
+                <select class="form-control form-control-sm dropdown prn-select" id="origem" name="origem">
+                    <option value="null">UF de Origem</option>
+                    @foreach (var item in ViewBag.EstadosOrigem)
+                    {
+                        if (item.uf == ViewBag.UfOrigem)
+                        {
+                            <option selected value="@item.uf">@item.uf</option>
+ }
+                        else
+                        {
+                            <option value="@item.uf">@item.uf</option>
+}
+
                     }
-                    <div class="input-group-append">
-                        <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
-                            <i style="font-size:1.3em;" class="fas fa-search"></i>
-                        </button>
-                    </div><!--fim do appende-->
-                </div><!--fim div input-->
-            </div><!--fim coluna 2-->
-        }
+                </select>
 
 
+            </div><!--fim div input-->
+
+        </div><!--fim coluna 2-->
+
+        <div class="form-group col-lg-2 pt-1">
+            <label class="pr-fontalternativa">UF Destino</label>
+
+            <div class="input-group input-group-sm">
+
+                <select class="form-control form-control-sm dropdown prn-select" id="destino" name="destino">
+                    <option value="null">UF de Destino</option>
+                    @foreach (var item in ViewBag.EstadosDestinos)
+                    {
+                        if (item.uf == ViewBag.UfDestino)
+                        {
+                            <option selected value="@item.uf">@item.uf</option>
+ }
+                        else
+                        {
+                            <option value="@item.uf">@item.uf</option>
+}
+
+                    }
+                </select>
+
+
+                <div class="input-group-append">
+                    <button data-toggle="tooltip" data-placement="right" title="Aplicar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
+                        <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                    </button>
+                </div><!--fim do appende-->
+            </div><!--fim div input-->
+        </div><!--fim coluna 2-->
 
 
     </div>
