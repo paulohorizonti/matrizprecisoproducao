@@ -8353,7 +8353,7 @@ namespace MatrizTributaria.Controllers
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST).ToList();
             }
 
             switch (ordenacao)
@@ -8710,7 +8710,7 @@ namespace MatrizTributaria.Controllers
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
             }
 
             switch (ordenacao)
@@ -8831,9 +8831,32 @@ namespace MatrizTributaria.Controllers
 
         //Edit Aliq icms st compra de atacado - ATUALIZADO VERSÃO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsSTCompAtaMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsSTCompAtaMassa(string origem,
+        string destino,
+        string opcao,
+        string param,
+        string ordenacao,
+        string qtdNSalvos,
+        string qtdSalvos,
+        string procurarPor,
+        string procurarPorAliq,
+        string procuraNCM,
+        string procuraCEST,
+        string procuraSetor,
+        string filtroSetor,
+        string filtroCorrente,
+        string filtroCorrenteAliq,
+        string procuraCate,
+        string filtroCate,
+        string filtroCorrenteNCM,
+        string filtroCorrenteCEST,
+        string filtroNulo,
+        string filtraPor,
+        string filtroFiltraPor,
+        string procuraCST,
+        string filtraCST,
+        int? page,
+        int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -8887,6 +8910,10 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -8904,8 +8931,9 @@ namespace MatrizTributaria.Controllers
             //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
             TempData.Keep("opcao");
 
+
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -8914,6 +8942,10 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -8925,6 +8957,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -8934,9 +8969,25 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
 
 
             //ViewBag com a opcao
@@ -8951,10 +9002,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -8963,10 +9016,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -8982,6 +9037,12 @@ namespace MatrizTributaria.Controllers
                 double pAlq = Convert.ToDouble(procurarPorAliq);
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == pAlq).ToList();
 
+            }
+
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
             }
 
             switch (ordenacao)
@@ -9015,6 +9076,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -9099,9 +9161,32 @@ namespace MatrizTributaria.Controllers
 
         //Edit aliq icms compra de simples nacional - ATUALIZADO VERSAO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsCompSNMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsCompSNMassa(string origem,
+        string destino,
+        string opcao,
+        string param,
+        string ordenacao,
+        string qtdNSalvos,
+        string qtdSalvos,
+        string procurarPor,
+        string procurarPorAliq,
+        string procuraNCM,
+        string procuraCEST,
+        string procuraSetor,
+        string filtroSetor,
+        string filtroCorrente,
+        string filtroCorrenteAliq,
+        string procuraCate,
+        string filtroCate,
+        string filtroCorrenteNCM,
+        string filtroCorrenteCEST,
+        string filtroNulo,
+        string filtraPor,
+        string filtroFiltraPor,
+        string procuraCST,
+        string filtraCST,
+        int? page,
+        int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -9155,6 +9240,10 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -9173,7 +9262,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -9182,6 +9271,10 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
+
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -9193,6 +9286,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -9202,9 +9298,25 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
 
 
             //ViewBag com a opcao
@@ -9220,10 +9332,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -9232,10 +9348,31 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                    }
+                    break;
+                case "Isenta":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //3-senta
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -9251,7 +9388,11 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == pAlq).ToList();
 
             }
-
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+            }
             switch (ordenacao)
             {
                 case "Produto_desc":
@@ -9283,6 +9424,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -9366,9 +9508,32 @@ namespace MatrizTributaria.Controllers
 
         //Edit aliq icms st compra de simples nacional -  ATUALIZADO VERSAO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsSTCompSNMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsSTCompSNMassa(string origem,
+        string destino,
+        string opcao,
+        string param,
+        string ordenacao,
+        string qtdNSalvos,
+        string qtdSalvos,
+        string procurarPor,
+            string procurarPorAliq,
+            string procuraNCM,
+            string procuraCEST,
+            string procuraSetor,
+            string filtroSetor,
+            string filtroCorrente,
+            string filtroCorrenteAliq,
+            string procuraCate,
+            string filtroCate,
+            string filtroCorrenteNCM,
+            string filtroCorrenteCEST,
+            string filtroNulo,
+            string filtraPor,
+            string filtroFiltraPor,
+            string procuraCST,
+            string filtraCST,
+            int? page,
+            int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -9421,6 +9586,11 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
+
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -9449,6 +9619,11 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
 
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
+
+
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteAliq = procurarPorAliq;
@@ -9459,6 +9634,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -9468,9 +9646,28 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
 
-            //criar o temp data da lista ou recupera-lo
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+            //verifica carregamento da tabela
             VerificaTempData();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
 
 
             //ViewBag com a opcao
@@ -9485,10 +9682,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -9497,10 +9696,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -9516,6 +9717,13 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == pAlq).ToList();
 
             }
+
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+            }
+
 
             switch (ordenacao)
             {
@@ -9548,6 +9756,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -9632,9 +9841,33 @@ namespace MatrizTributaria.Controllers
 
         //Edit aliq Icms Nfe Ind -  ATUALIZADO VERSAO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsNfeIndMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsNfeIndMassa(
+            string origem,
+            string destino,
+            string opcao,
+            string param,
+            string ordenacao,
+            string qtdNSalvos,
+            string qtdSalvos,
+            string procurarPor,
+            string procurarPorAliq,
+            string procuraNCM,
+            string procuraCEST,
+            string procuraSetor,
+            string filtroSetor,
+            string filtroCorrente,
+            string filtroCorrenteAliq,
+            string procuraCate,
+            string filtroCate,
+            string filtroCorrenteNCM,
+            string filtroCorrenteCEST,
+            string filtroNulo,
+            string filtraPor,
+            string filtroFiltraPor,
+            string procuraCST,
+            string filtraCST,
+            int? page,
+            int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -9688,6 +9921,10 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -9706,7 +9943,7 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procurarPorAliq != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) || (procuraCate != null) || (procuraCST != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -9715,6 +9952,9 @@ namespace MatrizTributaria.Controllers
             procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
 
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
@@ -9726,6 +9966,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -9735,9 +9978,25 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
 
 
             //ViewBag com a opcao
@@ -9752,10 +10011,17 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
+                    
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -9764,10 +10030,37 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
+
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                    }
+                    break;
+                case "Isenta":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //3-senta
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
+
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -9783,7 +10076,11 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == pAlq).ToList();
 
             }
-
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN.ToString() == procuraCST).ToList();
+            }
             switch (ordenacao)
             {
                 case "Produto_desc":
@@ -9815,6 +10112,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -9899,9 +10197,33 @@ namespace MatrizTributaria.Controllers
 
         //Edit aliq icms nfe Ata - ATUALIZADO VERSAO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsNfeAtaMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsNfeAtaMassa(
+            string origem,
+            string destino,
+            string opcao,
+            string param,
+            string ordenacao,
+            string qtdNSalvos,
+            string qtdSalvos,
+            string procurarPor,
+            string procurarPorAliq,
+            string procuraNCM,
+            string procuraCEST,
+            string procuraSetor,
+            string filtroSetor,
+            string filtroCorrente,
+            string filtroCorrenteAliq,
+            string procuraCate,
+            string filtroCate,
+            string filtroCorrenteNCM,
+            string filtroCorrenteCEST,
+            string filtroNulo,
+            string filtraPor,
+            string filtroFiltraPor,
+            string procuraCST,
+            string filtraCST,
+            int? page,
+            int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -9955,6 +10277,11 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
+
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -9983,6 +10310,9 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
 
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
+
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteAliq = procurarPorAliq;
@@ -9993,6 +10323,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
+
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -10002,9 +10337,28 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
 
-            //criar o temp data da lista ou recupera-lo
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+            //verifica carregamento da tabela
             VerificaTempData();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
 
 
             //ViewBag com a opcao
@@ -10019,10 +10373,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -10031,10 +10389,31 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                    }
+                    break;
+                case "Isenta":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //3-senta
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -10048,9 +10427,17 @@ namespace MatrizTributaria.Controllers
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == pAlq).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == pAlq).ToList();
 
             }
+
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+            }
+
+
 
             switch (ordenacao)
             {
@@ -10083,6 +10470,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
@@ -10168,9 +10556,32 @@ namespace MatrizTributaria.Controllers
 
         //Edit aliq icms nfe SN - ATUALIZADO VERSAO FINAL
         [HttpGet]
-        public ActionResult EditAliqIcmsNfeSNMassa(string opcao, string param, string ordenacao, string qtdNSalvos, string qtdSalvos, string procurarPor,
-            string procurarPorAliq, string procuraNCM, string procuraCEST, string procuraSetor, string filtroSetor, string filtroCorrente, string filtroCorrenteAliq,
-            string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, string filtroNulo, string filtraPor, string filtroFiltraPor, int? page, int? numeroLinhas)
+        public ActionResult EditAliqIcmsNfeSNMassa(string origem,
+            string destino,
+            string opcao,
+            string param,
+            string ordenacao,
+            string qtdNSalvos,
+            string qtdSalvos,
+            string procurarPor,
+            string procurarPorAliq,
+            string procuraNCM,
+            string procuraCEST,
+            string procuraSetor,
+            string filtroSetor,
+            string filtroCorrente,
+            string filtroCorrenteAliq,
+            string procuraCate,
+            string filtroCate,
+            string filtroCorrenteNCM,
+            string filtroCorrenteCEST,
+            string filtroNulo,
+            string filtraPor,
+            string filtroFiltraPor,
+            string procuraCST,
+            string filtraCST,
+            int? page,
+            int? numeroLinhas)
 
         {
             /*Verificar a sessão*/
@@ -10224,6 +10635,11 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
             procuraSetor = (procuraSetor != null) ? procuraSetor : null;
 
+            //cst
+            procuraCST = (procuraCST == "") ? null : procuraCST;
+            procuraCST = (procuraCST == "null") ? null : procuraCST;
+            procuraCST = (procuraCST != null) ? procuraCST : null;
+
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
@@ -10252,6 +10668,9 @@ namespace MatrizTributaria.Controllers
             procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
             procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
 
+            //cst
+            procuraCST = (procuraCST == null) ? filtraCST : procuraCST;
+
             //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteAliq = procurarPorAliq;
@@ -10262,6 +10681,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrenteCate = procuraCate;
             ViewBag.FiltroFiltraPor = filtraPor;
 
+            //cst
+            ViewBag.FiltroCST = procuraCST;
+
             //converter o valor da procura por setor ou categoria em inteiro
             if (procuraSetor != null)
             {
@@ -10271,10 +10693,26 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
+            if (procuraCST != null)
+            {
+                ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
+            }
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
 
-            //criar o temp data da lista ou recupera-lo
+            //verifica carregamento da tabela
             VerificaTempData();
 
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;
@@ -10288,10 +10726,15 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -10300,10 +10743,33 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                    }
+                    break;
+                case "Isenta":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //3-senta
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+
+                            break;
+                        case "2":
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            break;
+                        case "3":
+                            this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21).ToList();
+                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
                             break;
                     }
                     break;
@@ -10320,6 +10786,12 @@ namespace MatrizTributaria.Controllers
                 this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == pAlq).ToList();
 
             }
+            //Busca por cst
+            if (!String.IsNullOrEmpty(procuraCST))
+            {
+                this.tribMTX = tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR.ToString() == procuraCST).ToList();
+            }
+
 
             switch (ordenacao)
             {
@@ -10352,6 +10824,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
             ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
