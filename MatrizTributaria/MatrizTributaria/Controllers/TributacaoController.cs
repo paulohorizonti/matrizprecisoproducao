@@ -1300,12 +1300,13 @@ namespace MatrizTributaria.Controllers
             VerificaTempData();
 
             /*Redução base calc icms venda varejo cf*/
-            ViewBag.RedBasCalIcmsVendaVarCF     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null);
-            ViewBag.RedBasCalIcmsVendaVarCFNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null);
+            ViewBag.RedBasCalIcmsVendaVarCF        = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 20);
+            ViewBag.RedBasCalIcmsVendaVarCFNull    = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 20);
+
 
             /*Redução base calc icms ST venda varejo cf*/
-            ViewBag.RedBasCalIcmsSTVendaVarCF     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null);
-            ViewBag.RedBasCalIcmsSTVendaVarCFNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null);
+            ViewBag.RedBasCalIcmsSTVendaVarCF     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 20  && a.CST_VENDA_VAREJO_CONS_FINAL == 60);
+            ViewBag.RedBasCalIcmsSTVendaVarCFNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 20 && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null);
 
 
             /*Redução base de calculo ICMS venda varejo para Contribuinte*/
