@@ -2886,6 +2886,7 @@
     <Content Include="Views\Acoes\CamposComunsUsuarioCliente.cshtml" />
     <Content Include="Views\Acoes\UsuarioCliente.cshtml" />
     <Content Include="Views\Acoes\CamposSelecionaUF.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsPisCofins.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

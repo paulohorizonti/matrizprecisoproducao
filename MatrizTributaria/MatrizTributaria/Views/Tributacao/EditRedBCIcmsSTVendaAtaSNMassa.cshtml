@@ -22,7 +22,7 @@
                         <div class="container-fluid">
                             @using (Html.BeginForm("EditRedBCIcmsSTVendaAtaSNMassa", "Tributacao", FormMethod.Get))
                             {
-                                @RenderPage("~/Views/Acoes/CamposComuns.cshtml") <!--Renderiza os botões de ação-->
+                                @RenderPage("~/Views/Acoes/CamposComunsIcmsEntrada.cshtml") <!--Renderiza os botões de ação-->
 
 
                             }
@@ -41,47 +41,47 @@
                                         <th class="align-middle">
                                             @if (ViewBag.ParametroProduto == "Produto_asc")
                                             {
-                                                <i style="font-size:1.1em;" class="fas fa-sort-up pr-actionlink"></i>
-                                                @Html.ActionLink("Produtos", "EditAliqIcmsVenVarContMassa",
-                                                                                  new
-                                                                                  {
-                                                                                      filtroCorrente = ViewBag.FiltroCorrente,
-                                                                                      numeroLinhas = ViewBag.NumeroLinhas,
-                                                                                      ordenacao = "Produto_desc",
-                                                                                      filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
-                                                                                      filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
-                                                                                      filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
-                                                                                      filtroSetor = ViewBag.FiltroCorrenteSetor,
-                                                                                      filtroCate = ViewBag.FiltroCorrenteCate,
-                                                                                      filtraPor = ViewBag.FiltroFiltraPor,
-                                                                                      opcao = TempData["opcao"].ToString()
-                                                                                  }) }
-                                            else
-                                            {
-                                                <i style="font-size:1.1em;" class="fas fa-sort-down pr-actionlink"></i>
-                                                @Html.ActionLink("Produtos", "EditAliqIcmsVenVarContMassa",
-                                                                                  new
-                                                                                  {
-                                                                                      filtroCorrente = ViewBag.FiltroCorrente,
-                                                                                      numeroLinhas = ViewBag.NumeroLinhas,
-                                                                                      ordenacao = "Produto_asc",
-                                                                                      filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
-                                                                                      filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
-                                                                                      filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
-                                                                                      filtroSetor = ViewBag.FiltroCorrenteSetor,
-                                                                                      filtroCate = ViewBag.FiltroCorrenteCate,
-                                                                                      filtraPor = ViewBag.FiltroFiltraPor,
-                                                                                      opcao = TempData["opcao"].ToString()
-                                                                                  })}
+                                    <i style="font-size:1.1em;" class="fas fa-sort-up pr-actionlink"></i>
+                                                    @Html.ActionLink("Produtos", "EditAliqIcmsVenVarContMassa",
+                                                                                           new
+                                                                                           {
+                                                                                               filtroCorrente = ViewBag.FiltroCorrente,
+                                                                                               numeroLinhas = ViewBag.NumeroLinhas,
+                                                                                               ordenacao = "Produto_desc",
+                                                                                               filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
+                                                                                               filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                                                                               filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                                                                               filtroSetor = ViewBag.FiltroCorrenteSetor,
+                                                                                               filtroCate = ViewBag.FiltroCorrenteCate,
+                                                                                               filtraPor = ViewBag.FiltroFiltraPor,
+                                                                                               filtraCST = ViewBag.FiltroCST,
+                                                                                               opcao = TempData["opcao"].ToString()
+                                                                                           }) }
+                                                else
+                                                {
+                                    <i style="font-size:1.1em;" class="fas fa-sort-down pr-actionlink"></i>
+                                                    @Html.ActionLink("Produtos", "EditAliqIcmsVenVarContMassa",
+                                                                                           new
+                                                                                           {
+                                                                                               filtroCorrente = ViewBag.FiltroCorrente,
+                                                                                               numeroLinhas = ViewBag.NumeroLinhas,
+                                                                                               ordenacao = "Produto_asc",
+                                                                                               filtroCorrenteAliq = ViewBag.FiltroCorrenteAliq,
+                                                                                               filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                                                                               filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                                                                               filtroSetor = ViewBag.FiltroCorrenteSetor,
+                                                                                               filtroCate = ViewBag.FiltroCorrenteCate,
+                                                                                               filtraPor = ViewBag.FiltroFiltraPor,
+                                                                                               filtraCST = ViewBag.FiltroCST,
+                                                                                               opcao = TempData["opcao"].ToString()
+                                                                                           })}
                                         </th>
                                         @if (ViewBag.FiltrarPor == "Setor")
                                         {
-                                            <th scope="col">Setor</th>
- }
-                                        else
-                                        {
-                                            <th scope="col">Categoria</th>
-}
+                                    <th scope="col">Setor</th> }
+                                                else
+                                                {
+                                    <th scope="col">Categoria</th>}
                                         <th class="align-middle">
                                             CEST
                                         </th>
@@ -89,6 +89,10 @@
                                         <th class="align-middle">
                                             NCM
                                         </th>
+                                        <th class="align-middle text-center">
+                                            CST
+                                        </th>
+
 
                                         <th class="align-middle text-center">
                                             Aliquota
@@ -102,41 +106,42 @@
                                     @foreach (var item in Model)
                                     {
 
-                                <tr class="pr-td">
-                                    <td style="width:3%" class="prn-borderEspecial2">
-                                        @Html.DisplayFor(modelItem => item.ID)
-                                    </td>
-                                    <td style="width:10%" class="prn-borderEspecial2">
-                                        @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
-                                    </td>
-                                    <td style="width:35%" class="prn-borderEspecial2">
-                                        @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
-                                    </td>
-                                    @if (ViewBag.FiltrarPor == "Setor")
-                                    {
-                                        <td style="width:30%" class="text-left prn-borderEspecial2">
-                                            @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
+                                    <tr class="pr-td">
+                                        <td style="width:3%" class="prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.ID)
                                         </td>
-                                    }
-                                    else
-                                    {
-                                        <td style="width:30%" class="text-left prn-borderEspecial2">
-                                            @Html.DisplayFor(modelItem => item.CATEGORIA_DESCRICAO)
+                                        <td style="width:10%" class="prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.COD_BARRAS_PRODUTO)
                                         </td>
-                                    }
-                                    <td style="width:5%" class="prn-borderEspecial2">
-                                        @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
-                                    </td>
-                                    <td style="width:5%" class="prn-borderEspecial2">
-                                        @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
-                                    </td>
-                                    <td class="text-center prn-borderEspecial2" style="width:5%">
-                                        @Html.DisplayFor(modelItem => item.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL)
-                                    </td>
+                                        <td style="width:35%" class="prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.DESCRICAO_PRODUTO)
+                                        </td>
+                                        @if (ViewBag.FiltrarPor == "Setor")
+                                        {
+                                    <td style="width:30%" class="text-left prn-borderEspecial2">
+                                        @Html.DisplayFor(modelItem => item.DESCRICAO_SETOR_PRODUTO)
+                                    </td> }
+                                                    else
+                                                    {
+                                    <td style="width:30%" class="text-left prn-borderEspecial2">
+                                        @Html.DisplayFor(modelItem => item.CATEGORIA_DESCRICAO)
+                                    </td>}
+                                        <td style="width:5%" class="prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.CEST_PRODUTO)
+                                        </td>
+                                        <td style="width:5%" class="prn-borderEspecial2">
+                                            @Html.DisplayFor(modelItem => item.NCM_PRODUTO)
+                                        </td>
+                                        <td style="width:5%" class="prn-borderEspecial2 text-center">
+                                            @Html.DisplayFor(modelItem => item.CST_VENDA_ATA_SIMP_NACIONAL)
+                                        </td>
+                                        <td class="text-center prn-borderEspecial2" style="width:5%">
+                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL)
+                                        </td>
 
 
 
-                                </tr>}
+                                    </tr>}
                                 </tbody>
 
                             </table>
@@ -144,7 +149,7 @@
                             <div class="d-flex">
                                 <div class="mr-auto p-2">
                                     <p class="pr-fontanternativa">
-                                        <span class="pr-fontalternativa"> Página @(Model.PageCount<Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                                        <span class="pr-fontalternativa"> Página @(Model.PageCount<Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                                     </p>
                                 </div>
 
@@ -159,6 +164,11 @@
                                         numeroLinhas = ViewBag.NumeroLinhas,
                                         filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
                                         filtroCorrenteCEST = ViewBag.FiltroCorrenteCEST,
+                                        filtroSetor = ViewBag.FiltroCorrenteSetor,
+                                        ordenacao = ViewBag.ParametroProduto,
+                                        filtroCate = ViewBag.FiltroCorrenteCate,
+                                        filtraPor = ViewBag.FiltroFiltraPor,
+                                        filtraCST = ViewBag.FiltroCST,
                                         opcao = TempData["opcao"].ToString()
                                     }),
                                     new PagedListRenderOptions()
