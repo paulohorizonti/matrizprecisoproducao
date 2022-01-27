@@ -16,6 +16,10 @@ namespace MatrizTributaria.Controllers
         List<Produto> prod;
         List<Produto> prodMTX = new List<Produto>();
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>(); //TESTE COM A VIEW DA TRIBUTAÇÃO
+        List<Produto> produtosMTX = new List<Produto>();
+        //origem e destino
+        string ufOrigem = "";
+        string ufDestino = "";
         public ProdutoController()
         {
             db = new MatrizDbContext();
@@ -423,34 +427,28 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
             //chmar action auxiliar para verificar e carregar a tempdata com a lista
-            //VerificaTempDataProd();
-            VerificaTempData();
+            //montar select estado origem e destino
+            
 
-         
-            ///*Código de Barras*/
-            //ViewBag.CodBarras = this.prodMTX.Count(a=>a.codBarras !=0);
-            //ViewBag.CodBarrasNull = this.prodMTX.Count(a => a.codBarras == 0);
+            //verifica carregamento da tabela
+            VerificaTempDataProd();
 
-            ViewBag.CodBarras = this.tribMTX.Count(a => a.COD_BARRAS_PRODUTO != "0");
-            ViewBag.CodBarrasNull = this.tribMTX.Count(a => a.COD_BARRAS_PRODUTO == "0");
+           
 
 
+            ViewBag.CodBarras = this.prodMTX.Count(a => a.codBarras.ToString() != "0");
+            ViewBag.CodBarrasNull = this.prodMTX.Count(a => a.codBarras.ToString() == "0");
 
-            /*Cest*/
-            //ViewBag.Cest = this.prodMTX.Count(a => a.cest != null);
-            //ViewBag.CestNull = this.prodMTX.Count(a => a.cest == null);
 
-            ViewBag.Cest = this.tribMTX.Count(a => a.CEST_PRODUTO != null);
-            ViewBag.CestNull = this.tribMTX.Count(a => a.CEST_PRODUTO == null);
+            ViewBag.Cest = this.tribMTX.Count(a => a.CEST_PRODUTO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CestNull = this.tribMTX.Count(a => a.CEST_PRODUTO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
 
-            /*Ncm*/
-            //ViewBag.Ncm = this.prodMTX.Count(a => a.ncm != null);
-            //ViewBag.NcmNull = this.prodMTX.Count(a => a.ncm == null);
+            
 
-            ViewBag.Ncm = this.tribMTX.Count(a => a.NCM_PRODUTO != null);
-            ViewBag.NcmNull = this.tribMTX.Count(a => a.NCM_PRODUTO == null);
+            ViewBag.Ncm = this.tribMTX.Count(a => a.NCM_PRODUTO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.NcmNull = this.tribMTX.Count(a => a.NCM_PRODUTO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             return View();
@@ -1258,7 +1256,26 @@ namespace MatrizTributaria.Controllers
 
         //Alterar Codigo de Barras
         [HttpGet]
-        public ActionResult EditCodBarrasMassa(string opcao, string ordenacao, string procurarPor, string filtroCorrente, int? page, int? numeroLinhas)
+        public ActionResult EditCodBarrasMassa(
+            string origem,
+            string destino,
+            string opcao,
+            string param,
+            string ordenacao,
+            string qtdNSalvos,
+            string qtdSalvos,
+            string procuraCate,
+            string filtroCate,
+            string procuraNCM,
+            string procuraCEST,
+            string procurarPor, 
+            string filtroCorrente,
+            string filtroCorrenteNCM,
+            string filtroCorrenteCEST,
+            string filtraPor,
+            string filtroFiltraPor,
+            int? page,
+            int? numeroLinhas)
         {
             /*Verificar a sessão*/
             if (Session["usuario"] == null)
@@ -1266,6 +1283,9 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
 
             }
+
+            //variavel auxiliar
+            string resultado = param;
             //Auxilia na conversão para fazer a busca pelo codigo de barras
             /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
              ele será atribuido, caso contrario será o valor da variavel procurar por*/
@@ -1275,94 +1295,91 @@ namespace MatrizTributaria.Controllers
             long codBarrasL = 0;
             bool canConvert = long.TryParse(codBarras, out codBarrasL);
 
-            //ViewBag para persistir o numero de linhas 
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //categoria
+            procuraCate = (procuraCate == "") ? null : procuraCate;
+            procuraCate = (procuraCate == "null") ? null : procuraCate;
+            procuraCate = (procuraCate != null) ? procuraCate : null;
+
+            //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
 
-            //Ordenação
-            ViewBag.Ordenacao = ordenacao;
-            ViewBag.ParametroProduto = String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : ""; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            //ordenação
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
 
             /*Verifica a opção e atribui a uma tempdata para continuar salva*/
-            if (opcao != null)
-            {
-                TempData["opcao"] = opcao;
-            }
-            else
-            {
-                opcao = TempData["opcao"].ToString();
-            }
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
+            TempData["opcao"] = (opcao != null) ? opcao : TempData["opcao"];
 
             //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
             TempData.Keep("opcao");
 
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraCate != null)  ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
-            if (procurarPor != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                procurarPor = filtroCorrente;
-            }
+            //atrbui filtro corrente caso alguma procura esteja nulla
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
 
-            //Atribui ao filtro corrente
+            //View pag para filtros
             ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
 
-
-            /*Para tipar */
-            var prod1 = from s in db.Produtos select s; //variavel carregado de produtos
-
-            //Verifica qual a opção da tabela
-            if (opcao == "Com Cod. Barras")
+            ViewBag.FiltroCorrenteCate = procuraCate;
+            ViewBag.FiltroFiltraPor = filtraPor;
+            if (procuraCate != null)
             {
-                prod1 = prod1.Where(s => s.codBarras != 0);
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+            }
+            
 
-                //Verifica se tem busca
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+            //criar o temp data da lista ou recupera-lo
+            VerificaTempDataProd();
 
-                }
+                       
 
-                //Verifica a Ordenação
-                switch (ordenacao)
-                {
-                    case "Produto_desc":
-                        prod1 = prod1.OrderByDescending(s => s.descricao);
-                        break;
-                    default:
-                        prod1 = prod1.OrderBy(s => s.Id);
-                        break;
+            //ViewBag com a opcao
+            ViewBag.Opcao = opcao;
 
 
-                }
+            switch (opcao)
+            {
+                case "Com Cod. Barras":
+                    this.prodMTX = this.prodMTX.Where(s => s.codBarras.ToString() != "0").ToList();
+                    break;
+                case "Sem Cod. Barras":
+                    this.prodMTX = this.prodMTX.Where(s => s.codBarras.ToString() == "0").ToList();
+                    break;
+            }
+
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            this.prodMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraCate, prodMTX);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.prodMTX = this.prodMTX.OrderByDescending(s => s.descricao).ToList();
+                    break;
+                case "Produto_asc":
+                    this.prodMTX = this.prodMTX.OrderBy(s => s.descricao).ToList();
+                    break;
+                case "Id_desc":
+                    this.prodMTX = this.prodMTX.OrderBy(s => s.Id).ToList();
+                    break;
+                default:
+                    this.prodMTX = this.prodMTX.OrderBy(s => s.descricao).ToList();
+                    break;
+
 
             }
-            else
-            {
-                prod1 = prod1.Where(s => s.codBarras == 0);
 
-
-                //Verifica se tem busca
-                if (!String.IsNullOrEmpty(procurarPor))
-                {
-
-                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
-
-                }
-                switch (ordenacao)
-                {
-                    case "Produto_desc":
-                        prod1 = prod1.OrderByDescending(s => s.descricao);
-                        break;
-
-                    default:
-                        prod1 = prod1.OrderBy(s => s.Id);
-                        break;
-
-
-                }
-            }//fim else
 
             //montar a pagina
             int tamanhoPagina = 0;
@@ -1373,8 +1390,15 @@ namespace MatrizTributaria.Controllers
 
 
             int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
 
-            return View(prod1.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
+            return View(prodMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
 
         }
 
@@ -1473,6 +1497,43 @@ namespace MatrizTributaria.Controllers
 
             return new EmptyResult();
         }
+
+
+        private EmptyResult VerificaOriDest(string origem, string destino)
+        {
+
+            if (origem == null || origem == "")
+            {
+                TempData["UfOrigem"] = (TempData["UfOrigem"] == null) ? "TO" : TempData["UfOrigem"].ToString();
+                TempData.Keep("UfOrigem");
+            }
+            else
+            {
+                TempData["UfOrigem"] = origem;
+                TempData.Keep("UfOrigem");
+
+            }
+
+            if (destino == null || destino == "")
+            {
+                TempData["UfDestino"] = (TempData["UfDestino"] == null) ? "TO" : TempData["UfDestino"].ToString();
+                TempData.Keep("UfDestino");
+            }
+            else
+            {
+                TempData["UfDestino"] = destino;
+                TempData.Keep("UfDestino");
+            }
+
+
+
+
+
+            this.ufOrigem = TempData["UfOrigem"].ToString();
+            this.ufDestino = TempData["UfDestino"].ToString();
+
+            return new EmptyResult();
+        }
         //actions auxiliares // ponto de ajuste: busca por aliquota
         private List<TributacaoGeralView> ProcurarPor(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, List<TributacaoGeralView> tribMTX)
         {
@@ -1494,6 +1555,36 @@ namespace MatrizTributaria.Controllers
 
             return tribMTX;
         }
+        private List<Produto> ProcurarPorII(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, string procuraCate, List<Produto>prodMTX)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                this.prodMTX = (codBarrasL != 0) ? (prodMTX.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString()))).ToList() : prodMTX = (prodMTX.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()))).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                this.prodMTX = prodMTX.Where(s => s.cest == procuraCEST).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                this.prodMTX = prodMTX.Where(s => s.ncm == procuraNCM).ToList();
+
+            }
+
+            
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                this.prodMTX = this.prodMTX.Where(s => s.idCategoria.ToString() == procuraCate).ToList();
+
+
+            }
+
+            return this.prodMTX;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
