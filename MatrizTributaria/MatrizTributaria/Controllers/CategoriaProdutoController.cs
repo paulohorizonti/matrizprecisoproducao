@@ -121,7 +121,7 @@ namespace MatrizTributaria.Controllers
 
 
         // GET: Produtos/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, string msg)
         {
             if (Session["usuario"] == null)
             {
@@ -133,6 +133,10 @@ namespace MatrizTributaria.Controllers
                 int par = 3;
                 return RedirectToAction("../Erro/Erro", new { param = par });
             }
+            if(msg != null)
+            {
+                ViewBag.Menssagem = "Categoria não pode ser excluída, pertence a um ou mais produtos!!";
+            }
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             CategoriaProduto categoria = db.CategoriaProdutos.Find(id);
@@ -140,16 +144,22 @@ namespace MatrizTributaria.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.Id = id;
             return View(categoria);
 
         }
         // POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int? id)
         {
             CategoriaProduto categoria = db.CategoriaProdutos.Find(id);
+           var prodCat = (from a in db.Produtos where a.idCategoria == id select a.Id).FirstOrDefault();
+            if(prodCat != 0)
+            {
+               
+                return RedirectToAction("Delete", new { msg = "Categoria não pode ser excluída, pertence a um ou mais produtos!!" });
+            }
             db.CategoriaProdutos.Remove(categoria);
             db.SaveChanges();
             return RedirectToAction("Index");
