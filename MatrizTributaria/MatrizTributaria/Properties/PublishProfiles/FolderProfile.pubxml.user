@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2022-01-27T04:03:13.0084212Z;True|2022-01-17T11:17:02.1352778-03:00;True|2022-01-10T09:08:59.5729983-03:00;True|2022-01-06T09:42:32.9088717-03:00;True|2022-01-04T19:47:37.2239780-03:00;True|2021-12-28T14:51:11.9311422-03:00;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
+    <History>True|2022-02-01T04:29:22.9629884Z;True|2022-01-27T01:03:13.0084212-03:00;True|2022-01-17T11:17:02.1352778-03:00;True|2022-01-10T09:08:59.5729983-03:00;True|2022-01-06T09:42:32.9088717-03:00;True|2022-01-04T19:47:37.2239780-03:00;True|2021-12-28T14:51:11.9311422-03:00;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -90,31 +90,31 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/Shared/_Layout.cshtml">
-      <publishTime>01/13/2022 15:57:30</publishTime>
+      <publishTime>01/31/2022 22:28:05</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseCST.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/31/2022 23:59:05</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseCSTEnt.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>02/01/2022 01:08:22</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseIcmsEntrada.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/31/2022 22:25:28</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnalisePisCofins.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/31/2022 23:32:32</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseProd.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>02/01/2022 00:44:35</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseRedBaseCalEnt.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/31/2022 22:59:01</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseRedBaseCalSai.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/31/2022 09:58:12</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseTributaria.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/31/2022 08:40:16</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/CreateUsuarioCliente.cshtml">
       <publishTime>01/13/2022 16:53:13</publishTime>
@@ -207,10 +207,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/04/2022 19:01:07</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVendaVarContMassa.cshtml">
-      <publishTime>01/04/2022 18:21:45</publishTime>
+      <publishTime>01/31/2022 09:27:50</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVendaVarfCFMassa.cshtml">
-      <publishTime>01/04/2022 17:52:00</publishTime>
+      <publishTime>01/31/2022 09:28:46</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVendaVarSTCFMassa.cshtml">
       <publishTime>01/04/2022 17:54:27</publishTime>
@@ -222,67 +222,67 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteCestMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>02/01/2022 00:53:06</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteCestMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteNcmMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>02/01/2022 00:50:20</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteNcmMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteProdMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>02/01/2022 00:47:59</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteProdMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqEntCofinsMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>01/31/2022 23:50:47</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqEntCofinsMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqEntradaPisMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>01/31/2022 23:36:50</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqEntradaPisMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsCompAtaMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>01/31/2022 23:11:09</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsCompAtaMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsCompIndMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>01/31/2022 23:04:50</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsCompIndMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsCompSNMassa.cshtml">
-      <publishTime>01/04/2022 19:01:07</publishTime>
+      <publishTime>01/31/2022 23:18:12</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsCompSNMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTCompAtaMassa.cshtml">
-      <publishTime>01/04/2022 19:01:06</publishTime>
+      <publishTime>01/31/2022 23:15:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTCompAtaMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTCompIndMassa.cshtml">
-      <publishTime>01/04/2022 19:01:06</publishTime>
+      <publishTime>01/31/2022 23:07:57</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTCompIndMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTCompSNMassa.cshtml">
-      <publishTime>01/04/2022 19:01:06</publishTime>
+      <publishTime>01/31/2022 23:21:36</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqRedBasCalcIcmsSTCompSNMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -336,85 +336,85 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqSaiCofinsMassa.cshtml">
-      <publishTime>01/04/2022 19:01:06</publishTime>
+      <publishTime>01/31/2022 23:54:05</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqSaiCofinsMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqSaidaPisMassa.cshtml">
-      <publishTime>01/04/2022 19:01:06</publishTime>
+      <publishTime>01/31/2022 23:40:06</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliAliqSaidaPisMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstCompAtaMassa.cshtml">
-      <publishTime>01/04/2022 19:01:06</publishTime>
+      <publishTime>02/01/2022 01:17:26</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstCompAtaMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstCompIndMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 01:11:27</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstCompIndMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstCompSNMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 01:13:59</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstCompSNMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstEntradaPisCofinsMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:04:35</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstEntradaPisCofinsMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstNfeAtaMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 01:23:21</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstNfeAtaMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstNfeIndMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 01:20:18</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstNfeIndMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstNfeSNMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 01:26:21</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstNfeSNMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstSaidaPisCofinsMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:08:05</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstSaidaPisCofinsMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaAtaContMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:19:21</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaAtaContMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaAtaSNMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:22:51</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaAtaSNMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaVarCFMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:12:33</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaVarCFMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaVarContMassa.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:16:25</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EdtCliCstVendaVarContMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -435,7 +435,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/04/2022 19:01:05</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaProduto2.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/01/2022 00:59:52</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaRedBasCalEntrada.cshtml">
       <publishTime>01/04/2022 19:01:05</publishTime>
@@ -483,10 +483,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>01/27/2022 01:02:25</publishTime>
+      <publishTime>02/01/2022 01:28:58</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>01/27/2022 01:02:25</publishTime>
+      <publishTime>02/01/2022 01:28:58</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7311,10 +7311,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/10/2022 10:08:24</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsCST.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 10:01:46</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsIcmsEntrada.cshtml">
-      <publishTime>01/20/2022 15:09:16</publishTime>
+      <publishTime>01/27/2022 08:57:44</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsIcmsSaida.cshtml">
       <publishTime>01/20/2022 15:04:20</publishTime>
@@ -7324,6 +7324,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Views/Acoes/CamposComunsPisCofins.cshtml">
       <publishTime>01/26/2022 15:44:01</publishTime>
+    </File>
+    <File Include="Views/Acoes/CamposComunsProd.cshtml">
+      <publishTime>01/27/2022 17:44:18</publishTime>
     </File>
     <File Include="Views/Acoes/CamposComunsProdutos .cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7336,6 +7339,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Views/Acoes/CamposSelecionaUF.cshtml">
       <publishTime>01/18/2022 17:30:53</publishTime>
+    </File>
+    <File Include="Views/Acoes/TheadPadrao.cshtml">
+      <publishTime>01/27/2022 11:33:02</publishTime>
     </File>
     <File Include="Views/Acoes/UsuarioCliente.cshtml">
       <publishTime>01/17/2022 10:36:02</publishTime>
@@ -7527,7 +7533,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Produto/EditCodBarrasMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 17:35:18</publishTime>
     </File>
     <File Include="Views/Produto/EditCodBarrasMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7545,7 +7551,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Produto/GraficoAnaliseProdutos.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 17:17:42</publishTime>
     </File>
     <File Include="Views/Produto/Index.cshtml">
       <publishTime>01/10/2022 10:27:53</publishTime>
@@ -7569,7 +7575,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>01/26/2022 11:11:08</publishTime>
+      <publishTime>01/27/2022 09:59:01</publishTime>
     </File>
     <File Include="Views/Tributacao/Create.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7710,73 +7716,73 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraAtacadoMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 15:23:27</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraAtacadoMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraIndustriaMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 15:17:08</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraIndustriaMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraSNMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 15:27:57</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstCompraSNMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeAtaMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 15:39:57</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeAtaMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeIndMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 15:31:54</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeIndMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeSNMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 16:05:49</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstNfeSNMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsEntradaMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 11:49:29</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsEntradaMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsSaidaMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 10:32:41</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstPisCofinsSaidaMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaContMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 11:37:52</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaContMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaSNMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 11:37:40</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaAtaSNMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarCFMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 10:29:46</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarCFMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarContMassa.cshtml">
-      <publishTime>01/03/2022 15:46:17</publishTime>
+      <publishTime>01/27/2022 10:49:05</publishTime>
     </File>
     <File Include="Views/Tributacao/EditCstVendaVarContMassaModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7869,13 +7875,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/26/2022 14:21:45</publishTime>
     </File>
     <File Include="Views/Tributacao/GfRedBCalcIcmsSaida.cshtml">
-      <publishTime>01/26/2022 09:34:48</publishTime>
+      <publishTime>01/31/2022 08:38:18</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoAliPisCofins.cshtml">
       <publishTime>01/26/2022 15:20:18</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoCstEntrada.cshtml">
-      <publishTime>01/26/2022 17:46:25</publishTime>
+      <publishTime>01/27/2022 16:15:20</publishTime>
     </File>
     <File Include="Views/Tributacao/GraficoCstSaida.cshtml">
       <publishTime>01/26/2022 17:50:02</publishTime>
@@ -7920,7 +7926,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/27/2022 01:02:40</publishTime>
+      <publishTime>02/01/2022 01:29:00</publishTime>
     </File>
     <File Include="webfonts/fa-brands-400.eot">
       <publishTime>01/03/2022 15:46:17</publishTime>

@@ -12,7 +12,7 @@
 <div id="card-analise" class="container-fluid pr-container-2 pr-card-cad">
     <div class="card">
         <div class="card-header">
-            ANALISE:Produto <strong>"@ViewBag.Mensagem"</strong> <a data-toggle="tooltip" data-placement="right" title="Ir para Gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("AnaliseTributaria","TributacaoEmpresa")"><i style="font-size:1.3em;" class="fas fa-chart-pie"></i>  </a>
+            ANALISE:Produto <strong>"@ViewBag.Mensagem"</strong> Origem: "@ViewBag.UfOrigem" - Destino: "@ViewBag.UfDestino" <a data-toggle="tooltip" data-placement="right" title="Ir para Gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("AnaliseTributaria","TributacaoEmpresa")"><i style="font-size:1.3em;" class="fas fa-chart-pie"></i>  </a>
             <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="editarSelecionadosIcmsVenVarContCliente" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
             <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="editarSelecionadosIcmsVenVarContClienteManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
 
@@ -37,6 +37,7 @@
                                             <th>
                                                 Registro
                                             </th>
+                                           
                                             <th>
                                                 Código de Barras
                                             </th>
@@ -46,7 +47,7 @@
                                             <th>
                                                 Cest
                                             </th>
-                                            <th  class="text-center">
+                                            <th class="text-center">
                                                 Alíquota no Cliente
                                             </th>
                                             <th class="text-center">
@@ -62,6 +63,7 @@
                                             <td style="width:4%;">
                                                 @Html.DisplayFor(modelItem => item.TE_ID)
                                             </td>
+                                           
                                             <td style="width:8%;">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
                                             </td>
@@ -74,56 +76,53 @@
 
                                             @if (item.ALIQ_ICMS_VENDA_VAREJO_CONT == null || item.Aliq_Icms_Venda_Varejo_Cont_INTERNO == null)
                                             {
-                                                <td style="text-align:center; width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                if (item.ALIQ_ICMS_VENDA_VAREJO_CONT > item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)
-                                                {
+                                        <td style="text-align:center; width:10%;">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
+                                        </td>
+ }
+                                    else
+                                    {
+                                        if (item.ALIQ_ICMS_VENDA_VAREJO_CONT > item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)
+                                        {
 
-                                                    <td style="text-align:center; width:10%;" class="pr-td-maior">
-                                                        @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    if (item.ALIQ_ICMS_VENDA_VAREJO_CONT < item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)
-                                                    {
-                                                        <td style="text-align:center; width:10%;" class="pr-td-menor">
-                                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
-                                                        </td>
+                                        <td style="text-align:center; width:10%;" class="pr-td-maior">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
+                                        </td>
+ }
+                                    else
+                                    {
+                                        if (item.ALIQ_ICMS_VENDA_VAREJO_CONT < item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)
+                                        {
+                                        <td style="text-align:center; width:10%;" class="pr-td-menor">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
+                                        </td>
+ }
+                                    else
+                                    {
 
-                                                    }
-                                                    else
-                                                    {
-
-                                                        if (item.ALIQ_ICMS_VENDA_VAREJO_CONT == item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)
-                                                        {
-                                                            <td style="text-align:center; width:10%;" class="pr-td-igual">
-                                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
-                                                            </td>
-
-                                                        }
-                                                        else
-                                                        {
-                                                            if (item.ALIQ_ICMS_VENDA_VAREJO_CONT != null && item.Aliq_Icms_Venda_Varejo_Cont_INTERNO == null)
-                                                            {
-                                                                <td style="text-align:center; width:10%;">
-                                                                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
-                                                                </td>
-
-                                                            }
+                                        if (item.ALIQ_ICMS_VENDA_VAREJO_CONT == item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)
+                                        {
+                                        <td style="text-align:center; width:10%;" class="pr-td-igual">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
+                                        </td>
+ }
+                                    else
+                                    {
+                                        if (item.ALIQ_ICMS_VENDA_VAREJO_CONT != null && item.Aliq_Icms_Venda_Varejo_Cont_INTERNO == null)
+                                        {
+                                        <td style="text-align:center; width:10%;">
+                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_VENDA_VAREJO_CONT)
+                                        </td>
+}
 
 
-                                                        }
+                                }
 
 
-                                                    }
+                            }
 
-                                                }
-                                            }
+                        }
+                    }
 
                                             <td style="text-align:center; width:10%;">
                                                 @Html.DisplayFor(modelItem => item.Aliq_Icms_Venda_Varejo_Cont_INTERNO)

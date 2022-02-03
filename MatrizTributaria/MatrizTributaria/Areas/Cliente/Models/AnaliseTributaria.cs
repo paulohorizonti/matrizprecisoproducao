@@ -196,6 +196,13 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("REGIME_2560")]
         public int? REGIME_2560 { get; set; }
 
+        [Column("UF_ORIGEM")]
+        public string UF_ORIGEM { get; set; }
+
+        [Column("UF_DESTINO")]
+        public string UF_DESTINO { get; set; }
+
+
         [Column("Cst_Entrada_PisCofins_INTERNO")]
         public int? Cst_Entrada_PisCofins_INTERNO { get; set; }
 
