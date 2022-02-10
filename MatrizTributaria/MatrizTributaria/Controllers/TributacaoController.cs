@@ -105,7 +105,7 @@ namespace MatrizTributaria.Controllers
         //}
 
         //detalhe
-        public ActionResult Index(string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM,
+        public ActionResult Index(string origem, string destino, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM,
             string procuraCEST, string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string procuraCate,
             string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtronulo, 
             string auditadosNCM, string filtraPor, string filtroCorrenteAudNCM, string procurarPorAliq, string filtroCorrenteAliq,
@@ -210,6 +210,26 @@ namespace MatrizTributaria.Controllers
             }
 
             VerificaTempData();
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
+            //Aplica a origem e destino selecionada
+            this.tribMTX = this.tribMTX.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
 
             //buscar os auditados
             switch (auditadosNCM)

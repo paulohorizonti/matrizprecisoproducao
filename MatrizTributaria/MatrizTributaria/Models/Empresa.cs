@@ -52,6 +52,11 @@ namespace MatrizTributaria.Models
         [Column("email")]
         public string email { get; set; }
 
+        [Required(ErrorMessage = "Selecione uma Software House", AllowEmptyStrings = false)]
+        [Column("id_softwarehouse")]
+        [ForeignKey("SoftwareHouse")]
+        public int idSofwareHouse { get; set; }
+
         /*As datas serão informadas automaticamente no momento da criação do registro
          e quando houver alteração*/
         [Column("datacad")]
@@ -63,6 +68,9 @@ namespace MatrizTributaria.Models
         [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usuario> usuario { get; set; }
+
+        [JsonIgnore]
+        public virtual SoftwareHouse SoftwareHouse { get; set; }
 
     }
 }

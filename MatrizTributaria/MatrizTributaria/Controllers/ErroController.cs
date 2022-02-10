@@ -45,7 +45,11 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.Mensagem = "Erro ao acessar o banco de dados, verifique sua conexão e tente novamente";
             }
-           
+            if (param == 8)
+            {
+                ViewBag.Mensagem = "Cnpj já cadastrado para uma software house";
+            }
+
             return View("Index");
         }
         public ActionResult ErroLogin(int? param)

@@ -17,7 +17,7 @@
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
 
                     <div class="col-lg-12">
@@ -25,168 +25,204 @@
 
                             @using (Html.BeginForm("TabelaProduto", "TributacaoEmpresa", FormMethod.Get, new { @class = "form-row" }))
                             {
-                                <div class="form-group col-lg-7">
-                                    <label class="pr-fontealternativa">Filtro</label>
-                                    <div class="input-group input-group-sm">
-                                        <select class="form-control form-control-sm" id="parFiltro" name="parFiltro" style="width:45px;">
+                        <div class="form-group col-lg-2 pt-1">
+                            <label class="pr-fontalternativa">UF Origem</label>
 
-                                            @if (ViewBag.ParFiltro == 3)
-                                            {
+                            <div class="input-group input-group-sm">
 
+                                <select class="form-control form-control-sm dropdown prn-select" id="origem" name="origem">
+                                    <option value="null">UF de Origem</option>
+                                    @foreach (var item in ViewBag.EstadosOrigem)
+                                    {
+                                        if (item.uf == ViewBag.UfOrigem)
+                                        {
+                                            <option selected value="@item.uf">@item.uf</option>
+ }
+                                        else
+                                        {
+                                            <option value="@item.uf">@item.uf</option>
+}
 
-                                                <option selected value="3">Por Cód. de Barras ou Descrição</option>
-
-
-                                                <option value="2">Por NCM</option>
-
-
-                                                <option value="1">Por CEST</option>
-                                            }
-                                            else
-                                            {
-                                                if (ViewBag.ParFiltro == 2)
-                                                {
-
-                                                    <option value=3>Por Cód. de Barras ou Descrição </option>
+                                    }
+                                </select>
 
 
-                                                    <option selected value="2">Por NCM</option>
+                            </div><!--fim div input-->
+
+                        </div><!--fim coluna 2-->
+
+                        <div class="form-group col-lg-2 pt-1">
+                            <label class="pr-fontalternativa">UF Destino</label>
+
+                            <div class="input-group input-group-sm">
+
+                                <select class="form-control form-control-sm dropdown prn-select" id="destino" name="destino">
+                                    <option value="null">UF de Destino</option>
+                                    @foreach (var item in ViewBag.EstadosDestinos)
+                                    {
+                                        if (item.uf == ViewBag.UfDestino)
+                                        {
+                                            <option selected value="@item.uf">@item.uf</option>
+ }
+                                        else
+                                        {
+                                            <option value="@item.uf">@item.uf</option>
+}
+
+                                    }
+                                </select>
 
 
-                                                    <option value="1">Por CEST</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value=3>Por Cód. de Barras ou Descrição </option>
+                                <div class="input-group-append">
+                                    <button data-toggle="tooltip" data-placement="right" title="Aplicar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
+                                        <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                                    </button>
+                                </div><!--fim do appende-->
+                            </div><!--fim div input-->
+                        </div><!--fim coluna 2-->
+                                        <div class="form-group col-lg-8">
+                                            <label class="pr-fontealternativa">Filtro</label>
+                                            <div class="input-group input-group-sm">
+                                                <select class="form-control form-control-sm" id="parFiltro" name="parFiltro" style="width:45px;">
+
+                                                    @if (ViewBag.ParFiltro == 3)
+                                                    {
 
 
-                                                    <option value="2">Por NCM</option>
+                                    <option selected value="3">Por Cód. de Barras ou Descrição</option>
 
 
-                                                    <option selected value="1">Por CEST</option>
-                                                }
-                                            }
+                                                        <option value="2">Por NCM</option>
 
 
-                                        </select>
-                                        <div class="input-group-append">
-                                            @*<input id="filtro" name="filtro" type="text" class="form-control form-control-sm" style="width:550px;"/>*@
-                                            @Html.TextBox("FiltroDados", (string)ViewBag.DadoFiltrar, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite descrição ou o código de Barras", style = "width:340px;" })
+                                                                            <option value="1">Por CEST</option> }
+                                                                                            else
+                                                                                            {
+                                                                                                if (ViewBag.ParFiltro == 2)
+                                                                                                {
+
+                                                                            <option value=3>Por Cód. de Barras ou Descrição </option>
+
+
+                                                                                                    <option selected value="2">Por NCM</option>
+
+
+                                                                                                                            <option value="1">Por CEST</option> }
+                                                                                                                                                else
+                                                                                                                                                {
+                                                                                                                            <option value=3>Por Cód. de Barras ou Descrição </option>
+
+
+                                                                                                                                                    <option value="2">Por NCM</option>
+
+
+                                                                                                                                                                            <option selected value="1">Por CEST</option>}
+                                                                                                                                                                                            }
+
+
+                                                </select>
+                                                <div class="input-group-append">
+                                                    @*<input id="filtro" name="filtro" type="text" class="form-control form-control-sm" style="width:550px;"/>*@
+                                                    @Html.TextBox("FiltroDados", (string)ViewBag.DadoFiltrar, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite descrição ou o código de Barras", style = "width:380px;" })
+
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo"
+                                                            type="submit" id="button-addon3">
+                                                        <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
 
                                         </div>
-                                        <div class="input-group-append">
-                                            <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo"
-                                                    type="submit" id="button-addon3">
-                                                <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
 
 
 
-                                <div class="form-group col-lg-3">
-                                    <label class="pr-fontealternativa">Selecionar</label>
-                                    <div class="input-group input-group-sm">
-                                        <select class="form-control form-control-sm" id="filtroSelect" name="filtroSelect">
+                                                        <div class="form-group col-lg-3">
+                                                            <label class="pr-fontealternativa">Selecionar</label>
+                                                            <div class="input-group input-group-sm">
+                                                                <select class="form-control form-control-sm" id="filtroSelect" name="filtroSelect">
 
-                                            @if (ViewBag.FiltroSelect == 1)
-                                            {
-
-
-                                                <option value="1" selected>Todos</option>
+                                                                    @if (ViewBag.FiltroSelect == 1)
+                                                                    {
 
 
-                                                <option value="2">Sem Correspondencia</option>
+                                                    <option value="1" selected>Todos</option>
 
 
+                                                                        <option value="2">Sem Correspondencia</option> }
+                                                                                        else
+                                                                                        {
+                                                                                            if (ViewBag.FiltroSelect == 2)
+                                                                                            {
 
-                                            }
-                                            else
-                                            {
-                                                if (ViewBag.FiltroSelect == 2)
-                                                {
-
-                                                    <option value="1">Todos</option>
-
-
-                                                    <option value="2" selected>Sem Correspondencia</option>
+                                                                        <option value="1">Todos</option>
 
 
+                                                                                                <option value="2" selected>Sem Correspondencia</option>}
 
-                                                }
-
-                                            }
-
-
-                                        </select>
-
-                                        <div class="input-group-append">
-                                            <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo"
-                                                    type="submit" id="button-addon4">
-                                                <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="form-group col-lg-2">
-                                    <label class="pr-fontealternativa">Linhas</label>
-                                    <div class="input-group input-group-sm">
-                                        <select class="form-control form-control-sm" id="numeroLinhas" name="numeroLinhas">
-
-                                            @if (ViewBag.NumeroLinhas == 5)
-                                            {
+                                                                                                                }
 
 
-                                                <option selected>5</option>
+                                                                </select>
+
+                                                                <div class="input-group-append">
+                                                                    <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo"
+                                                                            type="submit" id="button-addon4">
+                                                                        <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                                        <div class="form-group col-lg-2">
+                                                                            <label class="pr-fontealternativa">Linhas</label>
+                                                                            <div class="input-group input-group-sm">
+                                                                                <select class="form-control form-control-sm" id="numeroLinhas" name="numeroLinhas">
+
+                                                                                    @if (ViewBag.NumeroLinhas == 5)
+                                                                                    {
 
 
-                                                <option>15</option>
+                                                                    <option selected>5</option>
 
 
-                                                <option>25</option>
-                                            }
-                                            else
-                                            {
-                                                if (ViewBag.NumeroLinhas == 15)
-                                                {
-
-                                                    <option>5</option>
+                                                                                        <option>15</option>
 
 
-                                                    <option selected>15</option>
+                                                                                                            <option>25</option> }
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                if (ViewBag.NumeroLinhas == 15)
+                                                                                                                                {
+
+                                                                                                            <option>5</option>
 
 
-                                                    <option>25</option>
-                                                }
-                                                else
-                                                {
-                                                    <option>5</option>
-                                                    <option>15</option>
-                                                    <option selected>25</option>
-                                                }
-                                            }
+                                                                                                                                    <option selected>15</option>
 
 
-                                        </select>
-
-                                        <div class="input-group-append">
-                                            <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo"
-                                                    type="submit" id="button-addon3">
-                                                <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                                                                                                                                            <option>25</option> }
+                                                                                                                                                                                else
+                                                                                                                                                                                {
+                                                                                                                                                            <option>5</option>
+                                                                                                                                                                                    <option>15</option>
+                                                                                                                                                                                                            <option selected>25</option>}
+                                                                                                                                                                                                                            }
 
 
+                                                                                </select>
 
+                                                                                <div class="input-group-append">
+                                                                                    <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo"
+                                                                                            type="submit" id="button-addon3">
+                                                                                        <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
 
-                            }
+                                                                        </div>}
 
 
 

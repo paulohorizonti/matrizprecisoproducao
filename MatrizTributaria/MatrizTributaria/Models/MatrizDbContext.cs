@@ -16,6 +16,8 @@ namespace MatrizTributaria.Models
         public virtual DbSet<Empresa> Empresas { get; set; }
         public virtual DbSet<Estado> Estados { get; set; }
 
+        public virtual DbSet<SoftwareHouse> SoftwareHouses { get; set; }
+        public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<Versao> Versoes { get; set; }
 
         public virtual DbSet<Legislacao> Legislacoes { get; set; }

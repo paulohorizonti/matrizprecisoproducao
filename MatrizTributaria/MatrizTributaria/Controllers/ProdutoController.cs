@@ -419,6 +419,7 @@ namespace MatrizTributaria.Controllers
             return View(model);
         }
 
+        //produto nao tem origem e destino, é apenas o cadastro do produto
         [HttpGet]
         public ActionResult GraficoAnaliseProdutos()
         {
@@ -428,7 +429,8 @@ namespace MatrizTributaria.Controllers
             }
             //chmar action auxiliar para verificar e carregar a tempdata com a lista
             //montar select estado origem e destino
-            
+
+
 
             //verifica carregamento da tabela
             VerificaTempDataProd();
@@ -436,19 +438,21 @@ namespace MatrizTributaria.Controllers
            
 
 
+
+
             ViewBag.CodBarras = this.prodMTX.Count(a => a.codBarras.ToString() != "0");
             ViewBag.CodBarrasNull = this.prodMTX.Count(a => a.codBarras.ToString() == "0");
 
 
-            ViewBag.Cest = this.tribMTX.Count(a => a.CEST_PRODUTO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CestNull = this.tribMTX.Count(a => a.CEST_PRODUTO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.Cest = this.prodMTX.Count(a => a.cest != null);
+            ViewBag.CestNull = this.prodMTX.Count(a => a.cest == null);
 
 
 
             
 
-            ViewBag.Ncm = this.tribMTX.Count(a => a.NCM_PRODUTO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.NcmNull = this.tribMTX.Count(a => a.NCM_PRODUTO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.Ncm = this.prodMTX.Count(a => a.ncm != null);
+            ViewBag.NcmNull = this.prodMTX.Count(a => a.ncm == null);
 
 
             return View();
@@ -1338,12 +1342,27 @@ namespace MatrizTributaria.Controllers
             {
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
-            
 
-            //criar o temp data da lista ou recupera-lo
+
             VerificaTempDataProd();
 
-                       
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
 
             //ViewBag com a opcao
             ViewBag.Opcao = opcao;

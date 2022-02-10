@@ -16,23 +16,13 @@ namespace MatrizTributaria.Controllers
 
         //Objego context
        readonly MatrizDbContext db;
-        List<Usuario> listUser = new List<Usuario>();
+       List<Usuario> listUser = new List<Usuario>();
 
         public UsuarioController()
         {
             db = new MatrizDbContext();
         }
-        // GET: Usuario
-        //public ActionResult Index()
-        //{
-        //    if (Session["usuario"] == null)
-        //    {
-        //        return RedirectToAction("../Home/Login");
-        //    }
-        //    var usuario = db.Usuarios.ToList();
-        //    return View(usuario);
-        //}
-
+        
 
         public ActionResult Index(string param, string ordenacao, string qtdSalvos, string procurarPor, string procuraEmpresa,
             string filtroCorrente, string filtroEmpresa, int? page, int? numeroLinhas)
