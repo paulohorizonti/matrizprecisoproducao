@@ -1,4 +1,4 @@
-﻿@model MatrizTributaria.Models.SoftwareHouse
+﻿@model MatrizTributaria.Models.ViewModels.TokenViewModel
 @{
     ViewBag.Title = "GerarToken";
 }
@@ -15,7 +15,7 @@
                     <div class="col-12">
                         
                         <div class="container-fluid">
-                            @using (Html.BeginForm("GerarTokenSalvar", "Token", FormMethod.Get))
+                            @using (Html.BeginForm("GerarToken", "Token", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="form-group row">
@@ -60,53 +60,60 @@
 
                                 </div>
 
-                                <div class="form-row">
-                                    <div class="col-lg-2 mb-3">
+                                @*<div class="form-row">*@
+                                    @*<div class="col-lg-2 mb-3">
                                         <label class="pr-fonte-label" for="idSofwareHouse">Id:</label>
 
                                         @Html.TextBoxFor(m => m.Id, new { @class = "form-control form-control-sm", @readonly = true, @name = "idSofwareHouse", id = "idSofwareHouse" })
 
-                                    </div>
-                                    <div class="col-lg-5 mb-3">
+                                    </div>*@
+                                    @*<div class="col-lg-5 mb-3">
                                         <label class="pr-fonte-label" for="nome">Nome:</label>
 
                                         @Html.TextBoxFor(m => m.Nome, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", @readonly = true, name = "nome" })
 
-                                    </div>
+                                    </div>*@
 
-                                    <div class="col-lg-5 mb-3">
+                                    @*<div class="col-lg-5 mb-3">
                                         <label class="pr-fonte-label" for="raz">Razão Social:</label>
 
                                         @Html.TextBoxFor(m => m.RazaoSocial, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", @readonly = true, name = "raz" })
 
-                                    </div>
+                                    </div>*@
 
 
-                                </div>
+                                @*</div>*@
                                 <div class="form-row">
 
-                                    <div class="col-lg-4 mb-3">
-                                        <label class="pr-fonte-label" for="cidade">Cidade:</label>
-                                        @Html.TextBoxFor(m => m.Cidade, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", @readonly = true, name = "cidade" })
-                                    </div>
+                                    @*<div class="col-lg-4 mb-3">
+            <label class="pr-fonte-label" for="cidade">Cidade:</label>
+            @Html.TextBoxFor(m => m.Cidade, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", @readonly = true, name = "cidade" })
+        </div>*@
 
-                                    <div class="col-lg-2 mb-3">
-                                        <label class="pr-fonte-label" for="estado">UF:</label>
-                                        @Html.TextBoxFor(m => m.Estado, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", @readonly = true, name = "estado" })
-                                    </div>
+                                    @*<div class="col-lg-2 mb-3">
+            <label class="pr-fonte-label" for="estado">UF:</label>
+            @Html.TextBoxFor(m => m.Estado, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", @readonly = true, name = "estado" })
+        </div>*@
+                                    @*<div class="col-lg-4 mb-3">
+            <label class="pr-fonte-label" for="telefone">Telefone:</label>
+            @Html.TextBoxFor(m => m.Telefone, new { @class = "form-control form-control-sm", name = "telefone", @readonly = true, id = "telefone" })
+        </div>*@
                                     <div class="col-lg-4 mb-3">
-                                        <label class="pr-fonte-label" for="telefone">Telefone:</label>
-                                        @Html.TextBoxFor(m => m.Telefone, new { @class = "form-control form-control-sm", name = "telefone", @readonly = true, id = "telefone" })
+                                        <label class="pr-fonte-label" for="idEmpresa">Software House*</label>
+                                        @Html.DropDownListFor(m => m.idSofwareHouse, new SelectList(ViewBag.SofwareHouse, "Id", "Nome"), "Escolha a Empresa", new { @class = "form-control form-control-sm prn-select" })
+                                        @Html.ValidationMessageFor(m => m.idSofwareHouse, "", new { @class = "text-danger", role = "alert" })
+
                                     </div>
                                     <div class="col-lg-2 mb-3">
                                         <label class="pr-fonte-label" for="DataVenc">Vencimento Token:</label>
-                                        <input class="form-control form-control-sm" id="DataVenc" name="DataVenc" type="date">
+                                        @*<input class="form-control form-control-sm" id="DataVenc" name="DataVenc" type="date">*@
+                                        @Html.TextBoxFor(m => m.Vencimento, "{0:dd-MM-yyyy}", new { @class = "form-control form-control-sm prn-select", @type = "date" })
 
 
                                     </div>
                                 </div>
 
-                                <div class="form-row">
+                                @*<div class="form-row">
                                     <div class="col-lg-3 mb-3">
                                         <label class="pr-fonte-label" for="ativo">Ativo:</label>
 
@@ -116,7 +123,7 @@
 
                                     </div>
 
-                                </div>
+                                </div>*@
 
 
                             }

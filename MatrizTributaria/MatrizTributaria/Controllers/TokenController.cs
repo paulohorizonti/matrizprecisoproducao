@@ -1,4 +1,5 @@
 ﻿using MatrizTributaria.Models;
+using MatrizTributaria.Models.ViewModels;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace MatrizTributaria.Controllers
         //Objego context
         readonly MatrizDbContext db;
         List<SoftwareHouse> listSofwareHouse = new List<SoftwareHouse>();
+        List<Token> listToken = new List<Token>();
         //Construtor da classe
         public TokenController()
         {
@@ -50,16 +52,17 @@ namespace MatrizTributaria.Controllers
 
             ViewBag.FiltroCorrenteSoftwareHouse = procuraSoftwareHouse;
 
-            ;
-            this.listSofwareHouse = db.SoftwareHouses.ToList();
+
+            //this.listSofwareHouse = db.SoftwareHouses.ToList();
+            this.listToken = db.Tokens.ToList();
             //procura
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                this.listSofwareHouse = this.listSofwareHouse.Where(s => s.Cnpj.Contains(procurarPor)).ToList();
+                this.listToken = this.listToken.Where(s => s.SoftwareHouse.Cnpj.Contains(procurarPor)).ToList();
             }
             if (!String.IsNullOrEmpty(procuraSoftwareHouse))
             {
-                this.listSofwareHouse = this.listSofwareHouse.Where(s => s.Nome.ToString().Equals(procuraSoftwareHouse)).ToList();
+                this.listToken = this.listToken.Where(s => s.SoftwareHouse.Nome.ToString().Equals(procuraSoftwareHouse)).ToList();
             }
 
             //montar a pagina
@@ -74,78 +77,125 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
 
            
-            return View(this.listSofwareHouse.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.listToken.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
 
         }
-        public ActionResult GerarToken(string param, int? id)
+        public ActionResult GerarToken()
         {
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("../Home/Login");
             }
+
+            ////Busca a softwareHaouse
+            //SoftwareHouse softh = db.SoftwareHouses.Find(id);
+
+
+            //if(param != null)
+            //{
+            //    ViewBag.Mensagem = param;
+            //    return RedirectToAction("Index", new { param = "Data não pode ser nula"});
+
+            //}
+            //else
+            //{
+            //    //verificar se a softwarehouse ja possui token
+            //    if (softh.Chave != "")
+            //    {
+            //        var tok = db.Tokens.ToList();
+            //        tok = tok.Where(m => m.idSofwareHouse.Equals(id) && m.Tokens.Equals(softh.Chave)).ToList();
+
+            //        if (tok.Count() > 0)
+            //        {
+            //            ViewBag.MensagemChave = "A Chave será trocada caso continue";
+            //            return View(softh);
+            //        }
+
+
+            //    }
+
+            //}
+
+
+
+
+            ////procurar a software house: se estiver nula nao existe, se nao procurar seu token na tabela de token
+            //if (softh == null)
+            //{
+
+            //        return RedirectToAction("Index", new { param = "Registro Não Encontrado" });
+
+
+
+            //}
+            //else //verificar se na tabela token tem esse id
+            //{
+            //    var tk = db.Tokens.ToList();
+            //    tk = tk.Where(m => m.idSofwareHouse.Equals(id)).ToList();
+            //    if(tk.Count() == 0)
+            //    {
+            //        return View(softh);
+            //    }
+            //    else
+            //    {
+            //        return RedirectToAction("Index", new { param = "Software House já possue Token" });
+            //    }
+            //}
+
+            ViewBag.SofwareHouse = db.SoftwareHouses.Where(m=>m.Chave ==null || m.Chave == "");
            
-            //Busca a softwareHaouse
-            SoftwareHouse softh = db.SoftwareHouses.Find(id);
+            var model = new TokenViewModel();
+            return View(model);
 
-
-            if(param != null)
-            {
-                ViewBag.Mensagem = param;
-                return RedirectToAction("Index", new { param = "Data não pode ser nula"});
-
-            }
-            else
-            {
-                //verificar se a softwarehouse ja possui token
-                if (softh.Chave != "")
-                {
-                    var tok = db.Tokens.ToList();
-                    tok = tok.Where(m => m.idSofwareHouse.Equals(id) && m.Tokens.Equals(softh.Chave)).ToList();
-
-                    if (tok.Count() > 0)
-                    {
-                        ViewBag.MensagemChave = "A Chave será trocada caso continue";
-                        return View(softh);
-                    }
-
-
-                }
-
-            }
-                        
-
-          
-
-            //procurar a software house: se estiver nula nao existe, se nao procurar seu token na tabela de token
-            if (softh == null)
-            {
-                
-                    return RedirectToAction("Index", new { param = "Registro Não Encontrado" });
-                
-
-                
-            }
-            else //verificar se na tabela token tem esse id
-            {
-                var tk = db.Tokens.ToList();
-                tk = tk.Where(m => m.idSofwareHouse.Equals(id)).ToList();
-                if(tk.Count() == 0)
-                {
-                    return View(softh);
-                }
-                else
-                {
-                    return RedirectToAction("Index", new { param = "Software House já possue Token" });
-                }
-            }
-           
-            
-            
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult GerarToken(TokenViewModel model)
+        {
+            //variavel auxiliar para guardar o resultado
+            string resultado = "";
+            int regSalvos = 0;
 
-              
+            model.DataCad = DateTime.Now;
+            model.Ativo = 1;
+            if (ModelState.IsValid)
+            {
+                //Buscar cnpj da softwareRouse
+                var softwH = db.SoftwareHouses.Find(model.idSofwareHouse);
+
+
+
+                string cnpjSH = softwH.Cnpj.ToString();
+                string chaveCript = cnpjSH + "MTX" + model.Vencimento.ToString(); //token criptografado
+
+                var token = new Token()
+                {
+                    Tokens = Criptografia.Encrypt(chaveCript),
+                    Vencimento = model.Vencimento,
+                    DataCad = model.DataCad,
+                    Ativo = model.Ativo,
+                    idSofwareHouse = model.idSofwareHouse
+
+                };
+
+
+
+                softwH.Chave = token.Tokens;
+
+               
+
+                db.Tokens.Add(token);
+                regSalvos++;
+                resultado = "Registro Salvo com Sucesso!!";
+                db.SaveChanges();
+               
+            }
+            return RedirectToAction("Index", new { param = resultado, qtdSalvos = regSalvos });
+
+        }
+
         public ActionResult GerarTokenSalvar(int Id, DateTime? dataVenc, Token tkNovo)
         {
             int regSalvos = 0;

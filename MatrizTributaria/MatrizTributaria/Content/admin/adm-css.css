@@ -346,6 +346,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
 .prn-select {
     max-width: 100% !important;
 }

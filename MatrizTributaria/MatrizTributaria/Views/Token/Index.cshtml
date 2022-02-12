@@ -1,5 +1,5 @@
 ﻿@using PagedList.Mvc
-@model PagedList.IPagedList<MatrizTributaria.Models.SoftwareHouse>
+@model PagedList.IPagedList<MatrizTributaria.Models.Token>
 @{
     ViewBag.Title = "Token";
 }
@@ -30,7 +30,7 @@
                                 <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
 
                                     <tr>
-                                        <th>ID</th>
+                                        <th>ID Token</th>
                                         <th>Nome</th>
                                         <th>Email</th>
                                         <th>Token</th>
@@ -48,22 +48,22 @@
                                                 @Html.DisplayFor(modelItem => item.Id)
                                             </td>
                                             <td style="width:20%">
-                                                @Html.DisplayFor(modelItem => item.Nome)
+                                                @Html.DisplayFor(modelItem => item.SoftwareHouse.Nome)
                                             </td>
                                             <td style="width:5%">
-                                                @Html.DisplayFor(modelItem => item.Email)
+                                                @Html.DisplayFor(modelItem => item.SoftwareHouse.Email)
                                             </td>
                                             <td style="width:8%">
-                                                @if (item.Chave == null || item.Chave == "")
+                                                @if (item.SoftwareHouse.Chave == null || item.SoftwareHouse.Chave == "")
                                                 {
-                                                    <a class="btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GerarToken", "Token", new { id = item.Id })">
+                                                    <a class="btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GerarToken", "Token", new { id = item.SoftwareHouse.Id })">
                                                         <i style="font-size:1.5em;" class="fas fa-ban"></i>
                                                     </a>
 
                                                 }
                                                 else
                                                 {
-                                                    <a class="btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GerarToken", "Token", new { id = item.Id })">
+                                                    <a class="btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GerarToken", "Token", new { id = item.SoftwareHouse.Id })">
                                                         <i style="font-size:1.5em;" class="fas fa-fingerprint"></i>
                                                     </a>
                                                     

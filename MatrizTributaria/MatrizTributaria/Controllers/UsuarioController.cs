@@ -249,7 +249,7 @@ namespace MatrizTributaria.Controllers
 
                 //criptografar senha
                 usuario.senha = hash.CriptografarSenha(model.senha);
-
+                
                 //usuario.senha = model.senha;
                 usuario.ativo = model.ativo;
                 usuario.nome = model.nome;
