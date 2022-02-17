@@ -75,6 +75,9 @@ namespace MatrizTributaria.Models
         [Column("primeiro_acesso")]
         public sbyte primeiro_acesso { get; set; }
 
+        [Column("acesso_empresas")]
+        public sbyte acesso_empresas { get; set; }
+
 
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }

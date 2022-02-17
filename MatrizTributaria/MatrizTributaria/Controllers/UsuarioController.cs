@@ -115,6 +115,7 @@ namespace MatrizTributaria.Controllers
             model.dataAlt = DateTime.Now;
             model.ativo = 1; //ativando o registro no cadastro
             model.primeiro_acesso = 0; //validar esse requisito
+            model.acesso_empresas = 0; //AINDA INICIA COM NÃO
             //ativando o registro no cadastro
             if (ModelState.IsValid)
             {
@@ -144,6 +145,7 @@ namespace MatrizTributaria.Controllers
 
                     ativo = model.ativo,
                     primeiro_acesso = model.primeiro_acesso,
+                    acesso_empresas = model.acesso_empresas, 
                     dataCad = model.dataCad,
                     dataAlt = model.dataAlt,
                     idNivel = model.idNivel,
@@ -228,7 +230,7 @@ namespace MatrizTributaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,nome,email,sexo,logradouro,numero,cep,senha,ativo,dataAlt,idNivel,telefone,cidade,estado,idEmpresa")] Usuario model)
+        public ActionResult Edit([Bind(Include = "id,nome,email,sexo,logradouro,numero,cep,senha,ativo,dataAlt,idNivel,telefone,cidade,estado,idEmpresa, primeiro_acesso, acesso_empresas")] Usuario model)
         {
             var hash = new Hash(SHA512.Create());
             var usuario = db.Usuarios.Find(model.id);
@@ -254,11 +256,14 @@ namespace MatrizTributaria.Controllers
                 usuario.ativo = model.ativo;
                 usuario.nome = model.nome;
                 usuario.dataAlt = model.dataAlt;
-                usuario.idNivel = model.idNivel;
+                usuario.idNivel = model.idNivel; 
                 usuario.telefone = model.telefone;
                 usuario.cidade = model.cidade;
                 usuario.estado = model.estado;
                 usuario.idEmpresa = model.idEmpresa;
+
+                usuario.primeiro_acesso = model.primeiro_acesso;
+                usuario.acesso_empresas = model.acesso_empresas;
 
 
                 db.SaveChanges();

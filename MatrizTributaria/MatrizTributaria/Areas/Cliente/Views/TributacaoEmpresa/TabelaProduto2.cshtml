@@ -12,12 +12,12 @@
 <div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
-            BUSCA - Origem: "@ViewBag.UfOrigem" - Destino: "@ViewBag.UfDestino"
+            BUSCA
             @RenderPage("~/Areas/Cliente/Views/Acoes/BotaoHome.cshtml") <!--Renderiza o botao home-->
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
 
                     <div class="col-lg-12">
@@ -71,7 +71,7 @@
                                         </select>
                                         <div class="input-group-append">
                                             @*<input id="filtro" name="filtro" type="text" class="form-control form-control-sm" style="width:550px;"/>*@
-                                            @Html.TextBox("FiltroDados", (string)ViewBag.DadoFiltrar, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite descrição ou o código de Barras", style = "width:340px;" })
+                                            @Html.TextBox("FiltroDados", (string)ViewBag.DadoFiltrar, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite descrição ou o código de Barras", style = "width:32rem;" })
 
                                         </div>
                                         <div class="input-group-append">
@@ -95,10 +95,10 @@
                                             {
 
 
-                                                <option value="1" selected>Todos</option>
+                                                <option value="1" selected>Com Correspondência</option>
 
 
-                                                <option value="2">Sem Correspondencia</option>
+                                                <option value="2">Sem Correspondência</option>
 
 
 
@@ -108,10 +108,10 @@
                                                 if (ViewBag.FiltroSelect == 2)
                                                 {
 
-                                                    <option value="1">Todos</option>
+                                        <option value="1">Com Correspondência</option>
 
 
-                                                    <option value="2" selected>Sem Correspondencia</option>
+                                                    <option value="2" selected>Sem Correspondência</option>
 
 
 
@@ -213,7 +213,7 @@
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
 
                     <div class="col-lg-2">
@@ -328,7 +328,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
                     </div>
 

@@ -730,7 +730,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         /*Produtos*/
         [HttpGet]
-        public ActionResult AnaliseProd(string ufOrigem, string ufDestino)
+        public ActionResult AnaliseProd()
         {
             if (Session["usuario"] == null)
             {
@@ -755,21 +755,6 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             VerificaTempData();
 
-            //origem e destino
-
-            //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
-
-
-
-            //verifica estados origem e destino
-            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
-
-
-            //aplica estado origem e destino
-            ViewBag.UfOrigem = this.ufOrigem;
-            ViewBag.UfDestino = this.ufDestino;
 
             //Para os itens sem correspondencia
             if (TempData["analise2"] == null)
@@ -789,9 +774,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 TempData.Keep("prdInexistente");
             }
 
-            this.tribEmpProd = this.tribEmpProd.Where(s => s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
-            this.trib2 = this.trib2.Where(s => s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
-
+           
 
             ///*Descrição: IGUAIS, DIFERENTES E NULOS*/
             //int iguais = analise.Count(a => a.PRODUTO_DESCRICAO == a.Descricao_INTERNO);
@@ -803,24 +786,24 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //ViewBag.ProdDescDif = analise.Count(a => a.PRODUTO_DESCRICAO != a.Descricao_INTERNO);
 
             /*Descrição: IGUAIS, DIFERENTES E NULOS*/
-            ViewBag.ProdDescIguais = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_DESCRICAO == a.Descricao_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.ProdDescNull = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_DESCRICAO == "" || a.PRODUTO_DESCRICAO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.ProdDescDif = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_DESCRICAO != a.Descricao_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.ProdDescIguais = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_DESCRICAO == a.Descricao_INTERNO);
+            ViewBag.ProdDescNull = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_DESCRICAO == "" || a.PRODUTO_DESCRICAO == null);
+            ViewBag.ProdDescDif = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_DESCRICAO != a.Descricao_INTERNO);
            
 
 
 
 
             /*Cest: IGUAIS, DIFERENTES, NULOS*/
-            ViewBag.ProdCESTNulo = analise.Count(a => a.PRODUTO_CEST == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)); // não possuem cest
-            ViewBag.ProdCESTDif = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_CEST != a.Cest_INTERNO && a.PRODUTO_CEST != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.ProdCESTIgual = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_CEST == a.Cest_INTERNO && a.PRODUTO_CEST != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.ProdCESTNulo = this.analise.Count(a => a.PRODUTO_CEST == null); // não possuem cest
+            ViewBag.ProdCESTDif = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_CEST != a.Cest_INTERNO && a.PRODUTO_CEST != null);
+            ViewBag.ProdCESTIgual = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_CEST == a.Cest_INTERNO && a.PRODUTO_CEST != null );
 
 
             /*Ncm*/
-            ViewBag.ProdNCMNulo= analise.Count(a => a.PRODUTO_NCM == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.ProdNCMDiferente = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_NCM != a.NCM_INTERNO && a.PRODUTO_NCM != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.ProdNCMIgual = analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_NCM == a.NCM_INTERNO && a.PRODUTO_NCM != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.ProdNCMNulo= this.analise.Count(a => a.PRODUTO_NCM == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.ProdNCMDiferente = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_NCM != a.NCM_INTERNO && a.PRODUTO_NCM != null);
+            ViewBag.ProdNCMIgual = this.analise.Count(a => a.PRODUTO_COD_BARRAS == a.Cod_Barras_INTERNO && a.PRODUTO_NCM == a.NCM_INTERNO && a.PRODUTO_NCM != null);
 
             /*Produtos sem correspondencias*/
             /*TO-DO: implementar código para pegar produtos sem correspondencia*/
@@ -835,7 +818,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             foreach(AnaliseTributaria2 t in trib2)
             {
                 //compara com oa lista de produtos existentes
-                tribEmpProd = tribEmpProd.Where(a => a.PRODUTO_COD_BARRAS.Contains(t.PRODUTO_COD_BARRAS) && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                tribEmpProd = tribEmpProd.Where(a => a.PRODUTO_COD_BARRAS.Contains(t.PRODUTO_COD_BARRAS)).ToList();
                 //caso nao exista o valor vem zerado e soma no contador
                 if(tribEmpProd.Count() >= 0)
                 {
@@ -1646,7 +1629,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
 
         [HttpGet]
-        public ActionResult TabelaProduto(string origem, string destino, string ordenacao,  int? filtroSelect, int? page, int? numeroLinhas, int? parFiltro=3, string filtroDados = "")
+        public ActionResult TabelaProduto(string ordenacao,  int? filtroSelect, int? page, int? numeroLinhas, int? parFiltro=3, string filtroDados = "")
         {
             /*Verificando a sessão*/
             if (Session["usuario"] == null)
@@ -1692,26 +1675,13 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             //origem e destino
 
-            //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
-
-
-
-            //verifica estados origem e destino
-            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
-
-
-            //aplica estado origem e destino
-            ViewBag.UfOrigem = this.ufOrigem;
-            ViewBag.UfDestino = this.ufDestino;
-
+            
 
             if (ViewBag.FiltroSelect == 1)
             {
                 if (TempData["trib"] == null)
                 {
-                    this.trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) select a).ToList();
+                    this.trib = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
                     TempData["trib"] = this.trib;
                     TempData.Keep("trib");
                 }
@@ -1721,10 +1691,10 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     TempData.Keep("trib");
                 }
                 //procura diferenciado para tabela de  produto
-                trib = ProcuraPorTabelaProduto(filtroDados, parFiltro, this.trib);
+                this.trib = ProcuraPorTabelaProduto(filtroDados, parFiltro, this.trib);
 
 
-                this.trib = this.trib.Where(s => s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                //this.trib = this.trib.Where(s => s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
                 int tamaanhoPagina = 0;
 
@@ -1736,7 +1706,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 int numeroPagina = (page ?? 1);
 
 
-                return View(trib.ToPagedList(numeroPagina, tamaanhoPagina)); //retorna a view com o numero de paginas e tamanho
+                return View(this.trib.ToPagedList(numeroPagina, tamaanhoPagina)); //retorna a view com o numero de paginas e tamanho
 
             }
             else
@@ -1754,7 +1724,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         /*Action responsavel por mostrar os produtos importados mas que não há correspondecia com produtos
          dentro da matriz MTX*/
         [HttpGet]
-        public ActionResult TabelaProduto2(string ufOrigem, string ufDestino, string opcao, string ordenacao, int? filtroSelect, int? page, int? numeroLinhas, int? parFiltro = 3, string filtroDados = "")
+        public ActionResult TabelaProduto2(string opcao, string ordenacao, int? filtroSelect, int? page, int? numeroLinhas, int? parFiltro = 3, string filtroDados = "")
         {
             /*Verificando a sessão*/
             if (Session["usuario"] == null)
@@ -1791,19 +1761,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.ParFiltro = (filtroDados != "") ? parFiltro : 3; //filtro para mostrar todos os dados
             ViewBag.DadoFiltrar = (filtroDados != null) ? filtroDados : null;
 
-            //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            
 
 
 
-            //verifica estados origem e destino
-            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
-
-
-            //aplica estado origem e destino
-            ViewBag.UfOrigem = this.ufOrigem;
-            ViewBag.UfDestino = this.ufDestino;
+            
 
             if (opcao == "Não Correspondente")
             {
@@ -1825,7 +1787,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             if (ViewBag.FiltroSelect == 2)
             {
-                this.trib2 = (from a in db.Analise_Tributaria_2 where a.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) select a).ToList();
+                this.trib2 = (from a in db.Analise_Tributaria_2 where a.CNPJ_EMPRESA == this.empresa.cnpj select a).ToList();
 
                 //procura diferenciado para tabela de  produto
                 trib2 = ProcuraPorTabelaProduto2(filtroDados, parFiltro, trib2);

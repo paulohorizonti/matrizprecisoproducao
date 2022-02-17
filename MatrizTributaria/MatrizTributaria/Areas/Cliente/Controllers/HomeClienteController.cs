@@ -30,6 +30,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 TempData["analise"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
+                TempData["analise2"] = null;
+                TempData["prdInexistente"] = null;
+                TempData["analise2"] = null;
+                TempData["UfOrigem"] = null;
+                TempData["UfDestino"] = null;
                 return RedirectToAction("HomeCliente");
             }
             else

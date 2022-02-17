@@ -18,6 +18,7 @@ namespace MatrizTributaria.Controllers
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
         List<Produto> prodMTX = new List<Produto>();
         Usuario user;
+        Empresa emp;
 
         Usuario usuario;
         Empresa empresa;
@@ -73,6 +74,7 @@ namespace MatrizTributaria.Controllers
             {
                 var erro = e.ToString();
                 int par = 7;
+                ViewBag.Empresas = db.Empresas;
                 return RedirectToAction("../Erro/ErroLogin", new { param = par });
             }
             if(param != "")
@@ -83,16 +85,21 @@ namespace MatrizTributaria.Controllers
                 }
                 
             }
+
+            ViewBag.Empresas = db.Empresas;
            
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login([Bind(Include = "email, senha, primeiro_acesso")] Usuario usuario)
+        public ActionResult Login([Bind(Include = "email, senha, primeiro_acesso, idEmpresa")] Usuario usuario)
         {
+            int empresaEscolhida = usuario.idEmpresa;
+
             string hashTxtSenha = null;
             var hash = new Hash(SHA512.Create());
             
+
             try
             {
                 this.user = db.Usuarios.Where(x => x.email == usuario.email).FirstOrDefault();
@@ -101,6 +108,7 @@ namespace MatrizTributaria.Controllers
             {
                 var erro = e.ToString();
                 int par = 7;
+                ViewBag.Empresas = db.Empresas;
                 return RedirectToAction("../Erro/ErroLogin", new { param = par });
             }
 
@@ -110,6 +118,7 @@ namespace MatrizTributaria.Controllers
             {
                 Session["usuario"] = null;
                 ViewBag.Message = "Usuário não encontrato!";
+                ViewBag.Empresas = db.Empresas;
                 return View();
             }
             else
@@ -118,12 +127,11 @@ namespace MatrizTributaria.Controllers
                 {
                     Session["usuario"] = null;
                     ViewBag.Message = "Por favor digite sua senha";
+                    ViewBag.Empresas = db.Empresas;
                     return View();
                 }
+
                 hashTxtSenha = hash.CriptografarSenha(usuario.senha);
-
-              
-
 
                 if (user.senha.Equals(hashTxtSenha) || user.senha.Equals(usuario.senha))
                 {
@@ -132,15 +140,59 @@ namespace MatrizTributaria.Controllers
                         //chamar o modal na view
                         ViewBag.Message = "PRIMEIRO ACESSO";
                         ViewBag.Identificador = this.user.id;
+                        ViewBag.Empresas = db.Empresas;
                         return View();
                     }
 
+
+                    //se ele nao escolher a empresa, passa com a empresa que ele tem no cadastro
+                    if(empresaEscolhida == 0) //VERIFICA A EMPRESA QUE ELE ESCOLHEU
+                    {
+                        Session["idEmpresa"] = user.empresa.id; //se nao esclhou nenhum  a session é com a propria empresa
+                        Session["cnpjEmp"] = user.empresa.cnpj;
+                        Session["empresa"] = user.empresa.fantasia;
+                    }
+                    else
+                    {
+                        if (this.user.acesso_empresas == 1)
+                        {
+                            this.emp = db.Empresas.Where(x => x.id == empresaEscolhida).FirstOrDefault();
+                            //se nao, o sistema busca a empresa selecionado e aplica nas sessoes
+                            Session["idEmpresa"] = this.emp.id; //se nao esclhou nenhum  a session é com a propria empresa
+                            Session["cnpjEmp"] = this.emp.cnpj;
+                            Session["empresa"] = this.emp.fantasia;
+                        }
+                        else
+                        {
+                            //verificar a empresa dele
+                            int empUsuario = this.user.idEmpresa;
+                            if(empUsuario != empresaEscolhida) 
+                            {
+                                Session["usuario"] = null;
+                                ViewBag.Message = "Usuário não permitido para essa Empresa";
+                                ViewBag.Empresas = db.Empresas;
+                                return View();
+                            }
+                            else
+                            {
+                                Session["idEmpresa"] = user.empresa.id; //se nao esclhou nenhum  a session é com a propria empresa
+                                Session["cnpjEmp"] = user.empresa.cnpj;
+                                Session["empresa"] = user.empresa.fantasia;
+                            }
+                           
+                        }
+                       
+                    }
+
+                   
+
+
                     ViewBag.Message = "Bem vindo : " + user.nome;
 
+
+
                     Session["usuario"] = user.nome;
-                    Session["cnpjEmp"] = user.empresa.cnpj;
-                    Session["idEmpresa"] = user.empresa.id;
-                    Session["empresa"] = user.empresa.fantasia;
+                    
                     Session["email"] = user.email;
                     Session["id"] = user.id;
                     Session["nivel"] = user.nivel.descricao;
@@ -162,8 +214,6 @@ namespace MatrizTributaria.Controllers
                     }
 
 
-
-
                     //this.empresa = (from a in db.Empresas where a.cnpj == empresaUsuario select a).FirstOrDefault(); //empresa
 
                     try
@@ -181,86 +231,6 @@ namespace MatrizTributaria.Controllers
                     Session["usuarios"] = usuario;
                     Session["empresas"] = empresa;
 
-                    ///*Montar a temp-data*/
-                    ///*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
-                    //if (TempData["analise"] == null)
-                    //{
-                    //    //carrega a lista analise usando o cnpj da empresa do usuario
-                    //    //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA == empresa.cnpj select a).ToList();
-
-
-                    //    try
-                    //    {
-                    //        this.analise = db.Analise_Tributaria.Where(x => x.CNPJ_EMPRESA == empresa.cnpj).ToList();
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        var erro = e.ToString();
-                    //        int par = 7;
-                    //        return RedirectToAction("../Erro/ErroLogin", new { param = par });
-                    //    }
-
-
-                    //    TempData["analise"] = this.analise; //cria
-                    //    TempData.Keep("analise"); //salva
-                    //}
-                    //else //não estando nula apenas atribui à lista o valor carregado em tempdata
-                    //{
-                    //    this.analise = (List<AnaliseTributaria>)TempData["analise"];
-                    //    TempData.Keep("analise");
-                    //}
-
-                    ///*Montar a temp-data*/
-                    ///*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
-                    //if (TempData["tributacaoMTX"] == null)
-                    //{
-                    //    //carrega a lista analise usando o cnpj da empresa do usuario
-                    //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-                    //    try
-                    //    {
-                    //        this.tribMTX = db.Tributacao_GeralView.ToList();
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        var erro = e.ToString();
-                    //        int par = 7;
-                    //        return RedirectToAction("../Erro/ErroLogin", new { param = par });
-                    //    }
-
-                    //    TempData["tributacaoMTX"] = this.tribMTX; //cria
-                    //    TempData.Keep("tributacaoMTX"); //salva
-                    //}
-                    //else //não estando nula apenas atribui à lista o valor carregado em tempdata
-                    //{
-                    //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
-                    //    TempData.Keep("tributacaoMTX");
-                    //}
-
-                    /*Temp data do produto*/
-
-                    //if (TempData["tributacaoProdMTX"] == null)
-                    //{
-                    //    //this.prodMTX = (from a in db.Produtos where a.Id.ToString() != null select a).ToList();
-                    //    try
-                    //    {
-                    //        this.prodMTX = db.Produtos.ToList();
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        var erro = e.ToString();
-                    //        int par = 7;
-                    //        return RedirectToAction("../Erro/ErroLogin", new { param = par });
-                    //    }
-
-
-                    //    TempData["tributacaoProdMTX"] = this.prodMTX; //cria a temp data e popula
-                    //    TempData.Keep("tributacaoProdMTX"); //persiste
-                    //}
-                    //else
-                    //{
-                    //    this.prodMTX = (List<Produto>)TempData["tributacaoProdMTX"];//atribui a lista os valores de tempdata
-                    //    TempData.Keep("tributacaoProdMTX"); //persiste
-                    //}
                     
 
                 }
@@ -268,12 +238,13 @@ namespace MatrizTributaria.Controllers
                 {
                     Session["usuario"] = null;
                     ViewBag.Message = "Senha incorreta!";
+                    ViewBag.Empresas = db.Empresas;
                     return View();
                 }
 
                 
             }
-
+            ViewBag.Empresas = db.Empresas;
             return RedirectToAction("Index","Home");
         }
 
@@ -362,6 +333,15 @@ namespace MatrizTributaria.Controllers
                 TempData["usuarioEmpresa"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
+
+                                            
+                //cliente
+                TempData["prdInexistente"] = null;
+                TempData["analise2"] = null;
+                TempData["UfOrigem"] = null;
+                TempData["UfDestino"] = null;
+
+
                 return RedirectToAction("Index");
             }
             else

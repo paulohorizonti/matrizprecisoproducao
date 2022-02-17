@@ -25,20 +25,22 @@
                                         <th>Cnpj</th>
                                         <th>Cidade</th>
                                         <th>Estado</th>
+                                        <th>Software House</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     @foreach (var item in Model)
                                     {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.id)</td>
-                            <td>@Html.DisplayFor(modelItem => item.razacaosocial)</td>
-                            <td>@Html.DisplayFor(modelItem => item.fantasia)</td>
-                            <td>@Html.DisplayFor(modelItem => item.cnpj)</td>
-                            <td>@Html.DisplayFor(modelItem => item.cidade)</td>
-                            <td>@Html.DisplayFor(modelItem => item.estado)</td>
-                        </tr>}
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.id)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.razacaosocial)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.fantasia)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.cnpj)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.cidade)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.estado)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.SoftwareHouse.)</td>
+                                    </tr>}
                                 </tbody>
                             </table>
                         </div><!--Fim do container da coluna-->
