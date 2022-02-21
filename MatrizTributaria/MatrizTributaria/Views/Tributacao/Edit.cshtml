@@ -30,18 +30,23 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-lg-2 mb-3">
-                                        <label class="pr-fonte-label" for="estado">Estado:</label>
-                                        @Html.TextBoxFor(m => m.estado, new { @class = "form-control pr-fonte", @name = "estados", @readonly = "true" })
+                                    <div class="col-lg-1 mb-3">
+                                        <label class="pr-fonte-label" for="estado">UF Origem:</label>
+                                        @Html.TextBoxFor(m => m.UF_Origem, new { @class = "form-control pr-fonte", @name = "estados", @readonly = "true" })
 
                                     </div>
-                                    <div class="col-lg-6 mb-3">
+                                    <div class="col-lg-1 mb-3">
+                                        <label class="pr-fonte-label" for="estado">UF Destino:</label>
+                                        @Html.TextBoxFor(m => m.UF_Destino, new { @class = "form-control pr-fonte", @name = "estados", @readonly = "true" })
+
+                                    </div>
+                                    <div class="col-lg-5 mb-3">
                                         <label class="pr-fonte-label" for="id">Produto:</label>
                                         @Html.TextBoxFor(m => m.produtos.descricao, new { @class = "form-control pr-fonte", @readonly = "true" })
                                         @Html.HiddenFor(m => m.idProduto)
 
                                     </div>
-                                    <div class="col-lg-4 mb-3">
+                                    <div class="col-lg-3 mb-3">
                                         <label class="pr-fonte-label" for="idSetor">Setor</label>
                                         @Html.DropDownListFor(m => m.idSetor, new SelectList(ViewBag.Setor, "id", "descricao"), "Escolha o Setor", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;" })
 

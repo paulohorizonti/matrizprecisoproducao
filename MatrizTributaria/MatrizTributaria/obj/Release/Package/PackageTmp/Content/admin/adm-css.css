@@ -347,7 +347,9 @@ textarea {
     max-width: 280px;
 }
 
-
+#filtroSelect {
+    max-width: 100% !important;
+}
 .prn-select {
     max-width: 100% !important;
 }

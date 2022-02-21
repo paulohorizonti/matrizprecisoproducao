@@ -94,7 +94,7 @@ namespace MatrizTributaria.Controllers
         [HttpPost]
         public ActionResult Login([Bind(Include = "email, senha, primeiro_acesso, idEmpresa")] Usuario usuario)
         {
-            int empresaEscolhida = usuario.idEmpresa;
+            //int empresaEscolhida = usuario.idEmpresa;
 
             string hashTxtSenha = null;
             var hash = new Hash(SHA512.Create());
@@ -145,51 +145,56 @@ namespace MatrizTributaria.Controllers
                     }
 
 
-                    //se ele nao escolher a empresa, passa com a empresa que ele tem no cadastro
-                    if(empresaEscolhida == 0) //VERIFICA A EMPRESA QUE ELE ESCOLHEU
+                    ////se ele nao escolher a empresa, passa com a empresa que ele tem no cadastro
+                    //if(empresaEscolhida == 0) //VERIFICA A EMPRESA QUE ELE ESCOLHEU
+                    //{
+                    Session["idEmpresa"] = user.empresa.id; //se nao esclhou nenhum  a session é com a propria empresa
+                    Session["cnpjEmp"] = user.empresa.cnpj;
+                    Session["empresa"] = user.empresa.fantasia;
+
+                    if(user.acesso_empresas == 1)
                     {
-                        Session["idEmpresa"] = user.empresa.id; //se nao esclhou nenhum  a session é com a propria empresa
-                        Session["cnpjEmp"] = user.empresa.cnpj;
-                        Session["empresa"] = user.empresa.fantasia;
+                        Session["acessoEmpresas"] = "sim";
                     }
                     else
                     {
-                        if (this.user.acesso_empresas == 1)
-                        {
-                            this.emp = db.Empresas.Where(x => x.id == empresaEscolhida).FirstOrDefault();
-                            //se nao, o sistema busca a empresa selecionado e aplica nas sessoes
-                            Session["idEmpresa"] = this.emp.id; //se nao esclhou nenhum  a session é com a propria empresa
-                            Session["cnpjEmp"] = this.emp.cnpj;
-                            Session["empresa"] = this.emp.fantasia;
-                        }
-                        else
-                        {
-                            //verificar a empresa dele
-                            int empUsuario = this.user.idEmpresa;
-                            if(empUsuario != empresaEscolhida) 
-                            {
-                                Session["usuario"] = null;
-                                ViewBag.Message = "Usuário não permitido para essa Empresa";
-                                ViewBag.Empresas = db.Empresas;
-                                return View();
-                            }
-                            else
-                            {
-                                Session["idEmpresa"] = user.empresa.id; //se nao esclhou nenhum  a session é com a propria empresa
-                                Session["cnpjEmp"] = user.empresa.cnpj;
-                                Session["empresa"] = user.empresa.fantasia;
-                            }
-                           
-                        }
-                       
+                        Session["acessoEmpresas"] = null;
                     }
+                    //}
+                    //else
+                    //{
+                    //    if (this.user.acesso_empresas == 1)
+                    //    {
+                    //        this.emp = db.Empresas.Where(x => x.id == empresaEscolhida).FirstOrDefault();
+                    //        //se nao, o sistema busca a empresa selecionado e aplica nas sessoes
+                    //        Session["idEmpresa"] = this.emp.id; //se nao esclhou nenhum  a session é com a propria empresa
+                    //        Session["cnpjEmp"] = this.emp.cnpj;
+                    //        Session["empresa"] = this.emp.fantasia;
+                    //    }
+                    //    else
+                    //    {
+                    //        //verificar a empresa dele
+                    //        int empUsuario = this.user.idEmpresa;
+                    //        if(empUsuario != empresaEscolhida) 
+                    //        {
+                    //            Session["usuario"] = null;
+                    //            ViewBag.Message = "Usuário não permitido para essa Empresa";
+                    //            ViewBag.Empresas = db.Empresas;
+                    //            return View();
+                    //        }
+                    //        else
+                    //        {
+                    //            Session["idEmpresa"] = user.empresa.id; //se nao esclhou nenhum  a session é com a propria empresa
+                    //            Session["cnpjEmp"] = user.empresa.cnpj;
+                    //            Session["empresa"] = user.empresa.fantasia;
+                    //        }
 
-                   
+                    //    }
+
+                    //}
 
 
                     ViewBag.Message = "Bem vindo : " + user.nome;
-
-
 
                     Session["usuario"] = user.nome;
                     

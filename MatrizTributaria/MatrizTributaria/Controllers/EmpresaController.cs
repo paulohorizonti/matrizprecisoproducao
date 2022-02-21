@@ -12,6 +12,7 @@ namespace MatrizTributaria.Controllers
 
         //Objego context
         readonly MatrizDbContext db;
+        Empresa emp;
 
         //Construtor da classe
         public EmpresaController()
@@ -218,6 +219,44 @@ namespace MatrizTributaria.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public ActionResult MudarEmpresa()
+        {
+            int empresaUsuario = (int)Session["idEmpresa"];
+
+            ViewBag.Empresas = db.Empresas.ToList();
+            ViewBag.EmpUsuario = empresaUsuario;
+
+
+            return View();
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MudarEmpresa(int? empresaUsuario)
+        {
+            int? usuarioemrpesa = empresaUsuario;
+            if(usuarioemrpesa == null)
+            {
+                ViewBag.Empresas = db.Empresas.ToList();
+                int empUser = (int)Session["idEmpresa"];
+                ViewBag.EmpUsuario = empUser;
+                return View();
+            }
+            this.emp = db.Empresas.Where(x => x.id == usuarioemrpesa).FirstOrDefault();
+            //se nao, o sistema busca a empresa selecionado e aplica nas sessoes
+            Session["idEmpresa"] = this.emp.id; //se nao esclhou nenhum  a session é com a propria empresa
+            Session["cnpjEmp"] = this.emp.cnpj;
+            Session["empresa"] = this.emp.fantasia;
+
+            
+            Session["empresas"] = this.emp;
+            TempData["analise"] = null;
+            TempData["analise2"] = null;
+            return RedirectToAction("Index", "Home");
+
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

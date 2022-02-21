@@ -169,9 +169,14 @@
                                 <div id="collapseUser" class="collapse" aria-labelledby="headingUser" data-parent="#accordionExample">
                                     <div class="pr-fundo-li">
                                         <ul class="nav flex-column pr-fundo-ul">
-                                          
-                                            <li class="nav-item"> <a class="nav-link active" href="@Url.Action("Usuario","TributacaoEmpresa")"> <i class="fas fa-address-card"></i> Usuário</a>
-                                        </ul>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link active" href="@Url.Action("Usuario","TributacaoEmpresa")"> <i class="fas fa-address-card"></i> Usuário</a>
+                                                @if (Session["acessoEmpresas"] != null)
+                                                {
+                                                    <li class="nav-item"> <a class="nav-link active" href="@Url.Action("MudarEmpresa","TributacaoEmpresa")"> <i class="fas fa-random"></i> Trocar Empresa</a></li>
+                                                }
+                                            </ul>
                                     </div>
                                 </div>
                             </div>

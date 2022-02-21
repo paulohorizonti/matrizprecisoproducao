@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\preciso\Desktop\publicacao_smart_oficial</_PublishTargetUrl>
-    <History>True|2022-02-15T13:56:59.9376574Z;True|2022-02-03T09:32:21.4050129-03:00;True|2022-02-01T01:29:22.9629884-03:00;True|2022-01-27T01:03:13.0084212-03:00;True|2022-01-17T11:17:02.1352778-03:00;True|2022-01-10T09:08:59.5729983-03:00;True|2022-01-06T09:42:32.9088717-03:00;True|2022-01-04T19:47:37.2239780-03:00;True|2021-12-28T14:51:11.9311422-03:00;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
+    <History>True|2022-02-18T10:44:17.8164660Z;True|2022-02-15T10:56:59.9376574-03:00;True|2022-02-03T09:32:21.4050129-03:00;True|2022-02-01T01:29:22.9629884-03:00;True|2022-01-27T01:03:13.0084212-03:00;True|2022-01-17T11:17:02.1352778-03:00;True|2022-01-10T09:08:59.5729983-03:00;True|2022-01-06T09:42:32.9088717-03:00;True|2022-01-04T19:47:37.2239780-03:00;True|2021-12-28T14:51:11.9311422-03:00;True|2021-12-20T17:43:31.9641928-03:00;True|2021-12-16T10:06:31.3141668-03:00;True|2021-12-10T17:45:01.4386867-03:00;True|2021-12-08T14:52:00.5132372-03:00;False|2021-12-07T08:57:01.5676589-03:00;True|2021-07-13T14:36:59.9211216-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -90,7 +90,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/Shared/_Layout.cshtml">
-      <publishTime>01/31/2022 22:28:05</publishTime>
+      <publishTime>02/17/2022 17:43:04</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseCST.cshtml">
       <publishTime>01/31/2022 23:59:05</publishTime>
@@ -105,7 +105,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/31/2022 23:32:32</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseProd.cshtml">
-      <publishTime>02/15/2022 10:37:42</publishTime>
+      <publishTime>02/17/2022 11:28:03</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/AnaliseRedBaseCalEnt.cshtml">
       <publishTime>01/31/2022 22:59:01</publishTime>
@@ -210,7 +210,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/31/2022 09:27:50</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVendaVarfCFMassa.cshtml">
-      <publishTime>01/31/2022 09:28:46</publishTime>
+      <publishTime>02/17/2022 15:31:27</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteAliqIcmsVendaVarSTCFMassa.cshtml">
       <publishTime>01/04/2022 17:54:27</publishTime>
@@ -234,7 +234,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteProdMassa.cshtml">
-      <publishTime>02/01/2022 00:47:59</publishTime>
+      <publishTime>02/17/2022 11:22:55</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/EditClienteProdMassaManualModal.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -422,26 +422,29 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/Index.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
+    <File Include="Areas/Cliente/Views/TributacaoEmpresa/MudarEmpresa.cshtml">
+      <publishTime>02/17/2022 17:48:59</publishTime>
+    </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaIcmsEntrada.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/18/2022 07:40:26</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaIcmsSaida.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/18/2022 07:38:07</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaPisCofins.cshtml">
-      <publishTime>01/04/2022 19:24:59</publishTime>
+      <publishTime>02/18/2022 07:42:01</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaProduto.cshtml">
-      <publishTime>02/15/2022 10:37:57</publishTime>
+      <publishTime>02/15/2022 17:49:12</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaProduto2.cshtml">
-      <publishTime>02/15/2022 10:37:13</publishTime>
+      <publishTime>02/15/2022 17:44:28</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaRedBasCalEntrada.cshtml">
-      <publishTime>01/04/2022 19:01:05</publishTime>
+      <publishTime>02/18/2022 07:41:14</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/TabelaRedBasCalSaida.cshtml">
-      <publishTime>02/03/2022 08:46:05</publishTime>
+      <publishTime>02/18/2022 07:39:09</publishTime>
     </File>
     <File Include="Areas/Cliente/Views/TributacaoEmpresa/Usuario.cshtml">
       <publishTime>02/13/2022 18:57:42</publishTime>
@@ -483,10 +486,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.dll">
-      <publishTime>02/15/2022 11:58:36</publishTime>
+      <publishTime>02/18/2022 07:43:33</publishTime>
     </File>
     <File Include="bin/MatrizTributaria.pdb">
-      <publishTime>02/15/2022 11:58:36</publishTime>
+      <publishTime>02/18/2022 07:43:33</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -849,7 +852,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Content/admin/adm-css.css">
-      <publishTime>02/11/2022 22:43:31</publishTime>
+      <publishTime>02/15/2022 17:40:36</publishTime>
     </File>
     <File Include="Content/all-min.css">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7440,7 +7443,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Empresa/Index.cshtml">
-      <publishTime>02/14/2022 08:23:29</publishTime>
+      <publishTime>02/17/2022 17:26:46</publishTime>
+    </File>
+    <File Include="Views/Empresa/MudarEmpresa.cshtml">
+      <publishTime>02/17/2022 17:08:57</publishTime>
     </File>
     <File Include="Views/Erro/ErroLogin.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7458,7 +7464,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Home/Login.cshtml">
-      <publishTime>02/15/2022 11:54:23</publishTime>
+      <publishTime>02/17/2022 15:40:04</publishTime>
     </File>
     <File Include="Views/ImportarExportar/Index.cshtml">
       <publishTime>01/03/2022 15:46:17</publishTime>
@@ -7581,7 +7587,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/03/2022 15:46:17</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>02/10/2022 09:33:23</publishTime>
+      <publishTime>02/17/2022 16:31:01</publishTime>
     </File>
     <File Include="Views/SoftwareHouse/Create.cshtml">
       <publishTime>02/10/2022 09:13:19</publishTime>

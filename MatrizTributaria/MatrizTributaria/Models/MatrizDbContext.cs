@@ -35,7 +35,8 @@ namespace MatrizTributaria.Models
         public virtual DbSet<TributacaoGeralView> Tributacao_GeralView { get; set; }
 
         public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria> Analise_Tributaria { get; set; } //Vitor
-        public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria2> Analise_Tributaria_2 { get; set; } //Vitor
+        public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributariaSn> Analise_TributariaSn { get; set; } //Paulo
+        public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria2> Analise_Tributaria_2 { get; set; } //Paulo
 
 
     }

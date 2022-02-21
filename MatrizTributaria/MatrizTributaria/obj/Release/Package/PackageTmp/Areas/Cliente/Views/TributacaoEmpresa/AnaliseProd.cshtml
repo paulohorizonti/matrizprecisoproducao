@@ -2,33 +2,9 @@
 
 @{ ViewBag.Title = "AnaliseProd"; }
 
-<div class="container-fluid pr-container  pr-card-cad row">
 
-    <div class="col-lg-12 col-sm-12 pr-1">
-
-        <div class="card">
-            <div class="card-header">
-                Estado de Origem e Destino
-            </div> <!--CAbeçalho-->
-            <div class="card-body">
-
-
-                @using (Html.BeginForm("AnaliseProd", "TributacaoEmpresa", FormMethod.Get))
-                {
-
-                    @RenderPage("~/Views/Acoes/CamposSelecionaUF.cshtml")}
-
-            </div><!--body-->
-        </div><!--card-->
-
-    </div>
-
-
-
-
-</div> <!--container maior-->
 <!--Produtos mesma descrição-->
-<div class="container-fluid pr-container-2 pr-card-cad row">
+<div class="container-fluid pr-container pr-card-cad row">
     <div class="col-lg-6 col-sm-12 pr-1">
         <div class="card">
             <div class="card-header">

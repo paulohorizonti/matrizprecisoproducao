@@ -49,6 +49,10 @@ namespace MatrizTributaria.Models
         [Column("ativo")]
         public sbyte ativo { get; set; }
 
+        //ativo vai ser automatico no momento da gravação do registro
+        [Column("simples_nacional")]
+        public sbyte simples_nacional { get; set; }
+
         [Column("email")]
         public string email { get; set; }
 

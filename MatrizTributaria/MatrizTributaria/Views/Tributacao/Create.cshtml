@@ -69,37 +69,48 @@
 
 
                                 <!--Produto-->
-                                <div class="form-row" style="margin-top:-15px;">
+                        <div class="form-row" style="margin-top:-15px;">
 
-                                    <div class="col-lg-2">
-                                        <label class="pr-fonte-label" for="estado">Estado*</label>
-                                        @Html.TextBoxFor(m => m.estado, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", name = "estado", id = "estado", placeholder = "Digite o Estado", @required = true })
+                            <div class="col-lg-2">
+                                <label class="pr-fonte-label" for="estado">UF Origem*</label>
+                                @*@Html.TextBoxFor(m => m.estado, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", name = "estado", id = "estado", placeholder = "Digite o Estado", @required = true })*@
+                                @Html.DropDownListFor(m => m.UF_Origem, new SelectList(ViewBag.EstadosOrigem, "uf", "descricao"), "Estado", new { @class = "form-control form-control-sm dropdown", @id = "UF_Origem" })
 
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <label class="pr-fonte-label" for="idProduto">Produto*</label>
-                                        <div class="input-group">
-                                           <input type="text" class="form-control form-control-sm" , name="descProduto" id="descproduto" placeholder="@ViewBag.ProdDesc" required readonly />
-                                              <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    <a href="#" data-toggle="modal" data-target="#modalProd"><i style="font-size:1.1em;" class="fas fa-search"></i></a>
-                                                </span>
-                                            </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="pr-fonte-label" for="estado">UF Destino*</label>
+                                @*@Html.TextBoxFor(m => m.estado, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", name = "estado", id = "estado", placeholder = "Digite o Estado", @required = true })*@
+                                @Html.DropDownListFor(m => m.UF_Destino, new SelectList(ViewBag.EstadosOrigem, "uf", "descricao"), "Estado", new { @class = "form-control form-control-sm dropdown", @id = "UF_Destino" })
 
-                                            <input hidden id="idProd" name="idProduto" />
-                                        </div>
+                            </div>
 
 
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <label class="pr-fonte-label" for="idSetor">Setor*</label>
-                                        @Html.DropDownListFor(m => m.idSetor, new SelectList(ViewBag.Setor, "id", "descricao"), "Escolha o Setor", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;", @id="setor" })
 
 
+                            <div class="col-lg-6">
+                                <label class="pr-fonte-label" for="idProduto">Produto*</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" , name="descProduto" id="descproduto" placeholder="@ViewBag.ProdDesc" required readonly />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <a href="#" data-toggle="modal" data-target="#modalProd"><i style="font-size:1.1em;" class="fas fa-search"></i></a>
+                                        </span>
                                     </div>
 
+                                    <input hidden id="idProd" name="idProduto" />
                                 </div>
+
+
+                            </div>
+
+                            <div class="col-lg-4">
+                                <label class="pr-fonte-label" for="idSetor">Setor*</label>
+                                @Html.DropDownListFor(m => m.idSetor, new SelectList(ViewBag.Setor, "id", "descricao"), "Escolha o Setor", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;", @id = "setor" })
+
+
+                            </div>
+
+                        </div>
                                 <div class="form-row mb-3">
 
                                     <div class="col-lg-6">
@@ -435,7 +446,7 @@
                                             <div class="form-row">
 
                                                 <div class="col-lg-2">
-                                                    <label class="pr-fonte-label" for="aliqCompInd">Aliq ICMS Venda</label>
+                                                    <label class="pr-fonte-label" for="aliqCompInd">Aliq ICMS Compra</label>
                                                     @Html.TextBoxFor(m => m.aliqIcmsCompDeInd, new { @class = "form-control form-control-sm decimal", name = "aliqCompInd", id = "aliqCompInd", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
@@ -503,7 +514,7 @@
                                             <div class="form-row">
 
                                                 <div class="col-lg-2">
-                                                    <label class="pr-fonte-label" for="aliqCompAta">Aliq ICMS Venda</label>
+                                                    <label class="pr-fonte-label" for="aliqCompAta">Aliq ICMS Compra</label>
                                                     @Html.TextBoxFor(m => m.aliqIcmsCompradeAta, new { @class = "form-control form-control-sm decimal", name = "aliqCompAta", id = "aliqCompAta", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
@@ -571,7 +582,7 @@
                                             <div class="form-row">
 
                                                 <div class="col-lg-2">
-                                                    <label class="pr-fonte-label" for="aliqCompSN">Aliq ICMS </label>
+                                                    <label class="pr-fonte-label" for="aliqCompSN">Aliq ICMS Compra</label>
                                                     @Html.TextBoxFor(m => m.aliqIcmsCompradeSimpNacional, new { @class = "form-control form-control-sm decimal", name = "aliqCompSN", id = "aliqCompSN", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 

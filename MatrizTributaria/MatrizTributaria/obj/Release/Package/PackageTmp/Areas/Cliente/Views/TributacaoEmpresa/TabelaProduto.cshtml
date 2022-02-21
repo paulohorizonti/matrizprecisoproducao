@@ -25,62 +25,10 @@
 
                             @using (Html.BeginForm("TabelaProduto", "TributacaoEmpresa", FormMethod.Get, new { @class = "form-row" }))
                             {
-                        <div class="form-group col-lg-2 pt-1">
-                            <label class="pr-fontalternativa">UF Origem</label>
+                       
 
-                            <div class="input-group input-group-sm">
-
-                                <select class="form-control form-control-sm dropdown prn-select" id="origem" name="origem">
-                                    <option value="null">UF de Origem</option>
-                                    @foreach (var item in ViewBag.EstadosOrigem)
-                                    {
-                                        if (item.uf == ViewBag.UfOrigem)
-                                        {
-                                            <option selected value="@item.uf">@item.uf</option>
- }
-                                        else
-                                        {
-                                            <option value="@item.uf">@item.uf</option>
-}
-
-                                    }
-                                </select>
-
-
-                            </div><!--fim div input-->
-
-                        </div><!--fim coluna 2-->
-
-                        <div class="form-group col-lg-2 pt-1">
-                            <label class="pr-fontalternativa">UF Destino</label>
-
-                            <div class="input-group input-group-sm">
-
-                                <select class="form-control form-control-sm dropdown prn-select" id="destino" name="destino">
-                                    <option value="null">UF de Destino</option>
-                                    @foreach (var item in ViewBag.EstadosDestinos)
-                                    {
-                                        if (item.uf == ViewBag.UfDestino)
-                                        {
-                                            <option selected value="@item.uf">@item.uf</option>
- }
-                                        else
-                                        {
-                                            <option value="@item.uf">@item.uf</option>
-}
-
-                                    }
-                                </select>
-
-
-                                <div class="input-group-append">
-                                    <button data-toggle="tooltip" data-placement="right" title="Aplicar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
-                                        <i style="font-size:1.3em;" class="fas fa-check-circle"></i>
-                                    </button>
-                                </div><!--fim do appende-->
-                            </div><!--fim div input-->
-                        </div><!--fim coluna 2-->
-                                        <div class="form-group col-lg-8">
+                       
+                                        <div class="form-group col-lg-7">
                                             <label class="pr-fontealternativa">Filtro</label>
                                             <div class="input-group input-group-sm">
                                                 <select class="form-control form-control-sm" id="parFiltro" name="parFiltro" style="width:45px;">
@@ -123,7 +71,7 @@
                                                 </select>
                                                 <div class="input-group-append">
                                                     @*<input id="filtro" name="filtro" type="text" class="form-control form-control-sm" style="width:550px;"/>*@
-                                                    @Html.TextBox("FiltroDados", (string)ViewBag.DadoFiltrar, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite descrição ou o código de Barras", style = "width:380px;" })
+                                                    @Html.TextBox("FiltroDados", (string)ViewBag.DadoFiltrar, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite descrição ou o código de Barras", style = "width:32rem;" })
 
                                                 </div>
                                                 <div class="input-group-append">
@@ -147,19 +95,19 @@
                                                                     {
 
 
-                                                    <option value="1" selected>Todos</option>
+                                                    <option value="1" selected>Com Correspondência</option>
 
 
-                                                                        <option value="2">Sem Correspondencia</option> }
+                                                                        <option value="2">Sem Correspondência</option> }
                                                                                         else
                                                                                         {
                                                                                             if (ViewBag.FiltroSelect == 2)
                                                                                             {
 
-                                                                        <option value="1">Todos</option>
+                                                                        <option value="1">Com Correspondência</option>
 
 
-                                                                                                <option value="2" selected>Sem Correspondencia</option>}
+                                                                                                <option value="2" selected>Sem Correspondência</option>}
 
                                                                                                                 }
 
@@ -222,7 +170,9 @@
                                                                                 </div>
                                                                             </div>
 
-                                                                        </div>}
+                                                                        </div>
+                                                                        
+                                                                        }
 
 
 
@@ -249,7 +199,7 @@
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
 
                     <div class="col-lg-2">
@@ -405,8 +355,6 @@
                                                 }
 
 
-
-
                                                 <td style="text-align:left; width:10%;">
                                                     @Html.DisplayFor(modelItem => item.NCM_INTERNO)
                                                 </td>
@@ -434,7 +382,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
                     </div>
 

@@ -337,6 +337,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.DataInicio = db.Tributacoes.Find(tributacao.id).inicioVigenciaMVA;
             ViewBag.DataFim = db.Tributacoes.Find(tributacao.id).fimVigenciaMVA;
 
+            ViewBag.UfOrigem = db.Tributacoes.Find(tributacao.id).UF_Origem;
+            ViewBag.UfDestino = db.Tributacoes.Find(tributacao.id).UF_Destino;
             return View(tributacao);
         }
 
@@ -367,6 +369,10 @@ namespace MatrizTributaria.Controllers
             ViewBag.FundLegalEndrada = db.Legislacoes;
             ViewBag.Legislacao = db.Legislacoes;
             ViewBag.CstGeral = db.CstIcmsGerais;
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
 
             var prod = from s in db.Produtos select s; //variavel carregado de produtos
 
@@ -530,6 +536,7 @@ namespace MatrizTributaria.Controllers
 
                 db.Tributacoes.Add(tributacao);
                 db.SaveChanges();
+                TempData["tributacaoMTX"] = null; //anulando a temdata que monta o index
                 return RedirectToAction("Index");//caso salve
             }
             catch(Exception e)
