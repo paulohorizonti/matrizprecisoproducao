@@ -32,7 +32,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 Session["empresas"] = null;
                 TempData["analise2"] = null;
                 TempData["prdInexistente"] = null;
-                
+                TempData["analiseSN"] = null;
                 TempData["UfOrigem"] = null;
                 TempData["UfDestino"] = null;
                 return RedirectToAction("HomeCliente");

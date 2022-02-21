@@ -2472,6 +2472,8 @@
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\Usuario.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\CreateUsuarioCliente.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\MudarEmpresa.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\AnaliseTributariaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsVendaVarfCFMassaSn.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
