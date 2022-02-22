@@ -2474,6 +2474,17 @@
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\MudarEmpresa.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\AnaliseTributariaSN.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsVendaVarfCFMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\AnaliseRedBaseCalSaiSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliAliqRedBasCalcIcmsVenVarCFMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsVendaVarSTCFMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsVendaVarContMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsSTVendaVarContMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsVendaAtaContMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsSTVendaAtaContMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsVendaAtaSNMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteAliqIcmsSTVendaAtaSNMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliAliqRedBasCalcIcmsSTVenVarCFMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliAliqRedBasCalcIcmsVenVarContMassaSn.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />

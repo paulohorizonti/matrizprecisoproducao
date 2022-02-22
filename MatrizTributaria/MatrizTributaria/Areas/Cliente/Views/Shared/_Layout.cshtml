@@ -249,7 +249,7 @@
                          google.charts.setOnLoadCallback(aliIcmsSTVendaAtaCont);/*ok*/
 
                          google.charts.setOnLoadCallback(aliqIcmsVendaAtaSN); /*OK*/
-                         google.charts.setOnLoadCallback(aliqIcmsSTVendaAtaSN);/*Fazendo*/
+                         google.charts.setOnLoadCallback(aliqIcmsSTVendaAtaSN);/*ok*/
 
 
 
@@ -309,7 +309,7 @@
 
 
                              chart.draw(data, options);
-                         }//fim venda varejo cons final
+                         }//fim venda varejo cons final - DESVIO SN - OK
 
                          function aliIcmsSTVarConsFinal() {
                               var data = google.visualization.arrayToDataTable([
@@ -365,7 +365,7 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         }// fim aliIcmsVarConsFinal
+                         }// fim aliIcmsVarConsFinal  - DESVIO SN - OK
 
                          function aliIcmsVendaVarCont() {
                              var data = google.visualization.arrayToDataTable([
@@ -420,9 +420,9 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         }// fim aliicmsvendavarcont
+                         }// fim aliicmsvendavarcont    - DESVIO SN - OK
 
-                         function aliIcmsSTVendaVarCont() {
+                         function aliIcmsSTVendaVarCont() {// fim aliIcmsSTVendaVarCont    - DESVIO SN - OK
                              var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],
                                         ['Maiores', @Html.Raw(ViewBag.AlqICMSSTVendaVContMaior)],
@@ -475,9 +475,9 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         }//fim venda varj cont st
+                         }//fim venda varj cont st    -DESVIO SN - OK
 
-                         function aliIcmsVendaAtaCont() {
+                         function aliIcmsVendaAtaCont() { //DESVIO SN OK
                              var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],
                                         ['Maiores', @Html.Raw(ViewBag.AlqICMSVataMaior)],
@@ -530,9 +530,9 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         }//fim icms venda ata cont
+                         }//fim icms venda ata cont DESVIO SN - OK
 
-                         function aliIcmsSTVendaAtaCont() {
+                         function aliIcmsSTVendaAtaCont() {//DESVIO SN - OK
                              var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],
                                         ['Maiores', @Html.Raw(ViewBag.AlqICMSSTVataMaior)],
@@ -585,7 +585,7 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         }//Fim icms st venda ata cont
+                         }//Fim icms st venda ata cont DESVIO SN - OK
 
                          function aliqIcmsVendaAtaSN() {
                               var data = google.visualization.arrayToDataTable([
@@ -640,10 +640,10 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         } //Fim venda atacado para simples nacional
+                         } //Fim venda atacado para simples nacional DESVIO SN - OK
 
                           /*Aliq ICMS ST Venda no atacado para Simples Nacional*/
-                         function aliqIcmsSTVendaAtaSN() {
+                         function aliqIcmsSTVendaAtaSN() {  //DESVIO SN - OK
                               var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],
                                         ['Maiores', @Html.Raw(ViewBag.AliqICMSSTVendaAtaSimpNacionalMaior)],
@@ -2119,7 +2119,7 @@
                     }
                     else
                     {
-                        if (ViewBag.Title == "AnaliseRedBaseCalSai")
+                        if (ViewBag.Title == "AnaliseRedBaseCalSai" || ViewBag.Title == "AnaliseRedBaseCalSaiSN")
                         {
                             <script src="~/Areas/Cliente/Scripts/Graficos/jquery-1.12.4.min.js"></script>
                             @Scripts.Render("~/bundles/jquerymaskedinput")
@@ -2195,7 +2195,7 @@
                                         //chmando a view
                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                         chart.draw(data, options);
-                                    }
+                                    }  // ok DESVIO SN
 
                                     function redBCalcSTVenCF() {
                                          var data = google.visualization.arrayToDataTable([
@@ -2250,7 +2250,7 @@
                                         //chmando a view
                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                         chart.draw(data, options);
-                                    }
+                                    } // ok DESVIO SN
 
                                     function redBCalcVenCont()
                                     {

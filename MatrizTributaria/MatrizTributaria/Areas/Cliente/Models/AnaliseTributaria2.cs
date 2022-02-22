@@ -206,5 +206,14 @@ namespace MatrizTributaria.Areas.Cliente.Models
 
         [Column("UF_DESTINO")]
         public string UF_DESTINO { get; set; }
+        [Column("DT_ALTERACAO")]
+        public DateTime? DT_ALTERACAO { get; set; }
+
+        public string DataFormatada
+        {
+            get { return DT_ALTERACAO?.ToShortDateString(); }
+        }
+
+
     }
 }
