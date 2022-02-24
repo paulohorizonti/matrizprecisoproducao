@@ -696,7 +696,7 @@
                              //chmando a view
                              google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                              chart.draw(data, options);
-                         }//fim funcao aliqIcmsSTVendaAtaSN
+                         }//fim funcao aliqIcmsSTVendaAtaSN - DESVIO SN - OK
 
 
 
@@ -710,7 +710,7 @@
     }
     else
     {
-        if (ViewBag.title == "AnaliseIcmsEntrada")
+        if (ViewBag.Title == "AnaliseIcmsEntrada" || ViewBag.Title == "AnaliseIcmsEntradaSN")
         {
             <script src="~/Areas/Cliente/Scripts/Graficos/jquery-1.12.4.min.js"></script>
             @Scripts.Render("~/bundles/jquerymaskedinput")
@@ -1251,7 +1251,7 @@
         }
         else
         {
-            if (ViewBag.title == "AnalisePisCofins")
+            if (ViewBag.Title == "AnalisePisCofins")
             {
                 <script src="~/Areas/Cliente/Scripts/Graficos/jquery-1.12.4.min.js"></script>
                 @Scripts.Render("~/bundles/jquerymaskedinput")
@@ -2307,7 +2307,7 @@
                                         //chmando a view
                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                         chart.draw(data, options);
-                                    }
+                                    } //ok DESVIO SN
 
                                     function redBCalcSTVenCont()
                                     {
@@ -2366,7 +2366,7 @@
                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                         chart.draw(data, options);
 
-                                    }
+                                    } //ok DESVIO SN
 
                                     function redBCalcVenAtaCont() {
                                          var data = google.visualization.arrayToDataTable([
@@ -2422,9 +2422,9 @@
                                         //chmando a view
                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
-                                    }
+                                    } //ok DESVIO SN
 
-                                    function redBCalcSTVenAtaCont() {
+                                    function redBCalcSTVenAtaCont() { // ok DESVIO SN
                                         var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],
                                         ['Maiores', @Html.Raw(ViewBag.RedBaseCalcICMSSTVataMaior)],
@@ -2478,9 +2478,9 @@
                                         //chmando a view
                                         google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
-                                    }
+                                    } //ok DESVIO SN
 
-                                    function redBCalcVenAtaSN()
+                                    function redBCalcVenAtaSN() //ok DESVIO SN
                                     {
                                         var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],

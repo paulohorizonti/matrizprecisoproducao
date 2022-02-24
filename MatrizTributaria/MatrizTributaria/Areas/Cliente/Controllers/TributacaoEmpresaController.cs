@@ -537,6 +537,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 this.empresa = (Empresa)Session["empresas"]; //se nao for nula basta carregar a empresa
             }
 
+            //se for simples nacional direciona para essa action
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("AnaliseIcmsEntradaSN");
+            }
             VerificaTempData();
 
             //origem e destino
@@ -625,6 +630,123 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.AliqICMSNFEAtaIgual = this.analise.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == a.Aliq_Icms_NFE_For_Ata_INTERNO && a.ALIQ_ICMS_NFE_FOR_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
             ViewBag.AliqICMSNFEAtaNulaInterno = this.analise.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA != null && a.Aliq_Icms_NFE_For_Ata_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
             ViewBag.AliqICMSNFEAtaNulaExterno = this.analise.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+            return View();
+
+        }
+
+        [HttpGet]
+        public ActionResult AnaliseIcmsEntradaSN(string ufOrigem, string ufDestino)
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+            string user = Session["usuario"].ToString(); //pega o usuario da sessão
+
+            //verifica se a variavel usuarios está nula, caso esteja ele carrega as informações de usuario e empresa
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else
+            {
+                this.empresa = (Empresa)Session["empresas"]; //se nao for nula basta carregar a empresa
+            }
+
+
+            VerificaTempDataSN();
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
+            /*Aliquota ICMS Compra de Industria*/
+            ViewBag.AliqICMSCompINDMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_COMP_DE_IND > a.Aliq_Icms_Comp_de_Ind_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompINDMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_COMP_DE_IND < a.Aliq_Icms_Comp_de_Ind_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompINDIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_COMP_DE_IND == a.Aliq_Icms_Comp_de_Ind_INTERNO && a.ALIQ_ICMS_COMP_DE_IND != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompINDNulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_COMP_DE_IND == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompIndNulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_COMP_DE_IND != null && a.Aliq_Icms_Comp_de_Ind_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)); //onde não for nulo no cliente e nulo no mtx
+
+
+
+            /*Aliquota ICMS ST Compra de Industria*/
+            ViewBag.AliqICMSSTCompINDMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND > a.Aliq_Icms_ST_Comp_de_Ind_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompINDMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND < a.Aliq_Icms_ST_Comp_de_Ind_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompINDIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND == a.Aliq_Icms_ST_Comp_de_Ind_INTERNO && a.ALIQ_ICMS_ST_COMP_DE_IND != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompINDNulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompIndNulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND != null && a.Aliq_Icms_ST_Compra_de_Ata_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+
+            /*Aliquota ICMS Compra de Atacado*/
+            ViewBag.AliqICMSCompATAMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA > a.Aliq_Icms_Compra_de_Ata_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompATAMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA < a.Aliq_Icms_Compra_de_Ata_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompATAIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA == a.Aliq_Icms_Compra_de_Ata_INTERNO && a.ALIQ_ICMS_COMPRA_DE_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompATANulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA != null && a.Aliq_Icms_Compra_de_Ata_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompATANulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+            /*Aliquota ICMS ST Compra de Atacado*/
+            ViewBag.AliqICMSSTCompATAMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA > a.Aliq_Icms_ST_Compra_de_Ata_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompATAMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA < a.Aliq_Icms_ST_Compra_de_Ata_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompATAIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA == a.Aliq_Icms_ST_Compra_de_Ata_INTERNO && a.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompATANulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && a.Aliq_Icms_ST_Compra_de_Ata_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompATANulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+            /*Aliquota ICMS Compra de Simples nacional*/
+            ViewBag.AliqICMSCompSNMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL > a.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompSNMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL < a.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompSNIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == a.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO && a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompSNNulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && a.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSCompSNNulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+            /*Aliquota ICMS ST Compra de Simples nacional*/
+            ViewBag.AliqICMSSTCompSNMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL > a.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompSNMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL < a.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompSNIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == a.Aliq_Icms_Compra_de_Simp_Nacional_INTERNO && a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompSNNulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && a.Aliq_Icms_ST_Compra_de_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSSTCompSNNulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+            /*Aliquota ICMS NFE INDUSTRIA*/
+            ViewBag.AliqICMSNFEIndMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE > a.Aliq_Icms_NFE_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEIndMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE < a.Aliq_Icms_NFE_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEIndIguais = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE == a.Aliq_Icms_NFE_INTERNO && a.ALIQ_ICMS_NFE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEIndNulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE != null && a.Aliq_Icms_NFE_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEIndNulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+            /*Aliquota ICMS NFE SIMPLES NACIONAL*/
+            ViewBag.AliqICMSNFESNMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_SN > a.Aliq_Icms_NFE_For_SN_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFESNMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_SN > a.Aliq_Icms_NFE_For_SN_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFESNIguais = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_SN == a.Aliq_Icms_NFE_For_SN_INTERNO && a.ALIQ_ICMS_NFE_FOR_SN != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFESNNullaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_SN != null && a.Aliq_Icms_NFE_For_SN_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFESNNullaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_SN == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+            /*Aliquota ICMS NFE ATACADO*/
+            ViewBag.AliqICMSNFEAtaMaior = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA > a.Aliq_Icms_NFE_For_Ata_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEAtaMenor = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA < a.Aliq_Icms_NFE_For_Ata_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEAtaIgual = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == a.Aliq_Icms_NFE_For_Ata_INTERNO && a.ALIQ_ICMS_NFE_FOR_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEAtaNulaInterno = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA != null && a.Aliq_Icms_NFE_For_Ata_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliqICMSNFEAtaNulaExterno = this.analiseSn.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             return View();
@@ -11449,6 +11571,13 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
 
+
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassaSn", new { opcao = opcao });
+
+            }
+
             VerificaTempData();
 
             //origem e destino
@@ -11625,6 +11754,261 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
 
+
+        /*Edição Red Base de Calc ICMS ST Venda varejo para contrbuinte*/
+        [HttpGet]
+        public ActionResult EdtCliAliqRedBasCalcIcmsSTVenVarContMassaSn(string ufOrigem, string ufDestino, string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "Redução Base de Calc. ICMS ST Venda Varejo para CONTRIBUINTE no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            VerificaTempDataSN();
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Maiores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT > a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT < a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Menores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT > a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT < a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT > a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT < a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulas Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT > a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT < a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulas MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT > a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT < a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO && a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            this.analiseSn = ProcuraPorSn(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analiseSn);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(this.analiseSn.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+
+
         [HttpGet]
         public ActionResult EdtCliAliqRedBasCalcIcmsSTVenVarContMassaModal(string strDados)
         {
@@ -11632,7 +12016,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //Objeto do tipo tributação empresa
             TributacaoEmpresa trib = new TributacaoEmpresa();
             string resultado = ""; //variavel auxiliar;
@@ -11647,54 +12031,105 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            decimal analiseRetorno = 0.0M;
-            decimal analiseTrib = 0.0M;
+            string analiseRetorno = "0";
+            string analiseTrib = "0";
             try
             {
-
-                //laço de repetição para percorrer o array com os registros
-                for (int i = 0; i < idTrib.Length; i++)
+                if (this.empresa.simples_nacional.Equals(1)) 
                 {
-                    //converter em inteiro
-                    int idTrb = int.Parse(idTrib[i]);
-
-                    //faz a busca no objeto criado instanciando um so objeto
-                    trib = db.TributacaoEmpresas.Find(idTrb);
-
-                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                    //pegar valores
-                    analiseRetorno = (analise.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null) ? analiseRetorno : (decimal)analise.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO;
-
-                    analiseTrib = (analise.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null) ? analiseTrib : decimal.Parse(trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT);
-
-                 
-                    //analisar se já são iguais
-                    if (analiseTrib == analiseRetorno)
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
                     {
-                        regNsalv++;
-                    }
-                    else
-                    {
-                        //verificar se a variavel veio 0.0
-                        if (analiseRetorno == 0.0M)
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+                        analiseRetorno = (analiseSn.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO.ToString();
+
+                        analiseTrib = (analiseSn.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null) ? analiseTrib : (trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT);
+
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
                         {
-                            //se veio 0.0 o valor deve ser atribuido nulo
-                            trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT = null;
+                            regNsalv++;
                         }
                         else
                         {
-                            trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT = analise.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO.ToString().Replace(",", ".");
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT = analiseSn.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO.ToString().Replace(",", ".");
 
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
                         }
-                        db.SaveChanges();
-                        regSalv++; //contagem de registros salvos
+
+
                     }
 
-
                 }
-                TempData["analise"] = null;
+                else
+                {
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
+                    {
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+                        analiseRetorno = (analise.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO.ToString();
+
+                        analiseTrib = (analise.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null) ? analiseTrib : (trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT);
+
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ST_VENDA_VAREJO_CONT = analise.Red_Base_Calc_ST_Venda_Varejo_Cont_INTERNO.ToString().Replace(",", ".");
+
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+                        }
+
+
+                    }
+                }
+
+                    
+
+
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -11704,9 +12139,21 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             }
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassaSn", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+
+            }
+
+           
         }
 
         [HttpGet]
@@ -11746,7 +12193,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //trocando o ponto por virgula
             redBasCalcAliqIcmsSTVenVarCont = redBasCalcAliqIcmsSTVenVarCont.Replace(",", ".");
 
@@ -11774,7 +12221,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
                 }
 
-                TempData["analise"] = null;
+               
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -11783,9 +12230,22 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassaSn", new { param = resultado, qtdSalvos = regSalvos });
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenVarContMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+
+
+           
         }
 
         /*Edição Red Base de Calc ICMS  Venda Atacado para contrbuinte*/
@@ -11863,6 +12323,13 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteCest = procuraCEST;
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
+
+
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassaSn", new { opcao = opcao });
+
+            }
 
             VerificaTempData();
 
@@ -12040,6 +12507,267 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
 
+
+        /*Edição Red Base de Calc ICMS  Venda Atacado para contrbuinte*/
+        [HttpGet]
+        public ActionResult
+        EdtCliAliqRedBasCalcIcmsVenAtaContMassaSn(string ufOrigem, string ufDestino, string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "Redução Base de Calc. ICMS  Venda Atacado para CONTRIBUINTE no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            VerificaTempDataSN();
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Maiores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Menores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+
+
+                    }
+                    break;
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulas Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+
+                    }
+                    break;
+                case "Nulas MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            this.analiseSn = ProcuraPorSn(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analiseSn);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(this.analiseSn.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+
+
+
         [HttpGet]
         public ActionResult EdtCliAliqRedBasCalcIcmsVenAtaContMassaModal(string strDados)
         {
@@ -12047,7 +12775,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //Objeto do tipo tributação empresa
             TributacaoEmpresa trib = new TributacaoEmpresa();
             string resultado = ""; //variavel auxiliar;
@@ -12062,55 +12790,104 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            decimal analiseRetorno = 0.0M;
-            decimal analiseTrib = 0.0M;
+            string analiseRetorno = "0";
+            string analiseTrib = "0";
             try
             {
-
-                //laço de repetição para percorrer o array com os registros
-                for (int i = 0; i < idTrib.Length; i++)
+                if (this.empresa.simples_nacional.Equals(1))
                 {
-                    //converter em inteiro
-                    int idTrb = int.Parse(idTrib[i]);
-
-                    //faz a busca no objeto criado instanciando um so objeto
-                    trib = db.TributacaoEmpresas.Find(idTrb);
-
-                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                    //pegar valores
-                   
-                    analiseRetorno = (analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : (decimal)analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO;
-
-                    analiseTrib = (analise.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : decimal.Parse(trib.RED_BASE_CALC_ICMS_VENDA_ATA);
-                   
-
-                    //analisar se já são iguais
-                    if (analiseTrib == analiseRetorno)
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
                     {
-                        regNsalv++;
-                    }
-                    else
-                    {
-                        //verificar se a variavel veio 0.0
-                        if (analiseRetorno == 0.0M)
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+
+                        analiseRetorno = (analiseSn.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString();
+
+                        analiseTrib = (analiseSn.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA);
+
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
                         {
-                            //se veio 0.0 o valor deve ser atribuido nulo
-                            trib.RED_BASE_CALC_ICMS_VENDA_ATA = null;
+                            regNsalv++;
                         }
                         else
                         {
-                            trib.RED_BASE_CALC_ICMS_VENDA_ATA = analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = analiseSn.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
 
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
                         }
-                        db.SaveChanges();
-                        regSalv++; //contagem de registros salvos
+
+
                     }
-
-
                 }
-                TempData["analise"] = null;
+                else
+                {
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
+                    {
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+
+                        analiseRetorno = (analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString();
+
+                        analiseTrib = (analise.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA);
+
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+                        }
+
+
+                    }
+                }
+                   
+             
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -12119,10 +12896,19 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 resultado = "Problemas ao salvar o registro: " + e.ToString();
 
             }
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassaSn", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
 
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+
+            }
         }
 
         [HttpGet]
@@ -12162,7 +12948,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //trocando o ponto por virgula
             redBasCalcAliqIcmsVenAtaCont = redBasCalcAliqIcmsVenAtaCont.Replace(",", ".");
 
@@ -12189,7 +12975,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
                 }
 
-                TempData["analise"] = null;
+                
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -12198,9 +12984,20 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassaSn", new { param = resultado, qtdSalvos = regSalvos });
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+          
         }
 
         /*Edição Red Base de Calc ICMS ST  Venda Atacado para contrbuinte*/
@@ -12278,6 +13075,13 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteCest = procuraCEST;
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
+
+
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaSn", new { opcao = opcao });
+
+            }
 
             VerificaTempData();
 
@@ -12451,6 +13255,257 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
 
+
+        /*Edição Red Base de Calc ICMS ST  Venda Atacado para contrbuinte*/
+        [HttpGet]
+        public ActionResult EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaSn(string ufOrigem, string ufDestino, string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "Redução Base de Calc. ICMS ST Venda Atacado para CONTRIBUINTE no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            VerificaTempDataSN();
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Maiores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Menores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Nulas Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Nulas MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            this.analiseSn = ProcuraPorSn(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analiseSn);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.analiseSn = this.analiseSn.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    this.analiseSn = this.analiseSn.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(this.analiseSn.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+
+
         [HttpGet]
         public ActionResult EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaModal(string strDados)
         {
@@ -12458,7 +13513,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //Objeto do tipo tributação empresa
             TributacaoEmpresa trib = new TributacaoEmpresa();
             string resultado = ""; //variavel auxiliar;
@@ -12473,55 +13528,108 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            decimal analiseRetorno = 0.0M;
-            decimal analiseTrib = 0.0M;
+            string analiseRetorno = "0";
+            string analiseTrib = "0";
             try
             {
-
-                //laço de repetição para percorrer o array com os registros
-                for (int i = 0; i < idTrib.Length; i++)
+                if (this.empresa.simples_nacional.Equals(1)) 
                 {
-                    //converter em inteiro
-                    int idTrb = int.Parse(idTrib[i]);
-
-                    //faz a busca no objeto criado instanciando um so objeto
-                    trib = db.TributacaoEmpresas.Find(idTrb);
-
-                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                    //pegar valores
-                   
-                    analiseRetorno = (analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : (decimal)analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO;
-
-                    analiseTrib = (analise.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : decimal.Parse(trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
-                    
-
-                    //analisar se já são iguais
-                    if (analiseTrib == analiseRetorno)
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
                     {
-                        regNsalv++;
-                    }
-                    else
-                    {
-                        //verificar se a variavel veio 0.0
-                        if (analiseRetorno == 0.0M)
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+
+                        analiseRetorno = (analiseSn.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString();
+
+                        analiseTrib = (analiseSn.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
+
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
                         {
-                            //se veio 0.0 o valor deve ser atribuido nulo
-                            trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = null;
+                            regNsalv++;
                         }
                         else
                         {
-                            trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analiseSn.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
 
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
                         }
-                        db.SaveChanges();
-                        regSalv++; //contagem de registros salvos
+
+
                     }
 
+                }
+                else 
+                {
+
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
+                    {
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+
+                        analiseRetorno = (analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString();
+
+                        analiseTrib = (analise.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
+
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+                        }
+
+
+                    }
 
                 }
-                TempData["analise"] = null;
+
+                   
+                
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -12530,10 +13638,20 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 resultado = "Problemas ao salvar o registro: " + e.ToString();
 
             }
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaSn", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
 
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+
+            }
+
         }
 
         [HttpGet]
@@ -12573,7 +13691,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //trocando o ponto por virgula
             redBasCalcAliqIcmsSTVenAtaCont = redBasCalcAliqIcmsSTVenAtaCont.Replace(",", ".");
 
@@ -12609,9 +13727,20 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaSn", new { param = resultado, qtdSalvos = regSalvos });
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+           
         }
 
 
@@ -12692,6 +13821,12 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassaSn", new { opcao = opcao });
+
+            }
+
             VerificaTempData();
 
             //origem e destino
@@ -12864,7 +13999,258 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
-        
+
+
+        [HttpGet]
+        public ActionResult EdtCliAliqRedBasCalcIcmsVenAtaSNMassaSn(string ufOrigem, string ufDestino, string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        {
+            /*Verificando a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("Login", "../Home");
+            }
+
+            //Mensagem do card
+            ViewBag.Mensagem = "Redução Base de Calc. ICMS  Venda Atacado para SIMPLES NACIONAL no Cliente X no MTX";
+
+            //variavel auxiliar
+            string resultado = param;
+
+            /*Pegando o usuário e a empresa do usuário*/
+            string user = Session["usuario"].ToString();
+
+            /*Inicializando a variavel de sessão usarios caso nao exista*/
+            if (Session["usuarios"] == null)
+            {
+                this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+                this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+                Session["usuarios"] = usuario;
+                Session["empresas"] = empresa;
+            }
+            else //se existir apenas atribui à empresa
+            {
+                this.empresa = (Empresa)Session["empresas"];
+            }
+
+            //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+            //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+            long codBarrasL = 0; //variavel tipada
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+            //parametro de ordenacao da tabela
+            ViewBag.Ordenacao = ordenacao;
+
+            //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+            ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            TempData.Keep("opcao");
+
+            //atribui 1 a pagina caso os parametreos nao sejam nulos
+            page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+            //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+            procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+            /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+            //ViewBag.FiltroCorrente = procuraPor;
+            ViewBag.FiltroCorrenteCest = procuraCEST;
+            ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+            ViewBag.FiltroCorrente = procuraPor;
+
+            VerificaTempDataSN();
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Maiores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Menores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Nulas Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Nulas MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analiseSn = this.analiseSn.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+
+
+            }//fim do switche
+
+            //Action para procurar
+            this.analiseSn = ProcuraPorSn(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analiseSn);
+
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.analiseSn = this.analiseSn.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    this.analiseSn = this.analiseSn.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(this.analiseSn.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+        }
+
+
+
         [HttpGet]
         public ActionResult EdtCliAliqRedBasCalcIcmsVenAtaSNMassaModal(string strDados)
         {
@@ -12872,7 +14258,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //Objeto do tipo tributação empresa
             TributacaoEmpresa trib = new TributacaoEmpresa();
             string resultado = ""; //variavel auxiliar;
@@ -12887,53 +14273,102 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            decimal analiseRetorno = 0.0M;
-            decimal analiseTrib = 0.0M;
+            string analiseRetorno = "0";
+            string analiseTrib = "0";
             try
             {
 
-                //laço de repetição para percorrer o array com os registros
-                for (int i = 0; i < idTrib.Length; i++)
+                if (this.empresa.simples_nacional.Equals(1)) 
                 {
-                    //converter em inteiro
-                    int idTrb = int.Parse(idTrib[i]);
-
-                    //faz a busca no objeto criado instanciando um so objeto
-                    trib = db.TributacaoEmpresas.Find(idTrb);
-
-                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                    //pegar valores
-                    analiseRetorno = (analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : (decimal)analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO;
-
-                    analiseTrib = (analise.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : decimal.Parse(trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
-                   
-                    //analisar se já são iguais
-                    if (analiseTrib == analiseRetorno)
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
                     {
-                        regNsalv++;
-                    }
-                    else
-                    {
-                        //verificar se a variavel veio 0.0
-                        if (analiseRetorno == 0.0M)
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+                        analiseRetorno = (analiseSn.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString();
+
+                        analiseTrib = (analiseSn.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
                         {
-                            //se veio 0.0 o valor deve ser atribuido nulo
-                            trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = null;
+                            regNsalv++;
                         }
                         else
                         {
-                            trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString().Replace(",", ".");
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analiseSn.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString().Replace(",", ".");
 
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
                         }
-                        db.SaveChanges();
-                        regSalv++; //contagem de registros salvos
+
+
                     }
-
-
                 }
-                TempData["analise"] = null;
+                else
+                {
+                    //laço de repetição para percorrer o array com os registros
+                    for (int i = 0; i < idTrib.Length; i++)
+                    {
+                        //converter em inteiro
+                        int idTrb = int.Parse(idTrib[i]);
+
+                        //faz a busca no objeto criado instanciando um so objeto
+                        trib = db.TributacaoEmpresas.Find(idTrb);
+
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        //pegar valores
+                        analiseRetorno = (analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString();
+
+                        analiseTrib = (analise.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
+
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = null;
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString().Replace(",", ".");
+
+                            }
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+                        }
+
+
+                    }
+                }
+
+                    
+              
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -12943,9 +14378,21 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             }
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassaSn", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalv, qtdNSalvos = regNsalv });
+
+            }
+
+            
         }
         [HttpGet]
         public ActionResult EdtCliAliqRedBasCalcIcmsVenAtaSNMassaManualModal(string strDados)
@@ -12984,7 +14431,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            this.empresa = (Empresa)Session["empresas"];
             //trocando o ponto por virgula
             redBasCalcAliqIcmsVenAtaSN = redBasCalcAliqIcmsVenAtaSN.Replace(",", ".");
 
@@ -13011,7 +14458,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
                 }
 
-                TempData["analise"] = null;
+                
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
@@ -13020,9 +14467,20 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 resultado = "Problemas ao salvar o registro: " + e.ToString();
             }
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["analiseSN"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassaSn", new { param = resultado, qtdSalvos = regSalvos });
 
-            //Redirecionar para a tela de graficos
-            return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+            else
+            {
+                TempData["analise"] = null;
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalvos });
+
+            }
+           
         }
 
         /*Edição Red Base de Calc ICMS ST Venda Atacado para Simples Nacional*/
