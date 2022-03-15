@@ -238,6 +238,7 @@ namespace MatrizTributaria.Models
         public DateTime? dataCad { get; set; }
 
         [Column("DataAlt")]
+        [DisplayFormat(DataFormatString = "{MM/dd/yyyy}")]
         public DateTime? dataAlt { get; set; }
 
         public string Data

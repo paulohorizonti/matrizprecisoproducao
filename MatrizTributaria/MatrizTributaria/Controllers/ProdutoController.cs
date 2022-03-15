@@ -95,7 +95,7 @@ namespace MatrizTributaria.Controllers
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                produtos = (codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToUpper().Contains(procurarPor.ToUpper())));
+                produtos = (codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().StartsWith(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToUpper().StartsWith(procurarPor.ToUpper())));
 
             }
             if (!String.IsNullOrEmpty(procuraCEST))
@@ -1145,7 +1145,7 @@ namespace MatrizTributaria.Controllers
 
                 if (!String.IsNullOrEmpty(procurarPor))
                 {
-                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().StartsWith(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().StartsWith(procurarPor.ToUpper()));
 
                 }
                 if (!String.IsNullOrEmpty(procurarPorCest))
@@ -1163,7 +1163,7 @@ namespace MatrizTributaria.Controllers
                 //ViewBag.NCMTipado = prod1;
                 if (!String.IsNullOrEmpty(procurarPor))
                 {
-                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()));
+                    prod1 = (codBarrasL != 0) ? prod1.Where(s => s.codBarras.ToString().StartsWith(codBarrasL.ToString())) : prod1 = prod1.Where(s => s.descricao.ToString().ToUpper().StartsWith(procurarPor.ToUpper()));
 
                 }
                 if (!String.IsNullOrEmpty(procurarPorCest))
@@ -1560,7 +1560,7 @@ namespace MatrizTributaria.Controllers
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                tribMTX = (codBarrasL != 0) ? (tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().Contains(codBarrasL.ToString()))).ToList() : tribMTX = (tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().Contains(procurarPor.ToUpper()))).ToList();
+                tribMTX = (codBarrasL != 0) ? (tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))).ToList() : tribMTX = (tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper()))).ToList();
             }
             if (!String.IsNullOrEmpty(procuraCEST))
             {
@@ -1580,7 +1580,7 @@ namespace MatrizTributaria.Controllers
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                this.prodMTX = (codBarrasL != 0) ? (prodMTX.Where(s => s.codBarras.ToString().Contains(codBarrasL.ToString()))).ToList() : prodMTX = (prodMTX.Where(s => s.descricao.ToString().ToUpper().Contains(procurarPor.ToUpper()))).ToList();
+                this.prodMTX = (codBarrasL != 0) ? (prodMTX.Where(s => s.codBarras.ToString().StartsWith(codBarrasL.ToString()))).ToList() : prodMTX = (prodMTX.Where(s => s.descricao.ToString().ToUpper().StartsWith(procurarPor.ToUpper()))).ToList();
             }
             if (!String.IsNullOrEmpty(procuraCEST))
             {

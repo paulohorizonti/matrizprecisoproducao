@@ -11,7 +11,7 @@ namespace MatrizTributaria.Models
         public int Id { get; set; }
 
         [Column("Cod_Interno")]
-        public Int64 codInterno { get; set; }
+        public Int64? codInterno { get; set; }
 
         [Column("Cod_Barras")]
         public Int64 codBarras { get; set; }

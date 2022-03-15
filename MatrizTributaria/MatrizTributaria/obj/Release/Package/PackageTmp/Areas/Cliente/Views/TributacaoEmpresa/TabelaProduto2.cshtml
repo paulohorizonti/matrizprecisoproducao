@@ -237,7 +237,7 @@
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                            <tr style="height:78.0px; border-bottom:2px solid #ccc;" class="pr-td">
+                                            <tr style="height:104.0px; border-bottom:2px solid #ccc;" class="pr-td">
 
                                                 <td style="width:5%;">
                                                     @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
@@ -259,7 +259,7 @@
                                 <table id="tablepr-2" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="3" class="pr-fonte2 pr-thtd" scope="col">Produto</th>
+                                            <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2 pr-thtd" scope="col">Produto</th>
 
                                         </tr>
                                         <tr class="pr-td">
@@ -269,7 +269,8 @@
                                             <th class="text-center">
                                                 Cliente
                                             </th>
-                                           
+                                            
+
 
                                         </tr>
                                     </thead>
@@ -297,13 +298,20 @@
                                                 
 
                                             </tr>
-                                            <tr style="border-bottom: 2px solid #ccc;" class="pr-td">
+                                            <tr  class="pr-td">
                                                 <td style="width:5%;">NCM</td>
                                                 <td style="text-align:left; width:20%;" class="pr-td-maior">
                                                         @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
                                                     </td>
                                               
 
+                                            </tr>
+                                            <tr style="border-bottom: 2px solid #ccc;" class="pr-td">
+                                                <td style="width:5%;">Data Importação</td>
+                                                <td style="text-align:left; width:20%;" class="pr-td-maior">
+                                                        @Html.DisplayFor(modelItem => item.DataFormatada)
+                                                    </td>
+                                              
 
                                             </tr>
                                         }
