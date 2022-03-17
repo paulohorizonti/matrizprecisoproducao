@@ -1014,10 +1014,10 @@
                                             google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
 
-                                        }
+                                        } // ok sn
 
                                         /*OK */
-                                        function aliIcmsSTCompSN()
+                                        function aliIcmsSTCompSN()// ok sn
                                         {
                                               var data = google.visualization.arrayToDataTable([
                                                         ['Aliquota', 'Valores'],
@@ -1070,7 +1070,7 @@
                                             //chmando a view
                                             google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                                     chart.draw(data, options);
-                                        }
+                                        } //ok sn
 
                                         /*ok*/
                                         function aliIcmsNFECompInd()
@@ -1127,7 +1127,7 @@
                                             google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                                     chart.draw(data, options);
 
-                                        }
+                                        } //ok sn
                                         /*ok*/
                                         function aliIcmsNFECompSN() {
                                             var data = google.visualization.arrayToDataTable([
@@ -1181,7 +1181,7 @@
                                             //chmando a view
                                             google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                            chart.draw(data, options);
-                                        }
+                                        } //ok sn
 
                                         /*OK*/
                                         function aliIcmsNfeComAta() {
@@ -1236,7 +1236,7 @@
                                             //chmando a view
                                             google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                             chart.draw(data, options);
-                                         }
+                                         } // ok sn
 
                                      });
 
@@ -1749,7 +1749,7 @@
                 else
                 {
 
-                    if (@ViewBag.Title == "AnaliseRedBaseCalEnt")
+                    if (@ViewBag.Title == "AnaliseRedBaseCalEnt" || @ViewBag.Title == "AnaliseRedBaseCalEntSN")
                     {
 
                         <script src="~/Areas/Cliente/Scripts/Graficos/jquery-1.12.4.min.js"></script>
@@ -1774,7 +1774,8 @@
 
 
                             /*OK*/
-                            function redBCalcCompInd() {
+                            function redBCalcCompInd() //ok sn
+                            {
                                     var data = google.visualization.arrayToDataTable([
                                         ['Aliquota', 'Valores'],
                                         ['Maiores', @Html.Raw(ViewBag.RedBaseCalcICMSCompINDMaior)],
@@ -1827,7 +1828,7 @@
                                     //chmando a view
                                     google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                     chart.draw(data, options);
-                            }
+                            } //ok sn
 
                             /*OK*/
                             function redBCalcSTCompInd() {
@@ -1883,7 +1884,7 @@
                                 //chmando a view
                                 google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                     chart.draw(data, options);
-                            }
+                            }  //ok sn
 
                             /*ok */
                             function redBCalcCompAta() {
@@ -1939,7 +1940,7 @@
                                 //chmando a view
                                 google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                     chart.draw(data, options);
-                            }
+                            } //ok sn
 
                             /*ok */
                             function redBCalcSTCompAta()
@@ -1996,7 +1997,7 @@
                                 //chmando a view
                                 google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                     chart.draw(data, options);
-                            }
+                            } //ok sn
 
                             /* OK */
                             function redBCalcCompSN() {
@@ -2052,7 +2053,7 @@
                                 //chmando a view
                                 google.visualization.events.addListener(chart, 'select', selectHandler);//chamando a funcao handler
                                     chart.draw(data, options);
-                            }
+                            } // ok ns
 
                             /*Ok*/
                             function redBCalcSTCompSN() {

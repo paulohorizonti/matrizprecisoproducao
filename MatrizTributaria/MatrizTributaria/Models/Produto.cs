@@ -38,7 +38,6 @@ namespace MatrizTributaria.Models
 
 
 
-
         [ForeignKey("categoriaProduto")]
         [Column("Id_Categoria")]
         public int idCategoria { get; set; }
