@@ -90,12 +90,14 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
             }
 
+
+            //aqui vai a lista
             var produtos = from s in db.Produtos select s;
 
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                produtos = (codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().StartsWith(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToUpper().StartsWith(procurarPor.ToUpper())));
+                produtos = ((codBarrasL != 0) ? (produtos.Where(s => s.codBarras.ToString().StartsWith(codBarrasL.ToString()))) : produtos = (produtos.Where(s => s.descricao.ToUpper().StartsWith(procurarPor.ToUpper()))));
 
             }
             if (!String.IsNullOrEmpty(procuraCEST))
@@ -127,7 +129,7 @@ namespace MatrizTributaria.Controllers
                     produtos = produtos.OrderBy(s => s.Id);
                     break;
                 default:
-                    produtos = produtos.OrderBy(s => s.descricao);
+                    produtos =produtos.OrderBy(s => s.descricao);
                     break;
 
 
@@ -152,6 +154,16 @@ namespace MatrizTributaria.Controllers
 
 
 
+
+        }
+
+
+        private List<Produto> GetProduto()
+        {
+            List<Produto> model = new List<Produto>();
+            model = (from s in db.Produtos select s).ToList();
+
+            return model;
 
         }
         // GET: Produto
@@ -238,6 +250,7 @@ namespace MatrizTributaria.Controllers
             // ViewBag.Categoria = db.Produtos.Find(produto.idCategoria).descricao; //categoria
             ViewBag.DataCad = produto.dataCad;
             ViewBag.DataAlt = produto.dataAlt;
+
             return View(produto);
         }
 
@@ -430,7 +443,7 @@ namespace MatrizTributaria.Controllers
             //chmar action auxiliar para verificar e carregar a tempdata com a lista
             //montar select estado origem e destino
 
-
+            TempData["procuraCAT"] = null;
 
             //verifica carregamento da tabela
             VerificaTempDataProd();
@@ -490,9 +503,12 @@ namespace MatrizTributaria.Controllers
             //verifica se veio parametros
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
-            auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "2";
 
-            filtraPor = (filtraPor != null) ? filtraPor : "Setor"; //padrão é por setor
+            //auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "0";
+
+
+
+            filtraPor = (filtraPor != null) ? filtraPor : "Categoria"; //padrão é por categoria
 
             if(filtraPor != "Setor")
             {
@@ -507,10 +523,58 @@ namespace MatrizTributaria.Controllers
             }
 
            
-            //categoria
-            procuraCate = (procuraCate == "") ? null : procuraCate;
-            procuraCate = (procuraCate == "null") ? null : procuraCate;
-            procuraCate = (procuraCate != null) ? procuraCate : null;
+            
+
+            if(procuraCate == null || procuraCate == "" || procuraCate == "null")
+            {
+                if(TempData["procuraCAT"] != null)
+                {
+                    procuraCate = TempData["procuraCAT"].ToString();
+                }
+                else
+                {
+                    procuraCate = null;
+                    TempData["procuraCAT"] = null;
+                }
+               
+            }
+            else
+            {
+                if(TempData["procuraCAT"] != null)
+                {
+                    if (procuraCate != (TempData["procuraCAT"].ToString()))
+                    {
+                        TempData["procuraCAT"] = procuraCate;
+                    }
+
+
+                }
+                else
+                {
+                    TempData["procuraCAT"] = procuraCate;
+                }
+                
+                
+                
+            }
+
+            //TempData["procuraCAT"] = procuraCate ?? TempData["procuraCAT"];
+
+            //if (TempData["procuraCAT"] == null)
+            //{
+            //    //categoria
+            //    procuraCate = (procuraCate == "") ? null : procuraCate;
+            //    procuraCate = (procuraCate == "null") ? null : procuraCate;
+            //    procuraCate = (procuraCate != null) ? procuraCate : null;
+            //    TempData["procuraCAT"] = procuraCate;
+
+            //}
+            //else
+            //{
+            //    procuraCate = (procuraCate == null) ? TempData["procuraCAT"].ToString() : procuraCate;
+            //}
+
+
 
             //setor
             procuraSetor = (procuraSetor == "") ? null : procuraSetor;
@@ -519,12 +583,16 @@ namespace MatrizTributaria.Controllers
 
             //numero de linhas
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+           
+            ViewBag.FiltroCorrenteAuditado =  (auditadosNCM != null) ? auditadosNCM : "0";
 
 
-          
 
             ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
             ViewBag.ParametroProduto = ordenacao;
+
+           
+           
 
             /*Verifica a opção e atribui a uma tempdata para continuar salva*/
             TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
@@ -533,9 +601,10 @@ namespace MatrizTributaria.Controllers
 
             //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
             TempData.Keep("opcao");
+            TempData.Keep("procuraCAT");
 
             //atribui 1 a pagina caso os parametros nao sejam nulos
-            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) ||(procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
 
             //atrbui filtro corrente caso alguma procura esteja nulla
             procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
@@ -552,9 +621,17 @@ namespace MatrizTributaria.Controllers
             ViewBag.FiltroCorrente = procurarPor;
             ViewBag.FiltroCorrenteNCM = procuraNCM;
             ViewBag.FiltroCorrenteCEST = procuraCEST;
-            ViewBag.FiltroCorrenteAuditado = auditadosNCM; 
+            //ViewBag.FiltroCorrenteAuditado = auditadosNCM; 
             ViewBag.FiltroCorrenteSetor = procuraSetor;
-            ViewBag.FiltroCorrenteCate = procuraCate;
+            if (TempData["procuraCAT"] == null)
+            {
+                ViewBag.FiltroCorrenteCate = procuraCate;
+            }
+            else
+            {
+                ViewBag.FiltroCorrenteCate = TempData["procuraCAT"].ToString();
+            }
+           
             ViewBag.FiltroFiltraPor = filtraPor;
 
             if (procuraSetor != null)
@@ -569,7 +646,7 @@ namespace MatrizTributaria.Controllers
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
 
-            switch (auditadosNCM)
+            switch (ViewBag.FiltroCorrenteAuditado)
             {
                 case "0": //SOMENTE OS NÃO AUDITADOS
                     this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 0).ToList();
@@ -661,15 +738,16 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList().OrderBy(s => s.descricao).ToList();
+          
 
 
-
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
 
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
 
 
         }
@@ -735,6 +813,9 @@ namespace MatrizTributaria.Controllers
             ViewBag.Legislacao = db.Legislacoes;
             ViewBag.CstGeral = db.CstIcmsGerais;
 
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
 
             return View();
         }
@@ -744,7 +825,8 @@ namespace MatrizTributaria.Controllers
             string IdFundamentoLegal, string CstVendaVarejoConsFinal, string alVeVarCF, string alVeVarCFSt, string rBcVeVarCF, string rBcSTVeVarCF, 
             string CstVendaVarejoCont, string alVeVarCont, string alVeVarContSt, string rBcVeVarCont, string rBcSTVeVarCont, string CstVendaAtaCont,
             string aliqIcmsVendaAtaCont, string aliqIcmsSTVendaAtaCont, string redBaseCalcIcmsVendaAtaCont, string redBaseCalcIcmsSTVendaAtaCont, 
-            string CstVendaAtaSimpNacional, string alVSN, string alVSNSt, string rBcVSN, string rBcSTVSN, string IdFundLegalSaidaICMS)
+            string CstVendaAtaSimpNacional, string alVSN, string alVSNSt, string rBcVSN, string rBcSTVSN, string IdFundLegalSaidaICMS, string cest, string ufOrigem,
+            string ufDestino)
         {
             int regSalvos = 0;
             int regNSalvos = 0;
@@ -817,164 +899,198 @@ namespace MatrizTributaria.Controllers
                 int? idTrib = (tribMTX[i].ID); //pega o id do registro da tributação a ser alterada
                 tributaCao = db.Tributacoes.Find(idTrib); //busca a tributação pelo seu id
 
-                //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
-                if(cstSaidaPisCofins != null)
+
+
+
+
+                if (ufOrigem != "null" && ufDestino != "null")
                 {
-                    tributaCao.cstSaidaPisCofins = cstSaidaPisCofins;
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    tributaCao.UF_Origem = ufOrigem;
+                    tributaCao.UF_Destino = ufDestino;
+                  
+                    //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
+                    if (cstSaidaPisCofins != null)
+                    {
+                        tributaCao.cstSaidaPisCofins = cstSaidaPisCofins;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (cstVendaVarejoConsFinal != null)
+                    {
+                        tributaCao.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (cstVendaVarejoCont != null)
+                    {
+
+                        tributaCao.cstVendaVarejoCont = cstVendaVarejoCont;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (cstVendaAtaCont != null)
+                    {
+                        tributaCao.cstVendaAtaCont = cstVendaAtaCont;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (cstVendaAtaSimpNacional != null)
+                    {
+                        tributaCao.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (fecp != "")
+                    {
+                        tributaCao.fecp = decimal.Parse(fecp);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (codNatRec != null)
+                    {
+                        tributaCao.codNatReceita = codNatRec;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (aliqSaidaPis != "")
+                    {
+                        tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (aliqSaidaCofins != "")
+                    {
+                        tributaCao.aliqSaidaCofins = decimal.Parse(aliqSaidaCofins);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (fundLegalCofins != null)
+                    {
+                        tributaCao.idFundamentoLegal = (fundLegalCofins);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (alVeVarCF != "")
+                    {
+                        tributaCao.aliqIcmsVendaVarejoConsFinal = decimal.Parse(alVeVarCF);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (alVeVarCFSt != "")
+                    {
+                        tributaCao.aliqIcmsSTVendaVarejoConsFinal = decimal.Parse(alVeVarCFSt);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (rBcVeVarCF != "")
+                    {
+                        tributaCao.redBaseCalcIcmsVendaVarejoConsFinal = decimal.Parse(rBcVeVarCF);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (rBcSTVeVarCF != "")
+                    {
+                        tributaCao.redBaseCalcIcmsSTVendaVarejoConsFinal = decimal.Parse(rBcSTVeVarCF);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (alVeVarCont != "")
+                    {
+                        tributaCao.aliqIcmsVendaVarejoCont = decimal.Parse(alVeVarCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (alVeVarContSt != "")
+                    {
+                        tributaCao.aliqIcmsSTVendaVarejo_Cont = decimal.Parse(alVeVarContSt);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (rBcVeVarCont != "")
+                    {
+                        tributaCao.redBaseCalcVendaVarejoCont = decimal.Parse(rBcVeVarCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (rBcSTVeVarCont != "")
+                    {
+                        tributaCao.RedBaseCalcSTVendaVarejo_Cont = decimal.Parse(rBcSTVeVarCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (aliqIcmsVendaAtaCont != "")
+                    {
+                        tributaCao.aliqIcmsVendaAtaCont = decimal.Parse(aliqIcmsVendaAtaCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (aliqIcmsSTVendaAtaCont != "")
+                    {
+                        tributaCao.aliqIcmsSTVendaAtaCont = decimal.Parse(aliqIcmsSTVendaAtaCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (redBaseCalcIcmsVendaAtaCont != "")
+                    {
+                        tributaCao.redBaseCalcIcmsVendaAtaCont = decimal.Parse(redBaseCalcIcmsVendaAtaCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (redBaseCalcIcmsSTVendaAtaCont != "")
+                    {
+                        tributaCao.redBaseCalcIcmsSTVendaAtaCont = decimal.Parse(redBaseCalcIcmsSTVendaAtaCont);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+                    if (alVSN != "")
+                    {
+                        tributaCao.aliqIcmsVendaAtaSimpNacional = decimal.Parse(alVSN);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (alVSNSt != "")
+                    {
+                        tributaCao.aliqIcmsSTVendaAtaSimpNacional = decimal.Parse(alVSNSt);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (rBcVSN != "")
+                    {
+                        tributaCao.redBaseCalcIcmsVendaAtaSimpNacional = decimal.Parse(rBcVSN);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (rBcSTVSN != "")
+                    {
+                        tributaCao.redBaseCalcIcmsSTVendaAtaSimpNacional = decimal.Parse(rBcSTVSN);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+                    if (fundLegalIcmsSaida != null)
+                    {
+                        tributaCao.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+
                 }
-                if(cstVendaVarejoConsFinal != null)
+
+
+
+
+               
+
+                //if(ufOrigem != "")
+                //{
+                //    if(ufDestino != "")
+                //    {
+
+                //    }
+                //}
+               
+
+                if(cest != "")
                 {
-                    tributaCao.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                    tributaCao.produtos.cest = cest;
                     regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
                 }
 
-                if (cstVendaVarejoCont !=null) 
-                {
-
-                    tributaCao.cstVendaVarejoCont = cstVendaVarejoCont;
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(cstVendaAtaCont != null)
-                {
-                    tributaCao.cstVendaAtaCont = cstVendaAtaCont;
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(cstVendaAtaSimpNacional != null)
-                {
-                    tributaCao.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if (fecp != "")
-                {
-                    tributaCao.fecp = decimal.Parse(fecp);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                
-                if(codNatRec != null)
-                {
-                    tributaCao.codNatReceita = codNatRec;
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if(aliqSaidaPis != "")
-                {
-                    tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if (aliqSaidaCofins != "")
-                {
-                    tributaCao.aliqSaidaCofins = decimal.Parse(aliqSaidaCofins);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if (fundLegalCofins != null)
-                {
-                    tributaCao.idFundamentoLegal = (fundLegalCofins);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                
-                if(alVeVarCF != "")
-                {
-                    tributaCao.aliqIcmsVendaVarejoConsFinal = decimal.Parse(alVeVarCF);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(alVeVarCFSt != "")
-                {
-                    tributaCao.aliqIcmsSTVendaVarejoConsFinal = decimal.Parse(alVeVarCFSt);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if(rBcVeVarCF != "")
-                {
-                    tributaCao.redBaseCalcIcmsVendaVarejoConsFinal = decimal.Parse(rBcVeVarCF);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if(rBcSTVeVarCF != "")
-                {
-                    tributaCao.redBaseCalcIcmsSTVendaVarejoConsFinal = decimal.Parse(rBcSTVeVarCF);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(alVeVarCont != "")
-                {
-                    tributaCao.aliqIcmsVendaVarejoCont = decimal.Parse(alVeVarCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(alVeVarContSt != "")
-                {
-                    tributaCao.aliqIcmsSTVendaVarejo_Cont = decimal.Parse(alVeVarContSt);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(rBcVeVarCont != "")
-                {
-                    tributaCao.redBaseCalcVendaVarejoCont = decimal.Parse(rBcVeVarCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(rBcSTVeVarCont != "")
-                {
-                    tributaCao.RedBaseCalcSTVendaVarejo_Cont = decimal.Parse(rBcSTVeVarCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(aliqIcmsVendaAtaCont != "")
-                {
-                    tributaCao.aliqIcmsVendaAtaCont = decimal.Parse(aliqIcmsVendaAtaCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if(aliqIcmsSTVendaAtaCont != "")
-                {
-                    tributaCao.aliqIcmsSTVendaAtaCont = decimal.Parse(aliqIcmsSTVendaAtaCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if (redBaseCalcIcmsVendaAtaCont != "")
-                {
-                    tributaCao.redBaseCalcIcmsVendaAtaCont = decimal.Parse(redBaseCalcIcmsVendaAtaCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if(redBaseCalcIcmsSTVendaAtaCont != "")
-                {
-                    tributaCao.redBaseCalcIcmsSTVendaAtaCont = decimal.Parse(redBaseCalcIcmsSTVendaAtaCont);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-
-                if (alVSN != "")
-                {
-                    tributaCao.aliqIcmsVendaAtaSimpNacional = decimal.Parse(alVSN);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if(alVSNSt != "")
-                {
-                    tributaCao.aliqIcmsSTVendaAtaSimpNacional = decimal.Parse(alVSNSt);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if (rBcVSN != "")
-                {
-                    tributaCao.redBaseCalcIcmsVendaAtaSimpNacional = decimal.Parse(rBcVSN);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if(rBcSTVSN != "")
-                {
-                    tributaCao.redBaseCalcIcmsSTVendaAtaSimpNacional = decimal.Parse(rBcSTVSN);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
-                if (fundLegalIcmsSaida != null)
-                {
-                    tributaCao.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
-                    regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
-                }
 
                 if(regParaSalvar != 0)
                 {
                     tributaCao.auditadoPorNCM = 1; //marca como auditado
+                    tributaCao.produtos.auditadoNCM = 1; //marca o produto como auditado tb
                     tributaCao.dataAlt = DateTime.Now; //data da alteração
                     try
                     {
@@ -1008,7 +1124,7 @@ namespace MatrizTributaria.Controllers
             return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
         }
         [HttpGet]
-        public ActionResult EditMassaModalPost(string strDados, string ncm)
+        public ActionResult EditMassaModalPost(string strDados, string ncm, string cest)
         {
             //variaveis de auxilio
             int regSalvos = 0;
@@ -1017,9 +1133,11 @@ namespace MatrizTributaria.Controllers
 
             string retorno = "";
 
+          
 
             //varivael para recebe o novo ncm
             string ncmMudar = "";
+            string cestMudar = "";
 
             //separar a String em um array
             string[] idProdutos = strDados.Split(',');
@@ -1028,10 +1146,16 @@ namespace MatrizTributaria.Controllers
             idProdutos = idProdutos.Where(item => item != "").ToArray();
 
             ncmMudar = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
-
-            ncmMudar = ncmMudar.Replace(".", ""); //tirar os pontos da string
-
-
+            cestMudar = cest != "" ? cest.Trim() : null;
+            if(ncmMudar != null)
+            {
+                if(ncmMudar != "")
+                {
+                    ncmMudar = ncmMudar.Replace(".", ""); //tirar os pontos da string
+                }
+               
+            }
+          
 
             //objeto produto
             Produto prod = new Produto();
@@ -1044,8 +1168,28 @@ namespace MatrizTributaria.Controllers
                 if (prod !=null)
                 {
                     
-
-                    prod.ncm = ncmMudar;
+                    if(cestMudar != null)
+                    {
+                        if(cestMudar != "") 
+                        {
+                            prod.cest = cestMudar;
+                        }
+                       
+                    }
+                    //verificar se veio nulo
+                    if(ncmMudar != null)
+                    {
+                        if(ncmMudar != "")
+                        {
+                            if (prod.ncm != ncmMudar)
+                            {
+                                prod.ncm = ncmMudar;
+                            }
+                        }
+                       
+                    }
+                    
+                    prod.auditadoNCM = 1;
                     prod.dataAlt = DateTime.Now; //data da alteração
                     try
                     {
@@ -1076,7 +1220,6 @@ namespace MatrizTributaria.Controllers
             //Redirecionar para registros
             return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
         }
-
 
 
         //Editar CEST
@@ -1199,8 +1342,6 @@ namespace MatrizTributaria.Controllers
 
 
         }
-
-
 
         [HttpGet]
         public ActionResult EditCestMassaModal(string array) 

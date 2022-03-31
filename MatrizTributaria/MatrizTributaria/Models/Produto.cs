@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PagedList;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -47,5 +49,10 @@ namespace MatrizTributaria.Models
 
         [Column("Status")]
         public Nullable<sbyte> status { get; set; }
+
+        [Column("AuditadoNCM")]
+        public Nullable<sbyte> auditadoNCM { get; set; }
     }
+
+   
 }

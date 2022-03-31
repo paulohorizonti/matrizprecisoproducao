@@ -9,30 +9,28 @@ $(document).ready(function () {
             var value = selecao.options[selecao.selectedIndex].value; //pegar o valor do select
 
             if (value == 1) {
-               
-               
-              
-                document.getElementById('mudarValoresNatRec').style.display = 'none';
-                document.getElementById('mudarValoresSetorFecp').style.display = 'none';
-               
-               
 
-                document.getElementById('mudarValoresTab').style.display = 'none';
+               /* document.getElementById('mudarValoresNatRec').style.display = 'none';*/
+               /* document.getElementById('mudarValoresSetorFecp').style.display = 'none';*/
+                document.getElementById('mudarValoresCest').style.display = 'none';
                 
-             
+
+               /* document.getElementById('mudarValoresTab').style.display = 'none';*/
+
+
                 document.getElementById("selAlterar").focus();
-                
-               
+
+
             } else {
-                document.getElementById('mudarValoresTab').style.display = 'block';
-                
-                
-                document.getElementById('mudarValoresNatRec').style.display = 'flex';
-                document.getElementById('mudarValoresSetorFecp').style.display = 'block';
+               /* document.getElementById('mudarValoresTab').style.display = 'block';*/
+
+                document.getElementById('mudarValoresCest').style.display = 'block';
+                //document.getElementById('mudarValoresNatRec').style.display = 'flex';
+                //document.getElementById('mudarValoresSetorFecp').style.display = 'block';
                 document.getElementById("selAlterar").focus();
-                
+
             }
-           
+
         });
     }
 
@@ -44,8 +42,162 @@ $(document).ready(function () {
 });
 
 
+//atribuir valores de tributação
+$(document).ready(function ()
+{
+    var uforigem = document.getElementById("ufOrigem");
+    var ufdestino = document.getElementById("ufDestino");
+
+    var fecp = document.getElementById("fecp");
+    var codReceita = document.getElementById("CodReceita");
+    var idCstSaiPC = document.getElementById("idCstSaiPC");
+    var alpS = document.getElementById("alpS");
+    var alcS = document.getElementById("alcS");
+    var idFundamentoLegal = document.getElementById("IdFundamentoLegal");
+
+    var idCstVeVarCF = document.getElementById("idCstVeVarCF");
+    var alVeVarCF = document.getElementById("alVeVarCF");
+    var alVeVarCFSt = document.getElementById("alVeVarCFSt");
+    var rBcVeVarCF = document.getElementById("rBcVeVarCF");
+    var rBcSTVeVarCF = document.getElementById("rBcSTVeVarCF");
+
+    var idCstVeVarCont = document.getElementById("idCstVeVarCont");
+    var alVeVarCont = document.getElementById("alVeVarCont");
+    var alVeVarContSt = document.getElementById("alVeVarContSt");
+    var rBcVeVarCont = document.getElementById("rBcVeVarCont");
+    var rBcSTVeVarCont = document.getElementById("rBcSTVeVarCont");
+
+    var idCstVeAtaCont = document.getElementById("idCstVeAtaCont");
+    var alVaC = document.getElementById("alVaC");
+    var alVaCSt = document.getElementById("alVaCSt");
+    var rBcVaC = document.getElementById("rBcVaC");
+    var rBcSTVaC = document.getElementById("rBcSTVaC");
+
+    var idCstVeAtaSN = document.getElementById("idCstVeAtaSN");
+    var alVSN = document.getElementById("alVSN");
+    var alVSNSt = document.getElementById("alVSNSt");
+    var rBcVSN = document.getElementById("rBcVSN");
+    var rBcSTVSN = document.getElementById("rBcSTVSN");
+
+    var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
 
 
+    uforigem.addEventListener("change", function () {
+
+
+        
+        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
+        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
+
+
+        if (opcaoValorOrigem === "UF de Origem") {
+
+            alert("UF de origem e destino devem ser preenchidos");
+            ufdestino.prop('disabled',true);
+            fecp.prop('disabel',true);
+
+        } else {
+            if (opcaoValorDestino == "UF de Destino") {
+                alert("UF de origem e destino devem ser preenchidos");
+                ufdestino.removeAttribute('disabled');
+                fecp.addAttribute('readonly');
+
+            }
+            else {
+                ufdestino.removeAttribute('disabled');
+                fecp.removeAttribute('readonly');
+            }
+
+        }
+
+    });
+
+    ufdestino.addEventListener("change", function () {
+
+        alert("Entrou");
+        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
+        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
+        alert("Origem: "+opcaoValorOrigem);
+        alert("Destino: "+opcaoValorDestino);
+
+
+        if (opcaoValorOrigem === "UF de Origem"){
+          
+            alert("UF de origem e destino devem ser preenchidos");
+            fecp.addAttribute('readonly');
+            
+        } else {
+            if (opcaoValorDestino == "UF de Destino") {
+                alert("UF de origem e destino devem ser preenchidos");
+
+                fecp.addAttribute('readonly');
+               
+            }
+            else {
+                fecp.removeAttribute('readonly');
+            }
+            
+        }
+
+    });
+
+
+
+    
+
+
+
+
+
+});
+function liberarCampos() {
+    var uforigem = document.getElementById("ufOrigem");
+    var ufdestino = document.getElementById("ufDestino");
+
+    var fecp = document.getElementById("fecp");
+    var codReceita = document.getElementById("CodReceita");
+    var idCstSaiPC = document.getElementById("idCstSaiPC");
+    var alpS = document.getElementById("alpS");
+    var alcS = document.getElementById("alcS");
+    var idFundamentoLegal = document.getElementById("IdFundamentoLegal");
+
+    var idCstVeVarCF = document.getElementById("idCstVeVarCF");
+    var alVeVarCF = document.getElementById("alVeVarCF");
+    var alVeVarCFSt = document.getElementById("alVeVarCFSt");
+    var rBcVeVarCF = document.getElementById("rBcVeVarCF");
+    var rBcSTVeVarCF = document.getElementById("rBcSTVeVarCF");
+
+    var idCstVeVarCont = document.getElementById("idCstVeVarCont");
+    var alVeVarCont = document.getElementById("alVeVarCont");
+    var alVeVarContSt = document.getElementById("alVeVarContSt");
+    var rBcVeVarCont = document.getElementById("rBcVeVarCont");
+    var rBcSTVeVarCont = document.getElementById("rBcSTVeVarCont");
+
+    var idCstVeAtaCont = document.getElementById("idCstVeAtaCont");
+    var alVaC = document.getElementById("alVaC");
+    var alVaCSt = document.getElementById("alVaCSt");
+    var rBcVaC = document.getElementById("rBcVaC");
+    var rBcSTVaC = document.getElementById("rBcSTVaC");
+
+    var idCstVeAtaSN = document.getElementById("idCstVeAtaSN");
+    var alVSN = document.getElementById("alVSN");
+    var alVSNSt = document.getElementById("alVSNSt");
+    var rBcVSN = document.getElementById("rBcVSN");
+    var rBcSTVSN = document.getElementById("rBcSTVSN");
+
+    var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
+
+
+
+
+
+
+    if (uforigem.onselect && ufdestino.onselect) {
+        fecp.removeAttribute('readonly');
+
+
+    }
+}
 
 
 
@@ -94,7 +246,7 @@ $(document).ready(function () {
 
         });
     }
-    
+
 });
 
 //Chamar graficos MENU
@@ -123,8 +275,8 @@ $(document).ready(function () {
 
         });
     }
-    
-    
+
+
 
 });//fim chamar graficos menu
 
@@ -2995,40 +3147,40 @@ $(document).ready(function () {
     var botaoSalvarCstCompSN = document.getElementById("salvarCstCompraSN"); //variavel para receber o botao de salvar
 
     if (botaoSalvarCstCompSN) {
-         botaoSalvarCstCompSN.addEventListener("click", function () {
-             var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
-             var dados = {}; //variavel auxiliar para receber o ID
-             var strDados = ""; //variavel auxiliar para receber o ID sem espaços
-             var cstCompraSN = document.getElementById("cstCompSN").value; //pegar o valor do imput
+        botaoSalvarCstCompSN.addEventListener("click", function () {
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = ""; //variavel auxiliar para receber o ID sem espaços
+            var cstCompraSN = document.getElementById("cstCompSN").value; //pegar o valor do imput
 
-             if (cstCompraSN) {
-                 for (var i = 0; i < selecionados.length; i++) {
-                     var selecionado = selecionados[i]; //variavel para conter os itens selecionados
-                     selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
-                     dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
-                     dados[i] = dados[i].trim();
-                     strDados += dados[i] + ",";
-                 }//fim do for
-                 bloqueioTela();//bloqueia tela
-                 //agora o ajax
-                 $.ajax({
+            if (cstCompraSN) {
+                for (var i = 0; i < selecionados.length; i++) {
+                    var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                    selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                    dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                    dados[i] = dados[i].trim();
+                    strDados += dados[i] + ",";
+                }//fim do for
+                bloqueioTela();//bloqueia tela
+                //agora o ajax
+                $.ajax({
 
-                     data: { strDados: strDados, cstCompraSN: cstCompraSN },
-                     types: "GET",
-                     processData: true,
-                     success: function () {
+                    data: { strDados: strDados, cstCompraSN: cstCompraSN },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
 
-                         window.location.href = '/Tributacao/EditCstCompraSNMassaModalPost?strDados=' + strDados + '&cstCompraSN=' + cstCompraSN;
+                        window.location.href = '/Tributacao/EditCstCompraSNMassaModalPost?strDados=' + strDados + '&cstCompraSN=' + cstCompraSN;
 
-                     }
+                    }
 
-                 });
+                });
                 //fim if verificacao vazio
-             } else {
-                 toastr.error("Selecione um CST!"); //caso nao escolha um cst uma exceção é lançada
-                 return false;
+            } else {
+                toastr.error("Selecione um CST!"); //caso nao escolha um cst uma exceção é lançada
+                return false;
 
-             }
+            }
         });
     }
 
@@ -3202,12 +3354,12 @@ $(document).ready(function () {
                 //agora o ajax
                 $.ajax({
 
-                    data: { strDados: strDados, cstVendAtaSN: cstVendAtaSN, origem : origem },
+                    data: { strDados: strDados, cstVendAtaSN: cstVendAtaSN, origem: origem },
                     types: "GET",
                     processData: true,
                     success: function () {
 
-                        window.location.href = '/Tributacao/EditCstVendaAtaSNMassaModalPost?strDados=' + strDados + '&cstVendAtaSN=' + cstVendAtaSN+'&origem=' + origem;
+                        window.location.href = '/Tributacao/EditCstVendaAtaSNMassaModalPost?strDados=' + strDados + '&cstVendAtaSN=' + cstVendAtaSN + '&origem=' + origem;
 
                     }
 
@@ -3261,7 +3413,7 @@ $(document).ready(function () {
                     }
 
                 });
-            //fim if verificacao vazio
+                //fim if verificacao vazio
             } else {
                 toastr.error("Selecione um CST!"); //caso nao escolha um cst uma exceção é lançada
                 return false;
@@ -3327,7 +3479,7 @@ $(document).ready(function () {
         //funcao para enviar para action os dados para serem salvos
         botaoSalvarCstVenVarCF.addEventListener("click", function () {
             var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
-           /* var cstVenVarCFMudar = document.getElementById("cstVeVarCF"); //pegar o valor do input*/
+            /* var cstVenVarCFMudar = document.getElementById("cstVeVarCF"); //pegar o valor do input*/
             var dados = {}; //variavel auxiliar para receber o ID
             var strDados = ""; //variavel auxiliar para receber o ID sem espaços
             var cstVendVarCF = document.getElementById("cstVeVarCF").value; //pegar o valor
@@ -3412,7 +3564,7 @@ $(document).ready(function () {
 
         });
     }
-   
+
 
 });
 
@@ -3500,7 +3652,7 @@ $(document).ready(function () {
         });
 
     }
-    
+
 
 });
 
@@ -3597,7 +3749,7 @@ $(document).ready(function () {
             }//fim do else verficar se nulo
         });
     }
-    
+
 
 });
 
@@ -3605,17 +3757,32 @@ $(document).ready(function () {
 $(document).ready(function () {
     toastOpcoes();
     var botaoSalvarNCM = document.getElementById("salvarNCM"); //variavel que recebe o botao da alteracao do ncm
-    
+
     //verificar se o botao existe
     if (botaoSalvarNCM) {
         botaoSalvarNCM.addEventListener("click", function () {
             var dados = {}
             var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
             var ncmMudar = document.getElementById("ncm");
+            var cestMudar = document.getElementById("cest"); //pegar o valor do input
 
             var dados = {}; //variavel auxiliar para receber o ID
             var strDados = "";
             var ncm = ncmMudar.value;
+            var cest = cestMudar.value; // //variavel que recebe o valor do input
+
+            if (cest != "")
+            {
+                if (cest.length != 9) {
+                    /* alert("Tamanho do NCM incorreto! Digite novamente");*/
+                    document.getElementById("cest").focus();
+                    /* swal('Tamanho do NCM incorreto! Digite novamente"');*/
+                    toastr.error("Tamanho do CEST incorreto! Digite novamente");
+
+                }
+
+            }
+
 
 
             if (ncm != "") {
@@ -3641,12 +3808,12 @@ $(document).ready(function () {
                     //agora o ajax
                     $.ajax({
 
-                        data: { strDados: strDados, ncm: ncm },
+                        data: { strDados: strDados, ncm: ncm, cest: cest },
                         types: "GET",
                         processData: true,
                         success: function () {
 
-                            window.location.href = '/Produto/EditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm;
+                            window.location.href = '/Produto/EditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
 
                         }
 
@@ -3674,12 +3841,12 @@ $(document).ready(function () {
                     //agora o ajax
                     $.ajax({
 
-                        data: { strDados: strDados, ncm: ncm },
+                        data: { strDados: strDados, ncm: ncm, cest: cest },
                         types: "GET",
                         processData: true,
                         success: function () {
 
-                            window.location.href = '/Produto/EditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm;
+                            window.location.href = '/Produto/EditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
 
                         }
 
@@ -3698,23 +3865,23 @@ $(document).ready(function () {
 
         });
     }
-   
 
-   
+
+
 });
 
 
 $(document).ready(function () {
     /** Script para selecionar a linha tabela */
-    var tabela        = document.getElementById("tablepr");
-    var tabela        = document.getElementById("tablepr-user");
-    var tabela        = document.getElementById("tablepr-2");
-    var linhas        = document.getElementsByTagName("tr");
-    var btnEditar     = document.getElementById("editarDados"); //variavel que representa o botão
+    var tabela = document.getElementById("tablepr");
+    var tabela = document.getElementById("tablepr-user");
+    var tabela = document.getElementById("tablepr-2");
+    var linhas = document.getElementsByTagName("tr");
+    var btnEditar = document.getElementById("editarDados"); //variavel que representa o botão
     var btnVisualizar = document.getElementById("visualizarDados"); //variavel que representa o botão
     var btnApagar = document.getElementById("apagarDados"); //variavel que representa o botao de apagar
-   
-    var a             = document.querySelector(".pr-titulo"); //pegar o nome do controler
+
+    var a = document.querySelector(".pr-titulo"); //pegar o nome do controler
     var controller = a.innerText;
 
 
@@ -3739,7 +3906,7 @@ $(document).ready(function () {
     }
 
     if (btnVisualizar) {
-       /* Função para pegar o clique do botão VISUALIZAR*/
+        /* Função para pegar o clique do botão VISUALIZAR*/
         btnVisualizar.addEventListener("click", function () {
             var selecionados = document.getElementsByClassName("selecionado"); //pega os elementos da linha com a classe selecionado
             //Verificar se está selecionado
@@ -3771,9 +3938,9 @@ $(document).ready(function () {
                 });
 
         });
-       
+
     }
-    
+
     if (btnEditar) {
         /*Função para pegar o clique do botão editar*/
         btnEditar.addEventListener("click", function () {
@@ -3798,7 +3965,7 @@ $(document).ready(function () {
 
             $.ajax(
                 {
-                   
+
                     data: { id: id },
                     types: "GET",
                     processData: true,
@@ -3817,7 +3984,7 @@ $(document).ready(function () {
         });
 
     }
-    
+
 
     if (btnApagar) {
         /*Função para pegar o clique do botão apagar*/
@@ -3856,7 +4023,7 @@ $(document).ready(function () {
 
         });
     }
-   
+
 
 
 })
@@ -3888,7 +4055,7 @@ $(document).ready(function () {
                 next: "Próximo",
                 last: "Último"
             },
-            
+
 
         }
     });
@@ -3902,9 +4069,9 @@ $(document).ready(function () {
 /*Converter inputs em maiusculo*/
 
 
-function maiuscula(z){
-        v = z.value.toUpperCase();
-        z.value = v;
+function maiuscula(z) {
+    v = z.value.toUpperCase();
+    z.value = v;
 }
 function minuscula(z) {
     v = z.value.toLowerCase();
@@ -3927,7 +4094,7 @@ function onlynumberDecimal(evt) {
     var key = theEvent.keyCode || theEvent.which;
     key = String.fromCharCode(key);
     var regex = /^[0-9,]+$/;
-    
+
     if (!regex.test(key)) {
         theEvent.returnValue = false;
         if (theEvent.preventDefault) theEvent.preventDefault();
@@ -4060,14 +4227,14 @@ function toastOpcoes() {
 $(document).ready(function () {
 
     var tabela = document.getElementById("table-editmassa");
-    
+
     if (tabela) {
         var linhas = tabela.getElementsByTagName('tr');
         var lab = document.getElementById('lab');
         lab.innerHTML = (linhas.length - 1);
 
     }
-   
+
 
 });
 

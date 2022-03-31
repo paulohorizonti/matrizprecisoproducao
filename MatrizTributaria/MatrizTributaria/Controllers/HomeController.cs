@@ -338,8 +338,8 @@ namespace MatrizTributaria.Controllers
                 TempData["usuarioEmpresa"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
+                TempData["procuraCAT"] = null;
 
-                                            
                 //cliente
                 TempData["prdInexistente"] = null;
                 TempData["analise2"] = null;
