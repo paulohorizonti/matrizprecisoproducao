@@ -1204,6 +1204,8 @@ $(document).ready(function () {
     var btnAlterarSelecionados = document.getElementById("editarSelecionados");
     var btnAlterarPorNCM = document.getElementById("editarPorNcm");
 
+    var btnTributacaoPorNCM = document.getElementById("tributacaoPorNcm");
+
     if (tabela) {
         var linhas = tabela.getElementsByTagName("tr");
         for (var i = 0; i < linhas.length; i++) {
@@ -1275,6 +1277,60 @@ $(document).ready(function () {
 
         });
 
+    }
+
+    //tributacaoPorNCM
+    if (btnTributacaoPorNCM) {
+        btnTributacaoPorNCM.addEventListener("click", function () {
+
+            var selecionados = document.getElementsByClassName("selecionado"); //pega os elementos da linha com a classe selecionado
+            if (selecionados.length > 1) {
+                alert("Para alterar TRIBUTAÇÃO usando o NCM selecione somente uma linha");
+                return false;
+            }
+            if (selecionados.length == 0) {
+                alert("Selecione PELO MENOS uma linha para alterar");
+                return false;
+            }
+            var dados = {}; //variavel auxiliar para receber o ID
+            var dadosNCM = {};
+            var strDadosNCM = "";
+            var strDados = "";
+
+            /*Laço para varrer os elementos com a tag TD*/
+            for (var i = 0; i < selecionados.length; i++) {
+                var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice i ao vetor dados
+                dadosNCM[i] = selecionado[5].innerHTML;
+                dados[i] = dados[i].trim();
+                dadosNCM[i] = dadosNCM[i].trim();
+                strDados += dados[i];
+                strDadosNCM = dadosNCM[i];
+
+
+            }
+            bloqueioTela();
+
+
+            //agora mandar esse vetor para o modal e passar o valor correto do ncm
+            $.ajax(
+                {
+
+                    data: { id: strDados, ncm: strDadosNCM },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Produto/EditTributacaoMassaNCMModal?id=' + strDados + '&ncm=' + strDadosNCM;
+
+                    }
+
+
+                });
+
+
+        });
     }
 
     //selecionado por ncm

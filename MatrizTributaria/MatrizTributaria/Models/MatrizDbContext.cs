@@ -23,6 +23,7 @@ namespace MatrizTributaria.Models
         public virtual DbSet<Legislacao> Legislacoes { get; set; }
         public virtual DbSet<NaturezaReceita> NaturezaReceitas { get; set; }
         public virtual DbSet<Tributacao> Tributacoes { get; set; }
+        public virtual DbSet<TributacaoNCM> TributacoesNcm { get; set; }//31032022
 
         public virtual DbSet<CstIcmsGeral> CstIcmsGerais { get; set; }
         public virtual DbSet<CstPisCofinsEntrada> CstPisCofinsEntradas { get; set; }

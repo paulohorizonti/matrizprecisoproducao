@@ -17,9 +17,14 @@ namespace MatrizTributaria.Controllers
         List<Produto> prodMTX = new List<Produto>();
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>(); //TESTE COM A VIEW DA TRIBUTAÇÃO
         List<Produto> produtosMTX = new List<Produto>();
+
+        List<TributacaoNCM> tribNCM = new List<TributacaoNCM>();
         //origem e destino
         string ufOrigem = "";
         string ufDestino = "";
+
+        string ufOrigemNCM = "";
+        string ufDestinoNCM = "";
         public ProdutoController()
         {
             db = new MatrizDbContext();
@@ -1123,7 +1128,85 @@ namespace MatrizTributaria.Controllers
             //Redirecionar para registros
             return RedirectToAction("EditMassa", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
         }
+       
+
         [HttpGet]
+        public ActionResult EditTributacaoMassaNCMModal(string id, string ncm, string uf_origem, string uf_destino)
+        {
+            //entrou na action, mostrar a tributação desse ncm na tela
+            //receber os dados do ncm para alterar
+
+            string ncmAlterar = ncm;
+            ncmAlterar = ncmAlterar.Replace(".", "");
+            ViewBag.NCM = ncmAlterar;
+            //buscar na tablea pelo ncm
+            this.tribNCM = db.TributacoesNcm.AsNoTracking().ToList();
+
+            //agora um objeto de tributação de produtos
+            this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
+
+
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+           
+
+            //verifica estados origem e destino
+            VerificaOriDestNCM(uf_origem, uf_destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigemNCM;
+            ViewBag.UfDestino = this.ufDestinoNCM;
+
+
+
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+            //pegar os ncm existenstes em cada tabela
+
+            //tributacao pelo estado
+            if(this.ufOrigemNCM != null && this.ufDestinoNCM != null)
+            {
+                this.tribNCM = this.tribNCM.Where(item => item.produtos.ncm.Equals(ncm) && item.UF_Origem.Equals(this.ufOrigemNCM) && item.UF_Destino.Equals(this.ufDestinoNCM)).ToList();
+
+            }
+
+            this.tribMTX = this.tribMTX.Where(item => item.NCM_PRODUTO == ncmAlterar).OrderBy(item => item.DESCRICAO_PRODUTO).ToList();
+           
+            ViewBag.TributacaoNCM = this.tribMTX;
+
+            ////retira o elemento vazio do array
+            //idProdutos = idProdutos.Where(item => item != "").ToArray();
+
+            //cestMudar = cest != "" ? cest.Trim() : null; //ternario para remover eventuais espaços
+
+            ////objeto produto
+            //Produto prod = new Produto();
+
+            ////percorrer o array, atribuir o valor de ncm e salvar o objeto
+            //for (int i = 0; i < idProdutos.Length; i++)
+            //{
+            //    int idProd = Int32.Parse(idProdutos[i]);
+            //    prod = db.Produtos.Find(idProd);
+            //    prod.dataAlt = DateTime.Now; //data da alteração
+            //    prod.cest = cestMudar; //novo ceste
+            //    db.SaveChanges();
+            //}
+
+            ViewBag.TributacaoNCM = this.tribNCM;
+            ViewBag.TributacaoMTX = this.tribMTX;
+            return View();
+        }
+
+
+
         public ActionResult EditMassaModalPost(string strDados, string ncm, string cest)
         {
             //variaveis de auxilio
@@ -1743,6 +1826,43 @@ namespace MatrizTributaria.Controllers
             }
 
             return this.prodMTX;
+        }
+
+        //verifica origem e destino so do ncm
+        private EmptyResult VerificaOriDestNCM(string origem, string destino)
+        {
+
+            if (origem == null || origem == "")
+            {
+                TempData["UfOrigemNCM"] = (TempData["UfOrigemNCM"] == null) ? "TO" : TempData["UfOrigemNCM"].ToString();
+                TempData.Keep("UfOrigemNCM");
+            }
+            else
+            {
+                TempData["UfOrigemNCM"] = origem;
+                TempData.Keep("UfOrigemNCM");
+
+            }
+
+            if (destino == null || destino == "")
+            {
+                TempData["UfDestinoNCM"] = (TempData["UfDestinoNCM"] == null) ? "TO" : TempData["UfDestinoNCM"].ToString();
+                TempData.Keep("UfDestinoNCM");
+            }
+            else
+            {
+                TempData["UfDestinoNCM"] = destino;
+                TempData.Keep("UfDestinoNCM");
+            }
+
+
+
+
+
+            this.ufOrigemNCM = TempData["UfOrigemNCM"].ToString();
+            this.ufDestinoNCM = TempData["UfDestinoNCM"].ToString();
+
+            return new EmptyResult();
         }
 
         protected override void Dispose(bool disposing)

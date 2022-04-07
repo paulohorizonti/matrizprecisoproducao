@@ -93,19 +93,122 @@ $(document).ready(function ()
         if (opcaoValorOrigem === "UF de Origem") {
 
             alert("UF de origem e destino devem ser preenchidos");
-            ufdestino.prop('disabled',true);
-            fecp.prop('disabel',true);
+            ufdestino.setAttribute('disabled', true);
+            fecp.setAttribute('readonly', true);
+
+            codReceita.setAttribute('disabled', true);
+            idCstSaiPC.setAttribute('disabled', true);
+            alpS.setAttribute('readonly', true);
+            alcS.setAttribute('readonly', true);
+            idFundamentoLegal.setAttribute('disabled', true);
+
+            idCstVeVarCF.setAttribute('disabled', true);
+
+            alVeVarCF.setAttribute('readonly', true);
+            alVeVarCFSt.setAttribute('readonly', true);
+            rBcVeVarCF.setAttribute('readonly', true);
+            rBcSTVeVarCF.setAttribute('readonly', true);
+            idCstVeVarCont.setAttribute('disabled', true);
+
+            alVeVarCont.setAttribute('readonly', true);
+            alVeVarContSt.setAttribute('readonly', true);
+            rBcVeVarCont.setAttribute('readonly', true);
+            rBcSTVeVarCont.setAttribute('readonly', true);
+            idCstVeAtaCont.setAttribute('disabled', true);
+            alVaC.setAttribute('readonly', true);
+            alVaCSt.setAttribute('readonly', true);
+
+            idCstVeAtaSN.setAttribute('disabled', true);
+            alVSN.setAttribute('readonly', true);
+            alVSNSt.setAttribute('readonly', true);
+            rBcVSN.setAttribute('readonly', true);
+            rBcSTVSN.setAttribute('readonly', true);
+            IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+            rBcVaC.setAttribute('readonly', true);
+            rBcSTVaC.setAttribute('readonly', true);
+
+            
+
 
         } else {
             if (opcaoValorDestino == "UF de Destino") {
                 alert("UF de origem e destino devem ser preenchidos");
                 ufdestino.removeAttribute('disabled');
-                fecp.addAttribute('readonly');
+                fecp.setAttribute('readonly', true);
+
+                codReceita.setAttribute('disabled', true);
+                idCstSaiPC.setAttribute('disabled', true);
+                alpS.setAttribute('readonly', true);
+                alcS.setAttribute('readonly', true);
+                idFundamentoLegal.setAttribute('disabled', true);
+
+                idCstVeVarCF.setAttribute('disabled', true);
+
+                alVeVarCF.setAttribute('readonly', true);
+                alVeVarCFSt.setAttribute('readonly', true);
+                rBcVeVarCF.setAttribute('readonly', true);
+                rBcSTVeVarCF.setAttribute('readonly', true);
+                idCstVeVarCont.setAttribute('disabled', true);
+
+                alVeVarCont.setAttribute('readonly', true);
+                alVeVarContSt.setAttribute('readonly', true);
+                rBcVeVarCont.setAttribute('readonly', true);
+                rBcSTVeVarCont.setAttribute('readonly', true);
+                idCstVeAtaCont.setAttribute('disabled', true);
+                alVaC.setAttribute('readonly', true);
+                alVaCSt.setAttribute('readonly', true);
+
+                idCstVeAtaSN.setAttribute('disabled', true);
+                alVSN.setAttribute('readonly', true);
+                alVSNSt.setAttribute('readonly', true);
+                rBcVSN.setAttribute('readonly', true);
+                rBcSTVSN.setAttribute('readonly', true);
+                IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+                rBcVaC.setAttribute('readonly', true);
+                rBcSTVaC.setAttribute('readonly', true);
+
+
 
             }
             else {
                 ufdestino.removeAttribute('disabled');
                 fecp.removeAttribute('readonly');
+
+                codReceita.removeAttribute('disabled');
+
+                idCstSaiPC.removeAttribute('disabled');
+                alpS.removeAttribute('readonly');
+                alcS.removeAttribute('readonly');
+                idFundamentoLegal.removeAttribute('disabled');
+
+                idCstVeVarCF.removeAttribute('disabled');
+
+                alVeVarCF.removeAttribute('readonly');
+                alVeVarCFSt.removeAttribute('readonly');
+                rBcVeVarCF.removeAttribute('readonly');
+                rBcSTVeVarCF.removeAttribute('readonly');
+                idCstVeVarCont.removeAttribute('disabled');
+
+                alVeVarCont.removeAttribute('readonly');
+                alVeVarContSt.removeAttribute('readonly');
+                rBcVeVarCont.removeAttribute('readonly');
+                rBcSTVeVarCont.removeAttribute('readonly');
+                idCstVeAtaCont.removeAttribute('disabled');
+                alVaC.removeAttribute('readonly');
+                alVaCSt.removeAttribute('readonly');
+
+                idCstVeAtaSN.removeAttribute('disabled');
+                alVSN.removeAttribute('readonly');
+                alVSNSt.removeAttribute('readonly');
+                rBcVSN.removeAttribute('readonly');
+                rBcSTVSN.removeAttribute('readonly');
+                IdFundLegalSaidaICMS.removeAttribute('disabled');
+
+                rBcVaC.removeAttribute('readonly');
+                rBcSTVaC.removeAttribute('readonly');
+
             }
 
         }
@@ -114,27 +217,125 @@ $(document).ready(function ()
 
     ufdestino.addEventListener("change", function () {
 
-        alert("Entrou");
+       
         var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
         var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
-        alert("Origem: "+opcaoValorOrigem);
-        alert("Destino: "+opcaoValorDestino);
+       
 
 
         if (opcaoValorOrigem === "UF de Origem"){
           
             alert("UF de origem e destino devem ser preenchidos");
-            fecp.addAttribute('readonly');
+            fecp.setAttribute('readonly', true);
+
+            codReceita.setAttribute('disabled', true);
+            idCstSaiPC.setAttribute('disabled', true);
+            alpS.setAttribute('readonly', true);
+            alcS.setAttribute('readonly', true);
+            idFundamentoLegal.setAttribute('disabled', true);
+
+            idCstVeVarCF.setAttribute('disabled', true);
+
+            alVeVarCF.setAttribute('readonly', true);
+            alVeVarCFSt.setAttribute('readonly', true);
+            rBcVeVarCF.setAttribute('readonly', true);
+            rBcSTVeVarCF.setAttribute('readonly', true);
+            idCstVeVarCont.setAttribute('disabled', true);
+
+            alVeVarCont.setAttribute('readonly', true);
+            alVeVarContSt.setAttribute('readonly', true);
+            rBcVeVarCont.setAttribute('readonly', true);
+            rBcSTVeVarCont.setAttribute('readonly', true);
+            idCstVeAtaCont.setAttribute('disabled', true);
+            alVaC.setAttribute('readonly', true);
+            alVaCSt.setAttribute('readonly', true);
+
+            idCstVeAtaSN.setAttribute('disabled', true);
+            alVSN.setAttribute('readonly', true);
+            alVSNSt.setAttribute('readonly', true);
+            rBcVSN.setAttribute('readonly', true);
+            rBcSTVSN.setAttribute('readonly', true);
+            IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+            rBcVaC.setAttribute('readonly', true);
+            rBcSTVaC.setAttribute('readonly', true);
             
         } else {
             if (opcaoValorDestino == "UF de Destino") {
                 alert("UF de origem e destino devem ser preenchidos");
 
-                fecp.addAttribute('readonly');
+                fecp.setAttribute('readonly', true);
+
+                codReceita.setAttribute('disabled', true);
+                idCstSaiPC.setAttribute('disabled', true);
+                alpS.setAttribute('readonly', true);
+                alcS.setAttribute('readonly', true);
+                idFundamentoLegal.setAttribute('disabled', true);
+
+                idCstVeVarCF.setAttribute('disabled', true);
+
+                alVeVarCF.setAttribute('readonly', true);
+                alVeVarCFSt.setAttribute('readonly', true);
+                rBcVeVarCF.setAttribute('readonly', true);
+                rBcSTVeVarCF.setAttribute('readonly', true);
+                idCstVeVarCont.setAttribute('disabled', true);
+
+                alVeVarCont.setAttribute('readonly', true);
+                alVeVarContSt.setAttribute('readonly', true);
+                rBcVeVarCont.setAttribute('readonly', true);
+                rBcSTVeVarCont.setAttribute('readonly', true);
+                idCstVeAtaCont.setAttribute('disabled', true);
+                alVaC.setAttribute('readonly', true);
+                alVaCSt.setAttribute('readonly', true);
+
+                idCstVeAtaSN.setAttribute('disabled', true);
+                alVSN.setAttribute('readonly', true);
+                alVSNSt.setAttribute('readonly', true);
+                rBcVSN.setAttribute('readonly', true);
+                rBcSTVSN.setAttribute('readonly', true);
+                IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+                rBcVaC.setAttribute('readonly', true);
+                rBcSTVaC.setAttribute('readonly', true);
                
             }
             else {
+                ufdestino.removeAttribute('disabled');
                 fecp.removeAttribute('readonly');
+
+                codReceita.removeAttribute('disabled');
+
+                idCstSaiPC.removeAttribute('disabled');
+                alpS.removeAttribute('readonly');
+                alcS.removeAttribute('readonly');
+                idFundamentoLegal.removeAttribute('disabled');
+
+                idCstVeVarCF.removeAttribute('disabled');
+
+                alVeVarCF.removeAttribute('readonly');
+                alVeVarCFSt.removeAttribute('readonly');
+                rBcVeVarCF.removeAttribute('readonly');
+                rBcSTVeVarCF.removeAttribute('readonly');
+                idCstVeVarCont.removeAttribute('disabled');
+
+                alVeVarCont.removeAttribute('readonly');
+                alVeVarContSt.removeAttribute('readonly');
+                rBcVeVarCont.removeAttribute('readonly');
+                rBcSTVeVarCont.removeAttribute('readonly');
+                idCstVeAtaCont.removeAttribute('disabled');
+                alVaC.removeAttribute('readonly');
+                alVaCSt.removeAttribute('readonly');
+
+                idCstVeAtaSN.removeAttribute('disabled');
+                alVSN.removeAttribute('readonly');
+                alVSNSt.removeAttribute('readonly');
+                rBcVSN.removeAttribute('readonly');
+                rBcSTVSN.removeAttribute('readonly');
+                IdFundLegalSaidaICMS.removeAttribute('disabled');
+
+                rBcVaC.removeAttribute('readonly');
+                rBcSTVaC.removeAttribute('readonly');
+
             }
             
         }

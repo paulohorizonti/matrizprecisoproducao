@@ -13,7 +13,8 @@
         <div class="card-body">
             
             <div class="container-fluid">
-                @using (Html.BeginForm("EditMassaNCMModalPost", "Produto", FormMethod.Get)) {
+                @using (Html.BeginForm("EditMassaNCMModalPost", "Produto", FormMethod.Get))
+                {
 
                 <div class="row">
 
@@ -113,7 +114,7 @@
                         <label class="pr-fontalternativa">Natureza da Receita</label>
                         <div class="input-group input-group-sm">
 
-                            @Html.DropDownList("CodReceita", new SelectList(ViewBag.NatReceita, "id", "descricao"), "Escolha a Natureza da Receita", new { @class = "form-control form-control-sm dropdown", @style = "max-width:100% !important;" })
+                            @Html.DropDownList("CodReceita", new SelectList(ViewBag.NatReceita, "id", "descricao"), "Escolha a Natureza da Receita", new { @class = "form-control form-control-sm dropdown", @style = "max-width:100% !important;", @disabled="true", @id="CodReceita", @name="CodReceita" })
 
                         </div>
                     </div>
@@ -143,7 +144,7 @@
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="idCstSaiPC">Cst Pis/Cofins S</label>
                                             <div class="input-group">
-                                                @Html.DropDownList("CstSaidaPisCofins", new SelectList(ViewBag.CstSaidaPisCofins, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstSaiPC" })
+                                                @Html.DropDownList("CstSaidaPisCofins", new SelectList(ViewBag.CstSaidaPisCofins, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstSaiPC", @disabled = "true" })
 
                                             </div>
 
@@ -157,13 +158,13 @@
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alpS">Aliq Pis S</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="aliqSaidaPis" id="alpS" style="min-width:100%;" placeholder="Aliq. Pis SAÍDA" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="aliqSaidaPis" id="alpS" style="min-width:100%;" placeholder="Aliq. Pis SAÍDA" readonly />
 
                                         </div>
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alcS">Aliq Cofins S</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="aliqSaidaCofins" id="alcS" style="min-width:100%;" placeholder="Aliq. Cofins SAÍDA" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="aliqSaidaCofins" id="alcS" style="min-width:100%;" placeholder="Aliq. Cofins SAÍDA" readonly />
 
 
                                         </div>
@@ -179,7 +180,7 @@
                                         <div class="col-lg-12">
                                             <label class="pr-fonte-label" for="legisPC">Legislação para Pis/Cofins</label>
                                             <div class="input-group mb-3">
-                                                @Html.DropDownList("IdFundamentoLegal", new SelectList(ViewBag.FundLegalPC, "id", "fundLegal"), "Fundamento Legal", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;" })
+                                                @Html.DropDownList("IdFundamentoLegal", new SelectList(ViewBag.FundLegalPC, "id", "fundLegal"), "Fundamento Legal", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;", @disabled = "true" })
 
                                             </div>
 
@@ -220,7 +221,7 @@
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="idCstVeVarCF">Código Cst</label>
                                             <div class="input-group">
-                                                @Html.DropDownList("CstVendaVarejoConsFinal", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeVarCF", @name = "cstVendaVarejoConsFinal" })
+                                                @Html.DropDownList("CstVendaVarejoConsFinal", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeVarCF", @name = "cstVendaVarejoConsFinal", @disabled = "true" })
                                             </div>
 
                                         </div>
@@ -238,23 +239,23 @@
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVeVarCF">Aliq ICMS Venda</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarCF" id="alVeVarCF" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarCF" id="alVeVarCF" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVeVarCFSt">Aliq ICMS ST </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarCFSt" id="alVeVarCFSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarCFSt" id="alVeVarCFSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcVeVarCF">Red.Base Calc ICMS </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="rBcVeVarCF" id="rBcVeVarCF" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="rBcVeVarCF" id="rBcVeVarCF" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcSTVeVarCF">Red.Base Calc ICMS ST</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="rBcSTVeVarCF" id="rBcSTVeVarCF" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="rBcSTVeVarCF" id="rBcSTVeVarCF" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
 
@@ -290,7 +291,7 @@
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="idCstVeVarCont">Código Cst</label>
                                             <div class="input-group">
-                                                @Html.DropDownList("CstVendaVarejoCont", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeVarCont", @name = "cstVendaVarejoCont" })
+                                                @Html.DropDownList("CstVendaVarejoCont", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeVarCont", @name = "cstVendaVarejoCont", @disabled = "true" })
 
                                             </div>
 
@@ -309,23 +310,23 @@
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVeVarCont">Aliq ICMS Venda</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarCont" id="alVeVarCont" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarCont" id="alVeVarCont" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVeVarContSt">Aliq ICMS ST </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarContSt" id="alVeVarContSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="alVeVarContSt" id="alVeVarContSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcVeVarCont">Red.Base Calc ICMS </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="rBcVeVarCont" id="rBcVeVarCont" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="rBcVeVarCont" id="rBcVeVarCont" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly/>
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcSTVeVarCont">Red.Base Calc ICMS ST</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="rBcSTVeVarCont" id="rBcSTVeVarCont" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="rBcSTVeVarCont" id="rBcSTVeVarCont" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
 
@@ -357,7 +358,7 @@
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="idCstVeAtaCont">Código Cst</label>
                                             <div class="input-group">
-                                                @Html.DropDownList("CstVendaAtaCont", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeAtaCont", @name = "cstVendaAtaCont" })
+                                                @Html.DropDownList("CstVendaAtaCont", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeAtaCont", @name = "cstVendaAtaCont", @disabled = "true" })
                                             </div>
 
                                         </div>
@@ -376,24 +377,24 @@
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVaC">Aliq ICMS Venda</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="aliqIcmsVendaAtaCont" id="alVaC" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="aliqIcmsVendaAtaCont" id="alVaC" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
 
                                         </div>
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVaCSt">Aliq ICMS ST </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="aliqIcmsSTVendaAtaCont" id="alVaCSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="aliqIcmsSTVendaAtaCont" id="alVaCSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcVaC">Red.Base Calc ICMS </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="redBaseCalcIcmsVendaAtaCont" id="rBcVaC" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="redBaseCalcIcmsVendaAtaCont" id="rBcVaC" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
-                                            <label class="pr-fonte-label" for="rBcSTVaC">Red.Base Calc ICMS ST</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="redBaseCalcIcmsSTVendaAtaCont" id="rBcSTVaC" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <label class="pr-fonte-label" for="rBcSTVaC">Red.Base Calc ICMS ST</label> 
+                                            <input type="text" class="form-control form-control-sm decimal" name="redBaseCalcIcmsSTVendaAtaCont" id="rBcSTVaC" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
 
@@ -425,7 +426,7 @@
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="idCstVeAtaSN">Código Cst</label>
                                             <div class="input-group">
-                                                @Html.DropDownList("CstVendaAtaSimpNacional", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeAtaSN", @name = "cstVendaAtaSimpNacional" })
+                                                @Html.DropDownList("CstVendaAtaSimpNacional", new SelectList(ViewBag.CstGeral, "descricao", "codigo"), "CST", new { @class = "form-control form-control-sm dropdown", @id = "idCstVeAtaSN", @name = "cstVendaAtaSimpNacional", @disabled = "true" })
                                             </div>
 
                                         </div>
@@ -443,23 +444,23 @@
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVSN">Aliq ICMS Venda</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="alVSN" id="alVSN" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="alVSN" id="alVSN" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
 
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="alVSNSt">Aliq ICMS ST </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="alVSNSt" id="alVSNSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="alVSNSt" id="alVSNSt" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcVSN">Red.Base Calc ICMS </label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="rBcVSN" id="rBcVSN" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="rBcVSN" id="rBcVSN" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly />
 
                                         </div>
                                         <div class="col-lg-2">
                                             <label class="pr-fonte-label" for="rBcSTVSN">Red.Base Calc ICMS ST</label>
-                                            <input type="text" class="form-control form-control-sm decimal" name="rBcSTVSN" id="rBcSTVSN" style="min-width:100%;" placeholder="Digite Aliquota (%)" />
+                                            <input type="text" class="form-control form-control-sm decimal" name="rBcSTVSN" id="rBcSTVSN" style="min-width:100%;" placeholder="Digite Aliquota (%)" readonly/>
 
                                         </div>
 
@@ -489,7 +490,7 @@
                                         <div class="col-lg-8">
 
                                             <div class="input-group mb-3">
-                                                @Html.DropDownList("IdFundLegalSaidaICMS", new SelectList(ViewBag.FundLegalSaida, "id", "fundLegal"), "Fundamento Legal Saída ICMS", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;" })
+                                                @Html.DropDownList("IdFundLegalSaidaICMS", new SelectList(ViewBag.FundLegalSaida, "id", "fundLegal"), "Fundamento Legal Saída ICMS", new { @class = "form-control form-control-sm dropdown", @style = "min-width:100%;", @disabled = "true" })
 
                                             </div>
 
