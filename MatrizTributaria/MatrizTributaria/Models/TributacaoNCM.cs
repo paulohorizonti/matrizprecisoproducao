@@ -234,20 +234,20 @@ namespace MatrizTributaria.Models
         //    get { return dataAlt?.ToShortDateString(); }
         //}
 
-        public virtual CstPisCofinsEntrada cstPisCofinsE { get; set; }
+        //public virtual CstPisCofinsEntrada cstPisCofinsE { get; set; }
 
-        public virtual CstPisCofinsSaida cstPisCofinsS { get; set; }
+        //public virtual CstPisCofinsSaida cstPisCofinsS { get; set; }
 
 
 
-        public virtual Legislacao fundamentoLegal { get; set; }
+        //public virtual Legislacao fundamentoLegal { get; set; }
 
         //public virtual CstIcmsGeral CstCompradeAta { get; set; }
 
-        public virtual NaturezaReceita naturezaReceita { get; set; }
+        //public virtual NaturezaReceita naturezaReceita { get; set; }
 
-        public virtual Produto produtos { get; set; }
-        public virtual SetorProdutos setorProdutos { get; set; }
+        //public virtual Produto produtos { get; set; }
+        //public virtual SetorProdutos setorProdutos { get; set; }
 
         
     }

@@ -12,7 +12,7 @@ namespace MatrizTributaria.Controllers
     public class ProdutoController : Controller
     {
         //Objeto context
-       readonly MatrizDbContext db;
+        readonly MatrizDbContext db;
         List<Produto> prod;
         List<Produto> prodMTX = new List<Produto>();
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>(); //TESTE COM A VIEW DA TRIBUTAÇÃO
@@ -905,9 +905,6 @@ namespace MatrizTributaria.Controllers
                 tributaCao = db.Tributacoes.Find(idTrib); //busca a tributação pelo seu id
 
 
-
-
-
                 if (ufOrigem != "null" && ufDestino != "null")
                 {
                     tributaCao.UF_Origem = ufOrigem;
@@ -1072,10 +1069,6 @@ namespace MatrizTributaria.Controllers
                 }
 
 
-
-
-               
-
                 //if(ufOrigem != "")
                 //{
                 //    if(ufDestino != "")
@@ -1140,7 +1133,10 @@ namespace MatrizTributaria.Controllers
             ncmAlterar = ncmAlterar.Replace(".", "");
             ViewBag.NCM = ncmAlterar;
             //buscar na tablea pelo ncm
-            this.tribNCM = db.TributacoesNcm.AsNoTracking().ToList();
+           // this.tribNCM = db.TributacoesNcm.AsNoTracking().ToList();
+
+           
+
 
             //agora um objeto de tributação de produtos
             this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
@@ -1170,17 +1166,81 @@ namespace MatrizTributaria.Controllers
 
 
             //pegar os ncm existenstes em cada tabela
+            this.tribNCM = db.TributacoesNcm.AsNoTracking().ToList(); //instancia o objeto.
 
             //tributacao pelo estado
             if(this.ufOrigemNCM != null && this.ufDestinoNCM != null)
             {
-                this.tribNCM = this.tribNCM.Where(item => item.produtos.ncm.Equals(ncm) && item.UF_Origem.Equals(this.ufOrigemNCM) && item.UF_Destino.Equals(this.ufDestinoNCM)).ToList();
+                this.tribNCM = this.tribNCM.Where(item => item.ncm.Equals(ncm) && item.UF_Origem.Equals(this.ufOrigemNCM) && item.UF_Destino.Equals(this.ufDestinoNCM)).ToList();
+
+            }
+            //objeto para mostrar os dados
+            TributacaoNCM tibNCMObj = (from a in db.TributacoesNcm where a.ncm.Equals(ncm) && a.UF_Origem.Equals(this.ufOrigemNCM) && a.UF_Destino.Equals(this.ufDestinoNCM) select a).FirstOrDefault();
+
+            if (tibNCMObj != null)
+            {
+                //piscofins E e S
+                int? cst = tibNCMObj.cstEntradaPisCofins;
+                ViewBag.CstEntradaPis = cst;
+                //int cst = ViewBag.CstEntradaPis.;
+                ViewBag.CstEntraPiscofinsDesc = (from a in db.CstPisCofinsEntradas where a.codigo == cst select a.descricao);
+                ViewBag.AliqPisE = tibNCMObj.aliqEntPis.ToString();
+                ViewBag.AliqCofinsE = tibNCMObj.aliqEntCofins.ToString();
+
+                ViewBag.CstSaidaPis = tibNCMObj.cstSaidaPisCofins.ToString();
+                cst = (int)ViewBag.CstSaidaPis;
+                ViewBag.CstSaidaPiscofinsDesc = (from a in db.CstPisCofinsSaidas where a.codigo == cst select a.descricao);
+                ViewBag.AliqPisS = tibNCMObj.aliqSaidaPis.ToString();
+                ViewBag.AliqCofinsS = tibNCMObj.aliqSaidaCofins.ToString();
+
+                //venda atacado contribinte
+                ViewBag.CstVendaAtaContr = tibNCMObj.cstVendaAtaCont.ToString();
+                cst =(int)ViewBag.CstVendaAtaContr;
+                ViewBag.CstAtaContrDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                ViewBag.AliqIcmsVenAtaCont = tibNCMObj.aliqIcmsVendaAtaCont.ToString();
+                ViewBag.AliqImcsStVenAtaCont = tibNCMObj.aliqIcmsSTVendaAtaCont.ToString();
+                ViewBag.AliqRedBasCalcVenAtaCont = tibNCMObj.redBaseCalcIcmsVendaAtaCont.ToString();
+                ViewBag.AliqRedBasCalcSTVenAtaCont = tibNCMObj.redBaseCalcIcmsSTVendaAtaCont.ToString();
+
+                //Venda Ata Simples Nacional
+                ViewBag.CstVendaAtaSimplesNacional = tibNCMObj.cstVendaAtaSimpNacional.ToString();
+                cst =(int)ViewBag.CstVendaAtaSimplesNacional;
+                ViewBag.CstVendaAtaSimplesNacionalDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                ViewBag.AliqIcmsVenAtaSn = tibNCMObj.aliqIcmsVendaAtaSimpNacional.ToString();
+                ViewBag.AliqImcsStVenAtaSn = tibNCMObj.aliqIcmsSTVendaAtaSimpNacional.ToString();
+                ViewBag.AliqRedBasCalcVenAtaSn = tibNCMObj.redBaseCalcIcmsVendaAtaSimpNacional.ToString();
+                ViewBag.AliqRedBasCalcSTVenAtaSn = tibNCMObj.redBaseCalcIcmsSTVendaAtaSimpNacional.ToString();
+
+                //Venda varejo para contribuinte
+                ViewBag.CstVendaVarCont = tibNCMObj.cstVendaVarejoCont.ToString();
+                cst =(int)ViewBag.CstVendaVarCont;
+                ViewBag.CstVendaVarContDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                ViewBag.AliqIcmsVenVarCont = tibNCMObj.aliqIcmsVendaVarejoCont.ToString();
+                ViewBag.AliqImcsStVenVarCont = tibNCMObj.aliqIcmsSTVendaVarejo_Cont.ToString();
+                ViewBag.AliqRedBasCalcVenVarCont = tibNCMObj.redBaseCalcVendaVarejoCont.ToString();
+                ViewBag.AliqRedBasCalcSTVenAtaSn = tibNCMObj.RedBaseCalcSTVendaVarejo_Cont.ToString();
+
+                //Venda varejo para consumidor final
+                ViewBag.CstVendaVarCf = tibNCMObj.cstVendaVarejoCont.ToString();
+                cst = (int)ViewBag.CstVendaVarCf;
+                ViewBag.CstVendaVarCfDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                ViewBag.AliqIcmsVenVarCf = tibNCMObj.aliqIcmsVendaVarejoConsFinal.ToString();
+                ViewBag.AliqImcsStVenVarCf = tibNCMObj.aliqIcmsSTVendaVarejoConsFinal.ToString();
+                ViewBag.AliqRedBasCalcVenVarCf = tibNCMObj.redBaseCalcIcmsVendaVarejoConsFinal.ToString();
+                ViewBag.AliqRedBasCalcSTVenAtaCf = tibNCMObj.redBaseCalcIcmsSTVendaVarejoConsFinal.ToString();
+
+
 
             }
 
+
+            //pega os ncm iguais
             this.tribMTX = this.tribMTX.Where(item => item.NCM_PRODUTO == ncmAlterar).OrderBy(item => item.DESCRICAO_PRODUTO).ToList();
-           
+
+            
+
             ViewBag.TributacaoNCM = this.tribMTX;
+           
 
             ////retira o elemento vazio do array
             //idProdutos = idProdutos.Where(item => item != "").ToArray();
@@ -1213,10 +1273,8 @@ namespace MatrizTributaria.Controllers
             int regSalvos = 0;
             int regNSalvos = 0;
             
-
             string retorno = "";
-
-          
+                     
 
             //varivael para recebe o novo ncm
             string ncmMudar = "";
