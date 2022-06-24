@@ -17,7 +17,7 @@ namespace MatrizTributaria.Controllers
 
         List<Tributacao> trib;
         List<Tributacao> tributacao = new List<Tributacao>();
-                
+        IQueryable<TributacaoGeralView> lstCli;
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
 
         //origem e destino
@@ -52,19 +52,19 @@ namespace MatrizTributaria.Controllers
         //     na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
         //    //if (TempData["tributacaoMTX"] == null)
         //    //{
-        //    //    //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-        //    //    this.tribMTX = db.Tributacao_GeralView.ToList();
-        //    //    TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+        //    //    //this.lstCli = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a);
+        //    //    this.lstCli = db.Tributacao_GeralView;
+        //    //    TempData["tributacaoMTX"] = this.lstCli; //cria a temp data e popula
         //    //    TempData.Keep("tributacaoMTX"); //persiste
         //    //}
         //    //else
         //    //{
-        //    //    this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+        //    //    this.lstCli = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
         //    //    TempData.Keep("tributacaoMTX"); //persiste
         //    //}
         //    VerificaTempData();
         //    //lista de produtos
-        //    //var listaProdutos = db.Produtos.ToList();
+        //    //var listaProdutos = db.Produtos;
         //    //int paginaTamanho = 4;
         //    //int paginaNumero = 1;
 
@@ -76,23 +76,23 @@ namespace MatrizTributaria.Controllers
 
         //    if (!String.IsNullOrEmpty(searchString))
         //    {
-        //        this.tribMTX = this.tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToUpper().Contains(searchString.ToUpper()) || s.ID.ToString().ToUpper().Contains(searchString.ToUpper())).ToList();
+        //        this.lstCli = this.lstCli.Where(s => s.DESCRICAO_PRODUTO.ToUpper().Contains(searchString.ToUpper()) || s.ID.ToString().ToUpper().Contains(searchString.ToUpper()));
 
         //    }
 
         //    switch (ViewBag.ProdutoParam)
         //    {
         //        case "Produto_desc":
-        //            this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList(); //ordenar pelo id do registro da tabela
+        //            this.lstCli = this.lstCli.OrderBy(s => s.ID); //ordenar pelo id do registro da tabela
         //            break;
         //        case "NatRec":
-        //            this.tribMTX = this.tribMTX.OrderBy(s => s.COD_NAT_RECEITA).ToList();
+        //            this.lstCli = this.lstCli.OrderBy(s => s.COD_NAT_RECEITA);
         //            break;
         //        case "NatRec_desc":
-        //            this.tribMTX = this.tribMTX.OrderByDescending(s => s.COD_NAT_RECEITA).ToList();
+        //            this.lstCli = this.lstCli.OrderByDescending(s => s.COD_NAT_RECEITA);
         //            break;
         //        default:
-        //            this.tribMTX = this.tribMTX.OrderByDescending(s => s.ID).ToList();
+        //            this.lstCli = this.lstCli.OrderByDescending(s => s.ID);
         //            break;
         //    }
         //    int pageSize = 10;
@@ -100,7 +100,7 @@ namespace MatrizTributaria.Controllers
 
 
 
-        //    return View(this.tribMTX.ToPagedList(pageNumber, pageSize));
+        //    return View(this.lstCli.ToPagedList(pageNumber, pageSize));
         //}
 
         //detalhe
@@ -213,8 +213,8 @@ namespace MatrizTributaria.Controllers
             //origem e destino
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
 
 
@@ -228,50 +228,50 @@ namespace MatrizTributaria.Controllers
 
 
             //Aplica a origem e destino selecionada
-            this.tribMTX = this.tribMTX.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+            this.lstCli = this.lstCli.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
             //buscar os auditados
             switch (auditadosNCM)
             {
                 case "0"://somente os não auditados
-                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 0).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.AUDITADO_POR_NCM == 0);
                     break;
                 case "1": //somente os auditados
-                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 1).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.AUDITADO_POR_NCM == 1);
                     break;
                 case "2": //todos
-                    this.tribMTX = this.tribMTX.Where(s => s.ID !=null).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.ID !=null);
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -288,13 +288,13 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
             ViewBag.Opcao = "Com aliquota"; //sempre mostrar o campo de busca por aliquota
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(this.tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
            
         }
 
@@ -371,8 +371,8 @@ namespace MatrizTributaria.Controllers
             ViewBag.CstGeral = db.CstIcmsGerais;
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             var prod = from s in db.Produtos select s; //variavel carregado de produtos
 
@@ -598,7 +598,7 @@ namespace MatrizTributaria.Controllers
             switch (sortOrder)
             {
                 case "Produto_desc":
-                    produtos = produtos.OrderByDescending(s => s.Id);
+                    produtos = produtos.OrderByDescending(s => s.descricao);
                     break;
                 case "CatProd":
                     produtos = produtos.OrderBy(s => s.idCategoria);
@@ -626,7 +626,7 @@ namespace MatrizTributaria.Controllers
 
             int pageNumber = (page ?? 1);
 
-            //var produtos = db.Produtos.ToList();
+            //var produtos = db.Produtos;
             return View(produtos.ToPagedList(pageNumber, pageSize)); //retorna a view com o numero de paginas e tamanho
 
         }
@@ -1114,8 +1114,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1127,67 +1127,68 @@ namespace MatrizTributaria.Controllers
             //aplica estado origem e destino
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
-
+            //Aplica a origem e destino selecionada
+            this.tribMTX = this.lstCli.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
 
             ///*Aliquota ICMS Compra industria*/
-            //ViewBag.AliqICMSEntradaInd = this.tribMTX.Count(a => a.ALIQ_ICMS_COMP_DE_IND != null); //tirar o cst = 60 o cst 40 e a categoria 21);
-            //ViewBag.AliqICMSEntradaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMP_DE_IND == null);
+            //ViewBag.AliqICMSEntradaInd = this.lstCli.Count(a => a.ALIQ_ICMS_COMP_DE_IND != null); //tirar o cst = 60 o cst 40 e a categoria 21);
+            //ViewBag.AliqICMSEntradaNulla = this.lstCli.Count(a => a.ALIQ_ICMS_COMP_DE_IND == null);
 
 
 
-            ViewBag.AliqICMSEntradaInd = this.tribMTX.Count(  a=>a.ALIQ_ICMS_COMP_DE_IND !=null && a.CST_COMPRA_DE_IND != 60 && a.CST_COMPRA_DE_IND != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60 o cst 40 e a categoria 21);
-            ViewBag.AliqICMSEntradaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMP_DE_IND == null && a.CST_COMPRA_DE_IND != 60 && a.CST_COMPRA_DE_IND != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSEntradaIndIsenta = this.tribMTX.Count(a => a.CST_COMPRA_DE_IND == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSEntradaInd = this.lstCli.Count(  a=>a.ALIQ_ICMS_COMP_DE_IND !=null && a.CST_COMPRA_DE_IND != 60 && a.CST_COMPRA_DE_IND != 40 && a.CST_COMPRA_DE_IND != 41 && a.ID_CATEGORIA != 21  ); //tirar o cst = 60 o cst 40 O CST 41 e a categoria 21);
+            ViewBag.AliqICMSEntradaNulla = this.lstCli.Count(a => a.ALIQ_ICMS_COMP_DE_IND == null && a.CST_COMPRA_DE_IND != 60 && a.CST_COMPRA_DE_IND != 40 && a.CST_COMPRA_DE_IND != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSEntradaIndIsenta = this.lstCli.Count(a => a.CST_COMPRA_DE_IND == 40 && a.ID_CATEGORIA != 21  );
 
 
 
             /*Aliquota ICMS st Compra industria*/
-            ViewBag.AliqICMSSTEntradaInd   = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND != null && a.CST_COMPRA_DE_IND == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTEntradaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND == null && a.CST_COMPRA_DE_IND == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTEntradaInd   = this.lstCli.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND != null && a.CST_COMPRA_DE_IND == 60 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSSTEntradaNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_COMP_DE_IND == null && a.CST_COMPRA_DE_IND == 60 && a.ID_CATEGORIA != 21  );
 
 
 
 
             /*Aliquota ICMS compra de atacado*/
-            ViewBag.AliqICMSCompraAta = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA      != null && a.CST_COMPRA_DE_ATA != 60 && a.CST_COMPRA_DE_ATA != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSCompraAtaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA != 60 && a.CST_COMPRA_DE_ATA != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSCompraAtaIsenta = this.tribMTX.Count(a => a.CST_COMPRA_DE_ATA == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSCompraAta = this.lstCli.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA      != null && a.CST_COMPRA_DE_ATA != 60 && a.CST_COMPRA_DE_ATA != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSCompraAtaNulla = this.lstCli.Count(a => a.ALIQ_ICMS_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA != 60 && a.CST_COMPRA_DE_ATA != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSCompraAtaIsenta = this.lstCli.Count(a => a.CST_COMPRA_DE_ATA == 40 && a.ID_CATEGORIA != 21  );
 
 
             /*Aliquota ICMS ST compra de atacado*/
-            ViewBag.AliqICMSSTCompraAta      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && a.CST_COMPRA_DE_ATA == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTCompraAtaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTCompraAta      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && a.CST_COMPRA_DE_ATA == 60 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSSTCompraAtaNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA == 60 && a.ID_CATEGORIA != 21  );
 
 
 
             /*Aliquota ICMS compra de Simples nacional*/
-            ViewBag.AliqICMSCompraSN      = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && a.CST_COMPRA_DE_SIMP_NACIONAL != 60 && a.CST_COMPRA_DE_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSCompraSNNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL != 60 && a.CST_COMPRA_DE_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSCompraSNIsenta = this.tribMTX.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSCompraSN      = this.lstCli.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && a.CST_COMPRA_DE_SIMP_NACIONAL != 60 && a.CST_COMPRA_DE_SIMP_NACIONAL != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSCompraSNNulla = this.lstCli.Count(a => a.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL != 60 && a.CST_COMPRA_DE_SIMP_NACIONAL != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSCompraSNIsenta = this.lstCli.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21  );
 
             /*Aliquota ICMS ST compra de Simples nacional*/
-            ViewBag.AliqICMSSTCompraSN = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL      != null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTCompraSNNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTCompraSN = this.lstCli.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL      != null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSSTCompraSNNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21  );
 
 
             /*Aliquota ICMS NFE Compra Industria*/
-            ViewBag.AliqICMSNFEInd = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE      != null && a.CST_DA_NFE_DA_IND_FORN != 60 && a.CST_DA_NFE_DA_IND_FORN != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSNfeIndNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE == null && a.CST_DA_NFE_DA_IND_FORN != 60 && a.CST_DA_NFE_DA_IND_FORN != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSNfeIndIsenta = this.tribMTX.Count(a => a.CST_DA_NFE_DA_IND_FORN == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSNFEInd = this.lstCli.Count(a => a.ALIQ_ICMS_NFE      != null && a.CST_DA_NFE_DA_IND_FORN != 60 && a.CST_DA_NFE_DA_IND_FORN != 40 && a.CST_COMPRA_DE_ATA != 41  && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSNfeIndNulla = this.lstCli.Count(a => a.ALIQ_ICMS_NFE == null && a.CST_DA_NFE_DA_IND_FORN != 60 && a.CST_DA_NFE_DA_IND_FORN != 40 && a.CST_COMPRA_DE_ATA != 41  && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSNfeIndIsenta = this.lstCli.Count(a => a.CST_DA_NFE_DA_IND_FORN == 40 && a.ID_CATEGORIA != 21  );
 
 
 
 
             /*Aliquota ICMS NFE Compra Ata*/
-            ViewBag.AliqICMSNFEAta = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA      != null && a.CST_DA_NFE_DE_ATA_FORN != 60 && a.CST_DA_NFE_DE_ATA_FORN != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSNFEAtaNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == null && a.CST_DA_NFE_DE_ATA_FORN != 60 && a.CST_DA_NFE_DE_ATA_FORN != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSNFEAtaIsenta = this.tribMTX.Count(a => a.CST_DA_NFE_DE_ATA_FORN == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSNFEAta = this.lstCli.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA      != null && a.CST_DA_NFE_DE_ATA_FORN != 60 && a.CST_DA_NFE_DE_ATA_FORN != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSNFEAtaNulla = this.lstCli.Count(a => a.ALIQ_ICMS_NFE_FOR_ATA == null && a.CST_DA_NFE_DE_ATA_FORN != 60 && a.CST_DA_NFE_DE_ATA_FORN != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSNFEAtaIsenta = this.lstCli.Count(a => a.CST_DA_NFE_DE_ATA_FORN == 40 && a.ID_CATEGORIA != 21  );
 
 
             /*Aliquota ICMS NFE Compra SN*/
-            ViewBag.AliqICMSNFESN = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_SN != null      && a.CSOSNTDANFEDOSNFOR != 60 && a.CSOSNTDANFEDOSNFOR != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSNFESNNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_NFE_FOR_SN == null && a.CSOSNTDANFEDOSNFOR != 60 && a.CSOSNTDANFEDOSNFOR != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSNFESNIsenta = this.tribMTX.Count(a => a.CSOSNTDANFEDOSNFOR == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSNFESN = this.lstCli.Count(a => a.ALIQ_ICMS_NFE_FOR_SN != null      && a.CSOSNTDANFEDOSNFOR != 60 && a.CSOSNTDANFEDOSNFOR != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSNFESNNulla = this.lstCli.Count(a => a.ALIQ_ICMS_NFE_FOR_SN == null && a.CSOSNTDANFEDOSNFOR != 60 && a.CSOSNTDANFEDOSNFOR != 40 && a.CST_COMPRA_DE_ATA != 41 && a.ID_CATEGORIA != 21  );
+            ViewBag.AliqICMSNFESNIsenta = this.lstCli.Count(a => a.CSOSNTDANFEDOSNFOR == 40 && a.ID_CATEGORIA != 21  );
 
 
             return View();
@@ -1202,11 +1203,10 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
-            //verifica carregamento da tabela
-            VerificaTempData();
+           
 
             //verifica estados origem e destino
             VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
@@ -1216,57 +1216,72 @@ namespace MatrizTributaria.Controllers
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
 
+            //verifica carregamento da tabela
+            VerificaTempData();
+
+            //Aplica a origem e destino selecionada
+            this.lstCli = this.lstCli.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+
+
             /*Aliquota ICMS Venda Varejo Consumidor Final - atualizado 17/01/2022 - estados origem e destino*/
-            ViewBag.AliqICMSVendaVarCF = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60
-            ViewBag.AliqICMSVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60
-            ViewBag.AliqICMSVendaVarCFIsenta = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaVarCFUsoConsumo = this.tribMTX.Count(a => a.ID_CATEGORIA == 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-                       
+            //ViewBag.AliqICMSVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60
+            //ViewBag.AliqICMSVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60
+            //ViewBag.AliqICMSVendaVarCFIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            //ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCli.Count(a => a.ID_CATEGORIA == 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+            ViewBag.AliqICMSVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41 && a.ID_CATEGORIA != 21); //tirar o cst = 60
+
+            ViewBag.AliqICMSVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41  && a.ID_CATEGORIA != 21); //tirar o cst = 60
+            ViewBag.AliqICMSVendaVarCFIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21);
+            ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCli.Count(a => a.ID_CATEGORIA == 21);
+            ViewBag.AliqICMSVendaVarCFNaoTributada = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 41 && a.ID_CATEGORIA != 21);
+
+
+
 
             /*Aliquota ICMS ST Venda Varejo Consumidor Final*/ /*Alteração feita para filtrar por CST = 60*/
-            ViewBag.AliqICMSSTVendaVarCF      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaVarCFNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            //ViewBag.AliqICMSSTVendaVarCF      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            //ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+            ViewBag.AliqICMSSTVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+            ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
 
 
 
 
             /*Aliquota ICMS Venda Varejo Para Contribuinte atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaVarContIsenta = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaVarCont      = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaVarContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaVarContIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
             /*Aliquota ICMS ST Venda Varejo Para Contribuinte*/
-            ViewBag.AliqICMSSTVendaVarCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaVarContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-
-
-
+            ViewBag.AliqICMSSTVendaVarCont      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaVarContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
 
             /*Aliquota ICMS Venda Ata Para Contribuinte atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaContIsenta = this.tribMTX.Count(a => a.CST_VENDA_ATA_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaCont      = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaContIsenta = this.lstCli.Count(a => a.CST_VENDA_ATA_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
 
             /*Aliquota ICMS ST Venda Ata Para Contribuinte  atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSSTVendaAtaCont      = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaAtaContNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaCont      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
 
             /*Aliquota ICMS Venda Ata Para Simples Nacional atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSVendaAtaSN      = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaSNIsenta = this.tribMTX.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaSN      = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaNSNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaSNIsenta = this.lstCli.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
             /*Aliquota ICMS ST Venda Ata Para Simples Nacional atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSSTVendaAtaSN     = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null  && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaAtaNSNulla = this.tribMTX.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-
+            ViewBag.AliqICMSSTVendaAtaSN     = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null  && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaNSNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
             return View();
@@ -1282,8 +1297,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1301,30 +1316,30 @@ namespace MatrizTributaria.Controllers
 
 
             /*Redução base calc icms compra de industria*/
-            ViewBag.RedBasCalIcmsCompInd     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null && a.CST_COMPRA_DE_IND == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsCompIndNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null && a.CST_COMPRA_DE_IND == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsCompInd     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null && a.CST_COMPRA_DE_IND == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsCompIndNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null && a.CST_COMPRA_DE_IND == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
          
             /*Redução base calc icms ST compra de industria*/
-            ViewBag.RedBasCalIcmsSTCompInd     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null && a.CST_COMPRA_DE_IND == 60  && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTCompIndNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null && a.CST_COMPRA_DE_IND == 60  && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTCompInd     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null && a.CST_COMPRA_DE_IND == 60  && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTCompIndNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null && a.CST_COMPRA_DE_IND == 60  && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
           
             /*Redução base calc icms compra de atacado*/
-            ViewBag.RedBasCalIcmsCompAta     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null && a.CST_COMPRA_DE_ATA == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsCompAtaNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsCompAta     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null && a.CST_COMPRA_DE_ATA == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsCompAtaNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Redução base calc icms st compra de atacado*/
-            ViewBag.RedBasCalIcmsSTCompAta     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null && a.CST_COMPRA_DE_ATA == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTCompAtaNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTCompAta     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null && a.CST_COMPRA_DE_ATA == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTCompAtaNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null && a.CST_COMPRA_DE_ATA == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
 
             /*Redução base calc icms compra de  SIMPLES NACIONAL*/
-            ViewBag.RedBasCalIcmsCompSN     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null && a.CST_COMPRA_DE_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsCompSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsCompSN     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null && a.CST_COMPRA_DE_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsCompSNNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Redução base calc icms compra de  SIMPLES NACIONAL*/
-            ViewBag.RedBasCalIcmsSTCompSN     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTCompSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTCompSN     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTCompSNNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && a.CST_COMPRA_DE_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             return View();
@@ -1339,8 +1354,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1354,41 +1369,41 @@ namespace MatrizTributaria.Controllers
             ViewBag.UfDestino = this.ufDestino;
 
             /*Redução base calc icms venda varejo cf*/
-            ViewBag.RedBasCalIcmsVendaVarCF        = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsVendaVarCFNull    = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaVarCF        = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaVarCFNull    = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*Redução base calc icms ST venda varejo cf*/
-            ViewBag.RedBasCalIcmsSTVendaVarCF     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTVendaVarCFNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaVarCF     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaVarCFNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*Redução base de calculo ICMS venda varejo para Contribuinte*/
-            ViewBag.RedBasCalIcmsVendaVarCont     = this.tribMTX.Count(a => a.RED_BASE_CALC_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsVendaVarContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaVarCont     = this.lstCli.Count(a => a.RED_BASE_CALC_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaVarContNull = this.lstCli.Count(a => a.RED_BASE_CALC_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*Redução base de calculo ICMS ST venda varejo para Contribuinte*/
-            ViewBag.RedBasCalIcmsSTVendaVarCont     = this.tribMTX.Count(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTVendaVarContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaVarCont     = this.lstCli.Count(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaVarContNull = this.lstCli.Count(a => a.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             
             /*Red Base Calc ICMS Venda Atacado para Contribuinte*/
-            ViewBag.RedBasCalIcmsVendaAtaCont     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsVendaAtaContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaAtaCont     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaAtaContNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Red Base Calc ICMS ST Venda Atacado para Contribuinte*/
-            ViewBag.RedBasCalIcmsSTVendaAtaCont =     this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTVendaAtaContNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaAtaCont =     this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaAtaContNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*Red Base Calc ICMS Venda Atacado para Simples Nacional*/
-            ViewBag.RedBasCalIcmsVendaAtaSN     = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsVendaAtaSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaAtaSN     = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsVendaAtaSNNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Red Base Calc ICMS ST Venda Atacado para Simples Nacional*/
-            ViewBag.RedBasCalIcmsSTVendaAtaSN = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBasCalIcmsSTVendaAtaSNNull = this.tribMTX.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaAtaSN = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBasCalIcmsSTVendaAtaSNNull = this.lstCli.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             return View();
@@ -1402,8 +1417,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1418,20 +1433,20 @@ namespace MatrizTributaria.Controllers
 
 
             /*Aliq Entrada Pis*/
-            ViewBag.AliEntradaPis     = this.tribMTX.Count(a => a.ALIQ_ENT_PIS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AliEntradaPisNull = this.tribMTX.Count(a => a.ALIQ_ENT_PIS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliEntradaPis     = this.lstCli.Count(a => a.ALIQ_ENT_PIS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliEntradaPisNull = this.lstCli.Count(a => a.ALIQ_ENT_PIS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Aliq Saída Pis*/
-            ViewBag.AliSaidaPis     = this.tribMTX.Count(a => a.ALIQ_SAIDA_PIS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AliSaidaPisNull = this.tribMTX.Count(a => a.ALIQ_SAIDA_PIS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliSaidaPis     = this.lstCli.Count(a => a.ALIQ_SAIDA_PIS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliSaidaPisNull = this.lstCli.Count(a => a.ALIQ_SAIDA_PIS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Ali Entrada Cofins*/
-            ViewBag.AliEntradaCofins     = this.tribMTX.Count(a => a.ALIQ_ENT_COFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AliEntradaCofinsNull = this.tribMTX.Count(a => a.ALIQ_ENT_COFINS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliEntradaCofins     = this.lstCli.Count(a => a.ALIQ_ENT_COFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliEntradaCofinsNull = this.lstCli.Count(a => a.ALIQ_ENT_COFINS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*Ali Saída Cofins*/
-            ViewBag.AliSaidaCofins     = this.tribMTX.Count(a => a.ALIQ_SAIDA_COFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AliSaidaCofinsNull = this.tribMTX.Count(a => a.ALIQ_SAIDA_COFINS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliSaidaCofins     = this.lstCli.Count(a => a.ALIQ_SAIDA_COFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AliSaidaCofinsNull = this.lstCli.Count(a => a.ALIQ_SAIDA_COFINS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             return View();
@@ -1444,8 +1459,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1461,33 +1476,33 @@ namespace MatrizTributaria.Controllers
 
 
             /*CST Entrada Pis/cofins */
-            ViewBag.CstEntradaPisCofins     = this.tribMTX.Count(a => a.CST_ENTRADA_PISCOFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstEntradaPisCofinsNull = this.tribMTX.Count(a => a.CST_ENTRADA_PISCOFINS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstEntradaPisCofins     = this.lstCli.Count(a => a.CST_ENTRADA_PISCOFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstEntradaPisCofinsNull = this.lstCli.Count(a => a.CST_ENTRADA_PISCOFINS == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*CST Compra de industria */
-            ViewBag.CstCompraInd     = this.tribMTX.Count(a => a.CST_COMPRA_DE_IND != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstCompraIndNull = this.tribMTX.Count(a => a.CST_COMPRA_DE_IND == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstCompraInd     = this.lstCli.Count(a => a.CST_COMPRA_DE_IND != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstCompraIndNull = this.lstCli.Count(a => a.CST_COMPRA_DE_IND == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*CST Compra de Atacado */ 
-            ViewBag.CstCompraAta     = this.tribMTX.Count(a => a.CST_COMPRA_DE_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstCompraAtaNull = this.tribMTX.Count(a => a.CST_COMPRA_DE_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstCompraAta     = this.lstCli.Count(a => a.CST_COMPRA_DE_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstCompraAtaNull = this.lstCli.Count(a => a.CST_COMPRA_DE_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*CST Compra de Simpes Nacional */
-            ViewBag.CstCompraSN     = this.tribMTX.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstCompraSNNull = this.tribMTX.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstCompraSN     = this.lstCli.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstCompraSNNull = this.lstCli.Count(a => a.CST_COMPRA_DE_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*CST NFe Industria*/
-            ViewBag.CstNfeInd     = this.tribMTX.Count(a => a.CST_DA_NFE_DA_IND_FORN != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstNfeIndNull = this.tribMTX.Count(a => a.CST_DA_NFE_DA_IND_FORN == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstNfeInd     = this.lstCli.Count(a => a.CST_DA_NFE_DA_IND_FORN != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstNfeIndNull = this.lstCli.Count(a => a.CST_DA_NFE_DA_IND_FORN == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*CST NFe Atacado*/
-            ViewBag.CstNfeAta     = this.tribMTX.Count(a => a.CST_DA_NFE_DE_ATA_FORN != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstNfeAtaNull = this.tribMTX.Count(a => a.CST_DA_NFE_DE_ATA_FORN == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstNfeAta     = this.lstCli.Count(a => a.CST_DA_NFE_DE_ATA_FORN != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstNfeAtaNull = this.lstCli.Count(a => a.CST_DA_NFE_DE_ATA_FORN == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*CST NFe Simples Nacional*/
-            ViewBag.CstNfeSN     = this.tribMTX.Count(a => a.CSOSNTDANFEDOSNFOR != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstNfeSNNull = this.tribMTX.Count(a => a.CSOSNTDANFEDOSNFOR == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstNfeSN     = this.lstCli.Count(a => a.CSOSNTDANFEDOSNFOR != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstNfeSNNull = this.lstCli.Count(a => a.CSOSNTDANFEDOSNFOR == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             return View();
@@ -1502,8 +1517,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1519,26 +1534,26 @@ namespace MatrizTributaria.Controllers
 
 
             /*Cst Pis Cofins Saida*/
-            ViewBag.CstSaidaPisCofins     = this.tribMTX.Count(a => a.CST_SAIDA_PISCOFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstSaidaPisCofinsNull = this.tribMTX.Count(a => a.CST_SAIDA_PISCOFINS == null);
+            ViewBag.CstSaidaPisCofins     = this.lstCli.Count(a => a.CST_SAIDA_PISCOFINS != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstSaidaPisCofinsNull = this.lstCli.Count(a => a.CST_SAIDA_PISCOFINS == null);
 
 
             /*Cst Venda Var Cons Final*/
-            ViewBag.CstVendaVarCF     = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstVendaVarCFNull = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == null);
+            ViewBag.CstVendaVarCF     = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaVarCFNull = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == null);
 
             /*CST Venda Varejo para Contribuinte*/
-            ViewBag.CstVendaVarCont     = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstVendaVarContNull = this.tribMTX.Count(a => a.CST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaVarCont     = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaVarContNull = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*CST Venda Atacado para Contribuinte*/
-            ViewBag.CstVendaAtaCont     = this.tribMTX.Count(a => a.CST_VENDA_ATA_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstVendaAtaContNull = this.tribMTX.Count(a => a.CST_VENDA_ATA_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaAtaCont     = this.lstCli.Count(a => a.CST_VENDA_ATA_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaAtaContNull = this.lstCli.Count(a => a.CST_VENDA_ATA_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
             /*CST Venda Atacado para Simples nacional*/
-            ViewBag.CstVendaAtaSN     = this.tribMTX.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.CstVendaAtaSNNull = this.tribMTX.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaAtaSN     = this.lstCli.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.CstVendaAtaSNNull = this.lstCli.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
 
@@ -1693,8 +1708,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -1714,37 +1729,38 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_SAIDA_PISCOFINS != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_SAIDA_PISCOFINS != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_SAIDA_PISCOFINS == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_SAIDA_PISCOFINS == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+           // this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_SAIDA_PISCOFINS.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_SAIDA_PISCOFINS.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -1762,11 +1778,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstPisCofinsSaidas.ToList();
+            ViewBag.CstGeral = db.CstPisCofinsSaidas;
 
 
 
@@ -1794,7 +1810,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas.ToList();
+            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
             return View(trib);
         }
 
@@ -1993,8 +2009,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -2015,38 +2031,39 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
 
 
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            //this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -2063,15 +2080,15 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
          
 
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
         }
 
@@ -2093,7 +2110,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
 
         }
@@ -2287,8 +2304,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -2308,39 +2325,40 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                   this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
 
 
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
-
+            // this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+           
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -2358,15 +2376,15 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
 
 
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
         [HttpGet]
@@ -2386,7 +2404,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
         }
 
@@ -2584,8 +2602,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -2605,38 +2623,38 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
 
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
-
+            // this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = lstCli.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -2654,15 +2672,15 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
 
 
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
                         
         }
@@ -2684,7 +2702,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
 
         }
@@ -2890,8 +2908,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -2913,37 +2931,37 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -2961,13 +2979,13 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
             
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
@@ -2990,7 +3008,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             ViewBag.Origem = origem;
             return View(trib);
         }
@@ -3197,8 +3215,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -3218,37 +3236,38 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_ENTRADA_PISCOFINS != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_ENTRADA_PISCOFINS != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_ENTRADA_PISCOFINS == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_ENTRADA_PISCOFINS == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+          //  this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_ENTRADA_PISCOFINS.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_ENTRADA_PISCOFINS.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -3266,11 +3285,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstPisCofinsEntradas.ToList();
+            ViewBag.CstGeral = db.CstPisCofinsEntradas;
 
 
 
@@ -3293,7 +3312,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas.ToList();
+            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
             return View(trib);
         }
 
@@ -3468,8 +3487,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -3489,37 +3508,38 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            //this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -3537,15 +3557,15 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
 
 
 
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
            
 
@@ -3569,7 +3589,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
         }
         [HttpGet]
@@ -3743,8 +3763,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -3764,37 +3784,38 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -3812,11 +3833,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
 
 
 
@@ -3843,7 +3864,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
         }
 
@@ -4018,8 +4039,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -4039,37 +4060,37 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -4087,11 +4108,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
 
 
 
@@ -4118,7 +4139,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
         }
 
@@ -4295,8 +4316,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -4316,37 +4337,37 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -4364,11 +4385,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
 
 
@@ -4392,7 +4413,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
 
         }
@@ -4569,8 +4590,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -4590,37 +4611,37 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -4638,11 +4659,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
 
 
@@ -4666,7 +4687,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
         }
 
@@ -4843,8 +4864,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -4864,37 +4885,37 @@ namespace MatrizTributaria.Controllers
             switch (opcao)
             {
                 case "Com CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR != null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
                 case "Sem CST":
-                    this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR == null && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //procurar por cst
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -4912,11 +4933,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
 
 
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
 
 
 
@@ -4940,7 +4961,7 @@ namespace MatrizTributaria.Controllers
 
             }
             //ViewBag.Tributos = trib;
-            ViewBag.CstGeral = db.CstIcmsGerais.ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais;
             return View(trib);
         }
         [HttpGet]
@@ -5121,8 +5142,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -5149,10 +5170,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_PIS != null  && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_PIS != null  && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -5161,44 +5182,44 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_PIS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_PIS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
            //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_PIS == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_PIS == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_ENTRADA_PISCOFINS.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_ENTRADA_PISCOFINS.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -5216,12 +5237,12 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstPisCofinsEntradas.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstPisCofinsEntradas.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
 
@@ -5422,8 +5443,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -5450,10 +5471,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_PIS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_PIS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -5462,44 +5483,44 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_PIS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_PIS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_PIS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_PIS == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_PIS == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_SAIDA_PISCOFINS.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_SAIDA_PISCOFINS.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -5517,12 +5538,12 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -5722,8 +5743,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -5750,10 +5771,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -5762,44 +5783,44 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ENT_COFINS == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ENT_COFINS == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_ENTRADA_PISCOFINS.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_ENTRADA_PISCOFINS.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -5817,12 +5838,12 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstPisCofinsEntradas.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstPisCofinsEntradas.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -6022,8 +6043,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -6050,10 +6071,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -6062,44 +6083,44 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_COFINS != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_COFINS == null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_SAIDA_COFINS == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_SAIDA_COFINS == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_SAIDA_PISCOFINS.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_SAIDA_PISCOFINS.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -6117,12 +6138,12 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -6318,8 +6339,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -6347,10 +6368,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null  && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null  && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -6360,44 +6381,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND == null && s.CST_COMPRA_DE_IND == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_IND == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -6414,11 +6435,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
         [HttpGet]
@@ -6613,8 +6634,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -6642,10 +6663,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -6655,44 +6676,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND != null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == null && s.CST_COMPRA_DE_IND == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_IND == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -6709,11 +6730,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -6909,8 +6930,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -6937,10 +6958,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -6949,44 +6970,44 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_ATA == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -7003,11 +7024,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
         [HttpGet]
@@ -7202,8 +7223,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -7231,10 +7252,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -7244,44 +7265,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_ATA == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -7298,11 +7319,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -7498,8 +7519,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -7527,10 +7548,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -7540,44 +7561,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_COMPRA_DE_SIMP_NACIONAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -7594,11 +7615,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -7794,8 +7815,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -7823,10 +7844,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -7836,44 +7857,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -7890,11 +7911,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -8098,8 +8119,8 @@ namespace MatrizTributaria.Controllers
 
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -8126,10 +8147,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -8138,10 +8159,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -8150,18 +8171,18 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
 
@@ -8169,16 +8190,16 @@ namespace MatrizTributaria.Controllers
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -8195,13 +8216,13 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(this.tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
         [HttpGet]
@@ -8405,8 +8426,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -8433,10 +8454,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -8445,10 +8466,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -8456,34 +8477,34 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM,  procuraSetor, procuraCate, tribMTX);
+           this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -8500,11 +8521,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -8705,8 +8726,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -8733,10 +8754,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -8745,10 +8766,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -8757,34 +8778,34 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_VENDA_VAREJO_CONT == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -8801,13 +8822,13 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(this.tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
 
@@ -9005,8 +9026,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -9032,10 +9053,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -9044,10 +9065,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -9056,33 +9077,33 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ST_VENDA_VAREJO_CONT == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -9099,13 +9120,13 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(this.tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
 
@@ -9302,8 +9323,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -9329,10 +9350,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -9341,10 +9362,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -9353,33 +9374,33 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_CONT == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -9396,13 +9417,13 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(this.tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
 
@@ -9599,8 +9620,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -9628,10 +9649,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -9641,44 +9662,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -9695,11 +9716,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -9897,8 +9918,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -9926,10 +9947,10 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -9939,44 +9960,44 @@ namespace MatrizTributaria.Controllers
                     {
                         case "1":
 
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 20 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -9993,11 +10014,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -10197,8 +10218,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -10225,10 +10246,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
@@ -10237,44 +10258,44 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL == 60 && s.UF_ORIGEM.Equals(this.ufOrigem) && s.UF_DESTINO.Equals(this.ufDestino));
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -10291,11 +10312,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -10525,8 +10546,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -10555,14 +10576,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2": //sem aliquota
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3": //isenta
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null || s.ALIQ_ICMS_COMP_DE_IND != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null || s.ALIQ_ICMS_COMP_DE_IND != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -10573,14 +10594,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2": //sem aliquota
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3": //isenta
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null || s.ALIQ_ICMS_COMP_DE_IND != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null || s.ALIQ_ICMS_COMP_DE_IND != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -10591,43 +10612,43 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND != null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2": //sem aliquota
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null && s.CST_COMPRA_DE_IND != 60 && s.CST_COMPRA_DE_IND != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3": //isenta
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null || s.ALIQ_ICMS_COMP_DE_IND != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == null || s.ALIQ_ICMS_COMP_DE_IND != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
 
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM,  procuraSetor, procuraCate, tribMTX);
+           this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMP_DE_IND == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMP_DE_IND == pAlq);
 
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -10645,11 +10666,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -10876,8 +10897,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -10902,12 +10923,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro) 
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
 
                     }
@@ -10917,46 +10938,46 @@ namespace MatrizTributaria.Controllers
                         switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_IND == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMP_DE_IND == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_IND.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -10973,11 +10994,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -11207,8 +11228,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -11236,14 +11257,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null || s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null || s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -11252,14 +11273,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null || s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null || s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -11270,27 +11291,27 @@ namespace MatrizTributaria.Controllers
 
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null && s.CST_COMPRA_DE_ATA != 60 && s.CST_COMPRA_DE_ATA != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null || s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == null || s.ALIQ_ICMS_COMPRA_DE_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM,  procuraSetor, procuraCate, tribMTX);
+           this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_ATA == pAlq);
 
             }
 
@@ -11298,22 +11319,22 @@ namespace MatrizTributaria.Controllers
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -11330,11 +11351,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -11563,8 +11584,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -11590,12 +11611,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -11604,12 +11625,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_ATA == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -11618,34 +11639,34 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_ATA == pAlq);
 
             }
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_ATA.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -11662,11 +11683,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -11892,8 +11913,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -11920,14 +11941,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -11936,14 +11957,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -11953,47 +11974,47 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null && s.CST_COMPRA_DE_SIMP_NACIONAL != 60 && s.CST_COMPRA_DE_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == null || s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_COMPRA_DE_SIMP_NACIONAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST);
             }
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -12010,11 +12031,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
 
@@ -12240,8 +12261,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -12270,12 +12291,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -12284,48 +12305,48 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_COMPRA_DE_SIMP_NACIONAL == pAlq);
 
             }
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_COMPRA_DE_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -12342,11 +12363,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -12572,8 +12593,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -12599,17 +12620,17 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                     
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -12618,17 +12639,17 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
 
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -12638,50 +12659,50 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE != null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == null && s.CST_DA_NFE_DA_IND_FORN != 60 && s.CST_DA_NFE_DA_IND_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
 
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == null || s.ALIQ_ICMS_NFE != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM,  procuraSetor, procuraCate, tribMTX);
+           this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_DA_NFE_DA_IND_FORN.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DA_IND_FORN.ToString() == procuraCST);
             }
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -12698,11 +12719,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -12932,8 +12953,8 @@ namespace MatrizTributaria.Controllers
 
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -12961,14 +12982,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -12977,14 +12998,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -12994,14 +13015,14 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA != null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null && s.CST_DA_NFE_DE_ATA_FORN != 60 && s.CST_DA_NFE_DE_ATA_FORN != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_ATA == null || s.ALIQ_ICMS_NFE_FOR_ATA != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13009,20 +13030,20 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.CST_DA_NFE_DE_ATA_FORN == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_DA_NFE_DE_ATA_FORN == pAlq);
 
             }
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
 
@@ -13030,16 +13051,16 @@ namespace MatrizTributaria.Controllers
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -13056,11 +13077,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -13286,8 +13307,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -13314,15 +13335,15 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13331,15 +13352,15 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13349,15 +13370,15 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN != null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null && s.CSOSNTDANFEDOSNFOR != 60 && s.CSOSNTDANFEDOSNFOR != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == null || s.ALIQ_ICMS_NFE_FOR_SN != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13365,35 +13386,35 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_NFE_FOR_SN == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CSOSNTDANFEDOSNFOR.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CSOSNTDANFEDOSNFOR.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -13410,11 +13431,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -13623,8 +13644,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -13656,19 +13677,24 @@ namespace MatrizTributaria.Controllers
 
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "4":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null);
+                            this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
+                        case "5":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 41 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+
                     }
                     break;
                 case "Sem aliquota":
@@ -13677,18 +13703,22 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "4":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null);
+                            this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "5":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 41 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13698,18 +13728,22 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "4":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null);
+                            this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "5":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 41 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13719,18 +13753,47 @@ namespace MatrizTributaria.Controllers
                     {
 
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "4":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null);
+                            this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "5":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 41 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                    }
+                    break;
+                case "Não Tributada":
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5"; //5-NÃO TRIBUTADA
+                    switch (ViewBag.Filtro)
+                    {
+
+                        case "1":
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "2":
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && s.CST_VENDA_VAREJO_CONS_FINAL != 60 && s.CST_VENDA_VAREJO_CONS_FINAL != 40 && s.CST_VENDA_VAREJO_CONS_FINAL != 41 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "3":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "4":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == null || s.CST_VENDA_VAREJO_CONS_FINAL != null);
+                            this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA == 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            break;
+                        case "5":
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 41 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null || s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -13738,19 +13801,19 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
             
@@ -13759,16 +13822,16 @@ namespace MatrizTributaria.Controllers
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -13785,12 +13848,12 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s=>s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s=>s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s=>s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s=>s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
         [HttpGet]
@@ -13987,11 +14050,10 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
-            //criar o temp data da lista ou recupera-lo
-            VerificaTempData();
+         
 
             //verifica estados origem e destino
             VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
@@ -14000,6 +14062,9 @@ namespace MatrizTributaria.Controllers
             //aplica estado origem e destino
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
+
+            //criar o temp data da lista ou recupera-lo
+            VerificaTempData();
 
 
             //ViewBag com a opcao
@@ -14015,12 +14080,18 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            //this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60);
+                            //this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+                            this.lstCli = this.lstCli.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+                            
+                            //ViewBag.AliqICMSSTVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+                            //ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+
+
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.ID_CATEGORIA != 21);
                             break;
                     }
                     break;
@@ -14029,46 +14100,46 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && s.ID_CATEGORIA != 21);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && s.ID_CATEGORIA != 21);
                             break;
                     }
                     break;
             }
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONS_FINAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -14085,12 +14156,12 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
         [HttpGet]
@@ -14291,8 +14362,8 @@ namespace MatrizTributaria.Controllers
 
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //criar o temp data da lista ou recupera-lo
             VerificaTempData();
@@ -14315,14 +14386,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21  && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21  && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         
                     }
@@ -14332,14 +14403,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
 
                     }
@@ -14349,14 +14420,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null && s.CST_VENDA_VAREJO_CONT != 60 && s.CST_VENDA_VAREJO_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == null || s.ALIQ_ICMS_VENDA_VAREJO_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
 
                     }
@@ -14367,35 +14438,35 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
             
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_VAREJO_CONT == pAlq);
 
             }
 
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST);
             }
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -14412,11 +14483,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -14614,8 +14685,8 @@ namespace MatrizTributaria.Controllers
 
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -14644,12 +14715,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -14658,47 +14729,47 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_VAREJO_CONT.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -14715,11 +14786,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -14915,8 +14986,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -14945,14 +15016,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -14961,14 +15032,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -14977,14 +15048,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null && s.CST_VENDA_ATA_CONT != 60 && s.CST_VENDA_ATA_CONT != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_CONT == null || s.ALIQ_ICMS_VENDA_ATA_CONT != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -14992,35 +15063,35 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -15037,11 +15108,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -15239,8 +15310,8 @@ namespace MatrizTributaria.Controllers
             }
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -15268,12 +15339,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -15282,12 +15353,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_CONT == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -15295,35 +15366,35 @@ namespace MatrizTributaria.Controllers
 
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_CONT.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -15340,11 +15411,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -15545,8 +15616,8 @@ namespace MatrizTributaria.Controllers
 
 
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -15574,14 +15645,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -15590,14 +15661,14 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -15606,49 +15677,49 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && s.CST_VENDA_ATA_SIMP_NACIONAL != 60 && s.CST_VENDA_ATA_SIMP_NACIONAL != 40 && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "3":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 40 && s.ID_CATEGORIA != 21);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null || s.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
                 double pAlq = Convert.ToDouble(procurarPorAliq);
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == pAlq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -15665,11 +15736,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -15872,8 +15943,8 @@ namespace MatrizTributaria.Controllers
                 ViewBag.FiltroCorrenteCSTInt = int.Parse(procuraCST);
             }
             //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -15901,12 +15972,12 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
@@ -15915,46 +15986,46 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60).ToList();
-                            this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL == 60);
+                            this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && s.ID_CATEGORIA != 21 && s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPorII(codBarrasL, procurarPor, procuraCEST, procuraNCM,  procuraSetor, procuraCate, tribMTX);
+           this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, procuraSetor, procuraCate, lstCli);
 
             //Busca por aliquota
             if (!String.IsNullOrEmpty(procurarPorAliq))
             {
-                this.tribMTX = this.tribMTX.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL.ToString() == procurarPorAliq).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL.ToString() == procurarPorAliq);
 
             }
             //Busca por cst
             if (!String.IsNullOrEmpty(procuraCST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST).ToList();
+                this.lstCli = this.lstCli.Where(s => s.CST_VENDA_ATA_SIMP_NACIONAL.ToString() == procuraCST);
             }
 
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -15970,11 +16041,11 @@ namespace MatrizTributaria.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
-            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo);
 
-            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
 
@@ -16064,15 +16135,15 @@ namespace MatrizTributaria.Controllers
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                tribMTX = (codBarrasL != 0) ? (tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))).ToList() : tribMTX = (tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper()))).ToList();
+                tribMTX = (codBarrasL != 0) ? (this.tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString())).ToList()) : tribMTX = (this.tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())).ToList());
             }
             if (!String.IsNullOrEmpty(procuraCEST))
             {
-                tribMTX = tribMTX.Where(s => s.CEST_PRODUTO == procuraCEST).ToList();
+                tribMTX = this.tribMTX.Where(s => s.CEST_PRODUTO == procuraCEST).ToList();
             }
             if (!String.IsNullOrEmpty(procuraNCM))
             {
-                tribMTX = tribMTX.Where(s => s.NCM_PRODUTO == procuraNCM).ToList();
+                tribMTX = this.tribMTX.Where(s => s.NCM_PRODUTO == procuraNCM).ToList();
 
             }
            
@@ -16087,15 +16158,15 @@ namespace MatrizTributaria.Controllers
 
             if (!String.IsNullOrEmpty(procurarPor))
             {
-                this.tribMTX = (codBarrasL != 0) ? (tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))).ToList() : tribMTX = (tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper()))).ToList();
+                this.tribMTX = (codBarrasL != 0) ? (this.tribMTX.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString())).ToList()) : tribMTX = (this.tribMTX.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())).ToList());
             }
             if (!String.IsNullOrEmpty(procuraCEST))
             {
-                this.tribMTX = tribMTX.Where(s => s.CEST_PRODUTO == procuraCEST).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.CEST_PRODUTO == procuraCEST).ToList();
             }
             if (!String.IsNullOrEmpty(procuraNCM))
             {
-                this.tribMTX = tribMTX.Where(s => s.NCM_PRODUTO == procuraNCM).ToList();
+                this.tribMTX = this.tribMTX.Where(s => s.NCM_PRODUTO == procuraNCM).ToList();
 
             }
           
@@ -16116,6 +16187,68 @@ namespace MatrizTributaria.Controllers
             return this.tribMTX;
         }
 
+        private IQueryable<TributacaoGeralView> ProcurarPorIII(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, string procuraSetor, string procuraCate, IQueryable<TributacaoGeralView> lstCli)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                this.lstCli = (codBarrasL != 0) ? (lstCli.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))) : lstCli = (lstCli.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())));
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                this.lstCli = lstCli.Where(s => s.CEST_PRODUTO == procuraCEST);
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                this.lstCli = lstCli.Where(s => s.NCM_PRODUTO == procuraNCM);
+
+            }
+
+            //Busca por setor
+            if (!String.IsNullOrEmpty(procuraSetor))
+            {
+                this.lstCli = lstCli.Where(s => s.ID_SETOR.ToString() == procuraSetor);
+
+            }
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                this.lstCli = lstCli.Where(s => s.ID_CATEGORIA.ToString() == procuraCate);
+
+
+            }
+
+            return this.lstCli;
+        }
+
+        private IQueryable<TributacaoGeralView> ProcurarPorIV(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, IQueryable<TributacaoGeralView> lstCli)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                this.lstCli = (codBarrasL != 0) ? (lstCli.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))) : lstCli = (lstCli.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())));
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                this.lstCli = lstCli.Where(s => s.CEST_PRODUTO == procuraCEST);
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                this.lstCli = lstCli.Where(s => s.NCM_PRODUTO == procuraNCM);
+
+            }
+
+
+
+            return lstCli;
+        }
+
+
+
+
+
         //retorno vazio para verificar a tempdata
 
         public EmptyResult VerificaTempData()
@@ -16125,14 +16258,32 @@ namespace MatrizTributaria.Controllers
              na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
             if (TempData["tributacaoMTX"] == null)
             {
-                //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-                this.tribMTX = db.Tributacao_GeralView.ToList();
-                TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+                //this.lstCli = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a);
+              
+                //this.tributacao = db.Tributacoes;
+
+                //this.tributacao = (from a in db.Tributacoes where a.UF_Origem.Equals(this.ufOrigem) && a.UF_Destino.Equals(this.ufDestino) select a);
+             
+                // this.lstCli = (from a in db.Tributacao_GeralView  select a);
+                //this.lstCli = db.Tributacao_GeralView.AsNoTracking();
+                this.lstCli = from a in db.Tributacao_GeralView select a;
+
+                
+               
+               //TempData["tributacaoMTX"] = this.lstCli; //cria a temp data e popula
+
+                TempData["tributacaoMTX"] = this.lstCli; //cria a temp data e popula
+
+                //TempData["tributacaoMTX"] = this.tributacao; //cria a temp data e popula
                 TempData.Keep("tributacaoMTX"); //persiste
             }
             else
             {
-                this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                // this.lstCli = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                this.lstCli = (IQueryable<TributacaoGeralView>)TempData["tributacaoMTX"];
+                //this.tributacao = (List<Tributacao>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+               //this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+
                 TempData.Keep("tributacaoMTX"); //persiste
             }
 
@@ -16173,14 +16324,14 @@ namespace MatrizTributaria.Controllers
 
             return new EmptyResult();
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
 
     }//fim controller
 

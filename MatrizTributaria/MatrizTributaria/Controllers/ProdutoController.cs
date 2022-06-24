@@ -17,7 +17,7 @@ namespace MatrizTributaria.Controllers
         List<Produto> prodMTX = new List<Produto>();
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>(); //TESTE COM A VIEW DA TRIBUTAÇÃO
         List<Produto> produtosMTX = new List<Produto>();
-
+        IQueryable<TributacaoGeralView> lstCli;
         List<TributacaoNCM> tribNCM = new List<TributacaoNCM>();
         //origem e destino
         string ufOrigem = "";
@@ -453,9 +453,6 @@ namespace MatrizTributaria.Controllers
             //verifica carregamento da tabela
             VerificaTempDataProd();
 
-           
-
-
 
 
             ViewBag.CodBarras = this.prodMTX.Count(a => a.codBarras.ToString() != "0");
@@ -563,21 +560,7 @@ namespace MatrizTributaria.Controllers
                 
             }
 
-            //TempData["procuraCAT"] = procuraCate ?? TempData["procuraCAT"];
-
-            //if (TempData["procuraCAT"] == null)
-            //{
-            //    //categoria
-            //    procuraCate = (procuraCate == "") ? null : procuraCate;
-            //    procuraCate = (procuraCate == "null") ? null : procuraCate;
-            //    procuraCate = (procuraCate != null) ? procuraCate : null;
-            //    TempData["procuraCAT"] = procuraCate;
-
-            //}
-            //else
-            //{
-            //    procuraCate = (procuraCate == null) ? TempData["procuraCAT"].ToString() : procuraCate;
-            //}
+           
 
 
 
@@ -654,13 +637,13 @@ namespace MatrizTributaria.Controllers
             switch (ViewBag.FiltroCorrenteAuditado)
             {
                 case "0": //SOMENTE OS NÃO AUDITADOS
-                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 0).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.AUDITADO_POR_NCM == 0);
                     break;
                 case "1": //SOMENTE OS AUDITADOS
-                    this.tribMTX = this.tribMTX.Where(s => s.AUDITADO_POR_NCM == 1).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.AUDITADO_POR_NCM == 1);
                     break;
                 case "2": //TODOS
-                    this.tribMTX = this.tribMTX.Where(s => s.ID !=null).ToList();
+                    this.lstCli = this.lstCli.Where(s => s.ID !=null);
                     break;
             }
 
@@ -674,10 +657,10 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.NCM_PRODUTO != null).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO != null);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.NCM_PRODUTO == null).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO == null);
                             break;
                     }
                     break;
@@ -686,46 +669,47 @@ namespace MatrizTributaria.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.tribMTX = this.tribMTX.Where(s => s.NCM_PRODUTO != null).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO != null);
                             break;
                         case "2":
-                            this.tribMTX = this.tribMTX.Where(s => s.NCM_PRODUTO == null).ToList();
+                            this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO == null);
                             break;
                     }
                     break;
             }
 
             //Action para procurar: passando alguns parametros que são comuns em todas as actions
-            this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+           //  this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorIII(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
 
             //verificar isso - setor categoria
             //Busca por setor
             if (!String.IsNullOrEmpty(procuraSetor))
             {
-                this.tribMTX = this.tribMTX.Where(s => s.ID_SETOR.ToString() == procuraSetor).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ID_SETOR.ToString() == procuraSetor);
               
 
             }
             //Busca por categoria
             if (!String.IsNullOrEmpty(procuraCate))
             {
-                this.tribMTX = this.tribMTX.Where(s => s.ID_CATEGORIA.ToString() == procuraCate).ToList();
+                this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA.ToString() == procuraCate);
 
 
             }
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    this.tribMTX = this.tribMTX.OrderByDescending(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Produto_asc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
                 case "Id_desc":
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.ID).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
                     break;
                 default:
-                    this.tribMTX = this.tribMTX.OrderBy(s => s.DESCRICAO_PRODUTO).ToList();
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
                     break;
 
 
@@ -751,7 +735,7 @@ namespace MatrizTributaria.Controllers
 
 
             //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
 
 
@@ -886,22 +870,24 @@ namespace MatrizTributaria.Controllers
             buscaNCM = buscaNCM.Replace(".", ""); //tirar os pontos da string
 
             VerificaTempData();
-
+            //busca o nmc pelo sua origem e destino
             if (!String.IsNullOrEmpty(buscaNCM))
             {
-                tribMTX = tribMTX.Where(s => s.NCM_PRODUTO == buscaNCM).ToList();
+                this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO == buscaNCM && s.UF_ORIGEM == ufOrigem && s.UF_DESTINO == ufDestino) ;
 
             }
-
+            
             //foreach para atualizar os produtos
             //retira o elemento vazio do array
            //objeto produto
             Tributacao tributaCao = new Tributacao();
 
+            List<TributacaoGeralView> tribMts = this.lstCli.ToList();
+
             //percorrer o array, atribuir o valor de ncm e salvar o objeto
-            for (int i = 0; i < tribMTX.Count; i++)
+            for (int i = 0; i < tribMts.Count(); i++)
             {
-                int? idTrib = (tribMTX[i].ID); //pega o id do registro da tributação a ser alterada
+                int? idTrib = (tribMts[i].ID); //pega o id do registro da tributação a ser alterada
                 tributaCao = db.Tributacoes.Find(idTrib); //busca a tributação pelo seu id
 
 
@@ -1139,8 +1125,8 @@ namespace MatrizTributaria.Controllers
 
 
             //agora um objeto de tributação de produtos
-            this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
-
+            //this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
+            this.lstCli = from a in db.Tributacao_GeralView select a;
 
 
             //montar select estado origem e destino
@@ -1160,22 +1146,19 @@ namespace MatrizTributaria.Controllers
 
 
 
-            //montar select estado origem e destino
-            ViewBag.EstadosOrigem = db.Estados.ToList();
-            ViewBag.EstadosDestinos = db.Estados.ToList();
 
 
-            //pegar os ncm existenstes em cada tabela
-            this.tribNCM = db.TributacoesNcm.AsNoTracking().ToList(); //instancia o objeto.
+            ////pegar os ncm existenstes em cada tabela
+            //this.tribNCM = db.TributacoesNcm.AsNoTracking().ToList(); //instancia o objeto.
 
-            //tributacao pelo estado
-            if(this.ufOrigemNCM != null && this.ufDestinoNCM != null)
-            {
-                this.tribNCM = this.tribNCM.Where(item => item.ncm.Equals(ncm) && item.UF_Origem.Equals(this.ufOrigemNCM) && item.UF_Destino.Equals(this.ufDestinoNCM)).ToList();
+            ////tributacao pelo estado
+            //if(this.ufOrigemNCM != null && this.ufDestinoNCM != null)
+            //{
+            //    this.tribNCM = this.tribNCM.Where(item => item.ncm.Equals(ncm) && item.UF_Origem.Equals(this.ufOrigemNCM) && item.UF_Destino.Equals(this.ufDestinoNCM)).ToList();
 
-            }
+            //}
             //objeto para mostrar os dados
-            TributacaoNCM tibNCMObj = (from a in db.TributacoesNcm where a.ncm.Equals(ncm) && a.UF_Origem.Equals(this.ufOrigemNCM) && a.UF_Destino.Equals(this.ufDestinoNCM) select a).FirstOrDefault();
+            TributacaoNCM tibNCMObj = (from a in db.TributacoesNcm where a.ncm.Equals(ncmAlterar) && a.UF_Origem.Equals(this.ufOrigemNCM) && a.UF_Destino.Equals(this.ufDestinoNCM) select a).FirstOrDefault();
 
             if (tibNCMObj != null)
             {
@@ -1183,51 +1166,60 @@ namespace MatrizTributaria.Controllers
                 int? cst = tibNCMObj.cstEntradaPisCofins;
                 ViewBag.CstEntradaPis = cst;
                 //int cst = ViewBag.CstEntradaPis.;
-                ViewBag.CstEntraPiscofinsDesc = (from a in db.CstPisCofinsEntradas where a.codigo == cst select a.descricao);
+                ViewBag.CstEntraPiscofinsDesc = (from a in db.CstPisCofinsEntradas where a.codigo == cst select a.descricao).FirstOrDefault();
                 ViewBag.AliqPisE = tibNCMObj.aliqEntPis.ToString();
                 ViewBag.AliqCofinsE = tibNCMObj.aliqEntCofins.ToString();
 
-                ViewBag.CstSaidaPis = tibNCMObj.cstSaidaPisCofins.ToString();
-                cst = (int)ViewBag.CstSaidaPis;
-                ViewBag.CstSaidaPiscofinsDesc = (from a in db.CstPisCofinsSaidas where a.codigo == cst select a.descricao);
+                cst = tibNCMObj.cstSaidaPisCofins;
+                ViewBag.CstSaidaPis = cst;
+                ViewBag.CstSaidaPiscofinsDesc = (from a in db.CstPisCofinsSaidas where a.codigo == cst select a.descricao).FirstOrDefault();
                 ViewBag.AliqPisS = tibNCMObj.aliqSaidaPis.ToString();
                 ViewBag.AliqCofinsS = tibNCMObj.aliqSaidaCofins.ToString();
 
                 //venda atacado contribinte
-                ViewBag.CstVendaAtaContr = tibNCMObj.cstVendaAtaCont.ToString();
-                cst =(int)ViewBag.CstVendaAtaContr;
-                ViewBag.CstAtaContrDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                cst = tibNCMObj.cstVendaAtaCont;
+                ViewBag.CstVendaAtaContr = cst;
+                ViewBag.CstAtaContrDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao).FirstOrDefault();
                 ViewBag.AliqIcmsVenAtaCont = tibNCMObj.aliqIcmsVendaAtaCont.ToString();
                 ViewBag.AliqImcsStVenAtaCont = tibNCMObj.aliqIcmsSTVendaAtaCont.ToString();
                 ViewBag.AliqRedBasCalcVenAtaCont = tibNCMObj.redBaseCalcIcmsVendaAtaCont.ToString();
                 ViewBag.AliqRedBasCalcSTVenAtaCont = tibNCMObj.redBaseCalcIcmsSTVendaAtaCont.ToString();
 
                 //Venda Ata Simples Nacional
-                ViewBag.CstVendaAtaSimplesNacional = tibNCMObj.cstVendaAtaSimpNacional.ToString();
-                cst =(int)ViewBag.CstVendaAtaSimplesNacional;
-                ViewBag.CstVendaAtaSimplesNacionalDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                cst = tibNCMObj.cstVendaAtaSimpNacional;
+                ViewBag.CstVendaAtaSimplesNacional = cst;
+                ViewBag.CstVendaAtaSimplesNacionalDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao).FirstOrDefault();
                 ViewBag.AliqIcmsVenAtaSn = tibNCMObj.aliqIcmsVendaAtaSimpNacional.ToString();
                 ViewBag.AliqImcsStVenAtaSn = tibNCMObj.aliqIcmsSTVendaAtaSimpNacional.ToString();
                 ViewBag.AliqRedBasCalcVenAtaSn = tibNCMObj.redBaseCalcIcmsVendaAtaSimpNacional.ToString();
                 ViewBag.AliqRedBasCalcSTVenAtaSn = tibNCMObj.redBaseCalcIcmsSTVendaAtaSimpNacional.ToString();
 
                 //Venda varejo para contribuinte
-                ViewBag.CstVendaVarCont = tibNCMObj.cstVendaVarejoCont.ToString();
-                cst =(int)ViewBag.CstVendaVarCont;
-                ViewBag.CstVendaVarContDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                cst = tibNCMObj.cstVendaVarejoCont;
+                ViewBag.CstVendaVarCont = cst;
+                ViewBag.CstVendaVarContDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao).FirstOrDefault();
                 ViewBag.AliqIcmsVenVarCont = tibNCMObj.aliqIcmsVendaVarejoCont.ToString();
                 ViewBag.AliqImcsStVenVarCont = tibNCMObj.aliqIcmsSTVendaVarejo_Cont.ToString();
                 ViewBag.AliqRedBasCalcVenVarCont = tibNCMObj.redBaseCalcVendaVarejoCont.ToString();
                 ViewBag.AliqRedBasCalcSTVenAtaSn = tibNCMObj.RedBaseCalcSTVendaVarejo_Cont.ToString();
 
                 //Venda varejo para consumidor final
-                ViewBag.CstVendaVarCf = tibNCMObj.cstVendaVarejoCont.ToString();
-                cst = (int)ViewBag.CstVendaVarCf;
-                ViewBag.CstVendaVarCfDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao);
+                cst = tibNCMObj.cstVendaVarejoCont;
+                ViewBag.CstVendaVarCf = cst;
+                ViewBag.CstVendaVarCfDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao).FirstOrDefault();
                 ViewBag.AliqIcmsVenVarCf = tibNCMObj.aliqIcmsVendaVarejoConsFinal.ToString();
                 ViewBag.AliqImcsStVenVarCf = tibNCMObj.aliqIcmsSTVendaVarejoConsFinal.ToString();
                 ViewBag.AliqRedBasCalcVenVarCf = tibNCMObj.redBaseCalcIcmsVendaVarejoConsFinal.ToString();
                 ViewBag.AliqRedBasCalcSTVenAtaCf = tibNCMObj.redBaseCalcIcmsSTVendaVarejoConsFinal.ToString();
+
+                //compra de inústria
+                cst = tibNCMObj.cstCompraDeInd;
+                ViewBag.CstCompraInd = cst;
+                ViewBag.CstCompraIndDesc = (from a in db.CstIcmsGerais where a.codigo == cst select a.descricao).FirstOrDefault();
+                ViewBag.AliqIcmsCompraInd = tibNCMObj.aliqIcmsCompDeInd.ToString();
+                ViewBag.AliqImcsStCompraInd = tibNCMObj.aliqIcmsSTCompDeInd.ToString();
+                ViewBag.AliqRedBasCalcCompraInd = tibNCMObj.redBaseCalcIcmsCompraDeInd.ToString();
+                ViewBag.AliqRedBasCalcSTCompraInd = tibNCMObj.redBaseCalcIcmsSTCompraDeInd.ToString();
 
 
 
@@ -1235,33 +1227,15 @@ namespace MatrizTributaria.Controllers
 
 
             //pega os ncm iguais
-            this.tribMTX = this.tribMTX.Where(item => item.NCM_PRODUTO == ncmAlterar).OrderBy(item => item.DESCRICAO_PRODUTO).ToList();
+            this.lstCli = this.lstCli.Where(item => item.NCM_PRODUTO == ncmAlterar).OrderBy(item => item.DESCRICAO_PRODUTO);
+                        
 
-            
-
-            ViewBag.TributacaoNCM = this.tribMTX;
+            ViewBag.TributacaoNCM = this.lstCli;
            
 
-            ////retira o elemento vazio do array
-            //idProdutos = idProdutos.Where(item => item != "").ToArray();
-
-            //cestMudar = cest != "" ? cest.Trim() : null; //ternario para remover eventuais espaços
-
-            ////objeto produto
-            //Produto prod = new Produto();
-
-            ////percorrer o array, atribuir o valor de ncm e salvar o objeto
-            //for (int i = 0; i < idProdutos.Length; i++)
-            //{
-            //    int idProd = Int32.Parse(idProdutos[i]);
-            //    prod = db.Produtos.Find(idProd);
-            //    prod.dataAlt = DateTime.Now; //data da alteração
-            //    prod.cest = cestMudar; //novo ceste
-            //    db.SaveChanges();
-            //}
 
             ViewBag.TributacaoNCM = this.tribNCM;
-            ViewBag.TributacaoMTX = this.tribMTX;
+            ViewBag.TributacaoMTX = this.lstCli;
             return View();
         }
 
@@ -1785,14 +1759,19 @@ namespace MatrizTributaria.Controllers
              na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
             if (TempData["tributacaoMTX"] == null)
             {
-                //this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
-                this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
-                TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+                ////this.tribMTX = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a).ToList();
+                //this.tribMTX = db.Tributacao_GeralView.AsNoTracking().ToList();
+                //TempData["tributacaoMTX"] = this.tribMTX; //cria a temp data e popula
+                //TempData.Keep("tributacaoMTX"); //persiste
+                this.lstCli = from a in db.Tributacao_GeralView select a;
+                TempData["tributacaoMTX"] = this.lstCli; //cria a temp data e popula
                 TempData.Keep("tributacaoMTX"); //persiste
             }
             else
             {
-                this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                //this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                //TempData.Keep("tributacaoMTX"); //persiste
+                this.lstCli = (IQueryable<TributacaoGeralView>)TempData["tributacaoMTX"];
                 TempData.Keep("tributacaoMTX"); //persiste
             }
 
@@ -1856,6 +1835,33 @@ namespace MatrizTributaria.Controllers
 
             return tribMTX;
         }
+
+
+
+
+        private IQueryable<TributacaoGeralView> ProcurarPorIII(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, IQueryable<TributacaoGeralView> lstCli)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                lstCli = (codBarrasL != 0) ? (lstCli.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))) : lstCli = (lstCli.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())));
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                lstCli = lstCli.Where(s => s.CEST_PRODUTO == procuraCEST);
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                lstCli = lstCli.Where(s => s.NCM_PRODUTO == procuraNCM);
+
+            }
+
+            return lstCli;
+        }
+
+
+
         private List<Produto> ProcurarPorII(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, string procuraCate, List<Produto>prodMTX)
         {
 
@@ -1913,8 +1919,7 @@ namespace MatrizTributaria.Controllers
                 TempData.Keep("UfDestinoNCM");
             }
 
-
-
+           
 
 
             this.ufOrigemNCM = TempData["UfOrigemNCM"].ToString();
@@ -1923,14 +1928,14 @@ namespace MatrizTributaria.Controllers
             return new EmptyResult();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
 
 
     }

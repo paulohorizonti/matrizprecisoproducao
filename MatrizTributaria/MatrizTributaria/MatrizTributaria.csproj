@@ -357,6 +357,7 @@
     <Compile Include="Models\MatrizDbContext.cs" />
     <Compile Include="Models\NaturezaReceita.cs" />
     <Compile Include="Models\Nivel.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\SetorProdutos.cs" />
     <Compile Include="Models\SoftwareHouse.cs" />
@@ -2941,6 +2942,7 @@
     <Content Include="Views\Empresa\MudarEmpresa.cshtml" />
     <Content Include="Views\Produto\EditTributacaoMassaNCMModal.cshtml" />
     <Content Include="Views\Acoes\CamposSelecionaUFNCM .cshtml" />
+    <Content Include="Views\Empresa\CadSuperLogica.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

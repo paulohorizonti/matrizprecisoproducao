@@ -30,7 +30,7 @@
                                 <table id="tbl-edtCstPisCofSai" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="6" class="pr-fonte2" scope="col">Analise CST</th>
+                                            <th style="text-align:center; border:none;" colspan="8" class="pr-fonte2" scope="col">Analise CST</th>
 
                                         </tr>
                                         <tr class="pr-td">
@@ -49,77 +49,134 @@
                                             <th>
                                                 CST no Cliente
                                             </th>
+                                            <th>Descricao CST Cliente</th>
                                             <th>
                                                 CST no MTX
                                             </th>
-
+                                            <th>Descricao CST MTX</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                            <tr style="height:12.0px;" class="pr-td">
-                                                <td style="width:4%;">
-                                                    @Html.DisplayFor(modelItem => item.TE_ID)
-                                                </td>
-                                                <td style="width:8%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
-                                                </td>
-                                                <td style="width:40%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                                </td>
-                                                <td style="width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
-                                                </td>
+                                        <tr style="height:12.0px;" class="pr-td">
+                                            <td style="width:4%;">
+                                                @Html.DisplayFor(modelItem => item.TE_ID)
+                                            </td>
+                                            <td style="width:5%;">
+                                                @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
+                                            </td>
+                                            <td style="width:20%;">
+                                                @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                            </td>
+                                            <td style="width:3%;">
+                                                @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
+                                            </td>
 
-                                                @if (item.CST_SAIDA_PIS_COFINS == null)
-                                                {
-                                                    <td style="text-align:center; width:10%;">
-                                                        @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    if (item.CST_SAIDA_PIS_COFINS != item.Cst_Saida_PisCofins_INTERNO && item.CST_SAIDA_PIS_COFINS != null)
-                                                    {
+                                            @if (item.CST_SAIDA_PIS_COFINS == null)
+                                            {
+                                        <td style="text-align:center; width:5%;">
+                                            @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
+                                        </td>
+                                                            <td style="text-align:center; width:20%;">
 
-                                                        <td style="text-align:center; width:10%;" class="pr-td-maior">
-                                                            @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (item.CST_SAIDA_PIS_COFINS == item.Cst_Saida_PisCofins_INTERNO && item.CST_SAIDA_PIS_COFINS != null)
-                                                        {
-                                                            <td style="text-align:center; width:10%;" class="pr-td-menor">
+                                                                @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                                {
+                                                                    if (item.CST_SAIDA_PIS_COFINS == dado.codigo)
+                                                                    {
+                                            <span>@dado.descricao</span>break;
+                                        }
+
+                                    }
+
+                                                            </td> }
+                                                                            else
+                                                                            {
+                                                                                if (item.CST_SAIDA_PIS_COFINS != item.Cst_Saida_PisCofins_INTERNO && item.CST_SAIDA_PIS_COFINS != null)
+                                                                                {
+
+                                                            <td style="text-align:center; width:5%;" class="pr-td-maior">
                                                                 @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                                             </td>
+                                                                                    <td style="text-align:center; width:20%;">
 
-                                                        }
-                                                        else
-                                                        {
-
-                                                            if (item.Cst_Saida_PisCofins_INTERNO == null && item.CST_SAIDA_PIS_COFINS != null)
-                                                            {
-                                                                <td style="text-align:center; width:10%;" class="pr-td-igual">
-                                                                    @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
-                                                                </td>
-
+                                                                                        @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                                                        {
+                                                                                            if (item.CST_SAIDA_PIS_COFINS == dado.codigo)
+                                                                                            {
+                                                                <span>@dado.descricao</span>break;
                                                             }
 
+                                                        }
 
+                                                                                    </td> }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            if (item.CST_SAIDA_PIS_COFINS == item.Cst_Saida_PisCofins_INTERNO && item.CST_SAIDA_PIS_COFINS != null)
+                                                                                                            {
+                                                                                    <td style="text-align:center; width:5%;" class="pr-td-menor">
+                                                                                        @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
+                                                                                    </td>
+
+                                                                                                                <td style="text-align:center; width:20%;">
+
+                                                                                                                    @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                                                                                    {
+                                                                                                                        if (item.CST_SAIDA_PIS_COFINS == dado.codigo)
+                                                                                                                        {
+                                                                                        <span>@dado.descricao</span>break;
+                                                                                    }
+
+                                                                                }
+
+                                                                                                                </td>
+ }
+                                                                                                            else
+                                                                                                            {
+
+                                                                                                                if (item.Cst_Saida_PisCofins_INTERNO == null && item.CST_SAIDA_PIS_COFINS != null)
+                                                                                                                {
+                                                                                    <td style="text-align:center; width:5%;" class="pr-td-igual">
+                                                                                        @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
+                                                                                    </td>
+                                                                                                                    <td style="text-align:center; width:20%;">
+
+                                                                                                                        @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                                                                                        {
+                                                                                                                            if (item.CST_SAIDA_PIS_COFINS == dado.codigo)
+                                                                                                                            {
+                                                                                        <span>@dado.descricao</span>break;
+                                                                                    }
+
+                                                                                }
+
+                                                                                                                    </td>}
+
+
+
+                                                                                                                                            }
+
+                                                                                                                                        }
+                                                                                                                                    }
+
+
+                                            <td style="text-align:center; width:10%;">
+                                                @Html.DisplayFor(modelItem => item.Cst_Saida_PisCofins_INTERNO)
+
+                                            </td>
+                                            <td style="width:20%;">
+                                                @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                {
+                                                    if (item.Cst_Saida_PisCofins_INTERNO == dado.codigo)
+                                                    {
+                                        <span>@dado.descricao</span>}
 
                                                         }
 
-                                                    }
-                                                }
+                                            </td>
 
-
-                                                <td style="text-align:center; width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.Cst_Saida_PisCofins_INTERNO)
-
-                                            </tr>
+                                        </tr>
 
                                         }
 

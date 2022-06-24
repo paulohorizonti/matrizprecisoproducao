@@ -260,7 +260,7 @@
                             <div class="form-row">
 
                                 <div class="col-lg-2">
-                                    <label class="pr-fonte-label" for="alVaC">Aliq ICMS Venda</label>
+                                    <label class="pr-fonte-label" for="alVaC">Aliq ICMS</label>
                                     <input class="form-control form-control-sm" value="@ViewBag.AliqIcmsVenAtaCont" readonly />
 
                                     @*@Html.TextBoxFor(m => m.aliqIcmsVendaAtaCont, new { @class = "form-control form-control-sm decimal ", @id = "alVaC", @name = "aliqIcmsVendaAtaCont", placeholder = "Digite Aliquota (%)" })*@
@@ -319,7 +319,7 @@
                             <div class="form-row">
 
                                 <div class="col-lg-2">
-                                    <label class="pr-fonte-label" for="alVSN">Aliq ICMS Venda</label>
+                                    <label class="pr-fonte-label" for="alVSN">Aliq ICMS</label>
                                     <input class="form-control form-control-sm" value="@ViewBag.AliqIcmsVenAtaSn" readonly />
 
                                     @*@Html.TextBoxFor(m => m.aliqIcmsVendaAtaSimpNacional, new { @class = "form-control form-control-sm decimal ", onkeyup = "maiuscula(this);", name = "alVSN", id = "alVSN", placeholder = "Digite Aliquota (%)" })*@
@@ -377,7 +377,7 @@
                             <div class="form-row">
 
                                 <div class="col-lg-2">
-                                    <label class="pr-fonte-label" for="alVeVarCont">Aliq ICMS Venda</label>
+                                    <label class="pr-fonte-label" for="alVeVarCont">Aliq ICMS</label>
                                     <input class="form-control form-control-sm" value="@ViewBag.AliqIcmsVenVarCont" readonly />
 
                                     @*@Html.TextBoxFor(m => m.aliqIcmsVendaVarejoCont, new { @class = "form-control form-control-sm decimal", name = "alVeVarCont", id = "alVeVarCont", placeholder = "Digite Aliquota (%)" })*@
@@ -434,7 +434,7 @@
                             <div class="form-row">
 
                                 <div class="col-lg-2">
-                                    <label class="pr-fonte-label" for="alVeVarCF">Aliq ICMS Venda</label>
+                                    <label class="pr-fonte-label" for="alVeVarCF">Aliq ICMS</label>
                                     <input class="form-control form-control-sm" value="@ViewBag.AliqIcmsVenVarCf" readonly />
 
                                     @*@Html.TextBoxFor(m => m.aliqIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm", name = "alVeVarCF", id = "alVeVarCF", placeholder = "Digite Aliquota (%)", onkeypress = "return onlynumberDecimal();" })*@
@@ -470,12 +470,16 @@
                                 <div class="col-lg-2">
                                     <label class="pr-fonte-label" for="idCstCompInd">Código Cst</label>
                                     <div class="input-group">
+                                        <input class="form-control form-control-sm" value="@ViewBag.CstCompraInd" readonly />
+
                                         @*@Html.DropDownListFor(m => m.cstCompraDeInd, new SelectList(ViewBag.CstGeral, "descricao", "codigo"), Model.cstCompraDeInd.ToString(), new { @class = "form-control form-control-sm dropdown", @id = "idCstCompInd", @name = "cstCompraDeInd" })*@
                                     </div>
 
                                 </div>
                                 <div class="col-lg-10">
                                     <label class="pr-fonte-label" for="desCompInd">Descrição</label>
+                                    <input class="form-control form-control-sm" value="@ViewBag.CstCompraIndDesc" readonly />
+
                                     @*<input type="text" class="form-control form-control-sm pr-fonte" name="desCompInd" id="desCompInd" style="min-width:100%;" readonly value="@ViewBag.CstCompraDeInd" />*@
                                 </div>
 
@@ -487,20 +491,29 @@
                             <div class="form-row">
 
                                 <div class="col-lg-2">
-                                    <label class="pr-fonte-label" for="aliqCompInd">Aliq ICMS Venda</label>
+                                    <label class="pr-fonte-label" for="aliqCompInd">Aliq ICMS</label>
+                                    <input class="form-control form-control-sm" value="@ViewBag.AliqIcmsCompraInd" readonly />
+
                                     @*@Html.TextBoxFor(m => m.aliqIcmsCompDeInd, new { @class = "form-control form-control-sm decimal", name = "aliqCompInd", id = "aliqCompInd", placeholder = "Digite Aliquota (%)" })*@
                                 </div>
 
                                 <div class="col-lg-2">
                                     <label class="pr-fonte-label" for="aliqSTCompInd">Aliq ICMS ST </label>
+                                    <input class="form-control form-control-sm" value="@ViewBag.AliqImcsStCompraInd" readonly />
+
                                     @*@Html.TextBoxFor(m => m.aliqIcmsSTCompDeInd, new { @class = "form-control form-control-sm decimal", name = "aliqSTCompInd", id = "aliqSTCompInd", placeholder = "Digite Aliquota (%)" })*@
                                 </div>
                                 <div class="col-lg-2">
                                     <label class="pr-fonte-label" for="rBcalCompInd">Red.Base Calc ICMS </label>
+                                    <input class="form-control form-control-sm" value="@ViewBag.AliqRedBasCalcCompraInd" readonly />
+
                                     @*@Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeInd, new { @class = "form-control form-control-sm decimal", name = "rBcalCompInd", id = "rBcalCompInd", placeholder = "Digite Redução (%)" })*@
                                 </div>
                                 <div class="col-lg-2">
                                     <label class="pr-fonte-label" for="rBcalSTCompInd">Red.Base Calc ICMS ST</label>
+                                    <input class="form-control form-control-sm" value="@ViewBag.AliqRedBasCalcSTCompraInd" readonly />
+
+
                                     @*@Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeInd, new { @class = "form-control form-control-sm decimal", name = "rBcalSTCompInd", id = "rBcSTVeVarCF", placeholder = "Digite Redução ST (%)" })*@
                                 </div>
 
@@ -836,7 +849,7 @@
                                     <caption>Produtos que receberão o novo NCM : <label id="lab" /> </caption>
                                     <thead style="font-size:12px; color:#ffffff; font-weight:100 !important" class="pr-thead">
                                         <tr>
-                                            <th scope="col">ID</th>
+                                            <th scope="col">ID-Produto</th>
                                             <th scope="col">Código de Barras</th>
                                             <th scope="col">Descrição</th>
                                             <th scope="col">Cest</th>
@@ -851,7 +864,7 @@
                                         {
                                             <tr class="pr-td sel">
                                                 <td style="width:5%">
-                                                    @item.ID
+                                                    @item.ID_PRODUTO
                                                 </td>
                                                 <td style="width:5%">
                                                     @item.COD_BARRAS_PRODUTO

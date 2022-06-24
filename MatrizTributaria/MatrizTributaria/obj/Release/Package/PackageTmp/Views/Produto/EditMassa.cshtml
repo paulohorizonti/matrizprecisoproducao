@@ -13,6 +13,8 @@
             <a data-toggle="tooltip" data-placement="right" title="Ir para gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("GraficoAnaliseProdutos","Produto")"><i style="font-size:1.5em;" class="fas fa-chart-pie"></i>  </a>
             <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="editarSelecionados" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-edit"></i></button>
             <button data-toggle="tooltip" data-placement="right" title="Alterar por NCM" type="button" id="editarPorNcm" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-box"></i></button>
+            <button data-toggle="tooltip" data-placement="right" title="Tributação por NCM" type="button" id="tributacaoPorNcm" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.5em;" class="fas fa-percentage"></i></button>
+
             @*<a data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" href="@Url.Action("Index", "Home")" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.5em;" class="fas fa-edit"></i></a>*@
         </div><!--fim do cabeçalho-->
         <div class="card-body">
@@ -40,7 +42,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="col" class="pr-actionlink">
-                                                ID
+                                                ID-Produto
                                             </th>
                                             <th scope="col">
                                                 Código de Barras
@@ -213,7 +215,7 @@
                             <div class="d-flex">
                                 <div class="mr-auto p-2">
                                     <p class="pr-fontanternativa">
-                                        <span class="pr-fontalternativa"> Página @(Model.PageCount<Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - - Total de registros: @Model.TotalItemCount</span>
+                                        <span class="pr-fontalternativa"> Página @(Model.PageCount<Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                                     </p>
                                 </div>
 
@@ -245,7 +247,7 @@
 }
                          }
 
-                         );
+                         )
 
 
                                 </div>
@@ -264,7 +266,7 @@
             </div><!--Fim do container do body do card-->
         </div><!--fim do body do card-->
         <div class="card-footer">
-            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.3em;" class="fas fa-user-edit"></i> = Edição em massa informando Dados MANUALMENTE <br />
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.3em;" class="fas fa-edit"></i> = Edição em massa informando Dados MANUALMENTE <br />
         </div>
     </div><!--Fim do card-->
 </div><!--Fim do container-->

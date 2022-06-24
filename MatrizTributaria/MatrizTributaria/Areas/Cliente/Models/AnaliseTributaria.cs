@@ -37,8 +37,14 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("CST_ENTRADA_PIS_COFINS")]
         public int? CST_ENTRADA_PIS_COFINS { get; set; }
 
+     
+
+
         [Column("CST_SAIDA_PIS_COFINS")]
         public int? CST_SAIDA_PIS_COFINS { get; set; }
+
+
+     
 
         [Column("ALIQ_ENTRADA_PIS")]
         public double? ALIQ_ENTRADA_PIS { get; set; }
@@ -206,9 +212,12 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("Cst_Entrada_PisCofins_INTERNO")]
         public int? Cst_Entrada_PisCofins_INTERNO { get; set; }
 
+
+       
         [Column("Cst_Saida_PisCofins_INTERNO")]
         public int? Cst_Saida_PisCofins_INTERNO { get; set; }
 
+        
         [Column("Aliq_Ent_Pis_INTERNO")]
         public double? Aliq_Ent_Pis_INTERNO { get; set; }
         [Column("Aliq_Saida_Pis_INTERNO")]
@@ -321,7 +330,15 @@ namespace MatrizTributaria.Areas.Cliente.Models
 
         [Column("Id_Produto_INTERNO")]
         public double? Id_Produto_INTERNO { get; set; }
-        
+
+
+        [Column("UF_Origem_INTERNO")]
+        public string UF_Origem_INTERNO { get; set; }
+
+
+        [Column("UF_Destino_INTERNO")]
+        public string UF_Destino_INTERNO { get; set; }
+
        
 
     }

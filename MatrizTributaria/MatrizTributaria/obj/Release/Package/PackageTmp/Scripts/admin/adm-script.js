@@ -10,9 +10,7 @@ $(document).ready(function () {
 
             if (value == 1) {
 
-
-
-                /*document.getElementById('mudarValoresNatRec').style.display = 'none';*/
+               /* document.getElementById('mudarValoresNatRec').style.display = 'none';*/
                /* document.getElementById('mudarValoresSetorFecp').style.display = 'none';*/
                 document.getElementById('mudarValoresCest').style.display = 'none';
                 
@@ -44,8 +42,363 @@ $(document).ready(function () {
 });
 
 
+//atribuir valores de tributação
+$(document).ready(function ()
+{
+    var uforigem = document.getElementById("ufOrigem");
+    var ufdestino = document.getElementById("ufDestino");
+
+    var fecp = document.getElementById("fecp");
+    var codReceita = document.getElementById("CodReceita");
+    var idCstSaiPC = document.getElementById("idCstSaiPC");
+    var alpS = document.getElementById("alpS");
+    var alcS = document.getElementById("alcS");
+    var idFundamentoLegal = document.getElementById("IdFundamentoLegal");
+
+    var idCstVeVarCF = document.getElementById("idCstVeVarCF");
+    var alVeVarCF = document.getElementById("alVeVarCF");
+    var alVeVarCFSt = document.getElementById("alVeVarCFSt");
+    var rBcVeVarCF = document.getElementById("rBcVeVarCF");
+    var rBcSTVeVarCF = document.getElementById("rBcSTVeVarCF");
+
+    var idCstVeVarCont = document.getElementById("idCstVeVarCont");
+    var alVeVarCont = document.getElementById("alVeVarCont");
+    var alVeVarContSt = document.getElementById("alVeVarContSt");
+    var rBcVeVarCont = document.getElementById("rBcVeVarCont");
+    var rBcSTVeVarCont = document.getElementById("rBcSTVeVarCont");
+
+    var idCstVeAtaCont = document.getElementById("idCstVeAtaCont");
+    var alVaC = document.getElementById("alVaC");
+    var alVaCSt = document.getElementById("alVaCSt");
+    var rBcVaC = document.getElementById("rBcVaC");
+    var rBcSTVaC = document.getElementById("rBcSTVaC");
+
+    var idCstVeAtaSN = document.getElementById("idCstVeAtaSN");
+    var alVSN = document.getElementById("alVSN");
+    var alVSNSt = document.getElementById("alVSNSt");
+    var rBcVSN = document.getElementById("rBcVSN");
+    var rBcSTVSN = document.getElementById("rBcSTVSN");
+
+    var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
 
 
+    uforigem.addEventListener("change", function () {
+
+
+        
+        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
+        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
+
+
+        if (opcaoValorOrigem === "UF de Origem") {
+
+            alert("UF de origem e destino devem ser preenchidos");
+            ufdestino.setAttribute('disabled', true);
+            fecp.setAttribute('readonly', true);
+
+            codReceita.setAttribute('disabled', true);
+            idCstSaiPC.setAttribute('disabled', true);
+            alpS.setAttribute('readonly', true);
+            alcS.setAttribute('readonly', true);
+            idFundamentoLegal.setAttribute('disabled', true);
+
+            idCstVeVarCF.setAttribute('disabled', true);
+
+            alVeVarCF.setAttribute('readonly', true);
+            alVeVarCFSt.setAttribute('readonly', true);
+            rBcVeVarCF.setAttribute('readonly', true);
+            rBcSTVeVarCF.setAttribute('readonly', true);
+            idCstVeVarCont.setAttribute('disabled', true);
+
+            alVeVarCont.setAttribute('readonly', true);
+            alVeVarContSt.setAttribute('readonly', true);
+            rBcVeVarCont.setAttribute('readonly', true);
+            rBcSTVeVarCont.setAttribute('readonly', true);
+            idCstVeAtaCont.setAttribute('disabled', true);
+            alVaC.setAttribute('readonly', true);
+            alVaCSt.setAttribute('readonly', true);
+
+            idCstVeAtaSN.setAttribute('disabled', true);
+            alVSN.setAttribute('readonly', true);
+            alVSNSt.setAttribute('readonly', true);
+            rBcVSN.setAttribute('readonly', true);
+            rBcSTVSN.setAttribute('readonly', true);
+            IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+            rBcVaC.setAttribute('readonly', true);
+            rBcSTVaC.setAttribute('readonly', true);
+
+            
+
+
+        } else {
+            if (opcaoValorDestino == "UF de Destino") {
+                alert("UF de origem e destino devem ser preenchidos");
+                ufdestino.removeAttribute('disabled');
+                fecp.setAttribute('readonly', true);
+
+                codReceita.setAttribute('disabled', true);
+                idCstSaiPC.setAttribute('disabled', true);
+                alpS.setAttribute('readonly', true);
+                alcS.setAttribute('readonly', true);
+                idFundamentoLegal.setAttribute('disabled', true);
+
+                idCstVeVarCF.setAttribute('disabled', true);
+
+                alVeVarCF.setAttribute('readonly', true);
+                alVeVarCFSt.setAttribute('readonly', true);
+                rBcVeVarCF.setAttribute('readonly', true);
+                rBcSTVeVarCF.setAttribute('readonly', true);
+                idCstVeVarCont.setAttribute('disabled', true);
+
+                alVeVarCont.setAttribute('readonly', true);
+                alVeVarContSt.setAttribute('readonly', true);
+                rBcVeVarCont.setAttribute('readonly', true);
+                rBcSTVeVarCont.setAttribute('readonly', true);
+                idCstVeAtaCont.setAttribute('disabled', true);
+                alVaC.setAttribute('readonly', true);
+                alVaCSt.setAttribute('readonly', true);
+
+                idCstVeAtaSN.setAttribute('disabled', true);
+                alVSN.setAttribute('readonly', true);
+                alVSNSt.setAttribute('readonly', true);
+                rBcVSN.setAttribute('readonly', true);
+                rBcSTVSN.setAttribute('readonly', true);
+                IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+                rBcVaC.setAttribute('readonly', true);
+                rBcSTVaC.setAttribute('readonly', true);
+
+
+
+            }
+            else {
+                ufdestino.removeAttribute('disabled');
+                fecp.removeAttribute('readonly');
+
+                codReceita.removeAttribute('disabled');
+
+                idCstSaiPC.removeAttribute('disabled');
+                alpS.removeAttribute('readonly');
+                alcS.removeAttribute('readonly');
+                idFundamentoLegal.removeAttribute('disabled');
+
+                idCstVeVarCF.removeAttribute('disabled');
+
+                alVeVarCF.removeAttribute('readonly');
+                alVeVarCFSt.removeAttribute('readonly');
+                rBcVeVarCF.removeAttribute('readonly');
+                rBcSTVeVarCF.removeAttribute('readonly');
+                idCstVeVarCont.removeAttribute('disabled');
+
+                alVeVarCont.removeAttribute('readonly');
+                alVeVarContSt.removeAttribute('readonly');
+                rBcVeVarCont.removeAttribute('readonly');
+                rBcSTVeVarCont.removeAttribute('readonly');
+                idCstVeAtaCont.removeAttribute('disabled');
+                alVaC.removeAttribute('readonly');
+                alVaCSt.removeAttribute('readonly');
+
+                idCstVeAtaSN.removeAttribute('disabled');
+                alVSN.removeAttribute('readonly');
+                alVSNSt.removeAttribute('readonly');
+                rBcVSN.removeAttribute('readonly');
+                rBcSTVSN.removeAttribute('readonly');
+                IdFundLegalSaidaICMS.removeAttribute('disabled');
+
+                rBcVaC.removeAttribute('readonly');
+                rBcSTVaC.removeAttribute('readonly');
+
+            }
+
+        }
+
+    });
+
+    ufdestino.addEventListener("change", function () {
+
+       
+        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
+        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
+       
+
+
+        if (opcaoValorOrigem === "UF de Origem"){
+          
+            alert("UF de origem e destino devem ser preenchidos");
+            fecp.setAttribute('readonly', true);
+
+            codReceita.setAttribute('disabled', true);
+            idCstSaiPC.setAttribute('disabled', true);
+            alpS.setAttribute('readonly', true);
+            alcS.setAttribute('readonly', true);
+            idFundamentoLegal.setAttribute('disabled', true);
+
+            idCstVeVarCF.setAttribute('disabled', true);
+
+            alVeVarCF.setAttribute('readonly', true);
+            alVeVarCFSt.setAttribute('readonly', true);
+            rBcVeVarCF.setAttribute('readonly', true);
+            rBcSTVeVarCF.setAttribute('readonly', true);
+            idCstVeVarCont.setAttribute('disabled', true);
+
+            alVeVarCont.setAttribute('readonly', true);
+            alVeVarContSt.setAttribute('readonly', true);
+            rBcVeVarCont.setAttribute('readonly', true);
+            rBcSTVeVarCont.setAttribute('readonly', true);
+            idCstVeAtaCont.setAttribute('disabled', true);
+            alVaC.setAttribute('readonly', true);
+            alVaCSt.setAttribute('readonly', true);
+
+            idCstVeAtaSN.setAttribute('disabled', true);
+            alVSN.setAttribute('readonly', true);
+            alVSNSt.setAttribute('readonly', true);
+            rBcVSN.setAttribute('readonly', true);
+            rBcSTVSN.setAttribute('readonly', true);
+            IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+            rBcVaC.setAttribute('readonly', true);
+            rBcSTVaC.setAttribute('readonly', true);
+            
+        } else {
+            if (opcaoValorDestino == "UF de Destino") {
+                alert("UF de origem e destino devem ser preenchidos");
+
+                fecp.setAttribute('readonly', true);
+
+                codReceita.setAttribute('disabled', true);
+                idCstSaiPC.setAttribute('disabled', true);
+                alpS.setAttribute('readonly', true);
+                alcS.setAttribute('readonly', true);
+                idFundamentoLegal.setAttribute('disabled', true);
+
+                idCstVeVarCF.setAttribute('disabled', true);
+
+                alVeVarCF.setAttribute('readonly', true);
+                alVeVarCFSt.setAttribute('readonly', true);
+                rBcVeVarCF.setAttribute('readonly', true);
+                rBcSTVeVarCF.setAttribute('readonly', true);
+                idCstVeVarCont.setAttribute('disabled', true);
+
+                alVeVarCont.setAttribute('readonly', true);
+                alVeVarContSt.setAttribute('readonly', true);
+                rBcVeVarCont.setAttribute('readonly', true);
+                rBcSTVeVarCont.setAttribute('readonly', true);
+                idCstVeAtaCont.setAttribute('disabled', true);
+                alVaC.setAttribute('readonly', true);
+                alVaCSt.setAttribute('readonly', true);
+
+                idCstVeAtaSN.setAttribute('disabled', true);
+                alVSN.setAttribute('readonly', true);
+                alVSNSt.setAttribute('readonly', true);
+                rBcVSN.setAttribute('readonly', true);
+                rBcSTVSN.setAttribute('readonly', true);
+                IdFundLegalSaidaICMS.setAttribute('disabled', true);
+
+                rBcVaC.setAttribute('readonly', true);
+                rBcSTVaC.setAttribute('readonly', true);
+               
+            }
+            else {
+                ufdestino.removeAttribute('disabled');
+                fecp.removeAttribute('readonly');
+
+                codReceita.removeAttribute('disabled');
+
+                idCstSaiPC.removeAttribute('disabled');
+                alpS.removeAttribute('readonly');
+                alcS.removeAttribute('readonly');
+                idFundamentoLegal.removeAttribute('disabled');
+
+                idCstVeVarCF.removeAttribute('disabled');
+
+                alVeVarCF.removeAttribute('readonly');
+                alVeVarCFSt.removeAttribute('readonly');
+                rBcVeVarCF.removeAttribute('readonly');
+                rBcSTVeVarCF.removeAttribute('readonly');
+                idCstVeVarCont.removeAttribute('disabled');
+
+                alVeVarCont.removeAttribute('readonly');
+                alVeVarContSt.removeAttribute('readonly');
+                rBcVeVarCont.removeAttribute('readonly');
+                rBcSTVeVarCont.removeAttribute('readonly');
+                idCstVeAtaCont.removeAttribute('disabled');
+                alVaC.removeAttribute('readonly');
+                alVaCSt.removeAttribute('readonly');
+
+                idCstVeAtaSN.removeAttribute('disabled');
+                alVSN.removeAttribute('readonly');
+                alVSNSt.removeAttribute('readonly');
+                rBcVSN.removeAttribute('readonly');
+                rBcSTVSN.removeAttribute('readonly');
+                IdFundLegalSaidaICMS.removeAttribute('disabled');
+
+                rBcVaC.removeAttribute('readonly');
+                rBcSTVaC.removeAttribute('readonly');
+
+            }
+            
+        }
+
+    });
+
+
+
+    
+
+
+
+
+
+});
+function liberarCampos() {
+    var uforigem = document.getElementById("ufOrigem");
+    var ufdestino = document.getElementById("ufDestino");
+
+    var fecp = document.getElementById("fecp");
+    var codReceita = document.getElementById("CodReceita");
+    var idCstSaiPC = document.getElementById("idCstSaiPC");
+    var alpS = document.getElementById("alpS");
+    var alcS = document.getElementById("alcS");
+    var idFundamentoLegal = document.getElementById("IdFundamentoLegal");
+
+    var idCstVeVarCF = document.getElementById("idCstVeVarCF");
+    var alVeVarCF = document.getElementById("alVeVarCF");
+    var alVeVarCFSt = document.getElementById("alVeVarCFSt");
+    var rBcVeVarCF = document.getElementById("rBcVeVarCF");
+    var rBcSTVeVarCF = document.getElementById("rBcSTVeVarCF");
+
+    var idCstVeVarCont = document.getElementById("idCstVeVarCont");
+    var alVeVarCont = document.getElementById("alVeVarCont");
+    var alVeVarContSt = document.getElementById("alVeVarContSt");
+    var rBcVeVarCont = document.getElementById("rBcVeVarCont");
+    var rBcSTVeVarCont = document.getElementById("rBcSTVeVarCont");
+
+    var idCstVeAtaCont = document.getElementById("idCstVeAtaCont");
+    var alVaC = document.getElementById("alVaC");
+    var alVaCSt = document.getElementById("alVaCSt");
+    var rBcVaC = document.getElementById("rBcVaC");
+    var rBcSTVaC = document.getElementById("rBcSTVaC");
+
+    var idCstVeAtaSN = document.getElementById("idCstVeAtaSN");
+    var alVSN = document.getElementById("alVSN");
+    var alVSNSt = document.getElementById("alVSNSt");
+    var rBcVSN = document.getElementById("rBcVSN");
+    var rBcSTVSN = document.getElementById("rBcSTVSN");
+
+    var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
+
+
+
+
+
+
+    if (uforigem.onselect && ufdestino.onselect) {
+        fecp.removeAttribute('readonly');
+
+
+    }
+}
 
 
 

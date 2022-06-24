@@ -321,8 +321,16 @@ namespace MatrizTributaria.Areas.Cliente.Models
 
         [Column("Id_Produto_INTERNO")]
         public double? Id_Produto_INTERNO { get; set; }
-        
-       
+
+
+        [Column("UF_Origem_INTERNO")]
+        public string UF_Origem_INTERNO { get; set; }
+
+
+        [Column("UF_Destino_INTERNO")]
+        public string UF_Destino_INTERNO { get; set; }
+
+
 
     }
 }

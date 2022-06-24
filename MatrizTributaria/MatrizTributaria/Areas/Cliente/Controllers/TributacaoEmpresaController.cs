@@ -21,6 +21,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
         Empresa emp;
         //listas para analise
+        IQueryable<AnaliseTributaria> lstAnalise;
         List<AnaliseTributaria>     analise = new List<AnaliseTributaria>();
         List<AnaliseTributariaSn> analiseSn = new List<AnaliseTributariaSn>();
 
@@ -99,20 +100,118 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             VerificaTempData();
             /*Analises tributárias para ICMS de Saída*/
 
+            //  this.lstAnalise = this.lstAnalise.Where(a=>a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
             /*OBS: 22072021: ACERTADO COMPARAÇÃO DE IGUALDADE: RETIRAR OS NULOS*/
             /*Aliq ICMS Venda Varejo Consumidor Final - ok*/
-            ViewBag.AlqICMSVarejoCFMaior = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSVarejoCFMenor = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSVarejoCFIgual = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSVarejoCFNullaInterno = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)); //onde nao for nulo no cliente mas no mtx sim
-            ViewBag.AlqICMSVarejoCFNullaExterno = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            //ViewBag.Total = this.lstAnalise.Count(a => a.CNPJ_EMPRESA.Equals(this.empresa.cnpj) && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+            //this.lstAnalise = this.lstAnalise.Where(a => a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+            //ViewBag.Total = this.lstAnalise.Count();
+
+
+
+            //ViewBag.AlqICMSVarejoCFMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO);
+            //ViewBag.AlqICMSVarejoCFMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO);
+            //ViewBag.AlqICMSVarejoCFIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null );
+            //ViewBag.AlqICMSVarejoCFNullaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null); //onde nao for nulo no cliente mas no mtx sim
+            //ViewBag.AlqICMSVarejoCFNullaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null );
+
+            //ViewBag.AlqICMSVarejoCFMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO);
+            //ViewBag.AlqICMSVarejoCFMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO);
+            //ViewBag.AlqICMSVarejoCFIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO);
+            //ViewBag.AlqICMSVarejoCFNullaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null); //onde nao for nulo no cliente mas no mtx sim
+            //ViewBag.AlqICMSVarejoCFNullaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null);
+
+
+
+
+            ///*Aliq ICMS ST Venda Varejo Consumidor Final - ok*/
+            //ViewBag.AlqICMSSTVarejoCFMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVarejoCFMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVarejoCFIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVarejoCFNulaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVarejoCFNulaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+            ///*Aliq ICMS Venda Varejo Contribuinte - ok*/
+            //ViewBag.AlqICMSVendaVContMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT > a.Aliq_Icms_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVendaVContMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT < a.Aliq_Icms_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVendaVContIguais = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == a.Aliq_Icms_Venda_Varejo_Cont_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVendaVContNulasInternos = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.Aliq_Icms_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVendaVContNulasExternos = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+            ///*Aliq ICMS ST Venda Varejo Contribuinte - ok*/
+            //ViewBag.AlqICMSSTVendaVContMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT > a.Aliq_Icms_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVendaVContMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT < a.Aliq_Icms_ST_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVendaVContIguais = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == a.Aliq_Icms_ST_Venda_Varejo_Cont_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVendaVContNulasInternos = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.Aliq_Icms_ST_Venda_Varejo_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVendaVContNulasExternos = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+
+            ///*Aliq ICMS venda ATA - ok*/
+            //ViewBag.AlqICMSVataMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA > a.Aliq_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVataMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA < a.Aliq_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVataIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA == a.Aliq_Icms_Venda_Ata_Cont_INTERNO && a.ALIQ_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVataNulaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA != null && a.Aliq_Icms_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSVataNulaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+            ///*Aliq ICMS ST venda ATA - ok*/
+            //ViewBag.AlqICMSSTVataMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA > a.Aliq_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVataMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA < a.Aliq_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVataIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA == a.Aliq_Icms_ST_Venda_Ata_Cont_INTERNO && a.ALIQ_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVataNulaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA != null && a.Aliq_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AlqICMSSTVataNulaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+
+            ///*Aliq ICMS Vendo no atacado para Simples Nacional - ok*/
+            //ViewBag.AliqICMSVendaAtaSimpNacionalMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Aliq_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSVendaAtaSimpNacionalMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Aliq_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSVendaAtaSimpNacionalIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Aliq_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSVendaAtaSimpNacionalNulaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Aliq_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSVendaAtaSimpNacionalNulaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+
+            ///*Aliq ICMS ST Venda no atacado para Simples Nacional - ok*/
+            //ViewBag.AliqICMSSTVendaAtaSimpNacionalMaior = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Aliq_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSSTVendaAtaSimpNacionalMenor = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Aliq_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSSTVendaAtaSimpNacionalIgual = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Aliq_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSSTVendaAtaSimpNacionalNulaInterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Aliq_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+            //ViewBag.AliqICMSVendaAtaSimpNacionalNulaExterno = this.lstAnalise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+
+
+
+
+
+            /*OBS: 22072021: ACERTADO COMPARAÇÃO DE IGUALDADE: RETIRAR OS NULOS*/
+            /*Aliq ICMS Venda Varejo Consumidor Final - ok*/
+            ViewBag.AlqICMSVarejoCFMaior        = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 60  && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 40 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 41 && a.PRODUTO_CATEGORIA != 21 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSVarejoCFMenor        = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 60 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 40 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 41 && a.PRODUTO_CATEGORIA != 21 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSVarejoCFIgual        = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 60 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 40 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 41 &&  a.PRODUTO_CATEGORIA != 21 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) );
+            ViewBag.AlqICMSVarejoCFNullaInterno = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 60 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 40 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 41 && a.PRODUTO_CATEGORIA != 21 &&  a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) ); //onde nao for nulo no cliente mas no mtx sim
+            ViewBag.AlqICMSVarejoCFNullaExterno = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 60 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 40 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 41 && a.PRODUTO_CATEGORIA != 21 &&  a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSVarejoCFNullaAmbos   = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 60 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 40 && a.Cst_Venda_Varejo_Cons_Final_INTERNO != 41 && a.PRODUTO_CATEGORIA != 21 &&  a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+            ViewBag.AlqICMSVarejoCFUsoConsumo = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.PRODUTO_CATEGORIA != 21 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            //isenta e nao tributada
+            ViewBag.AlqICMSVarejoCFNullaExternoIsenta = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL  == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 40  && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSVarejoCFNullaExternoNaoTrib = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 41 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+
+
 
             /*Aliq ICMS ST Venda Varejo Consumidor Final - ok*/
-            ViewBag.AlqICMSSTVarejoCFMaior = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSSTVarejoCFMenor = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSSTVarejoCFIgual = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSSTVarejoCFNulaInterno = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.AlqICMSSTVarejoCFNulaExterno = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSSTVarejoCFMaior = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO  && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSSTVarejoCFMenor = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSSTVarejoCFIgual = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSSTVarejoCFNulaInterno = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSSTVarejoCFNulaExterno = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.AlqICMSSTVarejoCFNulaAmbos = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+
 
             /*Aliq ICMS Venda Varejo Contribuinte - ok*/
             ViewBag.AlqICMSVendaVContMaior = this.analise.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT > a.Aliq_Icms_Venda_Varejo_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
@@ -158,6 +257,10 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.AliqICMSSTVendaAtaSimpNacionalIgual = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Aliq_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
             ViewBag.AliqICMSSTVendaAtaSimpNacionalNulaInterno = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Aliq_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
             ViewBag.AliqICMSVendaAtaSimpNacionalNulaExterno = this.analise.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
+
+
+
 
 
 
@@ -3337,6 +3440,276 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         /// <summary>
         /// Edição Venda Varejo consumidor Final
         /// </summary>
+        //[HttpGet]
+        //public ActionResult EditClienteAliqIcmsVendaVarfCFMassa(string ufOrigem, string ufDestino, string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
+        //{
+        //    /*Verificando a sessão*/
+        //    if (Session["usuario"] == null)
+        //    {
+        //        return RedirectToAction("Login", "../Home");
+        //    }
+
+        //    //Mensagem do card
+        //    ViewBag.Mensagem = "Alíquota ICMS Venda no Varejo para consumidor final no Cliente X  no MTX";
+
+        //    //variavel auxiliar
+        //    string resultado = param;
+
+        //    /*Pegando o usuário e a empresa do usuário*/
+        //    string user = Session["usuario"].ToString();
+
+        //    /*Inicializando a variavel de sessão usarios caso nao exista*/
+        //    if (Session["usuarios"] == null)
+        //    {
+        //        this.usuario = (from a in db.Usuarios where a.nome == user select a).FirstOrDefault(); //usuario
+        //        this.empresa = (from a in db.Empresas where a.cnpj == usuario.empresa.cnpj select a).FirstOrDefault(); //empresa
+        //        Session["usuarios"] = usuario;
+        //        Session["empresas"] = empresa;
+        //    }
+        //    else //se existir apenas atribui à empresa
+        //    {
+        //        this.empresa = (Empresa)Session["empresas"];
+        //    }
+
+        //    //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
+        //    string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
+
+        //    //converte em long caso seja possivel e atribui à variavel tipada: isso é necessário caso o usuário digitou codigo de barras ao inves de descrição do produto
+        //    long codBarrasL = 0; //variavel tipada
+        //    bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+        //    //verifica se veio parametros
+        //    procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+        //    procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+        //    //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
+        //    ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+
+        //    //parametro de ordenacao da tabela
+        //    ViewBag.Ordenacao = ordenacao;
+
+        //    //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
+        //    ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
+
+        //    /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+        //    TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+        //    opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+
+        //    //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+        //    TempData.Keep("opcao");
+
+        //    //atribui 1 a pagina caso os parametreos nao sejam nulos
+        //    page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
+
+
+        //    //atribui fitro corrente caso alguma procura esteja nulla(seja nullo)
+        //    procuraPor = (procuraPor == null) ? filtroCorrente : procuraPor;
+        //    procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+        //    procuraCEST = (procuraCEST == null) ? filtroCorrenteCest : procuraCEST;
+
+
+        //    /*Ponto de ajuste: fazer com que as buscas persistam entre as requisições usando temp data*/
+        //    //ViewBag.FiltroCorrente = procuraPor;
+        //    ViewBag.FiltroCorrenteCest = procuraCEST;
+        //    ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
+        //    ViewBag.FiltroCorrente = procuraPor;
+
+
+
+        //    //origem e destino
+
+        //    //montar select estado origem e destino
+        //    ViewBag.EstadosOrigem = db.Estados.ToList();
+        //    ViewBag.EstadosDestinos = db.Estados.ToList();
+
+
+        //    //verifica estados origem e destino
+        //    VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+
+        //    //aplica estado origem e destino
+        //    ViewBag.UfOrigem = this.ufOrigem;
+        //    ViewBag.UfDestino = this.ufDestino;
+
+
+        //    if (this.empresa.simples_nacional.Equals(1))
+        //    {
+        //        return RedirectToAction("EditClienteAliqIcmsVendaVarfCFMassaSn", new { opcao = opcao});
+
+        //    }
+        //    VerificaTempData();
+        //        /*Switch da opção*/
+        //        switch (opcao)
+        //        {
+        //            case "Maiores":
+        //                //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+        //                ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+
+        //                switch (ViewBag.Filtro)
+        //                {
+        //                    case "1":
+        //                        this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                    case "2":
+        //                        this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                    case "3":
+        //                        this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                    case "4":
+        //                        this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                    case "5":
+        //                        this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+
+        //                }
+        //                break;
+        //            case "Menores":
+        //                //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+        //                ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+
+        //                switch (ViewBag.Filtro)
+        //                {
+        //                case "1":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "2":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "3":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "4":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "5":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //            }
+        //                break;
+        //            case "Iguais":
+        //                //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+        //                ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
+
+        //                switch (ViewBag.Filtro)
+        //                {
+        //                case "1":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "2":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "3":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "4":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "5":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //            }
+        //                break;
+        //            case "Nulas Cliente":
+        //                //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+        //                ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
+
+
+        //                switch (ViewBag.Filtro)
+        //                {
+        //                case "1":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "2":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "3":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "4":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+        //                case "5":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    break;
+
+        //            }
+        //                break;
+        //            case "Nulas MTX":
+        //                //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+        //                ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
+
+        //                switch (ViewBag.Filtro)
+        //                {
+        //                case "1":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+
+        //                    this.lstAnalise = this.lstAnalise.OrderBy(a => a.Id_Produto_INTERNO);
+
+
+        //                    break;
+        //                case "2":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    this.lstAnalise = this.lstAnalise.OrderBy(a => a.Id_Produto_INTERNO);
+        //                    break;
+        //                case "3":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    this.lstAnalise = this.lstAnalise.OrderBy(a => a.Id_Produto_INTERNO);
+        //                    break;
+        //                case "4":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    this.lstAnalise = this.lstAnalise.OrderBy(a => a.Id_Produto_INTERNO);
+        //                    break;
+        //                case "5":
+        //                    this.lstAnalise = this.lstAnalise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.UF_Origem_INTERNO.Equals(this.ufOrigem) && a.UF_Destino_INTERNO.Equals(this.ufDestino));
+        //                    this.lstAnalise = this.lstAnalise.OrderBy(a => a.Id_Produto_INTERNO);
+        //                    break;
+
+        //            }
+        //                break;
+
+
+        //        }//fim do switche
+
+        //        //Action para procurar
+        //        this.lstAnalise = ProcuraPorII(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.lstAnalise);
+
+        //        switch (ordenacao)
+        //        {
+        //            case "Produto_desc":
+        //                this.lstAnalise = this.lstAnalise.OrderByDescending(s => s.PRODUTO_DESCRICAO);
+        //                break;
+        //            default:
+        //                this.lstAnalise = this.lstAnalise.OrderBy(s => s.Id_Produto_INTERNO);
+        //                break;
+        //        }
+
+
+        //        //montar a pagina
+        //        int tamaanhoPagina = 0;
+
+        //        //ternario para tamanho da pagina
+        //        tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+        //        //Mensagens de retorno
+        //        ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+        //        ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+        //        ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+        //        int numeroPagina = (page ?? 1);
+
+        //    this.analise = null;
+        //    this.analise = this.lstAnalise.ToList();
+        //        return View(this.analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+
+
+        //}
+
+
+
+
         [HttpGet]
         public ActionResult EditClienteAliqIcmsVendaVarfCFMassa(string ufOrigem, string ufDestino, string opcao, string param, string qtdNSalvos, string qtdSalvos, string ordenacao, string procuraPor, string procuraNCM, string procuraCEST, string filtroCorrente, string filtroCorrenteNCM, string filtroCorrenteCest, string filtroNulo, int? page, int? numeroLinhas)
         {
@@ -3412,7 +3785,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
 
-          
+
 
             //origem e destino
 
@@ -3433,169 +3806,207 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             if (this.empresa.simples_nacional.Equals(1))
             {
-                return RedirectToAction("EditClienteAliqIcmsVendaVarfCFMassaSn", new { opcao = opcao});
+                return RedirectToAction("EditClienteAliqIcmsVendaVarfCFMassaSn", new { opcao = opcao });
 
             }
             VerificaTempData();
-                /*Switch da opção*/
-                switch (opcao)
-                {
-                    case "Maiores":
-                        //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
-                        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
+            /*Switch da opção*/
+            switch (opcao)
+            {
+                case "Maiores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
-                        switch (ViewBag.Filtro)
-                        {
-                            case "1":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "2":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "3":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "4":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "5":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null  && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) ).ToList();
+                            break;
+                        case "5":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6": //ambos nula
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
 
-                        }
-                        break;
-                    case "Menores":
-                        //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
-                        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
+                    }
+                    break;
+                case "Menores":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
-                        switch (ViewBag.Filtro)
-                        {
-                            case "1":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "2":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "3":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "4":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "5":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6": //ambos nula
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Iguais":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
-                        }
-                        break;
-                    case "Iguais":
-                        //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
-                        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
-
-                        switch (ViewBag.Filtro)
-                        {
-                            case "1":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "2":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "3":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "4":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "5":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-
-                        }
-                        break;
-                    case "Nulas Cliente":
-                        //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
-                        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
-
-
-                        switch (ViewBag.Filtro)
-                        {
-                            case "1":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "2":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "3":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "4":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "5":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-
-                        }
-                        break;
-                    case "Nulas MTX":
-                        //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
-                        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
-
-                        switch (ViewBag.Filtro)
-                        {
-                            case "1":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "2":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "3":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "4":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-                            case "5":
-                                this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
-                                break;
-
-                        }
-                        break;
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6": //ambos nula
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Nulas Cliente":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
 
-                }//fim do switche
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6": //ambos nula
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Nulas MTX":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
-                //Action para procurar
-                this.analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise);
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6": //ambos nula
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
 
-                switch (ordenacao)
-                {
-                    case "Produto_desc":
-                        this.analise = this.analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
-                        break;
-                    default:
-                        this.analise = this.analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
-                        break;
-                }
+                case "Nulas Ambos":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "6";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6": //ambos nula
+                            this.analise = this.analise.Where(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
 
 
-                //montar a pagina
-                int tamaanhoPagina = 0;
 
-                //ternario para tamanho da pagina
-                tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
 
-                //Mensagens de retorno
-                ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
-                ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
-                ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-               
-                int numeroPagina = (page ?? 1);
+            }//fim do switche
 
-                return View(this.analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
-            
+            //Action para procurar
+            this.analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise);
 
-          
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.analise = this.analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    break;
+                default:
+                    this.analise = this.analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    break;
+            }
+
+
+            //montar a pagina
+            int tamaanhoPagina = 0;
+
+            //ternario para tamanho da pagina
+            tamaanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamaanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
+
+            int numeroPagina = (page ?? 1);
+
+            return View(this.analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
 
 
         }
@@ -3869,6 +4280,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 return RedirectToAction("../Home/Login");
             }
             this.empresa = (Empresa)Session["empresas"];
+            
             //Objeto do tipo tributação empresa
             TributacaoEmpresa trib = new TributacaoEmpresa();
             string resultado = ""; //variavel auxiliar;
@@ -3884,6 +4296,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             int regNsalv = 0;
             string analiseRetorno = "0";
             string analiseTrib = "0";
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
 
             try
             {
@@ -3932,7 +4349,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     else 
                     {
                         //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino select a).First();
                         //pegar valores
                         //analiseRetorno = (decimal)analise.Aliq_Icms_Venda_Varejo_Cons_Final_INTERNO;
                         /*Motivo da mudança:
@@ -4218,19 +4635,22 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO &&  a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60  && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
@@ -4242,19 +4662,22 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
@@ -4266,19 +4689,22 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
@@ -4289,19 +4715,22 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
@@ -4313,19 +4742,49 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
+                    }
+                    break;
+                case "Nulas Ambos":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "6";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino) && a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null).ToList();
+                            break;
+                        case "4":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO != null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            analise = analise.Where(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null && a.Cst_Venda_Varejo_Cons_Final_INTERNO == 60 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
@@ -28113,7 +28572,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.EstadosOrigem = db.Estados.ToList();
             ViewBag.EstadosDestinos = db.Estados.ToList();
 
-
+            ViewBag.CstPisCofinsE = db.CstPisCofinsEntradas.ToList();
+           // ViewBag.CstPisCofinsS = db.CstPisCofinsSaidas.ToList();
 
             //verifica estados origem e destino
             VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
@@ -28520,6 +28980,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.EstadosOrigem = db.Estados.ToList();
             ViewBag.EstadosDestinos = db.Estados.ToList();
 
+
+            ViewBag.CstPisCofinsS = db.CstPisCofinsSaidas.ToList();
 
 
             //verifica estados origem e destino
@@ -32952,6 +33414,28 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         }
 
         [HttpGet]
+        public IQueryable<AnaliseTributaria> ProcuraPorII(long? codBarrasL, string procuraPor, string procuraCEST, string procuraNCM, IQueryable<AnaliseTributaria> lstAnalise)
+        {
+            if (!String.IsNullOrEmpty(procuraPor))
+            {
+                this.lstAnalise = (codBarrasL != 0) ? (lstAnalise.Where(s => s.PRODUTO_COD_BARRAS.ToString().StartsWith(codBarrasL.ToString()))) : this.lstAnalise = (lstAnalise.Where(s => s.PRODUTO_DESCRICAO.ToString().ToUpper().StartsWith(procuraPor.ToUpper())));
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                this.lstAnalise = lstAnalise.Where(s => s.PRODUTO_CEST == procuraCEST);
+                //analise = analise.Where(s => s.PRODUTO_CEST.ToString().Contains(procuraCEST.ToString())).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                this.lstAnalise = lstAnalise.Where(s => s.PRODUTO_NCM == procuraNCM);
+                //analise = analise.Where(s => s.PRODUTO_CEST.ToString().Contains(procuraCEST.ToString())).ToList();
+            }
+
+            return this.lstAnalise;
+
+        }
+
+        [HttpGet]
         public List<AnaliseTributariaSn> ProcuraPorSn(long? codBarrasL, string procuraPor, string procuraCEST, string procuraNCM, List<AnaliseTributariaSn> analiseSn)
         {
             if (!String.IsNullOrEmpty(procuraPor))
@@ -33356,6 +33840,9 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         private EmptyResult VerificaOriDest(string origem, string destino)
         {
 
+
+         
+
             if (origem == null || origem == "")
             {
                 TempData["UfOrigem"] = (TempData["UfOrigem"] == null) ? "TO" : TempData["UfOrigem"].ToString();
@@ -33385,6 +33872,35 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             return new EmptyResult();
         }
+        //public EmptyResult VerificaTempData()
+        //{
+
+
+        //    /*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
+        //    if (TempData["analise"] == null)
+        //    {
+        //        //carrega a lista analise usando o cnpj da empresa do usuario
+        //        //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA.Equals(this.empresa.cnpj) select a).ToList();
+        //        /*AKTERAÇÃO DIA 30052022 - PEGAR SOMENTE ORIGEM E DESTINO SELECIONADO PELO USUARIO*/
+        //        //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA.Equals(this.empresa.cnpj)  select a).ToList();
+        //       // this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA.Equals(this.empresa.cnpj) select a).ToList();
+        //        this.lstAnalise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA.Equals(this.empresa.cnpj) select a);
+
+        //        //this.analise = this.lstAnalise.ToList();
+
+        //        TempData["analise"] = this.lstAnalise; //cria
+        //        TempData.Keep("analise"); //salva
+        //    }
+        //    else //não estando nula apenas atribui à lista o valor carregado em tempdata
+        //    {
+        //      // this.analise = (List<AnaliseTributaria>)TempData["analise"];
+        //       this.lstAnalise = (IQueryable<AnaliseTributaria>)TempData["analise"];
+        //        TempData.Keep("analise");
+        //    }
+
+        //    return new EmptyResult();
+        //}
+
         public EmptyResult VerificaTempData()
         {
 
@@ -33393,8 +33909,10 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             if (TempData["analise"] == null)
             {
                 //carrega a lista analise usando o cnpj da empresa do usuario
-
+                //this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA.Equals(this.empresa.cnpj) select a).ToList();
+                /*AKTERAÇÃO DIA 30052022 - PEGAR SOMENTE ORIGEM E DESTINO SELECIONADO PELO USUARIO*/
                 this.analise = (from a in db.Analise_Tributaria where a.CNPJ_EMPRESA.Equals(this.empresa.cnpj) select a).ToList();
+
                 TempData["analise"] = this.analise; //cria
                 TempData.Keep("analise"); //salva
             }
@@ -33406,8 +33924,6 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             return new EmptyResult();
         }
-
-
         public EmptyResult VerificaTempDataSN()
         {
             /*Verifica a variavel do tipo temp data ANALISE, caso esteja nula carregar a lista novamente*/
@@ -33465,13 +33981,13 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
 
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }
