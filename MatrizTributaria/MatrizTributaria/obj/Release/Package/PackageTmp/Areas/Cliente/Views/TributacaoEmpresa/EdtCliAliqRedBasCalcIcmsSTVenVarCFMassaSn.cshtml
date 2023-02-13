@@ -13,6 +13,7 @@
             <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="edtSelecionadosRedBasCalcIcmsSTVenVarCFCliente" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
             <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="edtSelecionadosRedBasCalcIcmsSTVenVarCFClienteManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
 
+
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
@@ -130,7 +131,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
 
                     </div>

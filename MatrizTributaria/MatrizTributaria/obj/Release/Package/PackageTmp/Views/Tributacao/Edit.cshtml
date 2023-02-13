@@ -67,8 +67,9 @@
 
                                     <div class="col-lg-3">
                                         <label class="pr-fonte-label" for="idFepc">FECP</label>
-                                        @Html.TextBoxFor(m => m.fecp, new { @class = "form-control form-control-sm decimal ", placeholder = "Digite Aliquota (%)", @id = "idFecp", @name = "fecp" })
+                                        @Html.TextBoxFor(m => m.fecp, new { @class = "form-control form-control-sm", placeholder = "Digite Aliquota (%)", @id = "idFecp", @name = "fecp",  onkeypress = "return onlynumberDecimal();" })
                                         @Html.ValidationMessageFor(m => m.fecp, "", new { @class = "text-danger", role = "alert" })
+
                                     </div>
 
 
@@ -149,11 +150,11 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alpE">Aliq Pis E</label>
-                                                    @Html.TextBoxFor(m => m.aliqEntPis, new { @class = "form-control form-control-sm decimal ", @id = "alpE", placeholder = "Aliquota PIS Entrada", @name = "aliqEntPis" })
+                                                    @Html.TextBoxFor(m => m.aliqEntPis, new { @class = "form-control form-control-sm", @id = "alpE", placeholder = "Aliquota PIS Entrada", @name = "aliqEntPis", onkeypress = "return onlynumberDecimal();" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alcE">Aliq Cofins E</label>
-                                                    @Html.TextBoxFor(m => m.aliqEntCofins, new { @class = "form-control form-control-sm decimal ", @name = "aliqEntCofins", @id = "alcE", placeholder = "Aliquota Cofins Entrada" })
+                                                    @Html.TextBoxFor(m => m.aliqEntCofins, new { @class = "form-control form-control-sm", @name = "aliqEntCofins", @id = "alcE", placeholder = "Aliquota Cofins Entrada", onkeypress = "return onlynumberDecimal();" })
                                                     @Html.ValidationMessageFor(m => m.aliqEntCofins, "", new { @class = "text-danger", role = "alert" })
                                                 </div>
 
@@ -180,12 +181,12 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alpS">Aliq Pis S</label>
-                                                    @Html.TextBoxFor(m => m.aliqSaidaPis, new { @class = "form-control form-control-sm decimal ", @name = "aliqSaidaPis", @id = "alpS", placeholder = "Aliquota PIS Saída" })
+                                                    @Html.TextBoxFor(m => m.aliqSaidaPis, new { @class = "form-control form-control-sm", @name = "aliqSaidaPis", @id = "alpS", placeholder = "Aliquota PIS Saída", onkeypress = "return onlynumberDecimal();" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alcS">Aliq Cofins S</label>
-                                                    @Html.TextBoxFor(m => m.aliqSaidaCofins, new { @class = "form-control form-control-sm decimal ", @name = "aliqSaidaCofins", id = "alcS", placeholder = "Aliquota Cofins Saída" })
+                                                    @Html.TextBoxFor(m => m.aliqSaidaCofins, new { @class = "form-control form-control-sm", @name = "aliqSaidaCofins", id = "alcS", placeholder = "Aliquota Cofins Saída", onkeypress = "return onlynumberDecimal();" })
 
                                                 </div>
 
@@ -225,21 +226,21 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVaC">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaAtaCont, new { @class = "form-control form-control-sm decimal ", @id = "alVaC", @name = "aliqIcmsVendaAtaCont", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaAtaCont, new { @class = "form-control form-control-sm", @id = "alVaC", @name = "aliqIcmsVendaAtaCont", placeholder = "Digite Aliquota (%)", onkeypress = "return onlynumberDecimal();" })
 
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVaCSt">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaAtaCont, new { @class = "form-control form-control-sm decimal ", @name = "aliqIcmsSTVendaAtaCont", @id = "alVaCSt", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaAtaCont, new { @class = "form-control form-control-sm", @name = "aliqIcmsSTVendaAtaCont", @id = "alVaCSt", placeholder = "Digite Aliquota (%)", onkeypress = "return onlynumberDecimal();" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcVaC">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaAtaCont, new { @class = "form-control form-control-sm decimal ", @name = "redBaseCalcIcmsVendaAtaCont", @id = "rBcVaC", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaAtaCont, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", @name = "redBaseCalcIcmsVendaAtaCont", @id = "rBcVaC", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcSTVaC">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaAtaCont, new { @class = "form-control form-control-sm decimal ", @name = "redBaseCalcIcmsSTVendaAtaCont", id = "rBcSTVaC", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaAtaCont, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", @name = "redBaseCalcIcmsSTVendaAtaCont", id = "rBcSTVaC", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -272,20 +273,20 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVSN">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaAtaSimpNacional, new { @class = "form-control form-control-sm decimal ", onkeyup = "maiuscula(this);", name = "alVSN", id = "alVSN", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaAtaSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "alVSN", id = "alVSN", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVSNSt">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaAtaSimpNacional, new { @class = "form-control form-control-sm decimal ", onkeyup = "maiuscula(this);", name = "alVSNSt", id = "alVSNSt", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaAtaSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "alVSNSt", id = "alVSNSt", placeholder = "Digite Aliquota (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcVSN">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaAtaSimpNacional, new { @class = "form-control form-control-sm decimal", onkeyup = "maiuscula(this);", name = "rBcVSN", id = "rBcVSN", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaAtaSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "rBcVSN", id = "rBcVSN", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcSTVSN">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaAtaSimpNacional, new { @class = "form-control form-control-sm decimal", onkeyup = "maiuscula(this);", name = "rBcSTVSN", id = "rBcSTVSN", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaAtaSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "rBcSTVSN", id = "rBcSTVSN", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -318,20 +319,20 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVeVarCont">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoCont, new { @class = "form-control form-control-sm decimal", name = "alVeVarCont", id = "alVeVarCont", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoCont, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "alVeVarCont", id = "alVeVarCont", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVeVarContSt">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaVarejo_Cont, new { @class = "form-control form-control-sm decimal ", name = "alVeVarContSt", id = "alVeVarContSt", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaVarejo_Cont, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "alVeVarContSt", id = "alVeVarContSt", placeholder = "Digite Aliquota (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcVeVarCont">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcVendaVarejoCont, new { @class = "form-control form-control-sm decimal", name = "rBcVeVarCont", id = "rBcVeVarCont", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcVendaVarejoCont, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcVeVarCont", id = "rBcVeVarCont", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcSTVeVarCont">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.RedBaseCalcSTVendaVarejo_Cont, new { @class = "form-control form-control-sm decimal ", onkeyup = "maiuscula(this);", name = "rBcSTVeVarCont", id = "rBcSTVeVarCont", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.RedBaseCalcSTVendaVarejo_Cont, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "rBcSTVeVarCont", id = "rBcSTVeVarCont", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -363,20 +364,20 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVeVarCF">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm", name = "alVeVarCF", id = "alVeVarCF", placeholder = "Digite Aliquota (%)", onkeypress = "return onlynumberDecimal();" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "alVeVarCF", id = "alVeVarCF", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="alVeVarCFSt">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaVarejoConsFinal, new { @class = "form-control form-control-sm decimal ", name = "alVeVarCFSt", id = "alVeVarCFSt", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTVendaVarejoConsFinal, new { @class = "form-control form-control-sm ", onkeypress = "return onlynumberDecimal();", name = "alVeVarCFSt", id = "alVeVarCFSt", placeholder = "Digite Aliquota (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcVeVarCF">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm decimal ", onkeyup = "maiuscula(this);", name = "rBcVeVarCF", id = "rBcVeVarCF", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsVendaVarejoConsFinal, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "rBcVeVarCF", id = "rBcVeVarCF", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcSTVeVarCF">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaVarejoConsFinal, new { @class = "form-control form-control-sm decimal ", onkeyup = "maiuscula(this);", name = "rBcSTVeVarCF", id = "rBcSTVeVarCF", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTVendaVarejoConsFinal, new { @class = "form-control form-control-sm ", onkeypress = "return onlynumberDecimal();", onkeyup = "maiuscula(this);", name = "rBcSTVeVarCF", id = "rBcSTVeVarCF", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -408,20 +409,20 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqCompInd">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsCompDeInd, new { @class = "form-control form-control-sm decimal", name = "aliqCompInd", id = "aliqCompInd", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsCompDeInd, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqCompInd", id = "aliqCompInd", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqSTCompInd">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTCompDeInd, new { @class = "form-control form-control-sm decimal", name = "aliqSTCompInd", id = "aliqSTCompInd", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTCompDeInd, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqSTCompInd", id = "aliqSTCompInd", placeholder = "Digite Aliquota (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcalCompInd">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeInd, new { @class = "form-control form-control-sm decimal", name = "rBcalCompInd", id = "rBcalCompInd", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeInd, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcalCompInd", id = "rBcalCompInd", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcalSTCompInd">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeInd, new { @class = "form-control form-control-sm decimal", name = "rBcalSTCompInd", id = "rBcSTVeVarCF", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeInd, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcalSTCompInd", id = "rBcSTVeVarCF", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -443,7 +444,7 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqNfeInd">Aliq NFE</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsNFE, new { @class = "form-control form-control-sm decimal", name = "aliqNfeInd", id = "aliqNfeInd", placeholder = "Digite a aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsNFE, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqNfeInd", id = "aliqNfeInd", placeholder = "Digite a aliquota (%)" })
                                                 </div>
 
 
@@ -476,20 +477,20 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqCompAta">Aliq ICMS Venda</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsCompradeAta, new { @class = "form-control form-control-sm decimal", name = "aliqCompAta", id = "aliqCompAta", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsCompradeAta, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqCompAta", id = "aliqCompAta", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqSTCompAta">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTCompraDeAta, new { @class = "form-control form-control-sm decimal", name = "aliqSTCompAta", id = "aliqSTCompAta", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTCompraDeAta, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqSTCompAta", id = "aliqSTCompAta", placeholder = "Digite Aliquota (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcalCompAta">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeAta, new { @class = "form-control form-control-sm decimal", name = "rBcalCompAta", id = "rBcalCompAta", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsCompraDeAta, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcalCompAta", id = "rBcalCompAta", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcalSTCompAta">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeAta, new { @class = "form-control form-control-sm decimal", name = "rBcalSTCompAta", id = "rBcalSTCompAta", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompraDeAta, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcalSTCompAta", id = "rBcalSTCompAta", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -511,7 +512,7 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqNfeAta">Aliq NFE</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsNfeAta, new { @class = "form-control form-control-sm decimal", name = "aliqNfeSN", id = "aliqNfeSN", placeholder = "Digite a aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsNfeAta, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqNfeSN", id = "aliqNfeSN", placeholder = "Digite a aliquota (%)" })
                                                 </div>
 
 
@@ -544,20 +545,20 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqCompSN">Aliq ICMS </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsCompradeSimpNacional, new { @class = "form-control form-control-sm decimal", name = "aliqCompSN", id = "aliqCompSN", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsCompradeSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqCompSN", id = "aliqCompSN", placeholder = "Digite Aliquota (%)" })
                                                 </div>
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqSTCompSN">Aliq ICMS ST </label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsSTCompradeSimpNacional, new { @class = "form-control form-control-sm decimal", name = "aliqSTCompSN", id = "aliqSTCompSN", placeholder = "Digite Aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsSTCompradeSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqSTCompSN", id = "aliqSTCompSN", placeholder = "Digite Aliquota (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcalCompSN">Red.Base Calc ICMS </label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsCompradeSimpNacional, new { @class = "form-control form-control-sm decimal", name = "rBcalCompSN", id = "rBcalCompSN", placeholder = "Digite Redução (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsCompradeSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcalCompSN", id = "rBcalCompSN", placeholder = "Digite Redução (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="rBcalSTCompSN">Red.Base Calc ICMS ST</label>
-                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompradeSimpNacional, new { @class = "form-control form-control-sm decimal", name = "rBcalSTCompSN", id = "rBcalSTCompSN", placeholder = "Digite Redução ST (%)" })
+                                                    @Html.TextBoxFor(m => m.redBaseCalcIcmsSTCompradeSimpNacional, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "rBcalSTCompSN", id = "rBcalSTCompSN", placeholder = "Digite Redução ST (%)" })
                                                 </div>
 
                                             </div>
@@ -579,7 +580,7 @@
 
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="aliqNfeSN">Aliq NFE</label>
-                                                    @Html.TextBoxFor(m => m.aliqIcmsNfeSN, new { @class = "form-control form-control-sm decimal", name = "aliqNfeSN", id = "aliqNfeSN", placeholder = "Digite a aliquota (%)" })
+                                                    @Html.TextBoxFor(m => m.aliqIcmsNfeSN, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "aliqNfeSN", id = "aliqNfeSN", placeholder = "Digite a aliquota (%)" })
                                                 </div>
 
 
@@ -600,11 +601,11 @@
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="valorMvaInd">Valor MVA Industria</label>
-                                                    @Html.TextBoxFor(m => m.valorMVAInd, new { @class = "form-control form-control-sm decimal", name = "valorMvaInd", id = "valorMvaInd", placeholder = "Digite o valor (%)" })
+                                                    @Html.TextBoxFor(m => m.valorMVAInd, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "valorMvaInd", id = "valorMvaInd", placeholder = "Digite o valor (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="valorMvaAta">Valor MVA Atacado (Dist)</label>
-                                                    @Html.TextBoxFor(m => m.valorMVAAtacado, new { @class = "form-control form-control-sm decimal", name = "valorMvaAta", id = "valorMvaAta", placeholder = "Digite o valor (%)" })
+                                                    @Html.TextBoxFor(m => m.valorMVAAtacado, new { @class = "form-control form-control-sm", onkeypress = "return onlynumberDecimal();", name = "valorMvaAta", id = "valorMvaAta", placeholder = "Digite o valor (%)" })
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label class="pr-fonte-label" for="iniVig">Inicio Vigencia MVA</label>

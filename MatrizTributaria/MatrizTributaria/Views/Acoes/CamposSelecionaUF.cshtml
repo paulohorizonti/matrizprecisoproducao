@@ -13,12 +13,14 @@
                     {
                         if (item.uf == ViewBag.UfOrigem)
                         {
-        <option selected value="@item.uf">@item.uf</option> }
-                        else
-                        {
-        <option value="@item.uf">@item.uf</option>}
+        <option selected value="@item.uf">@item.uf</option>
+ }
+    else
+    {
+    <option value="@item.uf">@item.uf</option>
+}
 
-                    }
+}
                 </select>
 
 
@@ -37,12 +39,14 @@
                     {
                         if (item.uf == ViewBag.UfDestino)
                         {
-        <option selected value="@item.uf">@item.uf</option> }
-                        else
-                        {
-        <option value="@item.uf">@item.uf</option>}
+        <option selected value="@item.uf">@item.uf</option>
+ }
+    else
+    {
+    <option value="@item.uf">@item.uf</option>
+}
 
-                    }
+}
                 </select>
 
 
@@ -53,8 +57,38 @@
                 </div><!--fim do appende-->
             </div><!--fim div input-->
         </div><!--fim coluna 2-->
+        <!--TIPO DE TRIBUTAÇÃO-->
+        <div class="form-group col-lg-2">
+            <label class="pr-fontalternativa">Regime Tributário</label>
+
+            <div class="input-group input-group-sm">
+
+               
+                <select class="form-control form-control-sm dropdown prn-select" id="tributacao" name="tributacao">
+
+                    @if (ViewBag.Tributacao != "OUTROS")
+                    {
 
 
+
+            <option selected value="SIMPLES">SIMPLES</option>
+                            <option value="OUTROS">OUTROS</option> }
+                                        else
+                                        {
+                            <option value="SIMPLES">SIMPLES</option>
+                                            <option selected value="OUTROS">OUTROS</option>}
+                </select>
+
+
+                <div class="input-group-append">
+                    <button data-toggle="tooltip" data-placement="right" title="Aplicar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
+                        <i style="font-size:1.3em;" class="fas fa-search"></i>
+                    </button>
+                </div><!--fim do appende-->
+
+
+            </div><!--fim div input-->
+        </div><!--fim coluna 2-->
 
 
 

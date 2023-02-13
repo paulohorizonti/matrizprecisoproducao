@@ -1,4 +1,7 @@
 ﻿
+
+
+
 //DataTable -->
 $(document).ready(function () {
     $('#table-graficos').DataTable({
@@ -1190,6 +1193,209 @@ $(document).ready(function () {
 
 
 
+//tributacaoncm
+$(document).ready(function () {
+
+    /** Script para selecionar a linha tabela */
+    var tabela = document.getElementById("tablepr-2");
+
+    var btnAlterarSelecionadosTribNcm = document.getElementById("editarSelecionadosTribNCM");
+    var btnAlterarSelecionadosTribComNCM = document.getElementById("editarSelecionadosTribComNCM"); //pega os ids para alterar com ncm (id da tabela tributacaoncm)
+    var btnAlterarPorNCMTribNcm = document.getElementById("editarPorNcmTribNcm");
+
+   
+
+    if (tabela) {
+        var linhas = tabela.getElementsByTagName("tr");
+        for (var i = 0; i < linhas.length; i++) {
+            var linha = linhas[i];
+
+            linha.addEventListener("click", function () {
+                //Adicionar ao atual
+                selLinha(this, true); //Selecione apenas um (parametro true seleciona mais de uma linha)
+
+            });
+        }
+    }
+
+
+
+    function selLinha(linha, multiplos) {
+        if (!multiplos) {
+
+            var linhas = linha.parentElement.getElementsByTagName("tr");
+            for (var i = 0; i < linhas.length; i++) {
+                var linha_ = linhas[i];
+                linha_.classList.remove("selecionado");
+            }
+        }
+        linha.classList.toggle("selecionado");
+    }
+
+    if (btnAlterarSelecionadosTribComNCM) {
+        //alterar selecionados
+        btnAlterarSelecionadosTribComNCM.addEventListener("click", function () {
+
+
+            var selecionados = document.getElementsByClassName("selecionado"); //pega os elementos da linha com a classe selecionado
+            //Verificar se está selecionado
+            if (selecionados.length < 1) {
+                alert("Selecione pelo menos uma linha");
+                return false;
+            }
+
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = "";
+            /*Laço para varrer os elementos com a tag TD*/
+            for (var i = 0; i < selecionados.length; i++) {
+                var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice i ao vetor dados
+                dados[i] = dados[i].trim();
+                strDados += dados[i] + ",";
+
+            }
+            bloqueioTela();
+
+            //agora mandar esse vetor para o modal e passar o valor correto do ncm
+            $.ajax(
+                {
+
+                    data: { array: strDados },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        //mandar para alterar so o cest e o ncm
+                        window.location.href = '/Tributacao/TributacaoNcmEditMassaModalComNCM?array=' + strDados;
+
+                    }
+
+
+                });
+
+
+        });
+
+    }
+
+
+    if (btnAlterarSelecionadosTribNcm) {
+        //alterar selecionados
+        btnAlterarSelecionadosTribNcm.addEventListener("click", function () {
+
+
+            var selecionados = document.getElementsByClassName("selecionado"); //pega os elementos da linha com a classe selecionado
+            //Verificar se está selecionado
+            if (selecionados.length < 1) {
+                alert("Selecione pelo menos uma linha");
+                return false;
+            }
+
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = "";
+            /*Laço para varrer os elementos com a tag TD*/
+            for (var i = 0; i < selecionados.length; i++) {
+                var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice i ao vetor dados
+                dados[i] = dados[i].trim();
+                strDados += dados[i] + ",";
+
+            }
+            bloqueioTela();
+
+            //agora mandar esse vetor para o modal e passar o valor correto do ncm
+            $.ajax(
+                {
+
+                    data: { array: strDados },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        //mandar para alterar so o cest e o ncm
+                        window.location.href = '/Tributacao/TributacaoNcmEditMassaModal?array=' + strDados;
+
+                    }
+
+
+                });
+
+
+        });
+
+    }
+
+  
+    //selecionado por ncm
+    if (btnAlterarPorNCMTribNcm) {
+        //alterar selecionados
+        btnAlterarPorNCMTribNcm.addEventListener("click", function () {
+
+            var titulo = document.getElementById("titulo");
+
+           // alert(titulo.innerHTML);
+
+            var selecionados = document.getElementsByClassName("selecionado"); //pega os elementos da linha com a classe selecionado
+            //Verificar se está selecionado
+            if (selecionados.length > 1) {
+                alert("Para alterar usando o NCM selecione somente uma linha");
+                return false;
+            }
+            if (selecionados.length == 0) {
+                alert("Selecione uma linha para alterar");
+                return false;
+            }
+
+            var dados = {}; //variavel auxiliar para receber o ID
+            var dadosNCM = {};
+            var strDadosNCM = "";
+            var strDados = "";
+            var tituloPagina = titulo.innerHTML;
+            /*Laço para varrer os elementos com a tag TD*/
+            for (var i = 0; i < selecionados.length; i++) {
+                var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice i ao vetor dados
+                if (titulo.innerHTML != "TributacaoNcm") {
+                    dadosNCM[i] = selecionado[3].innerHTML;
+                } else {
+                    dadosNCM[i] = selecionado[5].innerHTML;
+                }
+              
+                dados[i] = dados[i].trim();
+                dadosNCM[i] = dadosNCM[i].trim();
+                strDados += dados[i];
+                strDadosNCM = dadosNCM[i];
+
+
+            }
+            bloqueioTela();
+
+            //agora mandar esse vetor para o modal e passar o valor correto do ncm
+            $.ajax(
+                {
+
+                    data: { id: strDados, ncm: strDadosNCM, titulo: tituloPagina  },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+                        //alterear pelo ncm - mesmo ncm mesma tributacao - altera tudo, inclusive a tributacao
+                        window.location.href = '/Tributacao/TributacaoNcmEditMassaNCMModal?id=' + strDados + '&ncm=' + strDadosNCM + '&titulo=' + tituloPagina;
+
+                    }
+
+
+                });
+
+
+        });
+
+    }
+
+
+});
 
 
 
@@ -1392,6 +1598,12 @@ $(document).ready(function () {
    
 
 });
+
+
+
+
+
+
 
 function maiuscula(z) {
     v = z.value.toUpperCase();

@@ -1,7 +1,7 @@
 ﻿
 @using PagedList.Mvc
 @using MatrizTributaria.Areas.Cliente.Models
-@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
+@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributariaNCM>
 @{
     ViewBag.Title = "EdtCliAliqEntradaPisMassa";
 
@@ -31,7 +31,7 @@
                                 <table id="tbl-edtAlqEntPis" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="9" class="pr-fonte2" scope="col">Analise Alíquota</th>
+                                            <th style="text-align:center; border:none;" colspan="7" class="pr-fonte2" scope="col">Analise Alíquota</th>
 
                                         </tr>
                                         <tr class="pr-td">
@@ -39,14 +39,12 @@
                                                 Registro
                                             </th>
                                             <th>
-                                                Código de Barras
+                                               NCM
                                             </th>
                                             <th>
                                                 Descrição
                                             </th>
-                                            <th>
-                                                Cest
-                                            </th>
+                                          
                                             <th>CST Cliente</th>
                                             <th>
                                                 Alíquota no Cliente
@@ -55,7 +53,7 @@
                                             <th>
                                                 Alíquota no MTX
                                             </th>
-                                            <th>Cód. Barras MTX</th>
+                                            
 
 
                                         </tr>
@@ -68,14 +66,12 @@
                                                 @Html.DisplayFor(modelItem => item.TE_ID)
                                             </td>
                                             <td style="width:8%;">
-                                                @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
+                                                @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
                                             </td>
                                             <td style="width:20%;">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
                                             </td>
-                                            <td style="width:10%;">
-                                                @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
-                                            </td>
+                                           
                                             <td style="width:10%;">
                                                 @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
                                             </td>
@@ -87,7 +83,7 @@
                                         </td> }
                                                         else
                                                         {
-                                                            if (item.ALIQ_ENTRADA_PIS > item.Aliq_Ent_Pis_INTERNO)
+                                                            if (item.ALIQ_ENTRADA_PIS > item.ALIQ_ENT_PIS_BASE)
                                                             {
 
                                         <td style="text-align:center; width:10%;" class="pr-td-maior">
@@ -95,7 +91,7 @@
                                         </td> }
                                                             else
                                                             {
-                                                                if (item.ALIQ_ENTRADA_PIS < item.Aliq_Ent_Pis_INTERNO)
+                                                                if (item.ALIQ_ENTRADA_PIS < item.ALIQ_ENT_PIS_BASE)
                                                                 {
                                         <td style="text-align:center; width:10%;" class="pr-td-menor">
                                             @Html.DisplayFor(modelItem => item.ALIQ_ENTRADA_PIS)
@@ -103,14 +99,14 @@
                                                                 else
                                                                 {
 
-                                                                    if (item.ALIQ_ENTRADA_PIS == item.Aliq_Ent_Pis_INTERNO)
+                                                                    if (item.ALIQ_ENTRADA_PIS == item.ALIQ_ENT_PIS_BASE)
                                                                     {
                                         <td style="text-align:center; width:10%;" class="pr-td-igual">
                                             @Html.DisplayFor(modelItem => item.ALIQ_ENTRADA_PIS)
                                         </td> }
                                                                     else
                                                                     {
-                                                                        if (item.ALIQ_ENTRADA_PIS != null && item.Aliq_Ent_Pis_INTERNO == null)
+                                                                        if (item.ALIQ_ENTRADA_PIS != null && item.ALIQ_ENT_PIS_BASE == null)
                                                                         {
                                         <td style="text-align:center; width:10%;">
                                             @Html.DisplayFor(modelItem => item.ALIQ_ENTRADA_PIS)
@@ -125,14 +121,14 @@
                                                         }
 
                                             <td style="width:10%;">
-                                                @Html.DisplayFor(modelItem => item.Cst_Entrada_PisCofins_INTERNO)
+                                                @Html.DisplayFor(modelItem => item.CST_ENTRADA_PISCOFINS_BASE)
                                             </td>
                                             <td style="text-align:center; width:10%;">
-                                                @Html.DisplayFor(modelItem => item.Aliq_Ent_Pis_INTERNO)
+                                                @Html.DisplayFor(modelItem => item.ALIQ_ENT_PIS_BASE)
                                             </td>
 
                                             <td style="width:10%;">
-                                                @Html.DisplayFor(modelItem => item.Cod_Barras_INTERNO)
+                                                @Html.DisplayFor(modelItem => item.ALIQ_ENT_PIS_BASE)
                                             </td>
 
                                         </tr>
@@ -151,7 +147,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
 
                     </div>

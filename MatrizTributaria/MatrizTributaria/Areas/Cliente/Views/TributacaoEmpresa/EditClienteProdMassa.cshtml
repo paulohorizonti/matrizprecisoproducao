@@ -1,6 +1,6 @@
 ﻿@using PagedList.Mvc
 @using MatrizTributaria.Areas.Cliente.Models
-@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
+@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria3>
 @{
     ViewBag.Title = "EditClienteProdMassa";
 
@@ -220,7 +220,7 @@
                                 <table id="table-editDescProdCliente" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="6" class="pr-fonte2" scope="col">Analise de DESCRIÇÃO DE PRODUTO</th>
+                                            <th style="text-align:center; border:none;" colspan="7" class="pr-fonte2" scope="col">Analise de DESCRIÇÃO DE PRODUTO</th>
 
                                         </tr>
                                         <tr class="pr-td">
@@ -228,13 +228,20 @@
                                                 Registro
                                             </th>
                                             <th>
-                                                Código de Barras
+                                                Cód. de Barras no Cliente
                                             </th>
                                             <th>
-                                                NCM do produto
+                                                NCM  no Cliente
                                             </th>
                                             <th>
                                                 Descrição no Cliente
+                                            </th>
+                                            <th>
+                                                NCM  no MTX
+                                            </th>
+
+                                            <th>
+                                                Cód. Barras no MTX
                                             </th>
                                             <th>
                                                 Descrição no MTX
@@ -246,55 +253,75 @@
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                            <tr style="height:12.0px;" class="pr-td">
-                                                <td style="width:4%;">
-                                                    @Html.DisplayFor(modelItem => item.TE_ID)
-                                                </td>
-                                                <td style="width:8%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
-                                                </td>
-                                                <td style="width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
-                                                </td>
-
-                                                @if (item.PRODUTO_DESCRICAO == null)
-                                                {
-                                                    <td style="text-align:left; width:40%;">
-                                                        @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                                    </td>
-                                                }
-                                                else
-                                                {
-
-
-                                                    if (item.PRODUTO_DESCRICAO != item.Descricao_INTERNO)
-                                                    {
-                                                        <td style="text-align:left; width:40%;" class="pr-td-maior">
-                                                            @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                                        </td>
-                                                    }
+                                    <tr style="height:12.0px;" class="pr-td">
+                                        <td style="width:4%;">
+                                            @Html.DisplayFor(modelItem => item.TE_ID)
+                                        </td>
+                                        <td style="width:8%;">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
+                                        </td>
+                                        @if (item.PRODUTO_NCM == null)
+                                        {
+                                    <td style="width:5%;">
+                                        @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                    </td> }
                                                     else
                                                     {
-                                                        <td style="text-align:left; width:40%;" class="pr-td-igual">
-                                                            @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                                        </td>
+                                                        if (item.PRODUTO_NCM != item.NCM_INTERNO)
+                                                        {
+
+                                    <td style="text-align:left; width:10%;" class="pr-td-maior">
+                                        @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                    </td>
+ }
+                                else
+                                {
+                                    <td style="text-align:left; width:10%;" class="pr-td-igual">
+                                        @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                    </td>
+}
+                            }
+
+
+                                        @if (item.PRODUTO_DESCRICAO == null)
+                                        {
+                                    <td style="text-align:left; width:30%;">
+                                        @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                    </td> }
+                                                    else
+                                                    {
+
+
+                                                        if (item.PRODUTO_DESCRICAO != item.Descricao_INTERNO)
+                                                        {
+                                    <td style="text-align:left; width:30%;" class="pr-td-maior">
+                                        @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                    </td> }
+                                                        else
+                                                        {
+                                    <td style="text-align:left; width:30%;" class="pr-td-igual">
+                                        @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                    </td>}
+
+
+
                                                     }
+                                        <td style="text-align:left; width:10%;">
+                                            @Html.DisplayFor(modelItem => item.NCM_INTERNO)
+
+                                        </td>
+                                        <td style="text-align:left; width:8%;">
+                                            @Html.DisplayFor(modelItem => item.Cod_Barras_INTERNO)
+
+                                        </td>
+
+                                        <td style="text-align:left; width:30%;">
+                                            @Html.DisplayFor(modelItem => item.Descricao_INTERNO)
+
+                                        </td>
 
 
-
-                                                }
-
-
-                                                <td style="text-align:left; width:40%;">
-                                                    @Html.DisplayFor(modelItem => item.Descricao_INTERNO)
-
-                                                </td>
-
-
-
-                                            </tr>
-
-                                        }
+                                    </tr>}
 
                                     </tbody>
                                 </table><!--fim da tabela-->
@@ -308,7 +335,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
                     </div>
 

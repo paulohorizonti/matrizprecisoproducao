@@ -61,6 +61,15 @@ namespace MatrizTributaria.Models
         [ForeignKey("SoftwareHouse")]
         public int idSofwareHouse { get; set; }
 
+        //vitor: 08112022
+        [Column("id_superlogica")]
+        public int? id_superlogica { get; set; }
+
+
+        //inserir um combobox com os estado
+        [Column("usuario_admin_inicial")]
+        public string usuarioInicial { get; set; }
+
         /*As datas serão informadas automaticamente no momento da criação do registro
          e quando houver alteração*/
         [Column("datacad")]
@@ -68,6 +77,7 @@ namespace MatrizTributaria.Models
 
         [Column("dataalt")]
         public System.DateTime dataalt { get; set; }
+
 
         [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

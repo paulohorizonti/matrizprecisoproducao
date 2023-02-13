@@ -4,8 +4,7 @@
 @{ ViewBag.Title = "EditClienteAliqIcmsVendaVarSTCFMassaSn"; }
 
 
-
-@RenderPage("~/Areas/Cliente/Views/Acoes/CardInicial.cshtml") <!--Renderiza o card inicial-->
+@RenderPage("~/Areas/Cliente/Views/Acoes/CardInicial2.cshtml") <!--Renderiza o card inicial-->
 
 <div id="card-analise" class="container-fluid pr-container-2 pr-card-cad">
     <div class="card">
@@ -57,74 +56,80 @@
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                            <tr style="height:12.0px;" class="pr-td">
-                                <td style="width:4%;">
-                                    @Html.DisplayFor(modelItem => item.TE_ID)
-                                </td>
-                                <td style="width:8%;">
-                                    @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
-                                </td>
-                                <td style="width:40%;">
-                                    @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                </td>
-                                <td style="width:10%;">
-                                    @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
-                                </td>
+                                            <tr style="height:12.0px;" class="pr-td">
+                                                <td style="width:4%;">
+                                                    @Html.DisplayFor(modelItem => item.TE_ID)
+                                                </td>
+                                                <td style="width:8%;">
+                                                    @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
+                                                </td>
+                                                <td style="width:40%;">
+                                                    @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                                </td>
+                                                <td style="width:10%;">
+                                                    @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
+                                                </td>
 
-                                @if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null || item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null)
-                                {
-                <td style="text-align:center; width:10%;">
-                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
-                </td> }
-                                else
-                                {
-                                    if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
-                                    {
-
-                <td style="text-align:center; width:10%;" class="pr-td-maior">
-                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
-                </td> }
-                                    else
-                                    {
-                                        if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
-                                        {
-                <td style="text-align:center; width:10%;" class="pr-td-menor">
-                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
-                </td> }
-                                        else
-                                        {
-
-                                            if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
-                                            {
-                <td style="text-align:center; width:10%;" class="pr-td-igual">
-                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
-                </td> }
-                                            else
-                                            {
-                                                if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null)
+                                                @if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null || item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null)
                                                 {
-                <td style="text-align:center; width:10%;">
-                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
-                </td>}
+                                                    <td style="text-align:center; width:10%;">
+                                                        @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
+                                                    </td>
+ }
+                                                else
+                                                {
+                                                    if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL > item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
+                                                    {
+
+                                                        <td style="text-align:center; width:10%;" class="pr-td-maior">
+                                                            @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
+                                                        </td>
+ }
+                                                    else
+                                                    {
+                                                        if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL < item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
+                                                        {
+                                                            <td style="text-align:center; width:10%;" class="pr-td-menor">
+                                                                @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
+                                                            </td>
+ }
+                                                        else
+                                                        {
+
+                                                            if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
+                                                            {
+                                                                <td style="text-align:center; width:10%;" class="pr-td-igual">
+                                                                    @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
+                                                                </td>
+ }
+                                                            else
+                                                            {
+                                                                if (item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO == null)
+                                                                {
+                                                                    <td style="text-align:center; width:10%;">
+                                                                        @Html.DisplayFor(modelItem => item.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL)
+                                                                    </td>
+}
 
 
-                                            }
+                                                            }
 
 
-                                        }
+                                                        }
 
-                                    }
-                                }
-
-
-                                <td style="text-align:center; width:10%;">
-                                    @Html.DisplayFor(modelItem => item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
+                                                    }
+                                                }
 
 
+                                                <td style="text-align:center; width:10%;">
+                                                    @Html.DisplayFor(modelItem => item.Aliq_Icms_ST_Venda_Varejo_Cons_Final_INTERNO)
 
 
 
-                            </tr>}
+
+
+                                            </tr>
+}
 
                                     </tbody>
                                 </table><!--fim da tabela-->
@@ -138,7 +143,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
 
                     </div>

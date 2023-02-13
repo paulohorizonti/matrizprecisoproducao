@@ -1,6 +1,6 @@
 ﻿@using PagedList.Mvc
 @using MatrizTributaria.Areas.Cliente.Models
-@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
+@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria3>
 @{
     ViewBag.Title = "EditClienteNcmMassa";
 
@@ -111,27 +111,50 @@
                                         <select style="max-width: 100% !important;" class="pr-fontalternativa form-control form-control-sm" id="filtroNulo" name="filtroNulo">
                                             @if (ViewBag.Filtro == "1")
                                             {
-
                                                 <option value="1" selected>NCM Iguais</option>
-                                                <option value="2">NCM diferentes</option>
-                                                <option value="3">NCM Nulo</option>
+                                                <option value="2">NCM Diferentes</option>
+                                                <option value="3">NCM Nulo Ambos</option>
+                                                <option value="4">NCM Nulo MTX</option>
+                                                <option value="5">NCM Nulo Cliente</option>
                                             }
-                                            else
-                                            {
-                                                if (ViewBag.Filtro == "2")
+                                                                                      
+                                                @if (ViewBag.Filtro == "2")
                                                 {
 
                                                     <option value="1">NCM Iguais</option>
-                                                    <option value="2" selected>NCM diferentes</option>
-                                                    <option value="3">NCM Nulo</option>
+                                                    <option value="2"  selected>NCM Diferentes</option>
+                                                    <option value="3">NCM Nulo Ambos</option>
+                                                    <option value="4">NCM Nulo MTX</option>
+                                                    <option value="5">NCM Nulo Cliente</option>
                                                 }
-                                                else
+                                                @if (ViewBag.Filtro == "3")
                                                 {
+
                                                     <option value="1">NCM Iguais</option>
-                                                    <option value="2">NCM diferentes</option>
-                                                    <option value="3" selected>NCM Nulo</option>
+                                                    <option value="2">NCM Diferentes</option>
+                                                    <option value="3" selected>NCM Nulo Ambos</option>
+                                                    <option value="4">NCM Nulo MTX</option>
+                                                    <option value="5">NCM Nulo Cliente</option>
                                                 }
-                                            }
+                                                @if (ViewBag.Filtro == "4")
+                                                {
+
+                                                    <option value="1">NCM Iguais</option>
+                                                    <option value="2">NCM Diferentes</option>
+                                                    <option value="3">NCM Nulo Ambos</option>
+                                                    <option value="4" selected>NCM Nulo MTX</option>
+                                                    <option value="5">NCM Nulo Cliente</option>
+                                                }
+                                                @if (ViewBag.Filtro == "5")
+                                                {
+
+                                                    <option value="1">NCM Iguais</option>
+                                                    <option value="2">NCM Diferentes</option>
+                                                    <option value="3">NCM Nulo Ambos</option>
+                                                    <option value="4">NCM Nulo MTX</option>
+                                                    <option value="5" selected>NCM Nulo Cliente</option>
+                                                }
+                                            
                                         </select>
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-secondary pr-botoes-fundo">
@@ -203,9 +226,13 @@
     <div class="card">
         <div class="card-header">
             ANALISE:Produto <strong>"@ViewBag.Mensagem"</strong> <a data-toggle="tooltip" data-placement="right" title="Ir para Gráficos" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0" href="@Url.Action("AnaliseProd","TributacaoEmpresa")"><i style="font-size:1.3em;" class="fas fa-chart-pie"></i>  </a>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)"             type="button" id="editarSelecionadosNcmCliente"       class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
-            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="editarSelecionadosNcmClienteManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i  style="font-size:1.3em;" class="fas fa-user-edit"></i></button>
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s)" type="button" id="editarSelecionadosNcmCliente" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"> <i style="font-size:1.3em;" class="fas fa-edit"></i></button>
+            @*<button data-toggle="tooltip" data-placement="right" title="Alterar Selecionado(s) Manualmente" type="button" id="editarSelecionadosNcmClienteManual" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-user-edit"></i></button>*@
 
+            <button data-toggle="tooltip" data-placement="right" title="Alterar Todos os Registros" type="button" id="edtAlterarTODOS" class="float-lg-right dis-block btn btn-secondary pr-botoes-fundo border-0"><i style="font-size:1.3em;" class="fas fa-database"></i></button>
+
+            <!--Imput Hidden com o valor da opção-->
+            <input type="hidden" id="opcaoFiltro" value="@ViewBag.Opcao" />
         </div><!--fim do cabeçalho-->
 
         <div class="card-body">
@@ -220,24 +247,32 @@
                                 <table id="table-editNcmCliente" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="6" class="pr-fonte2" scope="col">Analise de NCM</th>
+                                            <th style="text-align:center; border:none;" colspan="7" class="pr-fonte2" scope="col">Analise de NCM</th>
 
                                         </tr>
                                         <tr class="pr-td">
+                                            
                                             <th>
                                                 Registro
                                             </th>
                                             <th>
-                                                Código de Barras
+                                                Cód. de Barras no Cliente
                                             </th>
                                             <th>
-                                                Descrição
+                                                NCM  no Cliente
                                             </th>
                                             <th>
-                                                NCM no Cliente
+                                                Descrição no Cliente
                                             </th>
                                             <th>
-                                                NCM no MTX
+                                                NCM  no MTX
+                                            </th>
+
+                                            <th>
+                                                Cód. Barras no MTX
+                                            </th>
+                                            <th>
+                                                Descrição no MTX
                                             </th>
 
 
@@ -246,53 +281,77 @@
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                            <tr style="height:12.0px;" class="pr-td">
-                                                <td style="width:4%;">
-                                                    @Html.DisplayFor(modelItem => item.TE_ID)
-                                                </td>
-                                                <td style="width:8%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
-                                                </td>
-                                                <td style="width:40%;">
-                                                    @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                                </td>
+                                        <tr style="height:12.0px;" class="pr-td">
+                                            <td style="width:4%;">
+                                                @Html.DisplayFor(modelItem => item.TE_ID)
+                                            </td>
+                                            <td style="width:8%;">
+                                                @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
+                                            </td>
+                                            @if (item.PRODUTO_NCM == null)
+                                            {
+                                        <td style="width:5%;">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                        </td>
+ }
+                                    else
+                                    {
+                                        if (item.PRODUTO_NCM != item.NCM_INTERNO)
+                                        {
 
-                                                @if (item.PRODUTO_NCM == null)
-                                                {
-                                                    <td style="text-align:left; width:10%;">
-                                                        @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
-                                                    </td>
-                                                }
-                                                else
-                                                {
-
-
-                                                    if (item.PRODUTO_NCM != item.NCM_INTERNO)
-                                                    {
-                                                        <td style="text-align:left; width:10%;" class="pr-td-maior">
-                                                            @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td style="text-align:left; width:10%;" class="pr-td-igual">
-                                                            @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
-                                                        </td>
-                                                    }
+                                        <td style="text-align:left; width:10%;" class="pr-td-maior">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                        </td> }
+                                                            else
+                                                            {
+                                        <td style="text-align:left; width:10%;" class="pr-td-igual">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                        </td>}
+                                                        }
 
 
+                                            @if (item.PRODUTO_DESCRICAO == null)
+                                            {
+                                        <td style="text-align:left; width:30%;">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                        </td>
+ }
+                                    else
+                                    {
 
-                                                }
+
+                                        if (item.PRODUTO_DESCRICAO != item.Descricao_INTERNO)
+                                        {
+                                        <td style="text-align:left; width:30%;" class="pr-td-maior">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                        </td>
+ }
+                                    else
+                                    {
+                                        <td style="text-align:left; width:30%;" class="pr-td-igual">
+                                            @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                        </td>
+}
 
 
-                                                <td style="text-align:left; width:10%;">
-                                                    @Html.DisplayFor(modelItem => item.NCM_INTERNO)
 
-                                                </td>
+                                }
+                                            <td style="text-align:left; width:10%;">
+                                                @Html.DisplayFor(modelItem => item.NCM_INTERNO)
+
+                                            </td>
+                                            <td style="text-align:left; width:8%;">
+                                                @Html.DisplayFor(modelItem => item.Cod_Barras_INTERNO)
+
+                                            </td>
+
+                                            <td style="text-align:left; width:30%;">
+                                                @Html.DisplayFor(modelItem => item.Descricao_INTERNO)
+
+                                            </td>
 
 
-
-                                            </tr>
+                                        </tr>
 
                                         }
 
@@ -308,7 +367,7 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount  - Total de registros: <span id="totalReg">@Model.TotalItemCount</span></span>
                         </p>
                     </div>
 
@@ -338,8 +397,11 @@
 
         </div><!--Fim do corpo do card-->
         <div class="card-footer">
-            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-edit"></i> = Edição em massa igualando ao MTX; <br />
-            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-user-edit"></i> = Edição em massa informando NCM manualmente <br />
+            Todos os Registros+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; <i style="font-size:1.5em;" class="fas fa-edit"></i> = Edição em massa: <b>IGUALANDO</b> ao MTX; <br />
+
+            @*Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-user-edit"></i> = Edição em massa informando CST manualmente <br />*@
+            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-database"></i> = Edição em massa: <b>ALTERAR TODOS OS REGISTROS</b> <br />
+
         </div>
 
     </div><!--fim do card-->

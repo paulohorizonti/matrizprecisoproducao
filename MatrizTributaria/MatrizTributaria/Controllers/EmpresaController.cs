@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
@@ -49,7 +51,7 @@ namespace MatrizTributaria.Controllers
                 int par = 1;
                 return RedirectToAction("../Erro/Erro", new { param = par });
             }
-
+            ViewBag.SoftwareHouse = db.SoftwareHouses;
             var model = new EmpresaViewModel();
             return View(model);
         }
@@ -89,6 +91,9 @@ namespace MatrizTributaria.Controllers
                  telefone = model.telefone,
                  email = model.email,
                  ativo = model.ativo,
+                 id_superlogica = model.id_superlogica,
+                 idSofwareHouse = model.idSofwareHouse,
+                 simples_nacional = model.simples_nacional,
                  datacad = model.datacad,
                  dataalt = model.dataalt
 
@@ -108,23 +113,149 @@ namespace MatrizTributaria.Controllers
 
         //cadastro superlógica
         //Vai chegar ate aqui passando alguns parametros
-        public dynamic CadSuperLogica(int? idplano, int? idcliente, int? identificador)
+        //BKP-PAULO: 08112022
+        //public dynamic CadSuperLogica(int? idplano, int? idcliente, int? identificador)
+        //{
+        //    //os dados vão chegar pela url
+        //    int? idPlanoa = idplano;
+        //    int? idCliente = idcliente;
+        //    int? iDentificador = identificador;
+
+        //    if(TempData["msg"] != null)
+        //    {
+        //        ViewBag.Msg = TempData["msg"];
+        //        ViewBag.CodMsg = TempData["codmsg"];
+        //    }
+
+
+
+        //    //verificar se os dados foram passados
+        //    if (idPlanoa == null || idCliente == null || iDentificador == null)
+        //    {
+        //        ViewBag.Mensagem = "Dados incompletos, por favor verifique sua requisição e tente novamente!";
+        //        ViewBag.CodMsg = 1;
+        //        return View();
+        //    }
+        //    else
+        //    {
+        //        //validar o cliente na superlogica
+        //        var requisicaoWeb = WebRequest.CreateHttp("https://api.superlogica.net/v2/financeiro/clientes/" + idCliente);
+
+        //        //passar os tokens
+        //        requisicaoWeb.Method = "GET";
+        //        requisicaoWeb.Headers["app_token"] = "6c7a8c42-3291-39d5-bc1c-1e0ce8e1beef";//Adicionando o AuthToken  no Header da requisição
+        //        requisicaoWeb.Headers["access_token"] = "05deedee-25c2-46ab-8fa3-10cd78f3f297";//Adicionando o AuthToken  no Header da requisição
+
+
+        //        //verificando se o cadastro do cliente existe e esta ok
+        //        using (HttpWebResponse resposta = (HttpWebResponse)requisicaoWeb.GetResponse())
+        //        {
+        //            if (resposta.StatusCode == HttpStatusCode.OK)
+        //            {
+        //                string mensagem = ("\r\nResponse Status Code is OK and StatusDescription is: {0}", resposta.StatusDescription).ToString();
+        //                ViewBag.Mensagem = mensagem;
+
+        //                //pegando os dados do cliente da resposta da api
+        //                var streamDados = resposta.GetResponseStream();
+        //                StreamReader reader = new StreamReader(streamDados);
+
+
+        //                string objResponse = reader.ReadToEnd();
+
+
+        //                //se retornar vazio
+        //                if(objResponse.Equals("[]"))
+        //                {
+        //                     mensagem = ("Cliente não encontrado ou dados incorretos. Por favor, verifique sua requisição e tente novamente");
+        //                    ViewBag.Mensagem = mensagem;
+        //                    ViewBag.CodMsg = 1;
+        //                    return View();
+        //                }
+        //                else
+        //                {
+        //                    var post = JsonConvert.DeserializeObject<Post>(objResponse.Substring(1, objResponse.Length - 2));
+        //                    ViewBag.IdCliente = post.id_sacado_sac;
+        //                    ViewBag.RazSocial = post.st_nome_sac;
+        //                    ViewBag.TamanhoReg = post.st_cgc_sac.Length; //verifica o tamanho do registro para identificar se cgc ou cnpj
+        //                    ViewBag.Endereco = post.st_endereco_sac;
+        //                    ViewBag.Cep = post.st_cep_sac;
+        //                    ViewBag.Bairro = post.st_bairro_sac;
+        //                    ViewBag.Complemento = post.st_complemento_sac;
+        //                    ViewBag.Cidade = post.st_cidade_sac;
+        //                    ViewBag.Estado = post.st_estado_sac;
+        //                    ViewBag.Telefone = post.st_telefone_sac;
+        //                    ViewBag.Email = post.st_email_sac;
+        //                    ViewBag.DataCadastro = post.dt_cadastro_sac;
+        //                    ViewBag.Senha = post.st_senha_sac;
+
+        //                    //parametros necessários
+        //                    ViewBag.Plano = idPlanoa;
+        //                    ViewBag.Identificador = iDentificador;
+
+
+
+
+
+
+        //                    if (post.st_cgc_sac.Length > 11)
+        //                    {
+        //                        ViewBag.CNPJ = post.st_cgc_sac;
+        //                    }
+        //                    else
+        //                    {
+        //                        ViewBag.CGC = post.st_cgc_sac;
+        //                    }
+
+
+        //                    streamDados.Close();
+        //                    resposta.Close();
+        //                }
+
+
+        //            }
+        //            else
+        //            {
+        //                //TO-DO para o retorno diferente de 200 (ok)
+        //                string mensagem = ("Cliente não encontrado ou dados não conclusivos: ", resposta.StatusDescription).ToString();
+        //                ViewBag.Mensagem = mensagem;
+        //            }
+
+
+        //        }
+
+
+        //    }//fim do else
+
+
+
+
+
+        //    var model = new EmpresaViewModel();
+        //    return View(model);
+        //}
+
+
+        /* ACTION Vitor: 08112022 */
+        //cadastro superlógica
+        //Vai chegar ate aqui passando alguns parametros
+        [HttpGet]
+        public ActionResult Cadastro(int? idplano, int? idcliente)
         {
             //os dados vão chegar pela url
             int? idPlanoa = idplano;
             int? idCliente = idcliente;
-            int? iDentificador = identificador;
+            Empresa empresa = new Empresa();
 
-            if(TempData["msg"] != null)
+            if (TempData["msg"] != null)
             {
                 ViewBag.Msg = TempData["msg"];
                 ViewBag.CodMsg = TempData["codmsg"];
             }
-             
+
 
 
             //verificar se os dados foram passados
-            if (idPlanoa == null || idCliente == null || iDentificador == null)
+            if (idPlanoa == null || idCliente == null)
             {
                 ViewBag.Mensagem = "Dados incompletos, por favor verifique sua requisição e tente novamente!";
                 ViewBag.CodMsg = 1;
@@ -158,9 +289,9 @@ namespace MatrizTributaria.Controllers
 
 
                         //se retornar vazio
-                        if(objResponse.Equals("[]"))
+                        if (objResponse.Equals("[]"))
                         {
-                             mensagem = ("Cliente não encontrado ou dados incorretos. Por favor, verifique sua requisição e tente novamente");
+                            mensagem = ("Cliente não encontrado ou dados incorretos. Por favor, verifique sua requisição e tente novamente");
                             ViewBag.Mensagem = mensagem;
                             ViewBag.CodMsg = 1;
                             return View();
@@ -184,7 +315,6 @@ namespace MatrizTributaria.Controllers
 
                             //parametros necessários
                             ViewBag.Plano = idPlanoa;
-                            ViewBag.Identificador = iDentificador;
 
 
 
@@ -199,12 +329,20 @@ namespace MatrizTributaria.Controllers
                             {
                                 ViewBag.CGC = post.st_cgc_sac;
                             }
-                           
+
+                            try
+                            {
+                                empresa = db.Empresas.Where(x => x.cnpj == post.st_cgc_sac).FirstOrDefault();
+                            }
+                            catch
+                            {
+                                Debug.Write("Empresa Não Cadastrada!");
+                            }
 
                             streamDados.Close();
                             resposta.Close();
                         }
-                       
+
 
                     }
                     else
@@ -214,25 +352,86 @@ namespace MatrizTributaria.Controllers
                         ViewBag.Mensagem = mensagem;
                     }
 
-                    
+
                 }
 
 
             }//fim do else
 
-
-
-
-
-            var model = new EmpresaViewModel();
-            return View(model);
+            if (empresa != null)
+            {
+                return View("Home", "Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
 
+
+        //BKP PAULO: 08112022
+        //[HttpPost]
+        //public ActionResult CadSuperLogicaPost(int? idCli, string inputCnpj, string inputCGC, string inputCEP, string inputLogradouro,
+        //    string inputBairro, string inputComplemento, string inputCidade, string inputEstado, string inputTelefone, string inputEmail,
+        //    string senhaSuperlogica, string fantasia, string userMtx, string inputUser, string inputSimpNacional, string planoSuperlogica, string identificadorSuperlogica)
+        //{
+
+
+        //    //zerando as tempdata das mensagens
+        //    TempData["msg"] = null;
+        //    TempData["codmsg"] = null;
+        //    TempData.Keep("codmsg");
+        //    TempData.Keep("msg");
+
+
+        //    //pegar as varaiveis e passar para caixa alta
+        //    int? idSuperlogica = idCli;
+        //    string cnpj = inputCnpj;
+        //    string cgd = inputCGC;
+        //    string cep = inputCEP;
+        //    string logradouro = inputLogradouro.ToUpper();
+        //    string bairro = inputBairro.ToUpper();
+        //    string complemento = inputComplemento.ToUpper();
+        //    string cidade = inputCidade.ToUpper();
+        //    string estado = inputEstado.ToUpper();
+        //    string telefone = inputTelefone.ToUpper();
+        //    string email = inputEmail.ToLower(); //email sempre minusculo
+        //    string senha = senhaSuperlogica; //caso a senha venha
+        //    string mtx_fantasia = fantasia.ToUpper();
+        //    string mtx_login = userMtx.ToLower(); //login do mtx - email do usuario
+        //    string mtx_user = inputUser.ToUpper();
+        //    string mtx_simpnacional = inputSimpNacional.ToUpper();
+        //    string plano = planoSuperlogica;
+        //    string identif = identificadorSuperlogica;
+
+        //    //verificar os campos nulos
+        //    if (mtx_user.Equals("") || mtx_login.Equals(""))
+        //    {
+
+        //        TempData["msg"] = "Nome do Usuário ou login não podem ser VAZIO ou NULO";
+        //        TempData["codmsg"] = 2;
+        //        TempData.Keep("codmsg");
+        //        TempData.Keep("msg");
+        //        ViewBag.CodMsg = 2;
+        //        return RedirectToAction("CadSuperLogica", new { idplano = plano, idcliente = idSuperlogica, identificador = identif });
+        //    }
+
+        //    //DO-TO VITOR
+
+
+        //    return null;//
+        //}
+
+        //detalhes
+
+
+        /*ACTION VITOR: 08112022*/
         [HttpPost]
-        public ActionResult CadSuperLogicaPost(int? idCli, string inputCnpj, string inputCGC, string inputCEP, string inputLogradouro,
-            string inputBairro, string inputComplemento, string inputCidade, string inputEstado, string inputTelefone, string inputEmail,
-            string senhaSuperlogica, string fantasia, string userMtx, string inputUser, string inputSimpNacional, string planoSuperlogica, string identificadorSuperlogica)
+        public ActionResult Cadastro(int? idCli, string inputCnpj, string inputCGC, string inputCEP, string inputLogradouro,
+           string inputBairro, string inputComplemento, string inputCidade, string inputEstado, string inputTelefone, string inputEmail,
+           string senhaSuperlogica, string fantasia, string userMtx, string inputUser, string inputSimpNacional, string planoSuperlogica, string identificadorSuperlogica,
+           string inputRazSocial, string inputNumero, string inputSenhaUser)
         {
 
 
@@ -242,45 +441,91 @@ namespace MatrizTributaria.Controllers
             TempData.Keep("codmsg");
             TempData.Keep("msg");
 
-
-            //pegar as varaiveis e passar para caixa alta
-            int? idSuperlogica = idCli;
-            string cnpj = inputCnpj;
-            string cgd = inputCGC;
-            string cep = inputCEP;
-            string logradouro = inputLogradouro.ToUpper();
-            string bairro = inputBairro.ToUpper();
-            string complemento = inputComplemento.ToUpper();
-            string cidade = inputCidade.ToUpper();
-            string estado = inputEstado.ToUpper();
-            string telefone = inputTelefone.ToUpper();
-            string email = inputEmail.ToLower(); //email sempre minusculo
-            string senha = senhaSuperlogica; //caso a senha venha
-            string mtx_fantasia = fantasia.ToUpper();
-            string mtx_login = userMtx.ToLower(); //login do mtx - email do usuario
-            string mtx_user = inputUser.ToUpper();
-            string mtx_simpnacional = inputSimpNacional.ToUpper();
-            string plano = planoSuperlogica;
-            string identif = identificadorSuperlogica;
-
             //verificar os campos nulos
-            if (mtx_user.Equals("") || mtx_login.Equals(""))
+            if (inputUser.Equals("") || userMtx.Equals(""))
             {
-                
+
                 TempData["msg"] = "Nome do Usuário ou login não podem ser VAZIO ou NULO";
                 TempData["codmsg"] = 2;
                 TempData.Keep("codmsg");
                 TempData.Keep("msg");
                 ViewBag.CodMsg = 2;
-                return RedirectToAction("CadSuperLogica", new { idplano = plano, idcliente = idSuperlogica, identificador = identif });
+                return RedirectToAction("CadSuperLogica", new { idplano = planoSuperlogica, idcliente = idCli });
+            }
+            else
+            {
+                //Verifica se exite a empresa no DB
+                Empresa empresa = db.Empresas.Where(x => x.cnpj.Equals(inputCnpj)).FirstOrDefault();
+                //Se não existe salva
+                if (empresa == null)
+                {
+                    SoftwareHouse softwareHouse = db.SoftwareHouses.Find(1);
+                    //Salvar Empresa
+                    Empresa empresaSalvar = new Empresa()
+                    {
+                        razacaosocial = inputRazSocial.ToUpper(),
+                        fantasia = fantasia.ToUpper(),
+                        cnpj = inputLogradouro.ToUpper(),
+                        logradouro = inputLogradouro.ToUpper(),
+                        numero = inputNumero.ToUpper(),
+                        cep = inputCEP.ToUpper(),
+                        complemento = inputComplemento.ToUpper(),
+                        cidade = inputCidade.ToUpper(),
+                        estado = inputEstado.ToUpper(),
+                        telefone = inputTelefone.ToUpper(),
+                        ativo = 1,
+                        email = inputEmail.ToLower(),
+                        datacad = DateTime.Now,
+                        dataalt = DateTime.Now,
+                        idSofwareHouse = 1,
+                        simples_nacional = sbyte.Parse(inputSimpNacional),
+                        id_superlogica = idCli,
+                        SoftwareHouse = softwareHouse
+
+                    };
+
+                    db.Empresas.Add(empresaSalvar);
+                    db.SaveChanges();
+
+                }
+                //Pega a empresa se nula no BD para criar usuario
+                if (empresa == null)
+                    empresa = db.Empresas.Where(x => x.cnpj == inputCnpj).FirstOrDefault();
+
+
+                //Verifica se o usuario já existe do DB
+                Usuario usuario = db.Usuarios.Where(x => x.email.Equals(userMtx.ToLower())).FirstOrDefault();
+                //Se não existe salva
+                var hash = new Hash(SHA512.Create());
+                if (usuario == null)
+                {
+                    Usuario user = new Usuario()
+                    {
+                        nome = inputUser.ToUpper(),
+                        email = inputEmail.ToLower(),
+                        logradouro = empresa.logradouro,
+                        cep = empresa.cep,
+                        senha = hash.CriptografarSenha(inputSenhaUser),
+                        ativo = 1,
+                        dataAlt = DateTime.Now,
+                        dataCad = DateTime.Now,
+                        idNivel = 7,
+                        telefone = empresa.telefone,
+                        cidade = empresa.cidade,
+                        idEmpresa = empresa.id,
+                        primeiro_acesso = 1,
+                        acesso_empresas = 0
+                    };
+
+                    db.Usuarios.Add(user);
+                    db.SaveChanges();
+                }
+
             }
 
-
-
-            return null;
+            return RedirectToAction("../Home/Login");
         }
 
-        //detalhes
         public ActionResult Detalhes(int? id)
         {
             if (Session["usuario"] == null)
@@ -429,11 +674,15 @@ namespace MatrizTributaria.Controllers
             Session["idEmpresa"] = this.emp.id; //se nao esclhou nenhum  a session é com a propria empresa
             Session["cnpjEmp"] = this.emp.cnpj;
             Session["empresa"] = this.emp.fantasia;
+            Session["simplesNacional"] = this.emp.simples_nacional.ToString();
+            TempData["UfOrigem"] = this.emp.estado.ToString();
+            TempData["UfDestino"] = this.emp.estado.ToString();
 
-            
+
             Session["empresas"] = this.emp;
             TempData["analise"] = null;
             TempData["analise2"] = null;
+            TempData["analise_NCM"] = null;
             return RedirectToAction("Index", "Home");
 
 

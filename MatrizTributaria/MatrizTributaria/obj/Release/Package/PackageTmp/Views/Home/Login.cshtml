@@ -49,16 +49,16 @@
                                         </div>
                                     }
 
-                                    @if (ViewBag.Message == "Usuário não permitido para essa Empresa") 
+                                    @if (ViewBag.Message == "Usuário não permitido para essa Empresa")
                                     {
-                                    
-                                <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    @ViewBag.Message
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                    
+
+                                        <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            @ViewBag.Message
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
                                     }
 
 
@@ -82,6 +82,20 @@
                                             </button>
                                         </div>
                                     }
+
+                                    <!--Vitor: 08112022-->
+                                    @if (ViewBag.Message == "Não foi possível conectar, motivo: Debitos em atraso!")
+                                    {
+                                        <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            @ViewBag.Message
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    }
+
+
+
                                     @if (ViewBag.Message == "Senha incorreta!")
                                     {
                                         <div id="alerta" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -152,13 +166,13 @@
 
                                         </div>
                                         @*<div class="form-group">
-                                            @Html.DropDownListFor(m => m.idEmpresa, new SelectList(ViewBag.Empresas, "id", "razacaosocial"), "Escolha a Empresa", new { @class = "form-control prn-select", @style = "border-radius: 10rem !important; padding: 0.5rem 0.5rem;  height:3.0rem;" })
+                @Html.DropDownListFor(m => m.idEmpresa, new SelectList(ViewBag.Empresas, "id", "razacaosocial"), "Escolha a Empresa", new { @class = "form-control prn-select", @style = "border-radius: 10rem !important; padding: 0.5rem 0.5rem;  height:3.0rem;" })
 
-                                        </div>*@
+            </div>*@
 
 
-                                                        <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>
-                                                    }
+                                        <button type="submit" class="btn btn-primary btn-user btn-block pr-btn-login"><span style="font-weight:500;">Login</span></button>
+                                    }
 
                                     <form class="user">
                                     </form>

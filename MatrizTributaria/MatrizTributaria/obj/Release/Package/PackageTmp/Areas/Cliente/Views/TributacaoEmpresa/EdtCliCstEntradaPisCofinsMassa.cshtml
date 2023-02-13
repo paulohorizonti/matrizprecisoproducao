@@ -1,10 +1,10 @@
 ﻿@using PagedList.Mvc
 @using MatrizTributaria.Areas.Cliente.Models
-@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
-@{
-    ViewBag.Title = "EdtCliCstEntradaPisCofinsMassa";
 
-}
+
+    @model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
+
+@{ ViewBag.Title = "EdtCliCstEntradaPisCofinsMassa"; }
 
 @RenderPage("~/Areas/Cliente/Views/Acoes/CardInicialCst.cshtml") <!--Renderiza o card inicial-->
 
@@ -38,6 +38,9 @@
                                                 Registro
                                             </th>
                                             <th>
+                                                NCM
+                                            </th>
+                                            <th>
                                                 Código de Barras
                                             </th>
                                             <th>
@@ -61,121 +64,120 @@
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                        <tr style="height:12.0px;" class="pr-td">
-                                            <td style="width:4%;">
-                                                @Html.DisplayFor(modelItem => item.TE_ID)
-                                            </td>
-                                            <td style="width:5%;">
-                                                @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
-                                            </td>
-                                            <td style="width:20%;">
-                                                @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
-                                            </td>
-                                            <td style="width:3%;">
-                                                @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
-                                            </td>
+                            <tr style="height:12.0px;" class="pr-td">
+                                <td style="width:4%;">
+                                    @Html.DisplayFor(modelItem => item.TE_ID)
+                                </td>
+                                <td style="width:5%;">
+                                    @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
+                                </td>
+                                <td style="width:20%;">
+                                    @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
+                                </td>
+                                <td style="width:3%;">
+                                    @Html.DisplayFor(modelItem => item.PRODUTO_CEST)
+                                </td>
 
-                                            @if (item.CST_ENTRADA_PIS_COFINS == null)
+                                @if (item.CST_ENTRADA_PIS_COFINS == null)
+                                {
+                <td style="text-align:center; width:5%;">
+                    @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                </td>
+                                    <td style="text-align:center; width:20%;">
+
+                                        @foreach (var dado in ViewBag.CstPisCofinsE)
+                                        {
+                                            if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
                                             {
-                                        <td style="text-align:center; width:5%;">
-                                            @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
-                                        </td>
-                                        <td style="text-align:center; width:20%;">
+                    <span>@dado.descricao</span>break;
+                }
 
+            }
+
+                                        @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
+                                    </td>
+ }
+                                else
+                                {
+                                    if (item.CST_ENTRADA_PIS_COFINS != item.Cst_Entrada_PisCofins_INTERNO && item.CST_ENTRADA_PIS_COFINS != null)
+                                    {
+
+                <td style="text-align:center; width:5%;" class="pr-td-maior">
+                    @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                </td>
+                                        <td style="width:20%;" class="pr-td-maior">
                                             @foreach (var dado in ViewBag.CstPisCofinsE)
                                             {
                                                 if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
                                                 {
-                                                  <span>@dado.descricao</span>
-                                                   break;
-                                                }
+                    <span>@dado.descricao</span>}
 
-                                            }
-
+            }
                                             @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
-                                        </td> 
-                                        }
-                                                                            else
-                                                                            {
-                                                                                if (item.CST_ENTRADA_PIS_COFINS != item.Cst_Entrada_PisCofins_INTERNO && item.CST_ENTRADA_PIS_COFINS != null)
-                                                                                {
-
-                                                            <td style="text-align:center; width:5%;" class="pr-td-maior">
-                                                                @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
-                                                            </td>
-                                                            <td style="width:20%;" class="pr-td-maior">
-                                                                @foreach (var dado in ViewBag.CstPisCofinsE)
-                                                                {
-                                                                    if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
-                                                                    {
-                                                            <span>@dado.descricao</span>}
-
-                                                    }
-                                                                @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
-                                                            </td> }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            if (item.CST_ENTRADA_PIS_COFINS == item.Cst_Entrada_PisCofins_INTERNO && item.CST_ENTRADA_PIS_COFINS != null)
-                                                                                                            {
-                                                                                    <td style="text-align:center; width:5%;" class="pr-td-menor">
-                                                                                        @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
-                                                                                    </td>
-                                                                                    <td style="width:20%;" class="pr-td-menor">
-                                                                                        @foreach (var dado in ViewBag.CstPisCofinsE)
-                                                                                        {
-                                                                                            if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
-                                                                                            {
-                                                                                    <span>@dado.descricao</span>}
-
-                                                                            }
-                                                                                        @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
-                                                                                    </td> }
-                                                                                                                                        else
-                                                                                                                                        {
-
-                                                                                                                                            if (item.Cst_Entrada_PisCofins_INTERNO == null && item.CST_ENTRADA_PIS_COFINS != null)
-                                                                                                                                            {
-                                                                                                                <td style="text-align:center; width:5%;" class="pr-td-igual">
-                                                                                                                    @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
-                                                                                                                </td>
-                                                                                                                <td style="width:20%;" class="pr-td-igual">
-                                                                                                                    @foreach (var dado in ViewBag.CstPisCofinsE)
-                                                                                                                    {
-                                                                                                                        if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
-                                                                                                                        {
-                                                                                                                <span>@dado.descricao</span>}
-
-                                                                                                        }
-                                                                                                                    @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
-                                                                                                                </td>}
-
-
-
-                                                                                                                                                                        }
-
-                                                                                                                                                                    }
-                                                                                                                                                                }
-
-
-                                            <td style="text-align:center; width:5%;">
-                                                @Html.DisplayFor(modelItem => item.Cst_Entrada_PisCofins_INTERNO)
-                                            </td>
-                                            <td style="width:20%;">
+                                        </td>
+ }
+                                    else
+                                    {
+                                        if (item.CST_ENTRADA_PIS_COFINS == item.Cst_Entrada_PisCofins_INTERNO && item.CST_ENTRADA_PIS_COFINS != null)
+                                        {
+                <td style="text-align:center; width:5%;" class="pr-td-menor">
+                    @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                </td>
+                                            <td style="width:20%;" class="pr-td-menor">
                                                 @foreach (var dado in ViewBag.CstPisCofinsE)
                                                 {
-                                                    if (item.Cst_Entrada_PisCofins_INTERNO == dado.codigo)
+                                                    if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
                                                     {
-                                                         <span>@dado.descricao</span>
-                                                    }
-                                                   
-                                                }
-                                              
-                                            </td>
+                    <span>@dado.descricao</span>}
 
-                                        </tr>
+            }
+                                                @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
+                                            </td>
+ }
+                                        else
+                                        {
+
+                                            if (item.Cst_Entrada_PisCofins_INTERNO == null && item.CST_ENTRADA_PIS_COFINS != null)
+                                            {
+                <td style="text-align:center; width:5%;" class="pr-td-igual">
+                    @Html.DisplayFor(modelItem => item.CST_ENTRADA_PIS_COFINS)
+                </td>
+                                                <td style="width:20%;" class="pr-td-igual">
+                                                    @foreach (var dado in ViewBag.CstPisCofinsE)
+                                                    {
+                                                        if (item.CST_ENTRADA_PIS_COFINS == dado.codigo)
+                                                        {
+                    <span>@dado.descricao</span>}
+
+            }
+                                                    @*@Html.DisplayFor(modelItem => item.CST_PIS_COFINS_DESCRICAO)*@
+                                                </td>
+}
+
+
 
                                         }
-                                       }
+
+                                    }
+                                }
+
+
+                                <td style="text-align:center; width:5%;">
+                                    @Html.DisplayFor(modelItem => item.Cst_Entrada_PisCofins_INTERNO)
+                                </td>
+                                <td style="width:20%;">
+                                    @foreach (var dado in ViewBag.CstPisCofinsE)
+                                    {
+                                        if (item.Cst_Entrada_PisCofins_INTERNO == dado.codigo)
+                                        {
+                    <span>@dado.descricao</span>}
+
+            }
+
+                                </td>
+
+                            </tr>}
+                                        }
 
                                     </tbody>
                                 </table><!--fim da tabela-->
@@ -189,31 +191,31 @@
 
                         <p class="pr-fontanternativa">
 
-                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount</span>
+                            <span class="pr-fontalternativa">Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - Total de registros: @Model.TotalItemCount</span>
                         </p>
 
                     </div>
 
                     <div style="float:right;" class="p-2 pr-fontalternativa">
                         @Html.PagedListPager(
-                            Model,
-                            page => Url.Action("EdtCliCstEntradaPisCofinsMassa",
-                            new
-                            {
-                                page,
-                                ordenacao = ViewBag.Ordenacao,
-                                filtroCorrente = ViewBag.FiltroCorrente,
-                                filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
-                                filtroCorrenteCest = ViewBag.FiltroCorrenteCest,
-                                numeroLinhas = ViewBag.NumeroLinhas,
-                                filtroNulo = ViewBag.Filtro,
-                                opcao = TempData["opcao"].ToString()
+                                           Model,
+                                           page => Url.Action("EdtCliCstEntradaPisCofinsMassa",
+                                           new
+                                           {
+                                               page,
+                                               ordenacao = ViewBag.Ordenacao,
+                                               filtroCorrente = ViewBag.FiltroCorrente,
+                                               filtroCorrenteNCM = ViewBag.FiltroCorrenteNCM,
+                                               filtroCorrenteCest = ViewBag.FiltroCorrenteCest,
+                                               numeroLinhas = ViewBag.NumeroLinhas,
+                                               filtroNulo = ViewBag.Filtro,
+                                               opcao = TempData["opcao"].ToString()
 
-                            }),
-                            new PagedListRenderOptions()
-                            {
-                                LiElementClasses = new List<string> { "page-item" }
-                            })
+                                           }),
+                                           new PagedListRenderOptions()
+                                           {
+                                               LiElementClasses = new List<string> { "page-item" }
+                                           })
                     </div>
 
                 </div>

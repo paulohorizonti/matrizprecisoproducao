@@ -204,6 +204,9 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("UF_ORIGEM")]
         public string UF_ORIGEM { get; set; }
 
+        [Column("ATIVO")]
+        public sbyte ATIVO { get; set; }
+
         [Column("UF_DESTINO")]
         public string UF_DESTINO { get; set; }
         [Column("DT_ALTERACAO")]

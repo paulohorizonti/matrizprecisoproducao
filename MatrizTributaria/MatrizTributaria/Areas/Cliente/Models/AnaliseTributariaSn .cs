@@ -202,6 +202,9 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("UF_DESTINO")]
         public string UF_DESTINO { get; set; }
 
+        [Column("ATIVO")]
+        public sbyte ATIVO { get; set; }
+
 
         [Column("Cst_Entrada_PisCofins_INTERNO")]
         public int? Cst_Entrada_PisCofins_INTERNO { get; set; }

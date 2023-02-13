@@ -13,9 +13,6 @@ namespace MatrizTributaria.Models
         public int id { get; set; }
 
 
-        //[Column("Estado")]
-        //public string estado { get; set; }
-
         [Column("UF_Origem")]
         public string UF_Origem { get; set; }
 
@@ -31,7 +28,10 @@ namespace MatrizTributaria.Models
         [Column("Fecp")]
         public Nullable<decimal> fecp { get; set; }
 
-       
+        [Column("Categoria")]
+        public Nullable<int> categoria { get; set; }
+
+
         [Column("Cod_Nat_Receita")]
         public Nullable<int> codNatReceita { get; set; }
 
@@ -211,11 +211,27 @@ namespace MatrizTributaria.Models
 
         [Column("Inicio_Vigencia_MVA")]
         [DisplayFormat(DataFormatString = "{MM/dd/yyyy}")]
-        public Nullable<System.DateTime> inicioVigenciaMVA { get; set; }
+        public DateTime? inicioVigenciaMVA { get; set; }
+
 
         [Column("Fim_Vigencia_MVA")]
         [DisplayFormat(DataFormatString = "{MM/dd/yyyy}")]
-        public Nullable<System.DateTime> fimVigenciaMVA { get; set; }
+        public DateTime? fimVigenciaMVA { get; set; }
+
+
+        [Column("DataCad")]
+        [DisplayFormat(DataFormatString = "{MM/dd/yyyy}")]
+        public DateTime? dataCad { get; set; }
+
+
+        [Column("DataAlt")]
+        [DisplayFormat(DataFormatString = "{MM/dd/yyyy}")]
+        public DateTime? dataAlt { get; set; }
+
+        public string DataFormatada
+        {
+            get { return dataAlt?.ToShortDateString(); }
+        }
 
         [Column("Credito_Outorgado")]
         public Nullable<sbyte> creditoOutorgado { get; set; }
@@ -226,29 +242,12 @@ namespace MatrizTributaria.Models
         [Column("Regime_2560")]
         public Nullable<sbyte> regime2560 { get; set; }
 
-        
-
-
-        //public string Data
-        //{
-        //    get { return dataAlt?.ToShortDateString(); }
-        //}
-
-        //public virtual CstPisCofinsEntrada cstPisCofinsE { get; set; }
-
-        //public virtual CstPisCofinsSaida cstPisCofinsS { get; set; }
+        [Column("AuditadoNCM")]
+        public Nullable<sbyte> auditadoPorNCM { get; set; }
 
 
 
-        //public virtual Legislacao fundamentoLegal { get; set; }
 
-        //public virtual CstIcmsGeral CstCompradeAta { get; set; }
 
-        //public virtual NaturezaReceita naturezaReceita { get; set; }
-
-        //public virtual Produto produtos { get; set; }
-        //public virtual SetorProdutos setorProdutos { get; set; }
-
-        
     }
 }

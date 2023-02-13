@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Web.Mvc;
-
+using System.Net.Mail;
 
 namespace MatrizTributaria.Controllers
 {
@@ -77,6 +77,7 @@ namespace MatrizTributaria.Controllers
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
 
             ViewBag.Empresas = db.Empresas.ToList();
+
             return View(listUser.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
            
         }
@@ -114,8 +115,16 @@ namespace MatrizTributaria.Controllers
             model.dataCad = DateTime.Now;
             model.dataAlt = DateTime.Now;
             model.ativo = 1; //ativando o registro no cadastro
-            model.primeiro_acesso = 0; //validar esse requisito
-            model.acesso_empresas = 0; //AINDA INICIA COM NÃO
+            model.primeiro_acesso = 1; //validar esse requisito
+            if(model.idNivel == 5)
+            {
+                model.acesso_empresas = 1; //AINDA INICIA COM NÃO
+            }
+            else
+            {
+                model.acesso_empresas = 0; //AINDA INICIA COM NÃO
+            }
+           
             //ativando o registro no cadastro
             if (ModelState.IsValid)
             {
@@ -156,7 +165,44 @@ namespace MatrizTributaria.Controllers
 
             };
 
-                try{
+                //envio do email
+
+                //SmtpClient smtp = new System.Net.Mail.SmtpClient();
+
+                ////smtp.Host = "smtp.gmail.com";
+                //smtp.Host = "smtpout.secureserver.net";
+                //smtp.Port = 587;
+                //smtp.EnableSsl = true;
+
+                //smtp.UseDefaultCredentials = false;
+                //smtp.Credentials = new System.Net.NetworkCredential("desenvolvimento@precisomtx.com.br", "teste1234");
+
+                //MailMessage mail = new System.Net.Mail.MailMessage();
+                //mail.From = new System.Net.Mail.MailAddress("desenvolvimento@precisomtx.com.br");
+                //if (!string.IsNullOrWhiteSpace(usuario.email.ToLower()))
+                //{
+                //    mail.To.Add(new System.Net.Mail.MailAddress(usuario.email));
+                //}
+                //else
+                //{
+                //    resultado = "Email incorreto ou faltando, favor tentar novamente";
+                //    regSalvos = 0;
+                //    //validar erro de falta de email
+                //    return RedirectToAction("Index", new { param = resultado, qtdSalvos = regSalvos });
+                //}
+                //mail.Subject = "Senha Provisória - PrecisoMtx";
+                //mail.Body = "Segue informações de usuário e senha provisórios:\n ";
+                //mail.Body += "Usuário: " + usuario.email + "\n";
+                //mail.Body += "Senha: " + usuario.senha + "\n";
+                //mail.Body += "Obs.: A senha será alterada no primeiro acesso \n";
+                //mail.Body += "Acesse: " + "http://3.141.167.140/Home/Login" + " para o primeiro Login \n";
+
+
+
+
+                try
+                {
+                    //smtp.Send(mail);//mudou
                     db.Usuarios.Add(usuario);
                     db.SaveChanges();
                     regSalvos++;
@@ -165,9 +211,9 @@ namespace MatrizTributaria.Controllers
 
 
                 }
-                catch (Exception e)
+                catch (SmtpFailedRecipientException ex) //mudou
                 {
-                    string ex = e.ToString();
+                    string e = ex.ToString();
                     regSalvos = 0;
                     resultado = "Não foi possivel salvar o registro!!";
                   

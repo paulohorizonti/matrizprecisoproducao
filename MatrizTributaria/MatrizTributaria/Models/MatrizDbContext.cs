@@ -25,6 +25,10 @@ namespace MatrizTributaria.Models
         public virtual DbSet<Tributacao> Tributacoes { get; set; }
         public virtual DbSet<TributacaoNCM> TributacoesNcm { get; set; }//31032022
 
+        public virtual DbSet<TributacaoNCMView> TributacoesNcmView { get; set; }//31032022
+
+        public virtual DbSet<TributacaoSN> TributacoesSn { get; set; }//31032022
+
         public virtual DbSet<CstIcmsGeral> CstIcmsGerais { get; set; }
         public virtual DbSet<CstPisCofinsEntrada> CstPisCofinsEntradas { get; set; }
         public virtual DbSet<CstPisCofinsSaida> CstPisCofinsSaidas { get; set; }
@@ -33,11 +37,19 @@ namespace MatrizTributaria.Models
 
         public virtual DbSet<TributacaoEmpresa> TributacaoEmpresas { get; set; }
 
+   
         public virtual DbSet<TributacaoGeralView> Tributacao_GeralView { get; set; }
+        public virtual DbSet<TtributacaoGeralViewSN> Tributacao_GeralView_Sn { get; set; }
 
         public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria> Analise_Tributaria { get; set; } //Vitor
         public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributariaSn> Analise_TributariaSn { get; set; } //Paulo
+
+        public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributariaNCM> Analise_TributariaNCM { get; set; } //Paulo
         public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria2> Analise_Tributaria_2 { get; set; } //Paulo
+
+        public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria3> Analise_Tributaria_3 { get; set; } //Paulo
+
+        public virtual DbSet<MatrizTributaria.Areas.Cliente.Models.AnaliseProd> Analise_Prod { get; set; } //Paulo
 
 
     }

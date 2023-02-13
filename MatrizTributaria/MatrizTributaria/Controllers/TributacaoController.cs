@@ -2,6 +2,7 @@
 using MatrizTributaria.Models.ViewModels;
 using PagedList;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,12 +15,19 @@ namespace MatrizTributaria.Controllers
     {
         //Objego context
         readonly MatrizDbContext db = new MatrizDbContext();
-
+        List<Produto> prod;
+        List<TributacaoNCM> tribNCM;
         List<Tributacao> trib;
         List<Tributacao> tributacao = new List<Tributacao>();
         IQueryable<TributacaoGeralView> lstCli;
+        IQueryable<TtributacaoGeralViewSN> lstCliSN;
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
+       
 
+        IQueryable<TributacaoNCMView> tribMTX_NCMView;
+
+        IQueryable<TributacaoNCMView> tribPorUF;
+        IQueryable<TributacaoNCM> tribMTX_NCM;
         //origem e destino
         string ufOrigem = "";
         string ufDestino = "";
@@ -115,6 +123,9 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
+
             //variavel auxiliar
             string resultado = param;
             //Auxilia na conversão para fazer a busca pelo codigo de barras
@@ -295,6 +306,2642 @@ namespace MatrizTributaria.Controllers
 
             //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
             return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+           
+        }
+
+        public ActionResult TributacaoNcm(string origem, string destino, string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
+            string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string procuraCate, string filtroCate, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtraPor, string filtroFiltraPor,
+            string filtroCorrenteAudNCM, string tributacao)
+        {
+            /*Verificar a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+
+            }
+
+
+            //verficia se é simples nacional
+            VerificaTributacao(tributacao); //verificar se a tributação escolhida está ativa
+            ViewBag.Tributacao = TempData["tributacao"].ToString();
+
+            //se for simples nacional direciona para essa action
+            if (ViewBag.Tributacao == "SIMPLES")
+            {
+
+                return RedirectToAction("TributacaoNcmSN", new {tributacao = tributacao, origem = origem, destino = destino });
+            }
+
+
+            //se nao vier nulo é pq houve pesquisa
+            if (procurarPor != null)
+            {
+                TempData["procuraPor"] = procurarPor;
+
+            }
+            else
+            {
+                if(filtroCorrente != null)
+                {
+                    TempData["procuraPor"] = filtroCorrente;
+                }
+            }
+            //se os dois estao nulos e o tempdata tem alguma coisa entao o friltro corrente deve receber tempdat
+            if(procurarPor == null && filtroCorrente == null)
+            {
+                if(TempData["procuraPor"] != null)
+                {
+                    filtroCorrente = TempData["procuraPor"].ToString();
+                }
+               
+            }
+
+          
+
+            //variavel auxiliar
+            string resultado = param;
+
+            //Auxilia na conversão para fazer a busca pelo codigo de barras
+            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
+             ele será atribuido, caso contrario será o valor da variavel procurar por*/
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
+
+            //converte em long caso seja possivel
+            long codBarrasL = 0;
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+                       
+
+            TempData.Keep("procuraPor");
+
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "0";
+
+
+
+            filtraPor = (filtraPor != null) ? filtraPor : "Categoria"; //padrão é por categoria
+
+            if (filtraPor != "Setor")
+            {
+
+                ViewBag.FiltrarPor = "Categoria";
+                procuraSetor = null;
+            }
+            else
+            {
+                ViewBag.FiltrarPor = "Setor";
+                procuraCate = null;
+            }
+
+
+
+
+            if (procuraCate == null || procuraCate == "" || procuraCate == "null")
+            {
+                if (TempData["procuraCAT"] != null)
+                {
+                    procuraCate = TempData["procuraCAT"].ToString();
+                }
+                else
+                {
+                    procuraCate = null;
+                    TempData["procuraCAT"] = null;
+                }
+
+            }
+            else
+            {
+                if (TempData["procuraCAT"] != null)
+                {
+                    if (procuraCate != (TempData["procuraCAT"].ToString()))
+                    {
+                        TempData["procuraCAT"] = procuraCate;
+                    }
+
+
+                }
+                else
+                {
+                    TempData["procuraCAT"] = procuraCate;
+                }
+
+
+
+            }
+
+            //setor
+            procuraSetor = (procuraSetor == "") ? null : procuraSetor;
+            procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
+            procuraSetor = (procuraSetor != null) ? procuraSetor : null;
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 30;
+
+           
+
+
+
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
+
+
+
+
+            ///*Verifica a opção e atribui a uma tempdata para continuar salva*/
+            //TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
+            //opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
+
+
+            //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
+            //TempData.Keep("opcao");
+            TempData.Keep("procuraCAT");
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+
+            auditadosNCM = (auditadosNCM == null) ? filtroCorrenteAudNCM : auditadosNCM; //todos os que não foram auditados
+
+            procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
+
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //View pag para filtros
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
+            ViewBag.FiltroCorrenteAuditado = (auditadosNCM != null) ? auditadosNCM : "0";
+            ViewBag.FiltroCorrenteSetor = procuraSetor;
+
+            if (TempData["procuraCAT"] == null)
+            {
+                ViewBag.FiltroCorrenteCate = procuraCate;
+            }
+            else
+            {
+                ViewBag.FiltroCorrenteCate = TempData["procuraCAT"].ToString();
+            }
+
+            ViewBag.FiltroFiltraPor = filtraPor;
+
+            if (procuraSetor != null)
+            {
+                ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
+            }
+            if (procuraCate != null)
+            {
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+            }
+
+            //criar o temp data da lista ou recupera-lo
+            VerificaTempData();
+
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
+            //Aplica a origem e destino selecionada
+            this.lstCli = this.lstCli.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+
+
+            switch (ViewBag.FiltroCorrenteAuditado)
+            {
+                case "0": //SOMENTE OS NÃO AUDITADOS
+                    this.lstCli = this.lstCli.Where(s => s.AUDITADO_POR_NCM == 0);
+                    break;
+                case "1": //SOMENTE OS AUDITADOS
+                    this.lstCli = this.lstCli.Where(s => s.AUDITADO_POR_NCM == 1);
+                    break;
+                case "2": //TODOS
+                    this.lstCli = this.lstCli.Where(s => s.ID != null);
+                    break;
+            }
+
+
+            //switch (opcao)
+            //{
+            //    case "Com NCM":
+            //        //o parametro filtronulo mostra o filtro informado, caso nao informar nenhum ele sera de acordo com a opcao
+            //        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1"; //COM NCM
+            //        //Switche do filtro
+            //        switch (ViewBag.Filtro)
+            //        {
+            //            case "1":
+            //                this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO != null);
+            //                break;
+            //            case "2":
+            //                this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO == null);
+            //                break;
+            //        }
+            //        break;
+            //    case "Sem NCM":
+            //        ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2"; //SEM NCM
+            //        switch (ViewBag.Filtro)
+            //        {
+            //            case "1":
+            //                this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO != null);
+            //                break;
+            //            case "2":
+            //                this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO == null);
+            //                break;
+            //        }
+            //        break;
+            //}
+
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            //  this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCli = ProcurarPorV(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCli);
+
+            //verificar isso - setor categoria
+            //Busca por setor
+            if (!String.IsNullOrEmpty(procuraSetor))
+            {
+                this.lstCli = this.lstCli.Where(s => s.ID_SETOR.ToString() == procuraSetor);
+
+
+            }
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                this.lstCli = this.lstCli.Where(s => s.ID_CATEGORIA.ToString() == procuraCate);
+
+
+            }
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.lstCli = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
+                    break;
+                case "Produto_asc":
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
+                    break;
+                case "Id_desc":
+                    this.lstCli = this.lstCli.OrderBy(s => s.ID);
+                    break;
+                default:
+                    this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
+                    break;
+
+
+            }
+
+
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList().OrderBy(s => s.descricao).ToList();
+
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.Opcao = "Com aliquota"; //sempre mostrar o campo de busca por aliquota
+
+
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstPisCofins = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.descricao); ; //para montar a descrição da cst na view
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.descricao); ; //para montar a descrição da cst na view
+
+            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            return View(this.lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+           
+        }
+
+
+        //PARA SIMPLES NACIONAL
+        public ActionResult TributacaoNcmSN(string origem, string destino, string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
+          string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string procuraCate, string filtroCate, string filtroCorrenteNCM,
+          string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtraPor, string filtroFiltraPor,
+          string filtroCorrenteAudNCM, string tributacao)
+        {
+            /*Verificar a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+
+            }
+
+
+            //verficia se é simples nacional
+            VerificaTributacao(tributacao); //verificar se a tributação escolhida está ativa
+            ViewBag.Tributacao = TempData["tributacao"].ToString();
+
+            //se for simples nacional direciona para essa action
+            if (ViewBag.Tributacao == "OUTROS")
+            {
+
+                return RedirectToAction("TributacaoNcm");
+            }
+
+
+            //se nao vier nulo é pq houve pesquisa
+            if (procurarPor != null)
+            {
+                TempData["procuraPor"] = procurarPor;
+
+            }
+            else
+            {
+                if (filtroCorrente != null)
+                {
+                    TempData["procuraPor"] = filtroCorrente;
+                }
+            }
+            //se os dois estao nulos e o tempdata tem alguma coisa entao o friltro corrente deve receber tempdat
+            if (procurarPor == null && filtroCorrente == null)
+            {
+                if (TempData["procuraPor"] != null)
+                {
+                    filtroCorrente = TempData["procuraPor"].ToString();
+                }
+
+            }
+
+
+
+            //variavel auxiliar
+            string resultado = param;
+
+            //Auxilia na conversão para fazer a busca pelo codigo de barras
+            /*A variavel codBarras vai receber o parametro de acordo com a ocorrencia, se o filtrocorrente estiver valorado
+             ele será atribuido, caso contrario será o valor da variavel procurar por*/
+            string codBarras = (filtroCorrente != null) ? filtroCorrente : procurarPor;
+
+            //converte em long caso seja possivel
+            long codBarrasL = 0;
+            bool canConvert = long.TryParse(codBarras, out codBarrasL);
+
+
+
+            TempData.Keep("procuraPor");
+
+
+            //verifica se veio parametros
+            procuraCEST = (procuraCEST != null) ? procuraCEST : null;
+            procuraNCM = (procuraNCM != null) ? procuraNCM : null;
+
+            //auditadosNCM = (auditadosNCM != null) ? auditadosNCM : "0";
+
+
+
+            filtraPor = (filtraPor != null) ? filtraPor : "Categoria"; //padrão é por categoria
+
+            if (filtraPor != "Setor")
+            {
+
+                ViewBag.FiltrarPor = "Categoria";
+                procuraSetor = null;
+            }
+            else
+            {
+                ViewBag.FiltrarPor = "Setor";
+                procuraCate = null;
+            }
+
+
+
+
+            if (procuraCate == null || procuraCate == "" || procuraCate == "null")
+            {
+                if (TempData["procuraCAT"] != null)
+                {
+                    procuraCate = TempData["procuraCAT"].ToString();
+                }
+                else
+                {
+                    procuraCate = null;
+                    TempData["procuraCAT"] = null;
+                }
+
+            }
+            else
+            {
+                if (TempData["procuraCAT"] != null)
+                {
+                    if (procuraCate != (TempData["procuraCAT"].ToString()))
+                    {
+                        TempData["procuraCAT"] = procuraCate;
+                    }
+
+
+                }
+                else
+                {
+                    TempData["procuraCAT"] = procuraCate;
+                }
+
+
+
+            }
+
+            //setor
+            procuraSetor = (procuraSetor == "") ? null : procuraSetor;
+            procuraSetor = (procuraSetor == "null") ? null : procuraSetor;
+            procuraSetor = (procuraSetor != null) ? procuraSetor : null;
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 30;
+
+
+
+
+
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
+
+
+
+
+            ///*Verifica a opção e atribui a uma tempdata para continuar salva*/
+            //TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
+            //opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
+
+
+            //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
+            //TempData.Keep("opcao");
+            TempData.Keep("procuraCAT");
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procuraCEST != null) || (procuraNCM != null) || (procuraSetor != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+
+            auditadosNCM = (auditadosNCM == null) ? filtroCorrenteAudNCM : auditadosNCM; //todos os que não foram auditados
+
+            procuraSetor = (procuraSetor == null) ? filtroSetor : procuraSetor;
+
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //View pag para filtros
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
+            ViewBag.FiltroCorrenteAuditado = (auditadosNCM != null) ? auditadosNCM : "0";
+            ViewBag.FiltroCorrenteSetor = procuraSetor;
+            if (TempData["procuraCAT"] == null)
+            {
+                ViewBag.FiltroCorrenteCate = procuraCate;
+            }
+            else
+            {
+                ViewBag.FiltroCorrenteCate = TempData["procuraCAT"].ToString();
+            }
+
+            ViewBag.FiltroFiltraPor = filtraPor;
+
+            if (procuraSetor != null)
+            {
+                ViewBag.FiltroCorrenteSetorInt = int.Parse(procuraSetor);
+            }
+            if (procuraCate != null)
+            {
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+            }
+
+            //verifica carregamento da tabela
+            VerificaTempDataSN();
+
+
+            //origem e destino
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
+            //Aplica a origem e destino selecionada
+            this.lstCliSN = this.lstCliSN.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+
+         
+
+            switch (ViewBag.FiltroCorrenteAuditado)
+            {
+                case "0": //SOMENTE OS NÃO AUDITADOS
+                    this.lstCliSN = this.lstCliSN.Where(s => s.AUDITADO_TRIB_POR_NCM == 0);
+                    break;
+                case "1": //SOMENTE OS AUDITADOS
+                    this.lstCliSN = this.lstCliSN.Where(s => s.AUDITADO_TRIB_POR_NCM == 1);
+                    break;
+                case "2": //TODOS
+                    this.lstCliSN = this.lstCliSN.Where(s => s.ID != null);
+                    break;
+            }
+
+
+           
+            //Action para procurar: passando alguns parametros que são comuns em todas as actions
+            //  this.tribMTX = ProcurarPor(codBarrasL, procurarPor, procuraCEST, procuraNCM, tribMTX);
+            this.lstCliSN = ProcurarPorSN(codBarrasL, procurarPor, procuraCEST, procuraNCM, lstCliSN);
+
+            //verificar isso - setor categoria
+            //Busca por setor
+            if (!String.IsNullOrEmpty(procuraSetor))
+            {
+                this.lstCliSN = this.lstCliSN.Where(s => s.ID_SETOR.ToString() == procuraSetor);
+
+
+            }
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                this.lstCliSN = this.lstCliSN.Where(s => s.ID_CATEGORIA.ToString() == procuraCate);
+
+
+            }
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.lstCliSN = this.lstCliSN.OrderByDescending(s => s.DESCRICAO_PRODUTO);
+                    break;
+                case "Produto_asc":
+                    this.lstCliSN = this.lstCliSN.OrderBy(s => s.DESCRICAO_PRODUTO);
+                    break;
+                case "Id_desc":
+                    this.lstCliSN = this.lstCliSN.OrderBy(s => s.ID);
+                    break;
+                default:
+                    this.lstCliSN = this.lstCliSN.OrderBy(s => s.DESCRICAO_PRODUTO);
+                    break;
+
+
+            }
+
+
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+
+            int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
+            ViewBag.SetorProdutos = db.SetorProdutos.AsNoTracking().ToList().OrderBy(s => s.descricao).ToList();
+
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.Opcao = "Com aliquota"; //sempre mostrar o campo de busca por aliquota
+
+
+
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstPisCofins = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.descricao); ; //para montar a descrição da cst na view
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.descricao); ; //para montar a descrição da cst na view
+
+            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            return View(this.lstCliSN.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
+        }
+
+
+
+
+
+        /*Backup da action de tributacaoComNCM 23122022*/
+
+        //public ActionResult TributacaoComNCM(string origem, string destino, string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
+        //    string procuraCate, string filtroCate, string filtroCorrenteNCM, string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtraPor, string filtroFiltraPor,
+        //    string filtroCorrenteAudNCM)
+        //{
+        //    /*Verificar a sessão*/
+        //    if (Session["usuario"] == null)
+        //    {
+        //        return RedirectToAction("../Home/Login");
+
+        //    }
+
+        //    //se nao vier nulo é pq houve pesquisa
+        //    if (procuraNCM != null)
+        //    {
+        //        TempData["procuraPorNCM"] = procuraNCM;
+
+        //    }
+        //    else
+        //    {
+        //        if (filtroCorrenteNCM != null)
+        //        {
+        //            TempData["procuraPorNCM"] = filtroCorrenteNCM;
+        //        }
+        //    }
+        //    //se os dois estao nulos e o tempdata tem alguma coisa entao o friltro corrente deve receber tempdat
+        //    if (procuraNCM == null && filtroCorrenteNCM == null)
+        //    {
+        //        if (TempData["procuraPorNCM"] != null)
+        //        {
+        //            filtroCorrenteNCM = TempData["procuraPorNCM"].ToString();
+        //        }
+
+        //    }
+
+        //    //variavel auxiliar
+        //    string resultado = param;
+
+        //    TempData.Keep("procuraPorNCM");
+
+
+        //    filtraPor = (filtraPor != null) ? filtraPor : "Categoria"; //padrão é por categoria
+
+
+
+        //    ViewBag.FiltrarPor = "Categoria";
+
+
+        //    if (procuraCate == null || procuraCate == "" || procuraCate == "null")
+        //    {
+        //        if (TempData["procuraCAT"] != null)
+        //        {
+        //            procuraCate = TempData["procuraCAT"].ToString();
+        //        }
+        //        else
+        //        {
+        //            procuraCate = null;
+        //            TempData["procuraCAT"] = null;
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        if (TempData["procuraCAT"] != null)
+        //        {
+        //            if (procuraCate != (TempData["procuraCAT"].ToString()))
+        //            {
+        //                TempData["procuraCAT"] = procuraCate;
+        //            }
+
+
+        //        }
+        //        else
+        //        {
+        //            TempData["procuraCAT"] = procuraCate;
+        //        }
+
+
+
+        //    }
+
+
+
+        //    //numero de linhas
+        //    ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 30;
+
+
+        //    ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+        //    ViewBag.ParametroProduto = ordenacao;
+
+
+        //    ///*Verifica a opção e atribui a uma tempdata para continuar salva*/
+        //    //TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
+        //    //opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
+
+
+        //    //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
+        //    //TempData.Keep("opcao");
+        //    TempData.Keep("procuraCAT");
+
+        //    //atribui 1 a pagina caso os parametros nao sejam nulos
+        //    page = (procuraCEST != null) || (procuraNCM != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+        //    //atrbui filtro corrente caso alguma procura esteja nulla
+
+        //    procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+        //    procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+
+        //    auditadosNCM = (auditadosNCM == null) ? filtroCorrenteAudNCM : auditadosNCM; //todos os que não foram auditados
+
+
+        //    procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+        //    //View pag para filtros
+
+        //    ViewBag.FiltroCorrenteNCM = procuraNCM;
+        //    ViewBag.FiltroCorrenteCEST = procuraCEST;
+        //    ViewBag.FiltroCorrenteAuditado = (auditadosNCM != null) ? auditadosNCM : "0";
+
+
+        //    if (TempData["procuraCAT"] == null)
+        //    {
+        //        ViewBag.FiltroCorrenteCate = procuraCate;
+        //    }
+        //    else
+        //    {
+        //        ViewBag.FiltroCorrenteCate = TempData["procuraCAT"].ToString();
+        //    }
+
+        //    ViewBag.FiltroFiltraPor = filtraPor;
+
+
+        //    if (procuraCate != null)
+        //    {
+        //        ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+        //    }
+
+        //    //criar o temp data da lista ou recupera-lo
+        //    VerificaTempDataNCM();
+
+
+        //    //montar select estado origem e destino
+        //    ViewBag.EstadosOrigem = db.Estados;
+        //    ViewBag.EstadosDestinos = db.Estados;
+
+
+
+        //    //verifica estados origem e destino
+        //    VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+        //    //aplica estado origem e destino
+        //    ViewBag.UfOrigem = this.ufOrigem;
+        //    ViewBag.UfDestino = this.ufDestino;
+
+
+        //    //Aplica a origem e destino selecionada
+        //    this.tribMTX_NCM = this.tribMTX_NCM.Where(s => s.UF_Origem == this.ufOrigem && s.UF_Destino == this.ufDestino);
+
+        //    switch (ViewBag.FiltroCorrenteAuditado)
+        //    {
+        //        case "0": //SOMENTE OS NÃO AUDITADOS
+        //            this.tribMTX_NCM = this.tribMTX_NCM.Where(s => s.auditadoPorNCM == 0);
+        //            break;
+        //        case "1": //SOMENTE OS AUDITADOS
+        //            this.tribMTX_NCM = this.tribMTX_NCM.Where(s => s.auditadoPorNCM == 1);
+        //            break;
+        //        case "2": //TODOS
+        //            this.tribMTX_NCM = this.tribMTX_NCM.Where(s => s.id != 0);
+        //            break;
+        //    }
+
+        //    this.tribMTX_NCM = ProcurarPorNCM_CEST(procuraCEST, procuraNCM, tribMTX_NCM);
+
+        //    //verificar isso - setor categoria
+
+        //    //Busca por categoria
+        //    if (!String.IsNullOrEmpty(procuraCate))
+        //    {
+        //        this.tribMTX_NCM = this.tribMTX_NCM.Where(s => s.ID_CATEGORIA.ToString() == procuraCate);
+
+
+        //    }
+        //    switch (ordenacao)
+        //    {
+        //        case "Produto_desc":
+        //            this.tribMTX_NCM = this.lstCli.OrderByDescending(s => s.DESCRICAO_PRODUTO);
+        //            break;
+        //        case "Produto_asc":
+        //            this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
+        //            break;
+        //        case "Id_desc":
+        //            this.lstCli = this.lstCli.OrderBy(s => s.ID);
+        //            break;
+        //        default:
+        //            this.lstCli = this.lstCli.OrderBy(s => s.DESCRICAO_PRODUTO);
+        //            break;
+
+
+        //    }
+
+
+        //    //montar a pagina
+        //    int tamanhoPagina = 0;
+
+        //    //Ternario para tamanho da pagina
+        //    tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+        //    int numeroPagina = (page ?? 1);
+        //    //Mensagens de retorno
+        //    ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+        //    ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+        //    ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
+
+
+        //    return null;
+        //}
+
+
+        public ActionResult TributacaoComNCM(string origem, string destino, string opcao, string param, string ordenacao, string qtdSalvos, string qtdNSalvos, string procuraNCM, string procuraCEST,
+            string procurarPor, string filtroCorrente, string procuraSetor, string filtroSetor, string procuraCate, string filtroCate, string filtroCorrenteNCM,
+            string filtroCorrenteCEST, int? page, int? numeroLinhas, string filtroNulo, string auditadosNCM, string filtraPor, string filtroFiltraPor,
+            string filtroCorrenteAudNCM, string tributacao)
+        {
+            /*Verificar a sessão*/
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+
+            }
+            ViewBag.TituloView = "TributacaoComNCM";
+            //verficia se é simples nacional
+            VerificaTributacao(tributacao); //verificar se a tributação escolhida está ativa
+            ViewBag.Tributacao = TempData["tributacao"].ToString();
+
+
+
+            //se nao vier nulo é pq houve pesquisa
+            if (procurarPor != null)
+            {
+                TempData["procuraPor"] = procurarPor;
+
+            }
+            else
+            {
+                if (filtroCorrente != null)
+                {
+                    TempData["procuraPor"] = filtroCorrente;
+                }
+            }
+            //se os dois estao nulos e o tempdata tem alguma coisa entao o friltro corrente deve receber tempdat
+            if (procurarPor == null && filtroCorrente == null)
+            {
+                if (TempData["procuraPor"] != null)
+                {
+                    filtroCorrente = TempData["procuraPor"].ToString();
+                }
+
+            }
+
+
+            //se nao vier nulo é pq houve pesquisa
+            if (procuraNCM != null)
+            {
+                TempData["procuraPorNCM"] = procuraNCM;
+
+            }
+            else
+            {
+                if (filtroCorrenteNCM != null)
+                {
+                    TempData["procuraPorNCM"] = filtroCorrenteNCM;
+                }
+            }
+            //se os dois estao nulos e o tempdata tem alguma coisa entao o friltro corrente deve receber tempdat
+            if (procuraNCM == null && filtroCorrenteNCM == null)
+            {
+                if (TempData["procuraPorNCM"] != null)
+                {
+                    filtroCorrenteNCM = TempData["procuraPorNCM"].ToString();
+                }
+
+            }
+
+            //variavel auxiliar
+            string resultado = param;
+
+            TempData.Keep("procuraPorNCM");
+
+
+            filtraPor = (filtraPor != null) ? filtraPor : "Categoria"; //padrão é por categoria
+
+           
+
+              ViewBag.FiltrarPor = "Categoria";
+           
+
+            if (procuraCate == null || procuraCate == "" || procuraCate == "null")
+            {
+                if (TempData["procuraCAT"] != null)
+                {
+                    procuraCate = TempData["procuraCAT"].ToString();
+                }
+                else
+                {
+                    procuraCate = null;
+                    TempData["procuraCAT"] = null;
+                }
+
+            }
+            else
+            {
+                if (TempData["procuraCAT"] != null)
+                {
+                    if (procuraCate != (TempData["procuraCAT"].ToString()))
+                    {
+                        TempData["procuraCAT"] = procuraCate;
+                    }
+
+
+                }
+                else
+                {
+                    TempData["procuraCAT"] = procuraCate;
+                }
+
+
+
+            }
+
+           
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 30;
+
+
+            ordenacao = String.IsNullOrEmpty(ordenacao) ? "Produto_asc" : ordenacao; //Se nao vier nula a ordenacao aplicar por produto decrescente
+            ViewBag.ParametroProduto = ordenacao;
+
+
+            ///*Verifica a opção e atribui a uma tempdata para continuar salva*/
+            //TempData["opcao"] = opcao ?? TempData["opcao"]; //se opção != null
+            //opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;
+
+
+            //persiste tempdata entre as requisições ate que opcao seja mudada na chamada pelo grafico
+            //TempData.Keep("opcao");
+            TempData.Keep("procuraCAT");
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procuraCEST != null) || (procuraNCM != null) || (procuraCate != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+            //atrbui filtro corrente caso alguma procura esteja nulla
+           
+            procuraNCM = (procuraNCM == null) ? filtroCorrenteNCM : procuraNCM;
+            procuraCEST = (procuraCEST == null) ? filtroCorrenteCEST : procuraCEST;
+
+            auditadosNCM = (auditadosNCM == null) ? filtroCorrenteAudNCM : auditadosNCM; //todos os que não foram auditados
+
+            
+            procuraCate = (procuraCate == null) ? filtroCate : procuraCate;
+
+            //View pag para filtros
+          
+            ViewBag.FiltroCorrenteNCM = procuraNCM;
+            ViewBag.FiltroCorrenteCEST = procuraCEST;
+            ViewBag.FiltroCorrenteAuditado = (auditadosNCM != null) ? auditadosNCM : "0";
+           
+
+            if (TempData["procuraCAT"] == null)
+            {
+                ViewBag.FiltroCorrenteCate = procuraCate;
+            }
+            else
+            {
+                ViewBag.FiltroCorrenteCate = TempData["procuraCAT"].ToString();
+            }
+
+            ViewBag.FiltroFiltraPor = filtraPor;
+
+           
+            if (procuraCate != null)
+            {
+                ViewBag.FiltroCorrenteCateInt = int.Parse(procuraCate);
+            }
+
+            //criar o temp data da lista ou recupera-lo
+            VerificaTempDataNCM(ViewBag.Tributacao);
+
+
+            //montar select estado origem e destino: FAZER DINSTINC
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
+
+            //ViewBag.EstadosOriDistinc = db.TributacoesNcmView.Where(c => c.ID > 0).Select(c => c.UF_ORIGEM).GroupBy(c => c.UF_ORIGEM);
+            //ViewBag.EstadosDestDistinc = this.tribMTX_NCMView.Where(c => c.ID > 0).Select(c => new { c.UF_DESTINO }).GroupBy(c => c.UF_DESTINO);
+
+            //ViewBag.EstadosOriDistinc = this.tribMTX_NCMView.Where(c => c.ID > 0).Select(c => new { c.UF_ORIGEM }).GroupBy(c => c.UF_ORIGEM);
+            //ViewBag.EstadosDestDistinc = this.tribMTX_NCMView.Where(c => c.ID > 0).Select(c => new { c.UF_DESTINO }).GroupBy(c => c.UF_DESTINO);
+            //ViewBag.EstadosOriDistinc = new SelectList(this.tribMTX_NCMView.Where(c => c.ID > 0).Select(c => new {c.UF_ORIGEM}).GroupBy(c=>c.UF_ORIGEM));
+            //ViewBag.EstadosDestDistinc = new SelectList(this.tribMTX_NCMView.Where(c => c.ID > 0).Select(c => new { c.UF_DESTINO }).GroupBy(c => c.UF_DESTINO));
+
+            //ViewBag.companies = new SelectList(oc_db.company.Where(c => c.status == "ACTIVE")
+            //                                    .Select(c => new { c.name_1 })
+            //                                    .Distinct()
+            //                                    .OrderBy(c => c.name_1)
+            //                       , "name_1", "name_1");
+
+
+
+            //verifica estados origem e destino
+            VerificaOriDest(origem, destino); //verifica a UF de origem e o destino 
+
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+
+            //Aplica a origem e destino selecionada
+            this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+
+            switch (ViewBag.FiltroCorrenteAuditado)
+            {
+                case "0": //SOMENTE OS NÃO AUDITADOS
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.AUDITADONCM == 0);
+                    break;
+                case "1": //SOMENTE OS AUDITADOS
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.AUDITADONCM == 1);
+                    break;
+                case "2": //TODOS
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.ID != 0);
+                    break;
+            }
+
+            this.tribMTX_NCMView = ProcurarPorNCM_CEST_PARA_NCM(procuraCEST, procuraNCM, tribMTX_NCMView);
+
+            //verificar isso - setor categoria
+           
+            //Busca por categoria
+            if (!String.IsNullOrEmpty(procuraCate))
+            {
+                this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.ID_CATEGORIA.ToString() == procuraCate);
+
+
+            }
+            switch (ordenacao)
+            {
+                case "Produto_desc":
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.OrderByDescending(s => s.NCM);
+                    break;
+                case "Produto_asc":
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.OrderBy(s => s.NCM);
+                    break;
+                case "Id_desc":
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.OrderBy(s => s.ID);
+                    break;
+                default:
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.OrderBy(s => s.NCM);
+                    break;
+
+
+            }
+
+
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+            int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+            ViewBag.RegNSalvos = (qtdNSalvos != null) ? qtdNSalvos : "";
+
+
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.codigo).ToList();
+            ViewBag.Opcao = "Com aliquota"; //sempre mostrar o campo de busca por aliquota
+
+
+
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao).ToList();
+            ViewBag.CstPisCofins = db.CstPisCofinsSaidas.AsNoTracking().OrderBy(s => s.descricao); ; //para montar a descrição da cst na view
+            ViewBag.CstGeral = db.CstIcmsGerais.AsNoTracking().OrderBy(s => s.descricao); ; //para montar a descrição da cst na view
+
+            //VerificaTributacoesPorUF(tributacao);
+
+            /*Verificar se ha tributação por uf*/
+            //ArrayList origemUF = new ArrayList();
+            //ArrayList destinoUF = new ArrayList();
+
+            //origemUF.Add("AC");
+            //origemUF.Add("AL");
+            //origemUF.Add("AP");
+            //origemUF.Add("AM");
+            //origemUF.Add("BA");
+            //origemUF.Add("CE");
+            //origemUF.Add("DF");
+            //origemUF.Add("ES");
+            //origemUF.Add("GO");
+            //origemUF.Add("MA");
+            //origemUF.Add("MT");
+            //origemUF.Add("MS");
+            //origemUF.Add("MG");
+            //origemUF.Add("PA");
+            //origemUF.Add("PB");
+            //origemUF.Add("PR");
+            //origemUF.Add("PE");
+            //origemUF.Add("PI");
+            //origemUF.Add("RJ");
+            //origemUF.Add("RN");
+            //origemUF.Add("RS");
+            //origemUF.Add("RO");
+            //origemUF.Add("RR");
+            //origemUF.Add("SC");
+            //origemUF.Add("SP");
+            //origemUF.Add("SE");
+            //origemUF.Add("TO");
+
+            //destinoUF.Add("AC");
+            //destinoUF.Add("AL");
+            //destinoUF.Add("AP");
+            //destinoUF.Add("AM");
+            //destinoUF.Add("BA");
+            //destinoUF.Add("CE");
+            //destinoUF.Add("DF");
+            //destinoUF.Add("ES");
+            //destinoUF.Add("GO");
+            //destinoUF.Add("MA");
+            //destinoUF.Add("MT");
+            //destinoUF.Add("MS");
+            //destinoUF.Add("MG");
+            //destinoUF.Add("PA");
+            //destinoUF.Add("PB");
+            //destinoUF.Add("PR");
+            //destinoUF.Add("PE");
+            //destinoUF.Add("PI");
+            //destinoUF.Add("RJ");
+            //destinoUF.Add("RN");
+            //destinoUF.Add("RS");
+            //destinoUF.Add("RO");
+            //destinoUF.Add("RR");
+            //destinoUF.Add("SC");
+            //destinoUF.Add("SP");
+            //destinoUF.Add("SE");
+            //destinoUF.Add("TO");
+
+            //int[,] ori_destino = new int[27, 27];
+
+            //for (int i = 0; i <= 26; i++)
+            //{
+            //    for(int a=0; a<=26; a++)
+            //    {
+            //        string origA = origemUF[i].ToString();
+            //        string destA = destinoUF[a].ToString();
+            //        ori_destino[i, a] = db.TributacoesNcm.Count(b => b.UF_Origem.Equals(origA) && b.UF_Destino.Equals(destA));
+            //        if(ori_destino[i,a] > 0)
+            //        {
+            //            ViewData["ori"+origA+"Dest"+destA] = ori_destino[i, a];
+                       
+            //        }
+            //       //ViewBag.valor = this.tribPorUF.Count(b => b.UF_ORIGEM.Equals(origemUF[i].ToString()) && b.UF_DESTINO.Equals(destinoUF[a].ToString()));
+            //    }
+            //}
+
+
+
+
+            //ViewBag.CstGeral = db.CstIcmsGerais.ToList(); //para montar a descrição da cst na view
+            return View(this.tribMTX_NCMView.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+
+
+           
+        }
+
+        [HttpGet]
+        public ActionResult TributacaoNcmEditMassaModal(string array)
+        {
+
+            string[] dadosDoCadastro = array.Split(',');
+
+            dadosDoCadastro = dadosDoCadastro.Where(item => item != "").ToArray(); //retira o 4o. elemento
+
+            prod = new List<Produto>();
+
+            for (int i = 0; i < dadosDoCadastro.Length; i++)
+            {
+                int aux = Int32.Parse(dadosDoCadastro[i]);
+                prod.Add(db.Produtos.Find(aux));
+
+
+            }
+            ViewBag.Produtos = prod;
+
+            /*ViewBagDiferente para pins cofins*/
+            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
+            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
+
+            /*ViewBags com os dados necessários para preencher as dropbox na view*/
+            ViewBag.Setor = db.SetorProdutos;
+            ViewBag.NatReceita = db.NaturezaReceitas;
+
+            ViewBag.FundLegal = db.Legislacoes;
+            ViewBag.CstIcms = db.CstIcmsGerais;
+            ViewBag.FundLegalPC = db.Legislacoes;
+            ViewBag.FundLegalSaida = db.Legislacoes;
+            ViewBag.FundLegalEndrada = db.Legislacoes;
+            ViewBag.Legislacao = db.Legislacoes;
+            ViewBag.CstGeral = db.CstIcmsGerais;
+
+
+            return View();
+        }
+        
+        //PEGAR OS DADOS DA SELEÇÃO COM NCM
+        [HttpGet]
+        public ActionResult TributacaoNcmEditMassaModalComNCM(string array)
+        {
+            string[] dadosDoCadastro = array.Split(',');
+
+            dadosDoCadastro = dadosDoCadastro.Where(item => item != "").ToArray(); //retira o 4o. elemento
+
+            tribNCM = new List<TributacaoNCM>();
+
+           
+
+            for (int i = 0; i < dadosDoCadastro.Length; i++)
+            {
+                int aux = Int32.Parse(dadosDoCadastro[i]);
+                tribNCM.Add(db.TributacoesNcm.Find(aux));
+
+
+            }
+            ViewBag.TribNCM = tribNCM;
+
+            /*ViewBagDiferente para pins cofins*/
+            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
+            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
+
+            /*ViewBags com os dados necessários para preencher as dropbox na view*/
+            ViewBag.Setor = db.SetorProdutos;
+            ViewBag.NatReceita = db.NaturezaReceitas;
+
+            ViewBag.FundLegal = db.Legislacoes;
+            ViewBag.CstIcms = db.CstIcmsGerais;
+            ViewBag.FundLegalPC = db.Legislacoes;
+            ViewBag.FundLegalSaida = db.Legislacoes;
+            ViewBag.FundLegalEndrada = db.Legislacoes;
+            ViewBag.Legislacao = db.Legislacoes;
+            ViewBag.CstGeral = db.CstIcmsGerais;
+            ViewBag.CategoriaProdutos = db.CategoriaProdutos.AsNoTracking().OrderBy(s => s.descricao);
+
+            return View();
+        }
+        [HttpGet]
+        public ActionResult TributacaoNcmEditMassaModalEditMassaModalPost(string strDados, string ncm, string cest)
+        {
+                            
+            //variaveis de auxilio
+            int regSalvos = 0;
+            int regNSalvos = 0;
+
+            string retorno = "";
+
+
+            //varivael para recebe o novo ncm
+            string ncmMudar = "";
+            string cestMudar = "";
+            bool mudarCest = false;
+
+            //separar a String em um array
+            string[] idProdutos = strDados.Split(',');
+
+            //retira o elemento vazio do array
+            idProdutos = idProdutos.Where(item => item != "").ToArray();
+
+            ncmMudar = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
+            cestMudar = cest != "" ? cest.Trim() : null;
+            mudarCest = cest == "NULL" ? true : mudarCest;
+
+            cestMudar = cestMudar == "NULL" ? null : cestMudar; //se for nullo ele atribui null;
+            if (ncmMudar != null)
+            {
+                if (ncmMudar != "")
+                {
+                    ncmMudar = ncmMudar.Replace(".", ""); //tirar os pontos da string
+                }
+
+            }
+
+
+            //objeto produto
+            Produto prod = new Produto();
+
+            //percorrer o array, atribuir o valor de ncm e salvar o objeto
+            for (int i = 0; i < idProdutos.Length; i++)
+            {
+                int idProd = Int32.Parse(idProdutos[i]);
+                prod = db.Produtos.Find(idProd);
+                if (prod != null)
+                {
+
+                    if (cestMudar != null)
+                    {
+                        if (cestMudar != "")
+                        {
+                            prod.cest = cestMudar;
+                        }
+
+                    }
+                    else
+                    {
+                        if(mudarCest)
+                        {
+                            prod.cest = cestMudar;
+                        }
+                    }
+                    //verificar se veio nulo
+                    if (ncmMudar != null)
+                    {
+                        if (ncmMudar != "")
+                        {
+                            if (prod.ncm != ncmMudar)
+                            {
+                                prod.ncm = ncmMudar;
+                            }
+                        }
+
+                    }
+
+                    prod.auditadoNCM = 1;
+                    prod.dataAlt = DateTime.Now; //data da alteração
+                    try
+                    {
+                        db.SaveChanges();
+                        regSalvos++;
+                    }
+                    catch (Exception e)
+                    {
+                        string ex = e.ToString();
+                        regNSalvos++;
+                    }
+
+                }
+
+            }
+            if (regSalvos > 0)
+            {
+                retorno = "Registro Salvo com Sucesso!!";
+                TempData["tributacaoMTX"] = null;//cria a temp data e popula
+                TempData["tributacaoMTXSN"] = null;
+
+                TempData["tributacaoMTX_NCMView"] = null;
+                TempData.Keep("tributacaoMTX"); //persiste
+                TempData.Keep("tributacaoMTXSN"); //persiste
+            }
+            else
+            {
+                retorno = "Nenhum item do  registro alterado";
+                //Redirecionar para registros
+                return RedirectToAction("TributacaoNcm", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+            }
+
+            //Redirecionar para registros
+            return RedirectToAction("TributacaoNcm", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+        }
+
+
+        public ActionResult TributacaoNcmEditMassaModalEditMassaModalComNCMPost(string strDados, string ncm, string cest)
+        {
+
+            //variaveis de auxilio
+            int regSalvos = 0;
+            int regNSalvos = 0;
+
+            string retorno = "";
+
+
+            //varivael para recebe o novo ncm
+            string ncmMudar = "";
+            string cestMudar = "";
+            bool mudarCest = false;
+
+            //separar a String em um array
+            string[] idTribNCM = strDados.Split(',');
+
+            //retira o elemento vazio do array
+            idTribNCM = idTribNCM.Where(item => item != "").ToArray();
+
+            ncmMudar = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
+            cestMudar = cest != "" ? cest.Trim() : null;
+            mudarCest = cest == "NULL" ? true : mudarCest;
+
+            cestMudar = cestMudar == "NULL" ? null : cestMudar; //se for nullo ele atribui null;
+            if (ncmMudar != null)
+            {
+                if (ncmMudar != "")
+                {
+                    ncmMudar = ncmMudar.Replace(".", ""); //tirar os pontos da string
+                }
+
+            }
+
+
+            //objeto produto
+            TributacaoNCM tNCM = new TributacaoNCM();
+
+            //percorrer o array, atribuir o valor de ncm e salvar o objeto
+            for (int i = 0; i < idTribNCM.Length; i++)
+            {
+                int idTNCM = Int32.Parse(idTribNCM[i]);
+                tNCM = db.TributacoesNcm.Find(idTNCM);
+                if (tNCM != null)
+                {
+
+                    if (cestMudar != null)
+                    {
+                        if (cestMudar != "")
+                        {
+                            tNCM.cest = cestMudar;
+                        }
+
+                    }
+                    else
+                    {
+                        if (mudarCest)
+                        {
+                            tNCM.cest = cestMudar;
+                        }
+                    }
+                    //verificar se veio nulo
+                    if (ncmMudar != null)
+                    {
+                        if (ncmMudar != "")
+                        {
+                            if (tNCM.ncm != ncmMudar)
+                            {
+                                tNCM.ncm = ncmMudar;
+                            }
+                        }
+
+                    }
+
+                    //tNCM.auditadoPorNCM = 1;
+                    tNCM.dataAlt = DateTime.Now; //data da alteração
+                    try
+                    {
+                        db.SaveChanges();
+                        regSalvos++;
+                    }
+                    catch (Exception e)
+                    {
+                        string ex = e.ToString();
+                        regNSalvos++;
+                    }
+
+                }
+
+            }
+            if (regSalvos > 0)
+            {
+                retorno = "Registro Salvo com Sucesso!!";
+                TempData["tributacaoMTX"] = null;//cria a temp data e popula
+                TempData["tributacaoMTXSN"] = null;
+                TempData["analise_NCM"] = null;
+                TempData["tributacaoMTX_NCMView"] = null;
+                TempData.Keep("tributacaoMTX"); //persiste
+                TempData.Keep("tributacaoMTXSN"); //persiste
+            }
+            else
+            {
+                retorno = "Nenhum item do  registro alterado";
+                //Redirecionar para registros
+                return RedirectToAction("TributacaoComNCM", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+            }
+
+            //Redirecionar para registros
+            return RedirectToAction("TributacaoComNCM", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+        }
+
+
+
+        [HttpGet]
+        public ActionResult TributacaoNcmEditMassaNCMModal(string id, string ncm, string titulo)
+        {
+            //receber os dados do ncm para alterar
+            string ncmAlterar = ncm;
+            ViewBag.NCM = ncmAlterar;
+            ViewBag.TituloPagina = titulo;
+            /*ViewBagDiferente para pins cofins*/
+            ViewBag.CstEntradaPisCofins = db.CstPisCofinsEntradas;
+            ViewBag.CstSaidaPisCofins = db.CstPisCofinsSaidas;
+
+            /*ViewBags com os dados necessários para preencher as dropbox na view*/
+            ViewBag.Setor = db.SetorProdutos;
+            ViewBag.NatReceita = db.NaturezaReceitas;
+
+            ViewBag.FundLegal = db.Legislacoes;
+            ViewBag.CstIcms = db.CstIcmsGerais;
+            ViewBag.FundLegalPC = db.Legislacoes;
+            ViewBag.FundLegalSaida = db.Legislacoes;
+            ViewBag.FundLegalEndrada = db.Legislacoes;
+            ViewBag.Legislacao = db.Legislacoes;
+            ViewBag.CstGeral = db.CstIcmsGerais;
+
+           
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados.ToList();
+            ViewBag.EstadosDestinos = db.Estados.ToList();
+
+            VerificaOriDest();
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = TempData["UfOrigem"].ToString();
+            ViewBag.UfDestino = TempData["UfDestino"].ToString();
+            return View();
+        }
+
+
+
+        //TributacaoNcmEditMassaNCMModalPost
+        //proximo
+        [HttpGet]
+        public ActionResult TributacaoNcmEditMassaNCMModalPost(string ncm, string fecp, string CodReceita, string CstSaidaPisCofins,  string aliqSaidaCofins,
+            string aliqSaidaPis, string IdFundamentoLegal, string CstVendaVarejoConsFinal, string alVeVarCF, string alVeVarCFSt, string rBcVeVarCF, string rBcSTVeVarCF,
+            string CstVendaVarejoCont, string alVeVarCont, string alVeVarContSt, string rBcVeVarCont, string rBcSTVeVarCont, string CstVendaAtaCont,
+            string aliqIcmsVendaAtaCont, string aliqIcmsSTVendaAtaCont, string redBaseCalcIcmsVendaAtaCont, string redBaseCalcIcmsSTVendaAtaCont,
+            string CstVendaAtaSimpNacional, string alVSN, string alVSNSt, string rBcVSN, string rBcSTVSN, string IdFundLegalSaidaICMS, string cest, string ufOrigem,
+            string ufDestino, string titulo)
+        {
+
+            //  decimal aliqSaidaPisDecimal = 0; //variavel tipada
+            /*Neste momento o sistema verifica se é possivel converter o que o usuario digitou
+             em um valor long, se for significa que ele digitou um codigo de barras e a variavel do tipo bool recebe TRUE*/
+            //bool canConvert = decimal.TryParse(aliqSaidaPis, out aliqSaidaPisDecimal);
+
+            // aliqSaidaPisDecimal =  System.Convert.ToDecimal(aliqSaidaPis);
+
+            // //Passar de , para ponto na string
+            // fecp = fecp.Replace(",", "."); //tirar os pontos da string
+            //// aliqSaidaPis = aliqSaidaPis.Replace(",", "."); 
+            // aliqSaidaCofins = aliqSaidaCofins.Replace(",", ".");
+
+            // alVeVarCF = alVeVarCF.Replace(",", ".");
+            // rBcVeVarCF = rBcVeVarCF.Replace(",", ".");
+            // rBcSTVeVarCF = rBcSTVeVarCF.Replace(",", ".");
+            // alVeVarCont = alVeVarCont.Replace(",", ".");
+            // alVeVarContSt = alVeVarContSt.Replace(",", ".");
+            // rBcVeVarCont = rBcVeVarCont.Replace(",", ".");
+            // rBcSTVeVarCont = rBcSTVeVarCont.Replace(",", ".");
+            // aliqIcmsVendaAtaCont = aliqIcmsVendaAtaCont.Replace(",", ".");
+
+            // aliqIcmsSTVendaAtaCont = aliqIcmsSTVendaAtaCont.Replace(",", ".");
+            // redBaseCalcIcmsVendaAtaCont = redBaseCalcIcmsVendaAtaCont.Replace(",", ".");
+            // redBaseCalcIcmsSTVendaAtaCont = redBaseCalcIcmsSTVendaAtaCont.Replace(",", ".");
+            // alVSN = alVSN.Replace(",", ".");
+            // alVSNSt = alVSNSt.Replace(",", ".");
+            // rBcVSN = rBcVSN.Replace(",", ".");
+
+            // rBcSTVSN = rBcSTVSN.Replace(",", ".");
+
+            VerificaOriDest();
+            ufOrigem = this.ufOrigem;
+            ufDestino = this.ufDestino;
+
+            int regSalvos = 0;
+            int regNSalvos = 0;
+            int regParaSalvar = 0;
+
+            string retorno = "";
+            //buscar os cst pela descrição
+            int? cstSaidaPisCofins = (CstSaidaPisCofins == "") ? null : (int?)(long)(from a in db.CstPisCofinsSaidas where a.descricao == CstSaidaPisCofins select a.codigo).FirstOrDefault();
+            int? cstVendaVarejoConsFinal = (CstVendaVarejoConsFinal == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaVarejoConsFinal select a.codigo).FirstOrDefault();
+            int? cstVendaVarejoCont = (CstVendaVarejoCont == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaVarejoCont select a.codigo).FirstOrDefault();
+            int? cstVendaAtaCont = (CstVendaAtaCont == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaAtaCont select a.codigo).FirstOrDefault();
+            int? cstVendaAtaSimpNacional = (CstVendaAtaSimpNacional == "") ? null : (int?)(long)(from a in db.CstIcmsGerais where a.descricao == CstVendaAtaSimpNacional select a.codigo).FirstOrDefault();
+            //natureza da reeita
+            int? codNatRec = 0;
+
+            if (CodReceita == "")
+            {
+                codNatRec = null;
+            }
+            else
+            {
+                codNatRec = int.Parse(CodReceita);
+            }
+
+            //Fundamento Legal cofins
+            int? fundLegalCofins = 0;
+            if (IdFundamentoLegal == "")
+            {
+                fundLegalCofins = null;
+            }
+            else
+            {
+                fundLegalCofins = int.Parse(IdFundamentoLegal);
+            }
+
+            //fundamento legal icms saida
+            int? fundLegalIcmsSaida = 0;
+            if (IdFundLegalSaidaICMS == "")
+            {
+                fundLegalIcmsSaida = null;
+            }
+            else
+            {
+                fundLegalIcmsSaida = int.Parse(IdFundLegalSaidaICMS);
+            }
+
+
+
+            //Aa aliquotas podem estar com a virgula, na hora de salvar o sistema passa para decimal
+            string buscaNCM = ncm != "" ? ncm.Trim() : null; //ternario para remover eventuais espaços
+
+            buscaNCM = buscaNCM.Replace(".", ""); //tirar os pontos da string
+
+            if(TempData["tributacao"].ToString() == "SIMPLES")
+            {
+                VerificaTempDataSN();
+
+                /*Buscar na tabema de tributacao por NCM passando que é simples nacional*/
+                VerificaTempDataNCM(TempData["tributacao"].ToString()); //retona a lista de tributacao por NCM
+
+
+                //buscar os NCM dentro dessa lista
+                if(!String.IsNullOrEmpty(buscaNCM))
+                {
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.NCM == buscaNCM && s.UF_ORIGEM == ufDestino && s.UF_DESTINO == ufDestino);
+                }
+                //Foreach para buscar os itens na tabela de NCM a serem alterados
+                TributacaoNCM trib_NCM = new TributacaoNCM(); //objeto que será alterado
+
+                List<TributacaoNCMView> trb_NMC_List = this.tribMTX_NCMView.ToList(); //lista com os itens selecionados
+
+                for(int i = 0; i < trb_NMC_List.Count(); i++)
+                {
+                    int? idTRIB = (trb_NMC_List[i].ID); //PEGA O ID DO REGISTRO NA TABELA A SER ALTERADA
+                    trib_NCM = db.TributacoesNcm.Find(idTRIB); //busca na tabela esse ID
+
+                    //uforigem e destino
+                    if(ufOrigem != "null" && ufDestino != "null")
+                    {
+                        trib_NCM.UF_Origem = ufOrigem;
+                        trib_NCM.UF_Destino = ufDestino;
+
+                        //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
+                        if (cstSaidaPisCofins != null)
+                        {
+                            trib_NCM.cstSaidaPisCofins = cstSaidaPisCofins;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (cstVendaVarejoConsFinal != null)
+                        {
+                            trib_NCM.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+
+                        if (cstVendaVarejoCont != null)
+                        {
+
+                            trib_NCM.cstVendaVarejoCont = cstVendaVarejoCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaCont != null)
+                        {
+                            trib_NCM.cstVendaAtaCont = cstVendaAtaCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaSimpNacional != null)
+                        {
+                            trib_NCM.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fecp != "")
+                        {
+                            trib_NCM.fecp = Decimal.Parse(fecp, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (codNatRec != null)
+                        {
+                            trib_NCM.codNatReceita = codNatRec;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (!aliqSaidaPis.Equals(""))
+                        {
+                            trib_NCM.aliqSaidaPis = Decimal.Parse(aliqSaidaPis, System.Globalization.CultureInfo.InvariantCulture);
+                            // tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqSaidaCofins != "")
+                        {
+                            trib_NCM.aliqSaidaCofins = Decimal.Parse(aliqSaidaCofins, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fundLegalCofins != null)
+                        {
+                            trib_NCM.idFundamentoLegal = (fundLegalCofins);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCF != "")
+                        {
+                            trib_NCM.aliqIcmsVendaVarejoConsFinal = Decimal.Parse(alVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCFSt != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaVarejoConsFinal = Decimal.Parse(alVeVarCFSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVeVarCF != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsVendaVarejoConsFinal = Decimal.Parse(rBcVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVeVarCF != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsSTVendaVarejoConsFinal = Decimal.Parse(rBcSTVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCont != "")
+                        {
+                            trib_NCM.aliqIcmsVendaVarejoCont = Decimal.Parse(alVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarContSt != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaVarejo_Cont = Decimal.Parse(alVeVarContSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcVeVarCont != "")
+                        {
+                            trib_NCM.redBaseCalcVendaVarejoCont = Decimal.Parse(rBcVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcSTVeVarCont != "")
+                        {
+                            trib_NCM.RedBaseCalcSTVendaVarejo_Cont = Decimal.Parse(rBcSTVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsVendaAtaCont != "")
+                        {
+                            trib_NCM.aliqIcmsVendaAtaCont = Decimal.Parse(aliqIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsSTVendaAtaCont != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaAtaCont = Decimal.Parse(aliqIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (redBaseCalcIcmsVendaAtaCont != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsVendaAtaCont = Decimal.Parse(redBaseCalcIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (redBaseCalcIcmsSTVendaAtaCont != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsSTVendaAtaCont = Decimal.Parse(redBaseCalcIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVSN != "")
+                        {
+                            trib_NCM.aliqIcmsVendaAtaSimpNacional = Decimal.Parse(alVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (alVSNSt != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaAtaSimpNacional = Decimal.Parse(alVSNSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVSN != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsVendaAtaSimpNacional = Decimal.Parse(rBcVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVSN != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsSTVendaAtaSimpNacional = Decimal.Parse(rBcSTVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (fundLegalIcmsSaida != null)
+                        {
+                            trib_NCM.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cest != "")
+                        {
+                            trib_NCM.cest = cest;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+
+                        if (regParaSalvar != 0)
+                        {
+                            trib_NCM.auditadoPorNCM = 1; //marca como auditado
+                            //trib_NCM.produtos.auditadoNCM = 1; //marca o produto como auditado tb
+                            trib_NCM.dataAlt = DateTime.Now; //data da alteração
+                            try
+                            {
+
+                                db.SaveChanges();
+                                regSalvos++;
+                                retorno = "Registro Salvo com Sucesso!!";
+                            }
+                            catch (Exception e)
+                            {
+                                string exC = e.ToString();
+                                regNSalvos++;
+                            }
+                        }
+                        else
+                        {
+                            retorno = "Nenhum item do  registro alterado";
+                           //Redirecionar para registros
+                           //NAO PODE RETORNAR POIS AINDA PRECISA PASSAR PELA OUTRA TABELA
+                           // return RedirectToAction("TributacaoNcmSN", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                        }
+
+
+
+                    }
+                } //fim do for
+
+                //busca o nmc pelo sua origem e destino
+                if (!String.IsNullOrEmpty(buscaNCM))
+                {
+                    //busca na view de tributacção geral sn que é a tabela de tributacao de produto em sn
+                    this.lstCliSN = this.lstCliSN.Where(s => s.NCM_PRODUTO == buscaNCM && s.UF_ORIGEM == ufOrigem && s.UF_DESTINO == ufDestino);
+
+                }
+
+                //foreach para atualizar os produtos
+                //retira o elemento vazio do array
+                //objeto produto
+                TributacaoSN tributaCaoSN = new TributacaoSN();
+
+                List<TtributacaoGeralViewSN> tribMtsSN = this.lstCliSN.ToList(); //lista de todos selecionados pelo ncm
+
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < tribMtsSN.Count(); i++)
+                {
+                    int? idTrib = (tribMtsSN[i].ID); //pega o id do registro da tributação a ser alterada
+                    tributaCaoSN = db.TributacoesSn.Find(idTrib); //busca a tributação pelo seu id
+
+
+                    if (ufOrigem != "null" && ufDestino != "null")
+                    {
+                        tributaCaoSN.UF_Origem = ufOrigem;
+                        tributaCaoSN.UF_Destino = ufDestino;
+
+                        //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
+                        if (cstSaidaPisCofins != null)
+                        {
+                            tributaCaoSN.cstSaidaPisCofins = cstSaidaPisCofins;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (cstVendaVarejoConsFinal != null)
+                        {
+                            tributaCaoSN.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaVarejoCont != null)
+                        {
+
+                            tributaCaoSN.cstVendaVarejoCont = cstVendaVarejoCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaCont != null)
+                        {
+                            tributaCaoSN.cstVendaAtaCont = cstVendaAtaCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaSimpNacional != null)
+                        {
+                            tributaCaoSN.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fecp != "")
+                        {
+                            tributaCaoSN.fecp = Decimal.Parse(fecp, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (codNatRec != null)
+                        {
+                            tributaCaoSN.codNatReceita = codNatRec;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (!aliqSaidaPis.Equals(""))
+                        {
+                            tributaCaoSN.aliqSaidaPis = Decimal.Parse(aliqSaidaPis, System.Globalization.CultureInfo.InvariantCulture);
+                            // tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqSaidaCofins != "")
+                        {
+                            tributaCaoSN.aliqSaidaCofins = Decimal.Parse(aliqSaidaCofins, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fundLegalCofins != null)
+                        {
+                            tributaCaoSN.idFundamentoLegal = (fundLegalCofins);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCF != "")
+                        {
+                            tributaCaoSN.aliqIcmsVendaVarejoConsFinal = Decimal.Parse(alVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCFSt != "")
+                        {
+                            tributaCaoSN.aliqIcmsSTVendaVarejoConsFinal = Decimal.Parse(alVeVarCFSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVeVarCF != "")
+                        {
+                            tributaCaoSN.redBaseCalcIcmsVendaVarejoConsFinal = Decimal.Parse(rBcVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVeVarCF != "")
+                        {
+                            tributaCaoSN.redBaseCalcIcmsSTVendaVarejoConsFinal = Decimal.Parse(rBcSTVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCont != "")
+                        {
+                            tributaCaoSN.aliqIcmsVendaVarejoCont = Decimal.Parse(alVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarContSt != "")
+                        {
+                            tributaCaoSN.aliqIcmsSTVendaVarejo_Cont = Decimal.Parse(alVeVarContSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcVeVarCont != "")
+                        {
+                            tributaCaoSN.redBaseCalcVendaVarejoCont = Decimal.Parse(rBcVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcSTVeVarCont != "")
+                        {
+                            tributaCaoSN.RedBaseCalcSTVendaVarejo_Cont = Decimal.Parse(rBcSTVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsVendaAtaCont != "")
+                        {
+                            tributaCaoSN.aliqIcmsVendaAtaCont = Decimal.Parse(aliqIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsSTVendaAtaCont != "")
+                        {
+                            tributaCaoSN.aliqIcmsSTVendaAtaCont = Decimal.Parse(aliqIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (redBaseCalcIcmsVendaAtaCont != "")
+                        {
+                            tributaCaoSN.redBaseCalcIcmsVendaAtaCont = Decimal.Parse(redBaseCalcIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (redBaseCalcIcmsSTVendaAtaCont != "")
+                        {
+                            tributaCaoSN.redBaseCalcIcmsSTVendaAtaCont = Decimal.Parse(redBaseCalcIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVSN != "")
+                        {
+                            tributaCaoSN.aliqIcmsVendaAtaSimpNacional = Decimal.Parse(alVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (alVSNSt != "")
+                        {
+                            tributaCaoSN.aliqIcmsSTVendaAtaSimpNacional = Decimal.Parse(alVSNSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVSN != "")
+                        {
+                            tributaCaoSN.redBaseCalcIcmsVendaAtaSimpNacional = Decimal.Parse(rBcVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVSN != "")
+                        {
+                            tributaCaoSN.redBaseCalcIcmsSTVendaAtaSimpNacional = Decimal.Parse(rBcSTVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (fundLegalIcmsSaida != null)
+                        {
+                            tributaCaoSN.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+
+                    }
+
+
+                    
+                    if (cest != "")
+                    {
+                        tributaCaoSN.produtos.cest = cest;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+
+                    if (regParaSalvar != 0)
+                    {
+                        tributaCaoSN.auditadoPorNCM = 1; //marca como auditado
+                        tributaCaoSN.produtos.auditadoNCM = 1; //marca o produto como auditado tb
+                        tributaCaoSN.dataAlt = DateTime.Now; //data da alteração
+                        try
+                        {
+                            db.SaveChanges();
+                            regSalvos++;
+                            retorno = "Registro Salvo com Sucesso!!";
+                        }
+                        catch (Exception e)
+                        {
+                            string exC = e.ToString();
+                            regNSalvos++;
+                        }
+                    }
+                    else
+                    {
+                        retorno = "Nenhum item do  registro alterado";
+                        //verifica qual pagina acessou para mudar os dados
+                        if (titulo != "TributacaoNcmSN")
+                        {
+                            return RedirectToAction("TributacaoComNCM", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                        }
+                        else
+                        {
+                            //Redirecionar para registros
+                            return RedirectToAction("TributacaoNcmSN", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                        }
+                       
+                    }
+
+
+
+                }
+                //zera a tempdata caso tenha salvo algum registros
+                if (regSalvos > 0)
+                {
+                   // TempData["tributacaoMTX"] = null;//cria a temp data e popula
+                    TempData["tributacaoMTXSN"] = null;//cria a temp data e popula
+                    TempData["tributacaoMTX_NCMView"] = null;
+                   // TempData.Keep("tributacaoMTX"); //persiste
+                    TempData.Keep("tributacaoMTXSN"); //persiste
+                    TempData.Keep("tributacaoMTX_NCMView"); //persiste
+                }
+
+
+
+                //Redirecionar para registros
+                // return RedirectToAction("TributacaoNcmSN", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                //Redirecionar para registros
+                if (titulo != "TributacaoNcmSN")
+                {
+                    return RedirectToAction("TributacaoComNCM", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                }
+                else
+                {
+                    //Redirecionar para registros
+                    return RedirectToAction("TributacaoNcmSN", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                }
+
+
+            }//se nao for simples
+            else
+            {
+                VerificaTempData();
+
+
+                /*Para tabela de Tributacao por ncm*/
+                /*Buscar na tabema de tributacao por NCM passando que é simples nacional*/
+                VerificaTempDataNCM(TempData["tributacao"].ToString()); //retona a lista de tributacao por NCM
+
+
+                //buscar os NCM dentro dessa lista
+                if (!String.IsNullOrEmpty(buscaNCM))
+                {
+                    this.tribMTX_NCMView = this.tribMTX_NCMView.Where(s => s.NCM == buscaNCM && s.UF_ORIGEM == ufDestino && s.UF_DESTINO == ufDestino);
+                }
+                //Foreach para buscar os itens na tabela de NCM a serem alterados
+                TributacaoNCM trib_NCM = new TributacaoNCM(); //objeto que será alterado
+
+                List<TributacaoNCMView> trb_NMC_List = this.tribMTX_NCMView.ToList(); //lista com os itens selecionados
+
+                for (int i = 0; i < trb_NMC_List.Count(); i++)
+                {
+                    int? idTRIB = (trb_NMC_List[i].ID); //PEGA O ID DO REGISTRO NA TABELA A SER ALTERADA
+                    trib_NCM = db.TributacoesNcm.Find(idTRIB); //busca na tabela esse ID
+
+                    //uforigem e destino
+                    if (ufOrigem != "null" && ufDestino != "null")
+                    {
+                        trib_NCM.UF_Origem = ufOrigem;
+                        trib_NCM.UF_Destino = ufDestino;
+
+                        //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
+                        if (cstSaidaPisCofins != null)
+                        {
+                            trib_NCM.cstSaidaPisCofins = cstSaidaPisCofins;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (cstVendaVarejoConsFinal != null)
+                        {
+                            trib_NCM.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+
+                        if (cstVendaVarejoCont != null)
+                        {
+
+                            trib_NCM.cstVendaVarejoCont = cstVendaVarejoCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaCont != null)
+                        {
+                            trib_NCM.cstVendaAtaCont = cstVendaAtaCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaSimpNacional != null)
+                        {
+                            trib_NCM.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fecp != "")
+                        {
+                            trib_NCM.fecp = Decimal.Parse(fecp, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (codNatRec != null)
+                        {
+                            trib_NCM.codNatReceita = codNatRec;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (!aliqSaidaPis.Equals(""))
+                        {
+                            trib_NCM.aliqSaidaPis = Decimal.Parse(aliqSaidaPis, System.Globalization.CultureInfo.InvariantCulture);
+                            // tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqSaidaCofins != "")
+                        {
+                            trib_NCM.aliqSaidaCofins = Decimal.Parse(aliqSaidaCofins, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fundLegalCofins != null)
+                        {
+                            trib_NCM.idFundamentoLegal = (fundLegalCofins);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCF != "")
+                        {
+                            trib_NCM.aliqIcmsVendaVarejoConsFinal = Decimal.Parse(alVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCFSt != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaVarejoConsFinal = Decimal.Parse(alVeVarCFSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVeVarCF != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsVendaVarejoConsFinal = Decimal.Parse(rBcVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVeVarCF != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsSTVendaVarejoConsFinal = Decimal.Parse(rBcSTVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCont != "")
+                        {
+                            trib_NCM.aliqIcmsVendaVarejoCont = Decimal.Parse(alVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarContSt != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaVarejo_Cont = Decimal.Parse(alVeVarContSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcVeVarCont != "")
+                        {
+                            trib_NCM.redBaseCalcVendaVarejoCont = Decimal.Parse(rBcVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcSTVeVarCont != "")
+                        {
+                            trib_NCM.RedBaseCalcSTVendaVarejo_Cont = Decimal.Parse(rBcSTVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsVendaAtaCont != "")
+                        {
+                            trib_NCM.aliqIcmsVendaAtaCont = Decimal.Parse(aliqIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsSTVendaAtaCont != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaAtaCont = Decimal.Parse(aliqIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (redBaseCalcIcmsVendaAtaCont != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsVendaAtaCont = Decimal.Parse(redBaseCalcIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (redBaseCalcIcmsSTVendaAtaCont != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsSTVendaAtaCont = Decimal.Parse(redBaseCalcIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVSN != "")
+                        {
+                            trib_NCM.aliqIcmsVendaAtaSimpNacional = Decimal.Parse(alVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (alVSNSt != "")
+                        {
+                            trib_NCM.aliqIcmsSTVendaAtaSimpNacional = Decimal.Parse(alVSNSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVSN != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsVendaAtaSimpNacional = Decimal.Parse(rBcVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVSN != "")
+                        {
+                            trib_NCM.redBaseCalcIcmsSTVendaAtaSimpNacional = Decimal.Parse(rBcSTVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (fundLegalIcmsSaida != null)
+                        {
+                            trib_NCM.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cest != "")
+                        {
+                            trib_NCM.cest = cest;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+
+                        if (regParaSalvar != 0)
+                        {
+                            trib_NCM.auditadoPorNCM = 1; //marca como auditado
+                            //trib_NCM.produtos.auditadoNCM = 1; //marca o produto como auditado tb
+                            trib_NCM.dataAlt = DateTime.Now; //data da alteração
+                            try
+                            {
+
+                                db.SaveChanges();
+                                regSalvos++;
+                                retorno = "Registro Salvo com Sucesso!!";
+                            }
+                            catch (Exception e)
+                            {
+                                string exC = e.ToString();
+                                regNSalvos++;
+                            }
+                        }
+                        else
+                        {
+                            retorno = "Nenhum item do  registro alterado";
+                            //Redirecionar para registros
+                            //NAO PODE RETORNAR POIS AINDA PRECISA PASSAR PELA OUTRA TABELA
+                            // return RedirectToAction("TributacaoNcmSN", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                        }
+
+
+
+                    }
+                } //fim do for
+
+
+
+                //busca o nmc pelo sua origem e destino
+                if (!String.IsNullOrEmpty(buscaNCM))
+                {
+                    this.lstCli = this.lstCli.Where(s => s.NCM_PRODUTO == buscaNCM && s.UF_ORIGEM == ufOrigem && s.UF_DESTINO == ufDestino);
+
+                }
+                //foreach para atualizar os produtos
+                //retira o elemento vazio do array
+                //objeto produto
+                Tributacao tributaCao = new Tributacao();
+
+                List<TributacaoGeralView> tribMts = this.lstCli.ToList();
+
+                //percorrer o array, atribuir o valor de ncm e salvar o objeto
+                for (int i = 0; i < tribMts.Count(); i++)
+                {
+                    int? idTrib = (tribMts[i].ID); //pega o id do registro da tributação a ser alterada
+                    tributaCao = db.Tributacoes.Find(idTrib); //busca a tributação pelo seu id
+
+
+                    if (ufOrigem != "null" && ufDestino != "null")
+                    {
+                        tributaCao.UF_Origem = ufOrigem;
+                        tributaCao.UF_Destino = ufDestino;
+
+                        //verifica se os parametros vieram preenchidos, caso true ele atribui ao objeto e conta um registro para salvar
+                        if (cstSaidaPisCofins != null)
+                        {
+                            tributaCao.cstSaidaPisCofins = cstSaidaPisCofins;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (cstVendaVarejoConsFinal != null)
+                        {
+                            tributaCao.cstVendaVarejoConsFinal = cstVendaVarejoConsFinal;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaVarejoCont != null)
+                        {
+
+                            tributaCao.cstVendaVarejoCont = cstVendaVarejoCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaCont != null)
+                        {
+                            tributaCao.cstVendaAtaCont = cstVendaAtaCont;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (cstVendaAtaSimpNacional != null)
+                        {
+                            tributaCao.cstVendaAtaSimpNacional = cstVendaAtaSimpNacional;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fecp != "")
+                        {
+                            tributaCao.fecp = Decimal.Parse(fecp, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (codNatRec != null)
+                        {
+                            tributaCao.codNatReceita = codNatRec;
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (!aliqSaidaPis.Equals(""))
+                        {
+                            tributaCao.aliqSaidaPis = Decimal.Parse(aliqSaidaPis, System.Globalization.CultureInfo.InvariantCulture);
+                            // tributaCao.aliqSaidaPis = decimal.Parse(aliqSaidaPis);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqSaidaCofins != "")
+                        {
+                            tributaCao.aliqSaidaCofins = Decimal.Parse(aliqSaidaCofins, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (fundLegalCofins != null)
+                        {
+                            tributaCao.idFundamentoLegal = (fundLegalCofins);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCF != "")
+                        {
+                            tributaCao.aliqIcmsVendaVarejoConsFinal = Decimal.Parse(alVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCFSt != "")
+                        {
+                            tributaCao.aliqIcmsSTVendaVarejoConsFinal = Decimal.Parse(alVeVarCFSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVeVarCF != "")
+                        {
+                            tributaCao.redBaseCalcIcmsVendaVarejoConsFinal = Decimal.Parse(rBcVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVeVarCF != "")
+                        {
+                            tributaCao.redBaseCalcIcmsSTVendaVarejoConsFinal = Decimal.Parse(rBcSTVeVarCF, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarCont != "")
+                        {
+                            tributaCao.aliqIcmsVendaVarejoCont = Decimal.Parse(alVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVeVarContSt != "")
+                        {
+                            tributaCao.aliqIcmsSTVendaVarejo_Cont = Decimal.Parse(alVeVarContSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcVeVarCont != "")
+                        {
+                            tributaCao.redBaseCalcVendaVarejoCont = Decimal.Parse(rBcVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (rBcSTVeVarCont != "")
+                        {
+                            tributaCao.RedBaseCalcSTVendaVarejo_Cont = Decimal.Parse(rBcSTVeVarCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsVendaAtaCont != "")
+                        {
+                            tributaCao.aliqIcmsVendaAtaCont = Decimal.Parse(aliqIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (aliqIcmsSTVendaAtaCont != "")
+                        {
+                            tributaCao.aliqIcmsSTVendaAtaCont = Decimal.Parse(aliqIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (redBaseCalcIcmsVendaAtaCont != "")
+                        {
+                            tributaCao.redBaseCalcIcmsVendaAtaCont = Decimal.Parse(redBaseCalcIcmsVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (redBaseCalcIcmsSTVendaAtaCont != "")
+                        {
+                            tributaCao.redBaseCalcIcmsSTVendaAtaCont = Decimal.Parse(redBaseCalcIcmsSTVendaAtaCont, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+                        if (alVSN != "")
+                        {
+                            tributaCao.aliqIcmsVendaAtaSimpNacional = Decimal.Parse(alVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (alVSNSt != "")
+                        {
+                            tributaCao.aliqIcmsSTVendaAtaSimpNacional = Decimal.Parse(alVSNSt, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcVSN != "")
+                        {
+                            tributaCao.redBaseCalcIcmsVendaAtaSimpNacional = Decimal.Parse(rBcVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (rBcSTVSN != "")
+                        {
+                            tributaCao.redBaseCalcIcmsSTVendaAtaSimpNacional = Decimal.Parse(rBcSTVSN, System.Globalization.CultureInfo.InvariantCulture);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+                        if (fundLegalIcmsSaida != null)
+                        {
+                            tributaCao.idFundLegalSaidaICMS = (fundLegalIcmsSaida);
+                            regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                        }
+
+
+                    }
+
+
+                    //if(ufOrigem != "")
+                    //{
+                    //    if(ufDestino != "")
+                    //    {
+
+                    //    }
+                    //}
+
+
+                    if (cest != "")
+                    {
+                        tributaCao.produtos.cest = cest;
+                        regParaSalvar++; //variavel auxiliar - conta os registros que poerão ser salvos
+                    }
+
+
+                    if (regParaSalvar != 0)
+                    {
+                        tributaCao.auditadoPorNCM = 1; //marca como auditado
+                        tributaCao.produtos.auditadoNCM = 1; //marca o produto como auditado tb
+                        tributaCao.dataAlt = DateTime.Now; //data da alteração
+                        try
+                        {
+                            db.SaveChanges();
+                            regSalvos++;
+                            retorno = "Registro Salvo com Sucesso!!";
+                        }
+                        catch (Exception e)
+                        {
+                            string exC = e.ToString();
+                            regNSalvos++;
+                        }
+                    }
+                    else
+                    {
+                        //retorno = "Nenhum item do  registro alterado";
+                        ////Redirecionar para registros
+                        //return RedirectToAction("TributacaoNcm", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+
+
+                        retorno = "Nenhum item do  registro alterado";
+                        //verifica qual pagina acessou para mudar os dados
+                        if (titulo != "TributacaoNcm")
+                        {
+                            return RedirectToAction("TributacaoComNCM", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                        }
+                        else
+                        {
+                            //Redirecionar para registros
+                            return RedirectToAction("TributacaoNcm", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                        }
+                    }
+
+
+
+                } //fim do for
+                  //zera a tempdata caso tenha salvo algum registros
+                if (regSalvos > 0)
+                {
+                   
+                    TempData["tributacaoMTX"] = null;//cria a temp data e popula
+                  //  TempData["tributacaoMTXSN"] = null;//cria a temp data e popula
+                    TempData["tributacaoMTX_NCMView"] = null;
+                    TempData.Keep("tributacaoMTX"); //persiste
+                   // TempData.Keep("tributacaoMTXSN"); //persiste
+                    TempData.Keep("tributacaoMTX_NCMView"); //persiste
+
+                }
+
+                //Redirecionar para registros
+                if (titulo != "TributacaoNcm")
+                {
+                    return RedirectToAction("TributacaoComNCM", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                }
+                else
+                {
+                    //Redirecionar para registros
+                    return RedirectToAction("TributacaoNcm", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+                }
+                // return RedirectToAction("TributacaoNcm", new { param = retorno, qtdSalvos = regSalvos, qtdNSalvos = regNSalvos });
+
+
+            }
+
+            return null;
            
         }
 
@@ -780,11 +3427,28 @@ namespace MatrizTributaria.Controllers
             return View(tributacao);
         }
 
+
+        //[HttpPost]
+        //public ActionResult EditPost(string estado, string idSetor, string fecp, string codNatReceita, string aliqEntPis, string aliqSaidaPis, string aliqEntCofins, string aliqSaidaCofins, string idFundamentoLegal, string aliqIcmsVendaAtaCont,
+        //    string redBaseCalcIcmsVendaAtaCont, string redBaseCalcIcmsSTVendaAtaCont, string aliqIcmsVendaAtaSimpNacional, string aliqIcmsSTVendaAtaSimpNacional, string redBaseCalcIcmsVendaAtaSimpNacional,
+        //    string redBaseCalcIcmsSTVendaAtaSimpNacional , string aliqIcmsVendaVarejoCont, string aliqIcmsSTVendaAtaCont , string aliqIcmsSTVendaVarejo_Cont, string redBaseCalcVendaVarejoCont, string RedBaseCalcSTVendaVarejo_Cont , string aliqIcmsVendaVarejoConsFinal,
+        //    string aliqIcmsSTVendaVarejoConsFinal , string redBaseCalcIcmsVendaVarejoConsFinal, string redBaseCalcIcmsSTVendaVarejoConsFinal , string idFundLegalSaidaICMS , string aliqIcmsCompDeInd , string aliqIcmsSTCompDeInd , string redBaseCalcIcmsCompraDeInd ,
+        //    string redBaseCalcIcmsSTCompraDeInd , string aliqIcmsNFE, string redBaseCalcIcmsCompraDeAta, string redBaseCalcIcmsSTCompraDeAta, string aliqIcmsCompradeAta , string  aliqIcmsSTCompraDeAta, string aliqIcmsNfeAta , string aliqIcmsCompradeSimpNacional,
+        //    string aliqIcmsSTCompradeSimpNacional , string redBaseCalcIcmsCompradeSimpNacional, string redBaseCalcIcmsSTCompradeSimpNacional, string aliqIcmsNfeSN , string idFundLelgalEntradaICMS , string regime2560 , string tipoMVA , string valorMVAInd , string inicioVigenciaMVA ,
+        //    string valorMVAAtacado , string fimVigenciaMVA , string creditoOutorgado , string dataAlt, string cstEntradaPisCofins, string cstSaidaPisCofins, string cstVendaAtaCont, string cstVendaAtaSimpNacional,
+        //    string cstVendaVarejoCont, string cstVendaVarejoConsFinal, string cstCompraDeInd, string cstdaNfedaIndFORN, string cstCompradeAta, string cstdaNfedeAtaFORn, string cstCompradeSimpNacional,
+        //    string CsosntdaNfedoSnFOR) 
+        //{
+
+
+        //    return null;
+        //}
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id, estado, idProduto, idSetor, fecp, codNatReceita, aliqEntPis, aliqSaidaPis, aliqEntCofins, aliqSaidaCofins, idFundamentoLegal, aliqIcmsVendaAtaCont," +
             "aliqIcmsSTVendaAtaCont, redBaseCalcIcmsVendaAtaCont, redBaseCalcIcmsSTVendaAtaCont, aliqIcmsVendaAtaSimpNacional ,aliqIcmsSTVendaAtaSimpNacional ,redBaseCalcIcmsVendaAtaSimpNacional ," +
-            "redBaseCalcIcmsSTVendaAtaSimpNacional ,aliqIcmsVendaVarejoCont ,aliqIcmsSTVendaAtaCont ,aliqIcmsSTVendaVarejo_Cont, redBaseCalcVendaVarejoCont ,RedBaseCalcSTVendaVarejo_Cont ,aliqIcmsVendaVarejoConsFinal ," +
+            "redBaseCalcIcmsSTVendaAtaSimpNacional ,aliqIcmsVendaVarejoCont ,aliqIcmsSTVendaVarejo_Cont, redBaseCalcVendaVarejoCont ,RedBaseCalcSTVendaVarejo_Cont ,aliqIcmsVendaVarejoConsFinal ," +
             "aliqIcmsSTVendaVarejoConsFinal ,redBaseCalcIcmsVendaVarejoConsFinal ,redBaseCalcIcmsSTVendaVarejoConsFinal ,idFundLegalSaidaICMS ,aliqIcmsCompDeInd ,aliqIcmsSTCompDeInd ,redBaseCalcIcmsCompraDeInd ," +
             "redBaseCalcIcmsSTCompraDeInd ,aliqIcmsNFE ,redBaseCalcIcmsCompraDeAta ,redBaseCalcIcmsSTCompraDeAta ,aliqIcmsCompradeAta ,aliqIcmsSTCompraDeAta ,aliqIcmsNfeAta ,aliqIcmsCompradeSimpNacional ," +
             "aliqIcmsSTCompradeSimpNacional ,redBaseCalcIcmsCompradeSimpNacional ,redBaseCalcIcmsSTCompradeSimpNacional ,aliqIcmsNfeSN ,idFundLelgalEntradaICMS ,regime2560 ,tipoMVA ,valorMVAInd ,inicioVigenciaMVA ," +
@@ -792,7 +3456,108 @@ namespace MatrizTributaria.Controllers
             string cstVendaVarejoCont, string cstVendaVarejoConsFinal, string cstCompraDeInd, string cstdaNfedaIndFORN, string cstCompradeAta, string cstdaNfedeAtaFORn, string cstCompradeSimpNacional,
             string CsosntdaNfedoSnFOR, Tributacao model)
         {
-           
+
+            //como chega
+            string fecpString      = model.fecp.ToString();
+            string aliqEntPis_S    = model.aliqEntPis.ToString();
+            string aliqSaidaPis_S  = model.aliqSaidaPis.ToString();
+            string aliqEntCofins_S = model.aliqEntCofins.ToString();
+
+            string aliqSaidaCofins_S = model.aliqSaidaCofins.ToString();
+            string aliqIcmsVendaAtaCont_S = model.aliqIcmsVendaAtaCont.ToString();
+            string aliqIcmsSTVendaAtaCont_S = model.aliqIcmsSTVendaAtaCont.ToString();
+            string redBaseCalcIcmsVendaAtaCont_S = model.redBaseCalcIcmsVendaAtaCont.ToString();
+            string redBaseCalcIcmsSTVendaAtaCont_S = model.redBaseCalcIcmsSTVendaAtaCont.ToString();
+            string aliqIcmsVendaAtaSimpNacional_S = model.aliqIcmsVendaAtaSimpNacional.ToString();
+            string aliqIcmsSTVendaAtaSimpNacional_S = model.aliqIcmsSTVendaAtaSimpNacional.ToString();
+            string redBaseCalcIcmsVendaAtaSimpNacional_S = model.redBaseCalcIcmsVendaAtaSimpNacional.ToString();
+            string redBaseCalcIcmsSTVendaAtaSimpNacional_S = model.redBaseCalcIcmsSTVendaAtaSimpNacional.ToString();
+            string aliqIcmsVendaVarejoCont_S = model.aliqIcmsVendaVarejoCont.ToString();
+            string aliqIcmsSTVendaVarejo_Cont_S = model.aliqIcmsSTVendaVarejo_Cont.ToString();
+            string redBaseCalcVendaVarejoCont_S = model.redBaseCalcVendaVarejoCont.ToString();
+            string RedBaseCalcSTVendaVarejo_Cont_S = model.RedBaseCalcSTVendaVarejo_Cont.ToString();
+            string aliqIcmsVendaVarejoConsFinal_S = model.aliqIcmsVendaVarejoConsFinal.ToString();
+            string aliqIcmsSTVendaVarejoConsFinal_S = model.aliqIcmsSTVendaVarejoConsFinal.ToString();
+            string redBaseCalcIcmsVendaVarejoConsFinal_S = model.redBaseCalcIcmsVendaVarejoConsFinal.ToString();
+            string redBaseCalcIcmsSTVendaVarejoConsFinal_S = model.redBaseCalcIcmsSTVendaVarejoConsFinal.ToString();
+
+            string aliqIcmsCompDeInd_S = model.aliqIcmsCompDeInd.ToString();
+            string aliqIcmsSTCompDeInd_S = model.aliqIcmsSTCompDeInd.ToString();
+            string redBaseCalcIcmsCompraDeInd_S = model.redBaseCalcIcmsCompraDeInd.ToString();
+            string redBaseCalcIcmsSTCompraDeInd_S = model.redBaseCalcIcmsSTCompraDeInd.ToString();
+            string aliqIcmsNFE_S = model.aliqIcmsNFE.ToString();
+            string redBaseCalcIcmsCompraDeAta_S = model.redBaseCalcIcmsCompraDeAta.ToString();
+            string redBaseCalcIcmsSTCompraDeAta_S = model.redBaseCalcIcmsSTCompraDeAta.ToString();
+            string aliqIcmsCompradeAta_S = model.aliqIcmsCompradeAta.ToString();
+            string aliqIcmsSTCompraDeAta_S = model.aliqIcmsSTCompraDeAta.ToString();
+            string aliqIcmsNfeAta_S = model.aliqIcmsNfeAta.ToString();
+
+            string aliqIcmsCompradeSimpNacional_S = model.aliqIcmsCompradeSimpNacional.ToString();
+            string aliqIcmsSTCompradeSimpNacional_S = model.aliqIcmsSTCompradeSimpNacional.ToString();
+
+            string redBaseCalcIcmsCompradeSimpNacional_S = model.redBaseCalcIcmsCompradeSimpNacional.ToString();
+            string redBaseCalcIcmsSTCompradeSimpNacional_S = model.redBaseCalcIcmsSTCompradeSimpNacional.ToString();
+            string aliqIcmsNfeSN_S = model.aliqIcmsNfeSN.ToString();
+
+            string valorMVAAtacado_S = model.valorMVAAtacado.ToString();
+            string valorMVAInd_S = model.valorMVAInd.ToString();
+            
+
+
+
+
+
+
+            fecpString = fecpString.Replace(",", ".");
+
+
+            aliqEntPis_S = aliqEntPis_S.Replace(",", ".");
+            aliqSaidaPis_S = aliqSaidaPis_S.Replace(",", ".");
+            aliqEntCofins_S = aliqEntCofins_S.Replace(",", ".");
+            aliqSaidaCofins_S = aliqSaidaCofins_S.Replace(",", ".");
+            aliqIcmsVendaAtaCont_S = aliqIcmsVendaAtaCont_S.Replace(",", ".");
+            aliqIcmsSTVendaAtaCont_S = aliqIcmsSTVendaAtaCont_S.Replace(",", ".");
+            redBaseCalcIcmsVendaAtaCont_S = redBaseCalcIcmsVendaAtaCont_S.Replace(",", ".");
+            redBaseCalcIcmsSTVendaAtaCont_S = redBaseCalcIcmsSTVendaAtaCont_S.Replace(",", ".");
+            aliqIcmsVendaAtaSimpNacional_S = aliqIcmsVendaAtaSimpNacional_S.Replace(",", ".");
+            aliqIcmsSTVendaAtaSimpNacional_S = aliqIcmsSTVendaAtaSimpNacional_S.Replace(",", ".");
+            redBaseCalcIcmsVendaAtaSimpNacional_S = redBaseCalcIcmsVendaAtaSimpNacional_S.Replace(",", ".");
+            redBaseCalcIcmsSTVendaAtaSimpNacional_S = redBaseCalcIcmsSTVendaAtaSimpNacional_S.Replace(",", ".");
+            aliqIcmsVendaVarejoCont_S = aliqIcmsVendaVarejoCont_S.Replace(",", ".");
+            aliqIcmsSTVendaVarejo_Cont_S = aliqIcmsSTVendaVarejo_Cont_S.Replace(",", ".");
+            redBaseCalcVendaVarejoCont_S = redBaseCalcVendaVarejoCont_S.Replace(",", ".");
+            RedBaseCalcSTVendaVarejo_Cont_S = RedBaseCalcSTVendaVarejo_Cont_S.Replace(",", ".");
+            aliqIcmsVendaVarejoConsFinal_S = aliqIcmsVendaVarejoConsFinal_S.Replace(",", ".");
+            aliqIcmsSTVendaVarejoConsFinal_S = aliqIcmsSTVendaVarejoConsFinal_S.Replace(",", ".");
+            redBaseCalcIcmsVendaVarejoConsFinal_S = redBaseCalcIcmsVendaVarejoConsFinal_S.Replace(",", ".");
+            redBaseCalcIcmsSTVendaVarejoConsFinal_S = redBaseCalcIcmsSTVendaVarejoConsFinal_S.Replace(",", ".");
+
+            aliqIcmsCompDeInd_S = aliqIcmsCompDeInd_S.Replace(",", ".");
+            aliqIcmsSTCompDeInd_S = aliqIcmsSTCompDeInd_S.Replace(",", ".");
+            redBaseCalcIcmsCompraDeInd_S = redBaseCalcIcmsCompraDeInd_S.Replace(",", ".");
+            redBaseCalcIcmsSTCompraDeInd_S = redBaseCalcIcmsSTCompraDeInd_S.Replace(",", ".");
+            aliqIcmsNFE_S = aliqIcmsNFE_S.Replace(",", ".");
+            redBaseCalcIcmsCompraDeAta_S = redBaseCalcIcmsCompraDeAta_S.Replace(",", ".");
+            redBaseCalcIcmsSTCompraDeAta_S = redBaseCalcIcmsSTCompraDeAta_S.Replace(",", ".");
+            aliqIcmsCompradeAta_S = aliqIcmsCompradeAta_S.Replace(",", ".");
+            aliqIcmsSTCompraDeAta_S = aliqIcmsSTCompraDeAta_S.Replace(",", ".");
+            aliqIcmsNfeAta_S = aliqIcmsNfeAta_S.Replace(",", ".");
+            aliqIcmsCompradeSimpNacional_S = aliqIcmsCompradeSimpNacional_S.Replace(",", ".");
+
+            redBaseCalcIcmsCompradeSimpNacional_S = redBaseCalcIcmsCompradeSimpNacional_S.Replace(",", ".");
+
+            redBaseCalcIcmsSTCompradeSimpNacional_S = redBaseCalcIcmsSTCompradeSimpNacional_S.Replace(",", ".");
+            aliqIcmsNfeSN_S = aliqIcmsNfeSN_S.Replace(",", ".");
+         
+
+
+
+
+            valorMVAAtacado_S = valorMVAAtacado_S.Replace(",", ".");
+
+
+            
+
 
             if (cstEntradaPisCofins != "")
             {
@@ -812,41 +3577,48 @@ namespace MatrizTributaria.Controllers
             {
                 model.cstVendaAtaSimpNacional = (from a in db.CstIcmsGerais where a.descricao == cstVendaAtaSimpNacional select a.codigo).FirstOrDefault();
             }
-            if(cstVendaVarejoCont != "")
+            if (cstVendaVarejoCont != "")
             {
-                model.cstVendaVarejoCont = (from a in db.CstIcmsGerais where a.descricao == cstVendaVarejoCont select a.codigo).FirstOrDefault(); 
+                model.cstVendaVarejoCont = (from a in db.CstIcmsGerais where a.descricao == cstVendaVarejoCont select a.codigo).FirstOrDefault();
             }
-            if(cstVendaVarejoConsFinal != "")
+            if (cstVendaVarejoConsFinal != "")
             {
                 model.cstVendaVarejoConsFinal = (from a in db.CstIcmsGerais where a.descricao == cstVendaVarejoConsFinal select a.codigo).FirstOrDefault();
             }
-            if(cstCompraDeInd != "")
+            if (cstCompraDeInd != "")
             {
                 model.cstCompraDeInd = (from a in db.CstIcmsGerais where a.descricao == cstCompraDeInd select a.codigo).FirstOrDefault();
             }
-            if(cstdaNfedaIndFORN != "")
+            if (cstdaNfedaIndFORN != "")
             {
                 model.cstdaNfedaIndFORN = (from a in db.CstIcmsGerais where a.descricao == cstdaNfedaIndFORN select a.codigo).FirstOrDefault();
             }
-            if(cstCompradeAta != "")
+            if (cstCompradeAta != "")
             {
                 model.cstCompradeAta = (from a in db.CstIcmsGerais where a.descricao == cstdaNfedaIndFORN select a.codigo).FirstOrDefault();
             }
-            if(cstdaNfedeAtaFORn != "")
+            if (cstdaNfedeAtaFORn != "")
             {
                 model.cstdaNfedeAtaFORn = (from a in db.CstIcmsGerais where a.descricao == cstdaNfedeAtaFORn select a.codigo).FirstOrDefault();
             }
-            if(cstCompradeSimpNacional  != "")
+            if (cstCompradeSimpNacional != "")
             {
                 model.cstCompradeSimpNacional = (from a in db.CstIcmsGerais where a.descricao == cstCompradeSimpNacional select a.codigo).FirstOrDefault();
             }
-            if(CsosntdaNfedoSnFOR != "")
+            if (CsosntdaNfedoSnFOR != "")
             {
                 model.CsosntdaNfedoSnFOR = (from a in db.CstIcmsGerais where a.descricao == CsosntdaNfedoSnFOR select a.codigo).FirstOrDefault();
             }
 
             /*Instanciar objeto*/
-            var tributacao = db.Tributacoes.Find(model.id);
+
+
+            Tributacao tributacao = new Tributacao();
+
+
+            tributacao = db.Tributacoes.Find(model.id); //busca a tributação pelo seu id
+
+            //var tributacao = db.Tributacoes.Find(model.id);
 
             /*Atribuir data local para alteração*/
             model.dataAlt = DateTime.Now;
@@ -858,9 +3630,25 @@ namespace MatrizTributaria.Controllers
             }
 
             /*Atribuir valores ao objeto para alterações*/
+           
             tributacao.idSetor = model.idSetor;
+            
+           
             tributacao.codNatReceita = model.codNatReceita;
-            tributacao.fecp = model.fecp;
+
+            // tributacao.fecp = model.fecp;
+            if(fecpString != "")
+            {
+                tributacao.fecp = Decimal.Parse(fecpString, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                if (model.fecp.Equals(null) && tributacao.fecp != null) 
+                {
+                    tributacao.fecp = null;
+                }
+            }
+          
 
             /*Verificar estados de CSTs*/
             if (model.cstEntradaPisCofins != null)
@@ -883,129 +3671,300 @@ namespace MatrizTributaria.Controllers
                 tributacao.cstVendaAtaSimpNacional = model.cstVendaAtaSimpNacional;
             }
 
-            if(model.cstVendaVarejoCont != null)
+            if (model.cstVendaVarejoCont != null)
             {
                 tributacao.cstVendaVarejoCont = model.cstVendaVarejoCont;
             }
 
-            if(model.cstVendaVarejoConsFinal != null)
+            if (model.cstVendaVarejoConsFinal != null)
             {
                 tributacao.cstVendaVarejoConsFinal = model.cstVendaVarejoConsFinal;
             }
 
-            if(model.cstCompraDeInd != null)
+            if (model.cstCompraDeInd != null)
             {
                 tributacao.cstCompraDeInd = model.cstCompraDeInd;
             }
 
-            if(model.cstdaNfedaIndFORN != null)
+            if (model.cstdaNfedaIndFORN != null)
             {
                 tributacao.cstdaNfedaIndFORN = model.cstdaNfedaIndFORN;
             }
 
-            if(model.cstCompradeAta != null)
+            if (model.cstCompradeAta != null)
             {
                 tributacao.cstCompradeAta = model.cstCompradeAta;
             }
 
-            if(model.cstdaNfedeAtaFORn != null)
+            if (model.cstdaNfedeAtaFORn != null)
             {
                 tributacao.cstdaNfedeAtaFORn = model.cstdaNfedeAtaFORn;
             }
 
-            if(model.cstCompradeSimpNacional != null)
+            if (model.cstCompradeSimpNacional != null)
             {
                 tributacao.cstCompradeSimpNacional = model.cstCompradeSimpNacional;
             }
 
-            if(model.CsosntdaNfedoSnFOR != null)
+            if (model.CsosntdaNfedoSnFOR != null)
             {
                 tributacao.CsosntdaNfedoSnFOR = model.CsosntdaNfedoSnFOR;
             }
 
             /*pis cofins*/
-            tributacao.aliqEntPis = model.aliqEntPis;
-            tributacao.aliqSaidaPis = model.aliqSaidaPis;
-            tributacao.aliqEntCofins = model.aliqEntCofins;
-            tributacao.aliqSaidaCofins = model.aliqSaidaCofins;
+            if (aliqEntPis_S != "")
+            {
+                tributacao.aliqEntPis = Decimal.Parse(aliqEntPis_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (aliqSaidaPis_S != "")
+            {
+                tributacao.aliqSaidaPis = Decimal.Parse(aliqSaidaPis_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (aliqEntCofins_S != "")
+            {
+                tributacao.aliqEntCofins = Decimal.Parse(aliqEntCofins_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (aliqSaidaCofins_S != "")
+            {
+                tributacao.aliqSaidaCofins = Decimal.Parse(aliqSaidaCofins_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
             tributacao.idFundamentoLegal = model.idFundamentoLegal;
-
             /*Venda atacado para contribuinte*/
-            tributacao.aliqIcmsVendaAtaCont = model.aliqIcmsVendaAtaCont;
-            tributacao.aliqIcmsSTVendaAtaCont = model.aliqIcmsSTVendaAtaCont;
-            tributacao.redBaseCalcIcmsVendaAtaCont = model.redBaseCalcIcmsVendaAtaCont;
-            tributacao.redBaseCalcIcmsSTVendaAtaCont = model.redBaseCalcIcmsSTVendaAtaCont;
-         
+            if (aliqIcmsVendaAtaCont_S != "")
+            {
+                tributacao.aliqIcmsVendaAtaCont = Decimal.Parse(aliqIcmsVendaAtaCont_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (aliqIcmsSTVendaAtaCont_S != "")
+            {
+                tributacao.aliqIcmsSTVendaAtaCont = Decimal.Parse(aliqIcmsSTVendaAtaCont_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (redBaseCalcIcmsVendaAtaCont_S != "")
+            {
+                tributacao.redBaseCalcIcmsVendaAtaCont = Decimal.Parse(redBaseCalcIcmsVendaAtaCont_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (redBaseCalcIcmsSTVendaAtaCont_S != "")
+            {
+                tributacao.redBaseCalcIcmsSTVendaAtaCont = Decimal.Parse(redBaseCalcIcmsSTVendaAtaCont_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+
             /*Venda atacado para simples nacional*/
-            tributacao.aliqIcmsVendaAtaSimpNacional   = model.aliqIcmsVendaAtaSimpNacional;
-            tributacao.aliqIcmsSTVendaAtaSimpNacional = model.aliqIcmsSTVendaAtaSimpNacional;
-            tributacao.redBaseCalcIcmsVendaAtaSimpNacional = model.redBaseCalcIcmsVendaAtaSimpNacional;
-            tributacao.redBaseCalcIcmsSTVendaAtaSimpNacional = model.redBaseCalcIcmsSTVendaAtaSimpNacional;
+
+
+            if (aliqIcmsVendaAtaSimpNacional_S != "")
+            {
+                tributacao.aliqIcmsVendaAtaSimpNacional = Decimal.Parse(aliqIcmsVendaAtaSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (aliqIcmsSTVendaAtaSimpNacional_S != "")
+            {
+                tributacao.aliqIcmsSTVendaAtaSimpNacional = Decimal.Parse(aliqIcmsSTVendaAtaSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (redBaseCalcIcmsVendaAtaSimpNacional_S != "")
+            {
+                tributacao.redBaseCalcIcmsVendaAtaSimpNacional = Decimal.Parse(redBaseCalcIcmsVendaAtaSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (redBaseCalcIcmsSTVendaAtaSimpNacional_S != "")
+            {
+                tributacao.redBaseCalcIcmsSTVendaAtaSimpNacional = Decimal.Parse(redBaseCalcIcmsSTVendaAtaSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
 
             /*Venda varejo para contribuinte*/
-            tributacao.aliqIcmsVendaVarejoCont = model.aliqIcmsVendaVarejoCont;
-            tributacao.aliqIcmsSTVendaVarejo_Cont = model.aliqIcmsSTVendaVarejo_Cont;
-            tributacao.redBaseCalcVendaVarejoCont = model.redBaseCalcVendaVarejoCont;
-            tributacao.RedBaseCalcSTVendaVarejo_Cont = model.RedBaseCalcSTVendaVarejo_Cont;
-        
+
+            if (aliqIcmsVendaVarejoCont_S != "")
+            {
+                tributacao.aliqIcmsVendaVarejoCont = Decimal.Parse(aliqIcmsVendaVarejoCont_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (aliqIcmsSTVendaVarejo_Cont_S != "")
+            {
+                tributacao.aliqIcmsSTVendaVarejo_Cont = Decimal.Parse(aliqIcmsSTVendaVarejo_Cont_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (redBaseCalcVendaVarejoCont_S != "")
+            {
+                tributacao.redBaseCalcVendaVarejoCont = Decimal.Parse(redBaseCalcVendaVarejoCont_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (RedBaseCalcSTVendaVarejo_Cont_S != "")
+            {
+                tributacao.RedBaseCalcSTVendaVarejo_Cont = Decimal.Parse(RedBaseCalcSTVendaVarejo_Cont_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
             /*Venda varejo para consumidor final*/
-            tributacao.aliqIcmsVendaVarejoConsFinal = model.aliqIcmsVendaVarejoConsFinal;
-            tributacao.aliqIcmsSTVendaVarejoConsFinal = model.aliqIcmsSTVendaVarejoConsFinal;
-            tributacao.redBaseCalcIcmsVendaVarejoConsFinal = model.redBaseCalcIcmsVendaVarejoConsFinal;
-            tributacao.redBaseCalcIcmsSTVendaVarejoConsFinal = model.redBaseCalcIcmsSTVendaVarejoConsFinal;
+
+            if (aliqIcmsVendaVarejoConsFinal_S != "")
+            {
+                tributacao.aliqIcmsVendaVarejoConsFinal = Decimal.Parse(aliqIcmsVendaVarejoConsFinal_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+
+            if (aliqIcmsSTVendaVarejoConsFinal_S != "")
+            {
+                tributacao.aliqIcmsSTVendaVarejoConsFinal = Decimal.Parse(aliqIcmsSTVendaVarejoConsFinal_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+
+            if (redBaseCalcIcmsVendaVarejoConsFinal_S != "")
+            {
+                tributacao.redBaseCalcIcmsVendaVarejoConsFinal = Decimal.Parse(redBaseCalcIcmsVendaVarejoConsFinal_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+
+            if (redBaseCalcIcmsSTVendaVarejoConsFinal_S != "")
+            {
+                tributacao.redBaseCalcIcmsSTVendaVarejoConsFinal = Decimal.Parse(redBaseCalcIcmsSTVendaVarejoConsFinal_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
 
             /*Fundamento legal vendas icms*/
             tributacao.idFundLegalSaidaICMS = model.idFundLegalSaidaICMS;
 
             /*Compra de industria*/
-            tributacao.aliqIcmsCompDeInd = model.aliqIcmsCompDeInd;
-            tributacao.aliqIcmsSTCompDeInd = model.aliqIcmsSTCompDeInd;
-            tributacao.redBaseCalcIcmsCompraDeInd = model.redBaseCalcIcmsCompraDeInd;
-            tributacao.redBaseCalcIcmsSTCompraDeInd = model.redBaseCalcIcmsSTCompraDeInd;
-            tributacao.aliqIcmsNFE = model.aliqIcmsNFE;
+
+            if (aliqIcmsCompDeInd_S != "")
+            {
+                tributacao.aliqIcmsCompDeInd = Decimal.Parse(aliqIcmsCompDeInd_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (aliqIcmsSTCompDeInd_S != "")
+            {
+                tributacao.aliqIcmsSTCompDeInd = Decimal.Parse(aliqIcmsSTCompDeInd_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (redBaseCalcIcmsCompraDeInd_S != "")
+            {
+                tributacao.redBaseCalcIcmsCompraDeInd = Decimal.Parse(redBaseCalcIcmsCompraDeInd_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (redBaseCalcIcmsSTCompraDeInd_S != "")
+            {
+                tributacao.redBaseCalcIcmsSTCompraDeInd = Decimal.Parse(redBaseCalcIcmsSTCompraDeInd_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (aliqIcmsNFE_S != "")
+            {
+                tributacao.aliqIcmsNFE = Decimal.Parse(aliqIcmsNFE_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+
 
             /*Compra de atacado*/
-            tributacao.redBaseCalcIcmsCompraDeAta = model.redBaseCalcIcmsCompraDeAta;
-            tributacao.redBaseCalcIcmsSTCompraDeAta = model.redBaseCalcIcmsSTCompraDeAta;
-            tributacao.aliqIcmsCompradeAta = model.aliqIcmsCompradeAta;
-            tributacao.aliqIcmsSTCompraDeAta = model.aliqIcmsSTCompraDeAta;
-            tributacao.aliqIcmsNfeAta = model.aliqIcmsNfeAta;
 
+            if (redBaseCalcIcmsCompraDeAta_S != "")
+            {
+                tributacao.redBaseCalcIcmsCompraDeAta = Decimal.Parse(redBaseCalcIcmsCompraDeAta_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (redBaseCalcIcmsSTCompraDeAta_S != "")
+            {
+                tributacao.redBaseCalcIcmsSTCompraDeAta = Decimal.Parse(redBaseCalcIcmsSTCompraDeAta_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (aliqIcmsCompradeAta_S != "")
+            {
+                tributacao.aliqIcmsCompradeAta = Decimal.Parse(aliqIcmsCompradeAta_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (aliqIcmsSTCompraDeAta_S != "")
+            {
+                tributacao.aliqIcmsSTCompraDeAta = Decimal.Parse(aliqIcmsSTCompraDeAta_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (aliqIcmsNfeAta_S != "")
+            {
+                tributacao.aliqIcmsNfeAta = Decimal.Parse(aliqIcmsNfeAta_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
             /*Compra de simples nacional*/
-            tributacao.aliqIcmsCompradeSimpNacional = model.aliqIcmsCompradeSimpNacional;
-            tributacao.aliqIcmsSTCompradeSimpNacional = model.aliqIcmsSTCompradeSimpNacional;
-            tributacao.redBaseCalcIcmsCompradeSimpNacional = model.redBaseCalcIcmsCompradeSimpNacional;
-            tributacao.redBaseCalcIcmsSTCompradeSimpNacional = model.redBaseCalcIcmsSTCompradeSimpNacional;
-            tributacao.aliqIcmsNfeSN = model.aliqIcmsNfeSN;
+
+
+            if (aliqIcmsCompradeSimpNacional_S != "")
+            {
+                tributacao.aliqIcmsCompradeSimpNacional = Decimal.Parse(aliqIcmsCompradeSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+
+            if (aliqIcmsSTCompradeSimpNacional_S != "")
+            {
+                tributacao.aliqIcmsSTCompradeSimpNacional = Decimal.Parse(aliqIcmsSTCompradeSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (redBaseCalcIcmsCompradeSimpNacional_S != "")
+            {
+                tributacao.redBaseCalcIcmsCompradeSimpNacional = Decimal.Parse(redBaseCalcIcmsCompradeSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (redBaseCalcIcmsSTCompradeSimpNacional_S != "")
+            {
+                tributacao.redBaseCalcIcmsSTCompradeSimpNacional = Decimal.Parse(redBaseCalcIcmsSTCompradeSimpNacional_S, System.Globalization.CultureInfo.InvariantCulture);
+
+            }
+            if (valorMVAInd_S != "")
+            {
+                tributacao.valorMVAInd = Decimal.Parse(valorMVAInd_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            if (valorMVAAtacado_S != "")
+            {
+                tributacao.valorMVAAtacado = Decimal.Parse(valorMVAAtacado_S, System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+
+
+
+
+
 
             /*Fundamento legal entrada(compras) icms*/
             tributacao.idFundLelgalEntradaICMS = model.idFundLelgalEntradaICMS;
-
+            
             /*Outros atributos*/
             tributacao.regime2560 = model.regime2560;
             tributacao.tipoMVA = model.tipoMVA;
-            tributacao.valorMVAInd = model.valorMVAInd;
+           
             tributacao.inicioVigenciaMVA = model.inicioVigenciaMVA;
-            tributacao.valorMVAAtacado = model.valorMVAAtacado;
+           
             tributacao.fimVigenciaMVA = model.fimVigenciaMVA;
             tributacao.creditoOutorgado = model.creditoOutorgado;
             tributacao.dataAlt = model.dataAlt;
 
-            try {
+            try
+            {
+             
                 db.SaveChanges();
                 TempData["tributacaoMTX"] = null;
 
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
+                string ex = e.GetType().ToString();
+
                 return RedirectToAction("Index");
 
             }
-           
+
             return RedirectToAction("Index");
 
         }
 
-        //delte
+        ////delte
 
         public ActionResult Delete(int? id)
         {
@@ -1112,7 +4071,8 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
-
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
@@ -1195,32 +4155,157 @@ namespace MatrizTributaria.Controllers
         }
 
         [HttpGet]
-        public ActionResult GraficoIcmsSaida(string ufOrigem, string ufDestino)
+        public ActionResult GraficoIcmsSaida(string ufOrigem, string ufDestino, string tributacao) //se for simples nacional vem descrito nessa variavel
         {
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("../Home/Login");
             }
 
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
+
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
 
-           
+            VerificaTributacao(tributacao); //verificar se a tributação escolhida está ativa
 
             //verifica estados origem e destino
             VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
 
-           
+            ViewBag.Tributacao = TempData["tributacao"].ToString();
+
             //aplica estado origem e destino
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
 
+            //se for simples nacional direciona para essa action
+            if (ViewBag.Tributacao == "SIMPLES")
+            {
+                
+                return RedirectToAction("GraficoIcmsSaidaSN", new { tributacao = tributacao });
+            }
+           
+
+           
+                //verifica carregamento da tabela
+                VerificaTempData();
+
+                //Aplica a origem e destino selecionada
+                this.lstCli = this.lstCli.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+
+
+                /*Aliquota ICMS Venda Varejo Consumidor Final - atualizado 17/01/2022 - estados origem e destino*/
+                //ViewBag.AliqICMSVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60
+                //ViewBag.AliqICMSVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino); //tirar o cst = 60
+                //ViewBag.AliqICMSVendaVarCFIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                //ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCli.Count(a => a.ID_CATEGORIA == 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+                ViewBag.AliqICMSVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41 && a.ID_CATEGORIA != 21); //tirar o cst = 60
+
+                ViewBag.AliqICMSVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41 && a.ID_CATEGORIA != 21); //tirar o cst = 60
+                ViewBag.AliqICMSVendaVarCFIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21);
+                ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCli.Count(a => a.ID_CATEGORIA == 21);
+                ViewBag.AliqICMSVendaVarCFNaoTributada = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 41 && a.ID_CATEGORIA != 21);
+
+
+
+
+                /*Aliquota ICMS ST Venda Varejo Consumidor Final*/ /*Alteração feita para filtrar por CST = 60*/
+                //ViewBag.AliqICMSSTVendaVarCF      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                //ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+                ViewBag.AliqICMSSTVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+                ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+
+
+
+
+                /*Aliquota ICMS Venda Varejo Para Contribuinte atualizado 18/01/2022 - estados origem e destino**/
+                ViewBag.AliqICMSVendaVarCont = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSVendaVarContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSVendaVarContIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+
+                /*Aliquota ICMS ST Venda Varejo Para Contribuinte*/
+                ViewBag.AliqICMSSTVendaVarCont = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSSTVendaVarContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+
+
+                /*Aliquota ICMS Venda Ata Para Contribuinte atualizado 18/01/2022 - estados origem e destino**/
+                ViewBag.AliqICMSVendaAtaCont = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSVendaAtaContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSVendaAtaContIsenta = this.lstCli.Count(a => a.CST_VENDA_ATA_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+
+
+                /*Aliquota ICMS ST Venda Ata Para Contribuinte  atualizado 18/01/2022 - estados origem e destino**/
+                ViewBag.AliqICMSSTVendaAtaCont = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSSTVendaAtaContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+
+
+                /*Aliquota ICMS Venda Ata Para Simples Nacional atualizado 18/01/2022 - estados origem e destino**/
+                ViewBag.AliqICMSVendaAtaSN = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSVendaAtaNSNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSVendaAtaSNIsenta = this.lstCli.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+                /*Aliquota ICMS ST Venda Ata Para Simples Nacional atualizado 18/01/2022 - estados origem e destino**/
+                ViewBag.AliqICMSSTVendaAtaSN = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+                ViewBag.AliqICMSSTVendaAtaNSNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+
+
+                return View();
+
+            
+
+            
+        }
+
+
+        [HttpGet]
+        public ActionResult GraficoIcmsSaidaSN(string ufOrigem, string ufDestino, string tributacao) //se for simples nacional vem descrito nessa variavel
+        {
+            if (Session["usuario"] == null)
+            {
+                return RedirectToAction("../Home/Login");
+            }
+
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
+
+            //montar select estado origem e destino
+            ViewBag.EstadosOrigem = db.Estados;
+            ViewBag.EstadosDestinos = db.Estados;
+
+            VerificaTributacao(tributacao); //verificar se a tributação escolhida está ativa
+
+            //verifica estados origem e destino
+            VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
+
+            ViewBag.Tributacao = TempData["tributacao"].ToString();
+
+            //aplica estado origem e destino
+            ViewBag.UfOrigem = this.ufOrigem;
+            ViewBag.UfDestino = this.ufDestino;
+
+            //se for simples nacional direciona para essa action
+            if (ViewBag.Tributacao == "OUTROS")
+            {
+                
+                    return RedirectToAction("GraficoIcmsSaida", new { tributacao = tributacao });
+                
+               
+            }
+
+
             //verifica carregamento da tabela
-            VerificaTempData();
+            VerificaTempDataSN();
 
             //Aplica a origem e destino selecionada
-            this.lstCli = this.lstCli.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
+            this.lstCliSN = this.lstCliSN.Where(s => s.UF_ORIGEM == this.ufOrigem && s.UF_DESTINO == this.ufDestino);
 
 
             /*Aliquota ICMS Venda Varejo Consumidor Final - atualizado 17/01/2022 - estados origem e destino*/
@@ -1229,12 +4314,12 @@ namespace MatrizTributaria.Controllers
             //ViewBag.AliqICMSVendaVarCFIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
             //ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCli.Count(a => a.ID_CATEGORIA == 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
-            ViewBag.AliqICMSVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41 && a.ID_CATEGORIA != 21); //tirar o cst = 60
+            ViewBag.AliqICMSVendaVarCF = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41 && a.ID_CATEGORIA != 21); //tirar o cst = 60
 
-            ViewBag.AliqICMSVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41  && a.ID_CATEGORIA != 21); //tirar o cst = 60
-            ViewBag.AliqICMSVendaVarCFIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21);
-            ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCli.Count(a => a.ID_CATEGORIA == 21);
-            ViewBag.AliqICMSVendaVarCFNaoTributada = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 41 && a.ID_CATEGORIA != 21);
+            ViewBag.AliqICMSVendaVarCFNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL != 60 && a.CST_VENDA_VAREJO_CONS_FINAL != 40 && a.CST_VENDA_VAREJO_CONS_FINAL != 41 && a.ID_CATEGORIA != 21); //tirar o cst = 60
+            ViewBag.AliqICMSVendaVarCFIsenta = this.lstCliSN.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 40 && a.ID_CATEGORIA != 21);
+            ViewBag.AliqICMSVendaVarCFUsoConsumo = this.lstCliSN.Count(a => a.ID_CATEGORIA == 21);
+            ViewBag.AliqICMSVendaVarCFNaoTributada = this.lstCliSN.Count(a => a.CST_VENDA_VAREJO_CONS_FINAL == 41 && a.ID_CATEGORIA != 21);
 
 
 
@@ -1243,51 +4328,50 @@ namespace MatrizTributaria.Controllers
             //ViewBag.AliqICMSSTVendaVarCF      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
             //ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
-            ViewBag.AliqICMSSTVendaVarCF = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
-            ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+            ViewBag.AliqICMSSTVendaVarCF = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL != null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
+            ViewBag.AliqICMSSTVendaVarCFNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONS_FINAL == null && a.CST_VENDA_VAREJO_CONS_FINAL == 60 && a.ID_CATEGORIA != 21);
 
 
 
 
             /*Aliquota ICMS Venda Varejo Para Contribuinte atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSVendaVarCont      = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaVarContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaVarContIsenta = this.lstCli.Count(a => a.CST_VENDA_VAREJO_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaVarCont = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaVarContNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT != 60 && a.CST_VENDA_VAREJO_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaVarContIsenta = this.lstCliSN.Count(a => a.CST_VENDA_VAREJO_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
             /*Aliquota ICMS ST Venda Varejo Para Contribuinte*/
-            ViewBag.AliqICMSSTVendaVarCont      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaVarContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaVarCont = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT != null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaVarContNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_VAREJO_CONT == null && a.CST_VENDA_VAREJO_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
 
             /*Aliquota ICMS Venda Ata Para Contribuinte atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSVendaAtaCont      = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaContIsenta = this.lstCli.Count(a => a.CST_VENDA_ATA_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaCont = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaContNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT != 60 && a.CST_VENDA_ATA_CONT != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaContIsenta = this.lstCliSN.Count(a => a.CST_VENDA_ATA_CONT == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
 
             /*Aliquota ICMS ST Venda Ata Para Contribuinte  atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSSTVendaAtaCont      = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaAtaContNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaCont = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT != null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaContNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_CONT == null && a.CST_VENDA_ATA_CONT == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
 
             /*Aliquota ICMS Venda Ata Para Simples Nacional atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSVendaAtaSN      = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaNSNulla = this.lstCli.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSVendaAtaSNIsenta = this.lstCli.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaSN = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaNSNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL != 60 && a.CST_VENDA_ATA_SIMP_NACIONAL != 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSVendaAtaSNIsenta = this.lstCliSN.Count(a => a.CST_VENDA_ATA_SIMP_NACIONAL == 40 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
             /*Aliquota ICMS ST Venda Ata Para Simples Nacional atualizado 18/01/2022 - estados origem e destino**/
-            ViewBag.AliqICMSSTVendaAtaSN     = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null  && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
-            ViewBag.AliqICMSSTVendaAtaNSNulla = this.lstCli.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaSN = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
+            ViewBag.AliqICMSSTVendaAtaNSNulla = this.lstCliSN.Count(a => a.ALIQ_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.CST_VENDA_ATA_SIMP_NACIONAL == 60 && a.ID_CATEGORIA != 21 && a.UF_ORIGEM == this.ufOrigem && a.UF_DESTINO == this.ufDestino);
 
 
             return View();
-        }
 
-       
+        }
 
         [HttpGet]
         public ActionResult GfRedBCalcIcmsEntrada(string ufOrigem, string ufDestino)
@@ -1299,6 +4383,9 @@ namespace MatrizTributaria.Controllers
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
+
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1353,6 +4440,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
 
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
@@ -1409,16 +4498,20 @@ namespace MatrizTributaria.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult GraficoAliPisCofins(string ufOrigem, string ufDestino)
+        public ActionResult GraficoAliPisCofins(string ufOrigem, string ufDestino, string tributacao)
         {
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("../Home/Login");
             }
 
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
+
+            VerificaTributacao(tributacao); //verificar se a tributação escolhida está ativa
 
             //verifica carregamento da tabela
             VerificaTempData();
@@ -1426,6 +4519,7 @@ namespace MatrizTributaria.Controllers
             //verifica estados origem e destino
             VerificaOriDest(ufOrigem, ufDestino); //verifica a UF de origem e o destino 
 
+            ViewBag.Tributacao = TempData["tributacao"].ToString();
 
             //aplica estado origem e destino
             ViewBag.UfOrigem = this.ufOrigem;
@@ -1458,6 +4552,9 @@ namespace MatrizTributaria.Controllers
             {
                 return RedirectToAction("../Home/Login");
             }
+
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
@@ -1516,6 +4613,8 @@ namespace MatrizTributaria.Controllers
                 return RedirectToAction("../Home/Login");
             }
 
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados;
             ViewBag.EstadosDestinos = db.Estados;
@@ -5243,7 +8342,7 @@ namespace MatrizTributaria.Controllers
 
 
             //ViewBag.CstGeral = db.CstIcmsGerais; //para montar a descrição da cst na view
-            return View(tribMTX.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(lstCli.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
 
 
 
@@ -16267,8 +19366,7 @@ namespace MatrizTributaria.Controllers
                 // this.lstCli = (from a in db.Tributacao_GeralView  select a);
                 //this.lstCli = db.Tributacao_GeralView.AsNoTracking();
                 this.lstCli = from a in db.Tributacao_GeralView select a;
-
-                
+                              
                
                //TempData["tributacaoMTX"] = this.lstCli; //cria a temp data e popula
 
@@ -16286,6 +19384,260 @@ namespace MatrizTributaria.Controllers
 
                 TempData.Keep("tributacaoMTX"); //persiste
             }
+
+            return new EmptyResult();
+        }
+
+
+        /*Bakcup VerificaTempDAtaNCM - 23122022*/
+        //public EmptyResult VerificaTempDataNCM()
+        //{
+        //    /*PAra tipar */
+        //    /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+        //     na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+        //    if (TempData["tributacaoMTX_NCM"] == null)
+        //    {
+
+        //        this.tribMTX_NCM = from a in db.TributacoesNcm select a;
+
+
+
+        //        TempData["tributacaoMTX_NCM"] = this.tribMTX_NCM; //cria a temp data e popula
+
+        //        //TempData["tributacaoMTX"] = this.tributacao; //cria a temp data e popula
+        //        TempData.Keep("tributacaoMTX_NCM"); //persiste
+        //    }
+        //    else
+        //    {
+        //        // this.tribMTX_NCM = (List<TributacaoNCM>)TempData["tributacaoMTX_NCM"];//atribui a lista os valores de tempdata
+
+        //        this.tribMTX_NCM = (IQueryable<TributacaoNCM>)TempData["tributacaoMTX_NCM"];
+
+        //        TempData.Keep("tributacaoMTX_NCM"); //persiste
+        //    }
+
+        //    return new EmptyResult();
+        //}
+
+        public EmptyResult VerificaTempDataNCM(string tributacao)
+        {
+            /*PAra tipar */
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+            if (TempData["tributacaoMTX_NCMView"] == null)
+            {
+               if(tributacao =="SIMPLES")
+                {
+                    this.tribMTX_NCMView = from a in db.TributacoesNcmView where a.SIMP_NACIONAL==1 select a; //FILTRA O QUE FOR SIMPLES NACIONAL
+                }
+                else
+                {
+                    this.tribMTX_NCMView = from a in db.TributacoesNcmView where a.SIMP_NACIONAL == 0 select a;
+                }
+               
+
+
+                
+                TempData["tributacaoMTX_NCMView"] = this.tribMTX_NCMView; //cria a temp data e popula
+
+                //TempData["tributacaoMTX"] = this.tributacao; //cria a temp data e popula
+                TempData.Keep("tributacaoMTX_NCMView"); //persiste
+            }
+            else
+            {
+                // this.tribMTX_NCM = (List<TributacaoNCM>)TempData["tributacaoMTX_NCM"];//atribui a lista os valores de tempdata
+               
+               this.tribMTX_NCMView = (IQueryable<TributacaoNCMView>)TempData["tributacaoMTX_NCMView"];
+
+                TempData.Keep("tributacaoMTX_NCMView"); //persiste
+            }
+
+            return new EmptyResult();
+        }
+        public EmptyResult VerificaTempDataSN()
+        {
+            /*PAra tipar */
+            /*A lista é salva em uma tempdata para ficar persistida enquanto o usuario está nessa action
+             na action de salvar devemos anular essa tempdata para que a lista seja carregada novaente*/
+            if (TempData["tributacaoMTXSN"] == null)
+            {
+                //this.lstCli = (from a in db.Tributacao_GeralView where a.ID.ToString() != null select a);
+
+                //this.tributacao = db.Tributacoes;
+
+                //this.tributacao = (from a in db.Tributacoes where a.UF_Origem.Equals(this.ufOrigem) && a.UF_Destino.Equals(this.ufDestino) select a);
+
+                // this.lstCli = (from a in db.Tributacao_GeralView  select a);
+                //this.lstCli = db.Tributacao_GeralView.AsNoTracking();
+                this.lstCliSN = from a in db.Tributacao_GeralView_Sn select a;
+
+
+                //TempData["tributacaoMTX"] = this.lstCli; //cria a temp data e popula
+
+                TempData["tributacaoMTXSN"] = this.lstCliSN; //cria a temp data e popula
+
+                //TempData["tributacaoMTX"] = this.tributacao; //cria a temp data e popula
+                TempData.Keep("tributacaoMTXSN"); //persiste
+            }
+            else
+            {
+                // this.lstCli = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                this.lstCliSN = (IQueryable<TtributacaoGeralViewSN>)TempData["tributacaoMTXSN"];
+                //this.tributacao = (List<Tributacao>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+                //this.tribMTX = (List<TributacaoGeralView>)TempData["tributacaoMTX"];//atribui a lista os valores de tempdata
+
+                TempData.Keep("tributacaoMTXSN"); //persiste
+            }
+
+            return new EmptyResult();
+        }
+
+
+     
+        public EmptyResult VerificaTributacoesPorUF(string tributacao)
+        {
+            if(TempData["tributacaoPorUF"] == null)
+            {
+                if (tributacao == "SIMPLES")
+                {
+                    this.tribPorUF = from a in db.TributacoesNcmView where a.SIMP_NACIONAL == 1 select a; //FILTRA O QUE FOR SIMPLES NACIONAL
+                }
+                else
+                {
+                    this.tribPorUF = from a in db.TributacoesNcmView where a.SIMP_NACIONAL == 0 select a;
+                }
+
+                TempData["tributacaoPorUF"] = this.tribPorUF; //cria a temp data e popula
+
+                //TempData["tributacaoMTX"] = this.tributacao; //cria a temp data e popula
+                TempData.Keep("tributacaoPorUF"); //persiste
+
+            }
+            else
+            {
+                this.tribPorUF = (IQueryable<TributacaoNCMView>)TempData["tributacaoPorUF"];
+
+                TempData.Keep("tributacaoPorUF"); //persiste
+
+            }
+            return new EmptyResult();
+        }
+
+
+        private IQueryable<TributacaoGeralView> ProcurarPorV(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, IQueryable<TributacaoGeralView> lstCli)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                lstCli = (codBarrasL != 0) ? (lstCli.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))) : lstCli = (lstCli.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())));
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                lstCli = lstCli.Where(s => s.CEST_PRODUTO.ToString().StartsWith(procuraCEST.ToString()));
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                lstCli = lstCli.Where(s => s.NCM_PRODUTO.ToString().StartsWith(procuraNCM.ToString()));
+
+            }
+
+            return lstCli;
+        }
+
+        //PROCURA DO SN
+        private IQueryable<TtributacaoGeralViewSN> ProcurarPorSN(long? codBarrasL, string procurarPor, string procuraCEST, string procuraNCM, IQueryable<TtributacaoGeralViewSN> lstCliSN)
+        {
+
+
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                lstCliSN = (codBarrasL != 0) ? (lstCliSN.Where(s => s.COD_BARRAS_PRODUTO.ToString().StartsWith(codBarrasL.ToString()))) : lstCliSN = (lstCliSN.Where(s => s.DESCRICAO_PRODUTO.ToString().ToUpper().StartsWith(procurarPor.ToUpper())));
+            }
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                lstCliSN = lstCliSN.Where(s => s.CEST_PRODUTO.ToString().StartsWith(procuraCEST.ToString()));
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                lstCliSN = lstCliSN.Where(s => s.NCM_PRODUTO.ToString().StartsWith(procuraNCM.ToString()));
+
+            }
+
+            return lstCliSN;
+        }
+
+
+        private IQueryable<TributacaoNCM> ProcurarPorNCM_CEST(string procuraCEST, string procuraNCM, IQueryable<TributacaoNCM> tribMTX_NCM)
+        {
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                tribMTX_NCM = tribMTX_NCM.Where(s => s.cest.ToString().StartsWith(procuraCEST.ToString()));
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                tribMTX_NCM = tribMTX_NCM.Where(s => s.ncm.ToString().StartsWith(procuraNCM.ToString()));
+
+            }
+
+            return tribMTX_NCM;
+
+        }
+
+
+
+
+        private IQueryable<TributacaoNCMView> ProcurarPorNCM_CEST_PARA_NCM(string procuraCEST, string procuraNCM, IQueryable<TributacaoNCMView> tribMTX_NCMview)
+        {
+            if (!String.IsNullOrEmpty(procuraCEST))
+            {
+                tribMTX_NCMview = tribMTX_NCMview.Where(s => s.CEST.ToString().StartsWith(procuraCEST.ToString()));
+            }
+            if (!String.IsNullOrEmpty(procuraNCM))
+            {
+                tribMTX_NCMview = tribMTX_NCMview.Where(s => s.NCM.ToString().StartsWith(procuraNCM.ToString()));
+
+            }
+
+            return tribMTX_NCMview;
+
+        }
+
+
+
+
+        //aplica a tributação na tempdada
+        private EmptyResult VerificaTributacao(string tributacao)
+        {
+            if(tributacao == null || tributacao == "")
+            {
+                TempData["tributacao"] = (TempData["tributacao"] == null) ? "OUTROS" : TempData["tributacao"].ToString();
+                TempData.Keep("tributacao");
+            }
+            else
+            {
+                if(TempData["tributacao"].ToString() != tributacao)
+                {
+                    //quer dizer que mudou, logo devemos zerar a tempdata da tributação
+                    TempData["tributacaoMTX_NCMView"] = null;
+                }
+                TempData["tributacao"] = (TempData["tributacao"] == null) ? "OUTROS" :tributacao;
+                TempData.Keep("tributacao");
+            }
+          
+            return new EmptyResult();
+        }
+        private EmptyResult VerificaOriDest()
+        {
+            TempData["UfOrigem"] = (TempData["UfOrigem"] == null) ? "TO" : TempData["UfOrigem"].ToString();
+            TempData.Keep("UfOrigem");
+            TempData["UfDestino"] = (TempData["UfDestino"] == null) ? "TO" : TempData["UfDestino"].ToString();
+            TempData.Keep("UfDestino");
+
+
+
+            this.ufOrigem = TempData["UfOrigem"].ToString();
+            this.ufDestino = TempData["UfDestino"].ToString();
 
             return new EmptyResult();
         }
@@ -16315,9 +19667,6 @@ namespace MatrizTributaria.Controllers
                 TempData.Keep("UfDestino");
             }
 
-            
-
-            
 
             this.ufOrigem = TempData["UfOrigem"].ToString();
             this.ufDestino = TempData["UfDestino"].ToString();

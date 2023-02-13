@@ -23,18 +23,21 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
         {
             if (Session["usuario"] != null)
             {
-                Session["usuario"] = null;
-                Session["empresa"] = null;
-                Session["email"] = null;
+                Session["usuario"]         = null;
+                Session["empresa"]         = null;
+                Session["email"]           = null;
                 TempData["usuarioEmpresa"] = null;
                 TempData["analise"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
                 TempData["analise2"] = null;
                 TempData["prdInexistente"] = null;
-                TempData["analiseSN"] = null;
-                TempData["UfOrigem"] = null;
-                TempData["UfDestino"] = null;
+                TempData["analiseSN"]      = null;
+                TempData["UfOrigem"]       = null;
+                TempData["UfDestino"]      = null;
+                TempData["tributacao"]     = null;
+                TempData["analise_NCM"] = null;
+                TempData["linhas"] = null;
                 return RedirectToAction("HomeCliente");
             }
             else

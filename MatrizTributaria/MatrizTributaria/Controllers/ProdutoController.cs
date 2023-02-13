@@ -447,6 +447,8 @@ namespace MatrizTributaria.Controllers
             }
             //chmar action auxiliar para verificar e carregar a tempdata com a lista
             //montar select estado origem e destino
+            TempData["procuraPor"] = null; //anulando variavel de procura
+            TempData.Keep("procuraPor");
 
             TempData["procuraCAT"] = null;
 
@@ -740,6 +742,8 @@ namespace MatrizTributaria.Controllers
 
 
         }
+
+    
         [HttpGet]
         public ActionResult EditMassaModal(string array)
         {
@@ -809,6 +813,7 @@ namespace MatrizTributaria.Controllers
             return View();
         }
 
+        //proximo
         [HttpGet]
         public ActionResult EditMassaNCMModalPost(string ncm, string fecp, string CodReceita, string CstSaidaPisCofins, string aliqSaidaPis, string aliqSaidaCofins,
             string IdFundamentoLegal, string CstVendaVarejoConsFinal, string alVeVarCF, string alVeVarCFSt, string rBcVeVarCF, string rBcSTVeVarCF, 

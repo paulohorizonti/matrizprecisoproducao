@@ -55,7 +55,18 @@ namespace MatrizTributaria.Models.ViewModels
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Insira uma e-mail válido")]
         public string email { get; set; }
 
+       
+        public int idSofwareHouse { get; set; }
 
+      
+        public sbyte simples_nacional { get; set; }
+
+        public int? id_superlogica { get; set; }
+
+
+        //inserir um combobox com os estado
+        [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Insira uma e-mail válido")]
+        public string usuarioInicial { get; set; }
 
         public System.DateTime datacad { get; set; }
 

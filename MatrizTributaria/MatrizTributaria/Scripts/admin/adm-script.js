@@ -7,29 +7,57 @@ $(document).ready(function () {
         btnAlterar.addEventListener("click", function () {
             var selecao = document.getElementById("selAlterar"); //pegar o elemento select
             var value = selecao.options[selecao.selectedIndex].value; //pegar o valor do select
+            var inputCest = document.getElementById("cest"); //input do cest
 
-            if (value == 1) {
 
-               /* document.getElementById('mudarValoresNatRec').style.display = 'none';*/
-               /* document.getElementById('mudarValoresSetorFecp').style.display = 'none';*/
-                document.getElementById('mudarValoresCest').style.display = 'none';
+            switch (value)
+            {
+                case "1":
+                    document.getElementById('mudarValoresCest').style.display = 'none';
+                    document.getElementById("selAlterar").focus();
+                    inputCest.value = "";
+                   
+                    break;
+                case "2":
+                    document.getElementById('mudarValoresCest').style.display = 'block';
+                    document.getElementById("selAlterar").focus();
+                    document.getElementById("cest").removeAttribute("readonly");
+                    inputCest.value = "";
+                    break;
+                case "3":
+                    document.getElementById('mudarValoresCest').style.display = 'block';
+                    document.getElementById("selAlterar").focus();
+                    inputCest.value = "NULL";
+                    document.getElementById("cest").setAttribute("readonly", true);
+
+                    break;
+
+                
+            }
+
+
+            //if (value == 1) {
+
+            //   /* document.getElementById('mudarValoresNatRec').style.display = 'none';*/
+            //   /* document.getElementById('mudarValoresSetorFecp').style.display = 'none';*/
+            //    document.getElementById('mudarValoresCest').style.display = 'none';
                 
 
-               /* document.getElementById('mudarValoresTab').style.display = 'none';*/
+            //   /* document.getElementById('mudarValoresTab').style.display = 'none';*/
 
 
-                document.getElementById("selAlterar").focus();
+            //    document.getElementById("selAlterar").focus();
 
 
-            } else {
-               /* document.getElementById('mudarValoresTab').style.display = 'block';*/
+            //} else {
+            //   /* document.getElementById('mudarValoresTab').style.display = 'block';*/
 
-                document.getElementById('mudarValoresCest').style.display = 'block';
-                //document.getElementById('mudarValoresNatRec').style.display = 'flex';
-                //document.getElementById('mudarValoresSetorFecp').style.display = 'block';
-                document.getElementById("selAlterar").focus();
+            //    document.getElementById('mudarValoresCest').style.display = 'block';
+            //    //document.getElementById('mudarValoresNatRec').style.display = 'flex';
+            //    //document.getElementById('mudarValoresSetorFecp').style.display = 'block';
+            //    document.getElementById("selAlterar").focus();
 
-            }
+            //}
 
         });
     }
@@ -42,9 +70,8 @@ $(document).ready(function () {
 });
 
 
-//atribuir valores de tributação
-$(document).ready(function ()
-{
+//atribuir valores de tributação quando o uf ja vem preenchido: 21/10/2022
+$(document).ready(function () {
     var uforigem = document.getElementById("ufOrigem");
     var ufdestino = document.getElementById("ufDestino");
 
@@ -82,265 +109,357 @@ $(document).ready(function ()
     var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
 
 
-    uforigem.addEventListener("change", function () {
+    if (ufOrigem.value != null && ufdestino.value != null)
+    {
+        ufdestino.setAttribute('disabled', true);
+        uforigem.setAttribute('disabled', true);
+        fecp.removeAttribute('readonly');
+
+        codReceita.removeAttribute('disabled');
+
+        idCstSaiPC.removeAttribute('disabled');
+        alpS.removeAttribute('readonly');
+        alcS.removeAttribute('readonly');
+        idFundamentoLegal.removeAttribute('disabled');
+
+        idCstVeVarCF.removeAttribute('disabled');
+
+        alVeVarCF.removeAttribute('readonly');
+        alVeVarCFSt.removeAttribute('readonly');
+        rBcVeVarCF.removeAttribute('readonly');
+        rBcSTVeVarCF.removeAttribute('readonly');
+        idCstVeVarCont.removeAttribute('disabled');
+
+        alVeVarCont.removeAttribute('readonly');
+        alVeVarContSt.removeAttribute('readonly');
+        rBcVeVarCont.removeAttribute('readonly');
+        rBcSTVeVarCont.removeAttribute('readonly');
+        idCstVeAtaCont.removeAttribute('disabled');
+        alVaC.removeAttribute('readonly');
+        alVaCSt.removeAttribute('readonly');
+
+        idCstVeAtaSN.removeAttribute('disabled');
+        alVSN.removeAttribute('readonly');
+        alVSNSt.removeAttribute('readonly');
+        rBcVSN.removeAttribute('readonly');
+        rBcSTVSN.removeAttribute('readonly');
+        IdFundLegalSaidaICMS.removeAttribute('disabled');
+
+        rBcVaC.removeAttribute('readonly');
+        rBcSTVaC.removeAttribute('readonly');
+
+    }
+
+
+
+
+
+
+
+
+
+
+});
+
+//atribuir valores de tributação
+//$(document).ready(function ()
+//{
+//    var uforigem = document.getElementById("ufOrigem");
+//    var ufdestino = document.getElementById("ufDestino");
+
+//    var fecp = document.getElementById("fecp");
+//    var codReceita = document.getElementById("CodReceita");
+//    var idCstSaiPC = document.getElementById("idCstSaiPC");
+//    var alpS = document.getElementById("alpS");
+//    var alcS = document.getElementById("alcS");
+//    var idFundamentoLegal = document.getElementById("IdFundamentoLegal");
+
+//    var idCstVeVarCF = document.getElementById("idCstVeVarCF");
+//    var alVeVarCF = document.getElementById("alVeVarCF");
+//    var alVeVarCFSt = document.getElementById("alVeVarCFSt");
+//    var rBcVeVarCF = document.getElementById("rBcVeVarCF");
+//    var rBcSTVeVarCF = document.getElementById("rBcSTVeVarCF");
+
+//    var idCstVeVarCont = document.getElementById("idCstVeVarCont");
+//    var alVeVarCont = document.getElementById("alVeVarCont");
+//    var alVeVarContSt = document.getElementById("alVeVarContSt");
+//    var rBcVeVarCont = document.getElementById("rBcVeVarCont");
+//    var rBcSTVeVarCont = document.getElementById("rBcSTVeVarCont");
+
+//    var idCstVeAtaCont = document.getElementById("idCstVeAtaCont");
+//    var alVaC = document.getElementById("alVaC");
+//    var alVaCSt = document.getElementById("alVaCSt");
+//    var rBcVaC = document.getElementById("rBcVaC");
+//    var rBcSTVaC = document.getElementById("rBcSTVaC");
+
+//    var idCstVeAtaSN = document.getElementById("idCstVeAtaSN");
+//    var alVSN = document.getElementById("alVSN");
+//    var alVSNSt = document.getElementById("alVSNSt");
+//    var rBcVSN = document.getElementById("rBcVSN");
+//    var rBcSTVSN = document.getElementById("rBcSTVSN");
+
+//    var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
+
+
+//    uforigem.addEventListener("change", function () {
 
 
         
-        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
-        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
+//        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
+//        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
 
 
-        if (opcaoValorOrigem === "UF de Origem") {
+//        if (opcaoValorOrigem === "UF de Origem") {
 
-            alert("UF de origem e destino devem ser preenchidos");
-            ufdestino.setAttribute('disabled', true);
-            fecp.setAttribute('readonly', true);
+//            alert("UF de origem e destino devem ser preenchidos");
+//            ufdestino.setAttribute('disabled', true);
+//            fecp.setAttribute('readonly', true);
 
-            codReceita.setAttribute('disabled', true);
-            idCstSaiPC.setAttribute('disabled', true);
-            alpS.setAttribute('readonly', true);
-            alcS.setAttribute('readonly', true);
-            idFundamentoLegal.setAttribute('disabled', true);
+//            codReceita.setAttribute('disabled', true);
+//            idCstSaiPC.setAttribute('disabled', true);
+//            alpS.setAttribute('readonly', true);
+//            alcS.setAttribute('readonly', true);
+//            idFundamentoLegal.setAttribute('disabled', true);
 
-            idCstVeVarCF.setAttribute('disabled', true);
+//            idCstVeVarCF.setAttribute('disabled', true);
 
-            alVeVarCF.setAttribute('readonly', true);
-            alVeVarCFSt.setAttribute('readonly', true);
-            rBcVeVarCF.setAttribute('readonly', true);
-            rBcSTVeVarCF.setAttribute('readonly', true);
-            idCstVeVarCont.setAttribute('disabled', true);
+//            alVeVarCF.setAttribute('readonly', true);
+//            alVeVarCFSt.setAttribute('readonly', true);
+//            rBcVeVarCF.setAttribute('readonly', true);
+//            rBcSTVeVarCF.setAttribute('readonly', true);
+//            idCstVeVarCont.setAttribute('disabled', true);
 
-            alVeVarCont.setAttribute('readonly', true);
-            alVeVarContSt.setAttribute('readonly', true);
-            rBcVeVarCont.setAttribute('readonly', true);
-            rBcSTVeVarCont.setAttribute('readonly', true);
-            idCstVeAtaCont.setAttribute('disabled', true);
-            alVaC.setAttribute('readonly', true);
-            alVaCSt.setAttribute('readonly', true);
+//            alVeVarCont.setAttribute('readonly', true);
+//            alVeVarContSt.setAttribute('readonly', true);
+//            rBcVeVarCont.setAttribute('readonly', true);
+//            rBcSTVeVarCont.setAttribute('readonly', true);
+//            idCstVeAtaCont.setAttribute('disabled', true);
+//            alVaC.setAttribute('readonly', true);
+//            alVaCSt.setAttribute('readonly', true);
 
-            idCstVeAtaSN.setAttribute('disabled', true);
-            alVSN.setAttribute('readonly', true);
-            alVSNSt.setAttribute('readonly', true);
-            rBcVSN.setAttribute('readonly', true);
-            rBcSTVSN.setAttribute('readonly', true);
-            IdFundLegalSaidaICMS.setAttribute('disabled', true);
+//            idCstVeAtaSN.setAttribute('disabled', true);
+//            alVSN.setAttribute('readonly', true);
+//            alVSNSt.setAttribute('readonly', true);
+//            rBcVSN.setAttribute('readonly', true);
+//            rBcSTVSN.setAttribute('readonly', true);
+//            IdFundLegalSaidaICMS.setAttribute('disabled', true);
 
-            rBcVaC.setAttribute('readonly', true);
-            rBcSTVaC.setAttribute('readonly', true);
+//            rBcVaC.setAttribute('readonly', true);
+//            rBcSTVaC.setAttribute('readonly', true);
 
             
 
 
-        } else {
-            if (opcaoValorDestino == "UF de Destino") {
-                alert("UF de origem e destino devem ser preenchidos");
-                ufdestino.removeAttribute('disabled');
-                fecp.setAttribute('readonly', true);
+//        } else {
+//            if (opcaoValorDestino == "UF de Destino") {
+//                alert("UF de origem e destino devem ser preenchidos");
+//                ufdestino.removeAttribute('disabled');
+//                fecp.setAttribute('readonly', true);
 
-                codReceita.setAttribute('disabled', true);
-                idCstSaiPC.setAttribute('disabled', true);
-                alpS.setAttribute('readonly', true);
-                alcS.setAttribute('readonly', true);
-                idFundamentoLegal.setAttribute('disabled', true);
+//                codReceita.setAttribute('disabled', true);
+//                idCstSaiPC.setAttribute('disabled', true);
+//                alpS.setAttribute('readonly', true);
+//                alcS.setAttribute('readonly', true);
+//                idFundamentoLegal.setAttribute('disabled', true);
 
-                idCstVeVarCF.setAttribute('disabled', true);
+//                idCstVeVarCF.setAttribute('disabled', true);
 
-                alVeVarCF.setAttribute('readonly', true);
-                alVeVarCFSt.setAttribute('readonly', true);
-                rBcVeVarCF.setAttribute('readonly', true);
-                rBcSTVeVarCF.setAttribute('readonly', true);
-                idCstVeVarCont.setAttribute('disabled', true);
+//                alVeVarCF.setAttribute('readonly', true);
+//                alVeVarCFSt.setAttribute('readonly', true);
+//                rBcVeVarCF.setAttribute('readonly', true);
+//                rBcSTVeVarCF.setAttribute('readonly', true);
+//                idCstVeVarCont.setAttribute('disabled', true);
 
-                alVeVarCont.setAttribute('readonly', true);
-                alVeVarContSt.setAttribute('readonly', true);
-                rBcVeVarCont.setAttribute('readonly', true);
-                rBcSTVeVarCont.setAttribute('readonly', true);
-                idCstVeAtaCont.setAttribute('disabled', true);
-                alVaC.setAttribute('readonly', true);
-                alVaCSt.setAttribute('readonly', true);
+//                alVeVarCont.setAttribute('readonly', true);
+//                alVeVarContSt.setAttribute('readonly', true);
+//                rBcVeVarCont.setAttribute('readonly', true);
+//                rBcSTVeVarCont.setAttribute('readonly', true);
+//                idCstVeAtaCont.setAttribute('disabled', true);
+//                alVaC.setAttribute('readonly', true);
+//                alVaCSt.setAttribute('readonly', true);
 
-                idCstVeAtaSN.setAttribute('disabled', true);
-                alVSN.setAttribute('readonly', true);
-                alVSNSt.setAttribute('readonly', true);
-                rBcVSN.setAttribute('readonly', true);
-                rBcSTVSN.setAttribute('readonly', true);
-                IdFundLegalSaidaICMS.setAttribute('disabled', true);
+//                idCstVeAtaSN.setAttribute('disabled', true);
+//                alVSN.setAttribute('readonly', true);
+//                alVSNSt.setAttribute('readonly', true);
+//                rBcVSN.setAttribute('readonly', true);
+//                rBcSTVSN.setAttribute('readonly', true);
+//                IdFundLegalSaidaICMS.setAttribute('disabled', true);
 
-                rBcVaC.setAttribute('readonly', true);
-                rBcSTVaC.setAttribute('readonly', true);
+//                rBcVaC.setAttribute('readonly', true);
+//                rBcSTVaC.setAttribute('readonly', true);
 
 
 
-            }
-            else {
-                ufdestino.removeAttribute('disabled');
-                fecp.removeAttribute('readonly');
+//            }
+//            else {
+//                ufdestino.removeAttribute('disabled');
+//                fecp.removeAttribute('readonly');
 
-                codReceita.removeAttribute('disabled');
+//                codReceita.removeAttribute('disabled');
 
-                idCstSaiPC.removeAttribute('disabled');
-                alpS.removeAttribute('readonly');
-                alcS.removeAttribute('readonly');
-                idFundamentoLegal.removeAttribute('disabled');
+//                idCstSaiPC.removeAttribute('disabled');
+//                alpS.removeAttribute('readonly');
+//                alcS.removeAttribute('readonly');
+//                idFundamentoLegal.removeAttribute('disabled');
 
-                idCstVeVarCF.removeAttribute('disabled');
+//                idCstVeVarCF.removeAttribute('disabled');
 
-                alVeVarCF.removeAttribute('readonly');
-                alVeVarCFSt.removeAttribute('readonly');
-                rBcVeVarCF.removeAttribute('readonly');
-                rBcSTVeVarCF.removeAttribute('readonly');
-                idCstVeVarCont.removeAttribute('disabled');
+//                alVeVarCF.removeAttribute('readonly');
+//                alVeVarCFSt.removeAttribute('readonly');
+//                rBcVeVarCF.removeAttribute('readonly');
+//                rBcSTVeVarCF.removeAttribute('readonly');
+//                idCstVeVarCont.removeAttribute('disabled');
 
-                alVeVarCont.removeAttribute('readonly');
-                alVeVarContSt.removeAttribute('readonly');
-                rBcVeVarCont.removeAttribute('readonly');
-                rBcSTVeVarCont.removeAttribute('readonly');
-                idCstVeAtaCont.removeAttribute('disabled');
-                alVaC.removeAttribute('readonly');
-                alVaCSt.removeAttribute('readonly');
+//                alVeVarCont.removeAttribute('readonly');
+//                alVeVarContSt.removeAttribute('readonly');
+//                rBcVeVarCont.removeAttribute('readonly');
+//                rBcSTVeVarCont.removeAttribute('readonly');
+//                idCstVeAtaCont.removeAttribute('disabled');
+//                alVaC.removeAttribute('readonly');
+//                alVaCSt.removeAttribute('readonly');
 
-                idCstVeAtaSN.removeAttribute('disabled');
-                alVSN.removeAttribute('readonly');
-                alVSNSt.removeAttribute('readonly');
-                rBcVSN.removeAttribute('readonly');
-                rBcSTVSN.removeAttribute('readonly');
-                IdFundLegalSaidaICMS.removeAttribute('disabled');
+//                idCstVeAtaSN.removeAttribute('disabled');
+//                alVSN.removeAttribute('readonly');
+//                alVSNSt.removeAttribute('readonly');
+//                rBcVSN.removeAttribute('readonly');
+//                rBcSTVSN.removeAttribute('readonly');
+//                IdFundLegalSaidaICMS.removeAttribute('disabled');
 
-                rBcVaC.removeAttribute('readonly');
-                rBcSTVaC.removeAttribute('readonly');
+//                rBcVaC.removeAttribute('readonly');
+//                rBcSTVaC.removeAttribute('readonly');
 
-            }
+//            }
 
-        }
+//        }
 
-    });
+//    });
 
-    ufdestino.addEventListener("change", function () {
+//    ufdestino.addEventListener("change", function () {
 
        
-        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
-        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
+//        var opcaoValorOrigem = uforigem.options[uforigem.selectedIndex].text; //pegou o valor
+//        var opcaoValorDestino = ufdestino.options[ufdestino.selectedIndex].text; //pegou o valor
        
 
 
-        if (opcaoValorOrigem === "UF de Origem"){
+//        if (opcaoValorOrigem === "UF de Origem"){
           
-            alert("UF de origem e destino devem ser preenchidos");
-            fecp.setAttribute('readonly', true);
+//            alert("UF de origem e destino devem ser preenchidos");
+//            fecp.setAttribute('readonly', true);
 
-            codReceita.setAttribute('disabled', true);
-            idCstSaiPC.setAttribute('disabled', true);
-            alpS.setAttribute('readonly', true);
-            alcS.setAttribute('readonly', true);
-            idFundamentoLegal.setAttribute('disabled', true);
+//            codReceita.setAttribute('disabled', true);
+//            idCstSaiPC.setAttribute('disabled', true);
+//            alpS.setAttribute('readonly', true);
+//            alcS.setAttribute('readonly', true);
+//            idFundamentoLegal.setAttribute('disabled', true);
 
-            idCstVeVarCF.setAttribute('disabled', true);
+//            idCstVeVarCF.setAttribute('disabled', true);
 
-            alVeVarCF.setAttribute('readonly', true);
-            alVeVarCFSt.setAttribute('readonly', true);
-            rBcVeVarCF.setAttribute('readonly', true);
-            rBcSTVeVarCF.setAttribute('readonly', true);
-            idCstVeVarCont.setAttribute('disabled', true);
+//            alVeVarCF.setAttribute('readonly', true);
+//            alVeVarCFSt.setAttribute('readonly', true);
+//            rBcVeVarCF.setAttribute('readonly', true);
+//            rBcSTVeVarCF.setAttribute('readonly', true);
+//            idCstVeVarCont.setAttribute('disabled', true);
 
-            alVeVarCont.setAttribute('readonly', true);
-            alVeVarContSt.setAttribute('readonly', true);
-            rBcVeVarCont.setAttribute('readonly', true);
-            rBcSTVeVarCont.setAttribute('readonly', true);
-            idCstVeAtaCont.setAttribute('disabled', true);
-            alVaC.setAttribute('readonly', true);
-            alVaCSt.setAttribute('readonly', true);
+//            alVeVarCont.setAttribute('readonly', true);
+//            alVeVarContSt.setAttribute('readonly', true);
+//            rBcVeVarCont.setAttribute('readonly', true);
+//            rBcSTVeVarCont.setAttribute('readonly', true);
+//            idCstVeAtaCont.setAttribute('disabled', true);
+//            alVaC.setAttribute('readonly', true);
+//            alVaCSt.setAttribute('readonly', true);
 
-            idCstVeAtaSN.setAttribute('disabled', true);
-            alVSN.setAttribute('readonly', true);
-            alVSNSt.setAttribute('readonly', true);
-            rBcVSN.setAttribute('readonly', true);
-            rBcSTVSN.setAttribute('readonly', true);
-            IdFundLegalSaidaICMS.setAttribute('disabled', true);
+//            idCstVeAtaSN.setAttribute('disabled', true);
+//            alVSN.setAttribute('readonly', true);
+//            alVSNSt.setAttribute('readonly', true);
+//            rBcVSN.setAttribute('readonly', true);
+//            rBcSTVSN.setAttribute('readonly', true);
+//            IdFundLegalSaidaICMS.setAttribute('disabled', true);
 
-            rBcVaC.setAttribute('readonly', true);
-            rBcSTVaC.setAttribute('readonly', true);
+//            rBcVaC.setAttribute('readonly', true);
+//            rBcSTVaC.setAttribute('readonly', true);
             
-        } else {
-            if (opcaoValorDestino == "UF de Destino") {
-                alert("UF de origem e destino devem ser preenchidos");
+//        } else {
+//            if (opcaoValorDestino == "UF de Destino") {
+//                alert("UF de origem e destino devem ser preenchidos");
 
-                fecp.setAttribute('readonly', true);
+//                fecp.setAttribute('readonly', true);
 
-                codReceita.setAttribute('disabled', true);
-                idCstSaiPC.setAttribute('disabled', true);
-                alpS.setAttribute('readonly', true);
-                alcS.setAttribute('readonly', true);
-                idFundamentoLegal.setAttribute('disabled', true);
+//                codReceita.setAttribute('disabled', true);
+//                idCstSaiPC.setAttribute('disabled', true);
+//                alpS.setAttribute('readonly', true);
+//                alcS.setAttribute('readonly', true);
+//                idFundamentoLegal.setAttribute('disabled', true);
 
-                idCstVeVarCF.setAttribute('disabled', true);
+//                idCstVeVarCF.setAttribute('disabled', true);
 
-                alVeVarCF.setAttribute('readonly', true);
-                alVeVarCFSt.setAttribute('readonly', true);
-                rBcVeVarCF.setAttribute('readonly', true);
-                rBcSTVeVarCF.setAttribute('readonly', true);
-                idCstVeVarCont.setAttribute('disabled', true);
+//                alVeVarCF.setAttribute('readonly', true);
+//                alVeVarCFSt.setAttribute('readonly', true);
+//                rBcVeVarCF.setAttribute('readonly', true);
+//                rBcSTVeVarCF.setAttribute('readonly', true);
+//                idCstVeVarCont.setAttribute('disabled', true);
 
-                alVeVarCont.setAttribute('readonly', true);
-                alVeVarContSt.setAttribute('readonly', true);
-                rBcVeVarCont.setAttribute('readonly', true);
-                rBcSTVeVarCont.setAttribute('readonly', true);
-                idCstVeAtaCont.setAttribute('disabled', true);
-                alVaC.setAttribute('readonly', true);
-                alVaCSt.setAttribute('readonly', true);
+//                alVeVarCont.setAttribute('readonly', true);
+//                alVeVarContSt.setAttribute('readonly', true);
+//                rBcVeVarCont.setAttribute('readonly', true);
+//                rBcSTVeVarCont.setAttribute('readonly', true);
+//                idCstVeAtaCont.setAttribute('disabled', true);
+//                alVaC.setAttribute('readonly', true);
+//                alVaCSt.setAttribute('readonly', true);
 
-                idCstVeAtaSN.setAttribute('disabled', true);
-                alVSN.setAttribute('readonly', true);
-                alVSNSt.setAttribute('readonly', true);
-                rBcVSN.setAttribute('readonly', true);
-                rBcSTVSN.setAttribute('readonly', true);
-                IdFundLegalSaidaICMS.setAttribute('disabled', true);
+//                idCstVeAtaSN.setAttribute('disabled', true);
+//                alVSN.setAttribute('readonly', true);
+//                alVSNSt.setAttribute('readonly', true);
+//                rBcVSN.setAttribute('readonly', true);
+//                rBcSTVSN.setAttribute('readonly', true);
+//                IdFundLegalSaidaICMS.setAttribute('disabled', true);
 
-                rBcVaC.setAttribute('readonly', true);
-                rBcSTVaC.setAttribute('readonly', true);
+//                rBcVaC.setAttribute('readonly', true);
+//                rBcSTVaC.setAttribute('readonly', true);
                
-            }
-            else {
-                ufdestino.removeAttribute('disabled');
-                fecp.removeAttribute('readonly');
+//            }
+//            else {
+//                ufdestino.removeAttribute('disabled');
+//                fecp.removeAttribute('readonly');
 
-                codReceita.removeAttribute('disabled');
+//                codReceita.removeAttribute('disabled');
 
-                idCstSaiPC.removeAttribute('disabled');
-                alpS.removeAttribute('readonly');
-                alcS.removeAttribute('readonly');
-                idFundamentoLegal.removeAttribute('disabled');
+//                idCstSaiPC.removeAttribute('disabled');
+//                alpS.removeAttribute('readonly');
+//                alcS.removeAttribute('readonly');
+//                idFundamentoLegal.removeAttribute('disabled');
 
-                idCstVeVarCF.removeAttribute('disabled');
+//                idCstVeVarCF.removeAttribute('disabled');
 
-                alVeVarCF.removeAttribute('readonly');
-                alVeVarCFSt.removeAttribute('readonly');
-                rBcVeVarCF.removeAttribute('readonly');
-                rBcSTVeVarCF.removeAttribute('readonly');
-                idCstVeVarCont.removeAttribute('disabled');
+//                alVeVarCF.removeAttribute('readonly');
+//                alVeVarCFSt.removeAttribute('readonly');
+//                rBcVeVarCF.removeAttribute('readonly');
+//                rBcSTVeVarCF.removeAttribute('readonly');
+//                idCstVeVarCont.removeAttribute('disabled');
 
-                alVeVarCont.removeAttribute('readonly');
-                alVeVarContSt.removeAttribute('readonly');
-                rBcVeVarCont.removeAttribute('readonly');
-                rBcSTVeVarCont.removeAttribute('readonly');
-                idCstVeAtaCont.removeAttribute('disabled');
-                alVaC.removeAttribute('readonly');
-                alVaCSt.removeAttribute('readonly');
+//                alVeVarCont.removeAttribute('readonly');
+//                alVeVarContSt.removeAttribute('readonly');
+//                rBcVeVarCont.removeAttribute('readonly');
+//                rBcSTVeVarCont.removeAttribute('readonly');
+//                idCstVeAtaCont.removeAttribute('disabled');
+//                alVaC.removeAttribute('readonly');
+//                alVaCSt.removeAttribute('readonly');
 
-                idCstVeAtaSN.removeAttribute('disabled');
-                alVSN.removeAttribute('readonly');
-                alVSNSt.removeAttribute('readonly');
-                rBcVSN.removeAttribute('readonly');
-                rBcSTVSN.removeAttribute('readonly');
-                IdFundLegalSaidaICMS.removeAttribute('disabled');
+//                idCstVeAtaSN.removeAttribute('disabled');
+//                alVSN.removeAttribute('readonly');
+//                alVSNSt.removeAttribute('readonly');
+//                rBcVSN.removeAttribute('readonly');
+//                rBcSTVSN.removeAttribute('readonly');
+//                IdFundLegalSaidaICMS.removeAttribute('disabled');
 
-                rBcVaC.removeAttribute('readonly');
-                rBcSTVaC.removeAttribute('readonly');
+//                rBcVaC.removeAttribute('readonly');
+//                rBcSTVaC.removeAttribute('readonly');
 
-            }
+//            }
             
-        }
+//        }
 
-    });
+//    });
 
 
 
@@ -350,7 +469,7 @@ $(document).ready(function ()
 
 
 
-});
+//});
 function liberarCampos() {
     var uforigem = document.getElementById("ufOrigem");
     var ufdestino = document.getElementById("ufDestino");
@@ -388,9 +507,7 @@ function liberarCampos() {
 
     var IdFundLegalSaidaICMS = document.getElementById("IdFundLegalSaidaICMS");
 
-
-
-
+     
 
 
     if (uforigem.onselect && ufdestino.onselect) {
@@ -673,6 +790,7 @@ $(document).ready(function () {
     }
 
 });
+
 //Salvar em massa aliq icms st venda atacado para contribuinte
 $(document).ready(function () {
     toastOpcoes(); //configurar o toast
@@ -826,7 +944,6 @@ $(document).ready(function () {
     }
 
 });
-
 
 
 //Salvar em massa aliq icms st venda varejo para contribuinte
@@ -3953,6 +4070,269 @@ $(document).ready(function () {
 
 
 });
+
+
+//salvar ncm tributacao
+
+$(document).ready(function () {
+    toastOpcoes();
+    var botaoSalvarNCMTribNCM = document.getElementById("salvarNCMTribNCM"); //variavel que recebe o botao da alteracao do ncm
+    //com NCM
+    var botaoSalvarNCMtribComNCM = document.getElementById("salvarNCMTribComNCM");
+
+
+
+    //verificar se o botao existe
+    if (botaoSalvarNCMTribNCM) {
+        botaoSalvarNCMTribNCM.addEventListener("click", function () {
+            var dados = {}
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var ncmMudar = document.getElementById("ncm");
+            var cestMudar = document.getElementById("cest"); //pegar o valor do input
+
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = "";
+            var ncm = ncmMudar.value;
+            var cest = cestMudar.value; // //variavel que recebe o valor do input
+
+            if (cest != "")
+            {
+                if (cest == "NULL") {
+                    var resultado = confirm("Todos os NCM selecionados TERÃO O CEST APAGADOS, confirma?");
+                    if (resultado == false) {
+                        toastr.warning("Atribuição de CEST com valor Nulo para os produtos selecionados abortada");
+                        /* alert("Atribuição de NCM para os produtos selecionados abortada");*/
+                        document.getElementById("ncm").focus();
+                        return;
+                    }
+
+                } else
+                {
+                    if (cest.length != 9) {
+                        /* alert("Tamanho do NCM incorreto! Digite novamente");*/
+                        document.getElementById("cest").focus();
+                        /* swal('Tamanho do NCM incorreto! Digite novamente"');*/
+                        toastr.error("Tamanho do CEST incorreto! Digite novamente");
+
+                    }
+                }
+
+                
+
+            }
+
+
+
+            if (ncm != "") {
+                if (ncm.length != 10) {
+                    /* alert("Tamanho do NCM incorreto! Digite novamente");*/
+
+                    document.getElementById("ncm").focus();
+                    /* swal('Tamanho do NCM incorreto! Digite novamente"');*/
+                    toastr.error("Tamanho do NCM incorreto! Digite novamente");
+
+                } else {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, ncm: ncm, cest: cest },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Tributacao/TributacaoNcmEditMassaModalEditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
+
+                        }
+
+
+                    });
+
+
+                }
+
+
+            } else {
+                var resultado = confirm("O NCM informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, ncm: ncm, cest: cest },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+                            window.location.href = '/Tributacao/TributacaoNcmEditMassaModalEditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
+                            //window.location.href = '/Produto/EditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
+
+                        }
+
+                    });
+
+
+                } else {
+                    toastr.warning("Atribuição de NCM para os produtos selecionados abortada");
+                    /* alert("Atribuição de NCM para os produtos selecionados abortada");*/
+                    document.getElementById("ncm").focus();
+                }
+
+            }
+
+
+
+        });
+    }
+
+    if (botaoSalvarNCMtribComNCM)
+    {
+        botaoSalvarNCMtribComNCM.addEventListener("click", function ()
+        {
+            var dados = {}
+            var selecionados = document.getElementsByClassName("sel"); //pega os elementos da linha com a classe selecionado
+            var ncmMudar = document.getElementById("ncm");
+            var cestMudar = document.getElementById("cest"); //pegar o valor do input
+
+            var dados = {}; //variavel auxiliar para receber o ID
+            var strDados = "";
+            var ncm = ncmMudar.value;
+            var cest = cestMudar.value; // //variavel que recebe o valor do input
+
+            if (cest != "") {
+                if (cest == "NULL") {
+                    var resultado = confirm("Todos os NCM selecionados TERÃO O CEST APAGADOS, confirma?");
+                    if (resultado == false) {
+                        toastr.warning("Atribuição de CEST com valor Nulo para os produtos selecionados abortada");
+                        /* alert("Atribuição de NCM para os produtos selecionados abortada");*/
+                        document.getElementById("ncm").focus();
+                        return;
+                    }
+
+                } else {
+                    if (cest.length != 9) {
+                        /* alert("Tamanho do NCM incorreto! Digite novamente");*/
+                        document.getElementById("cest").focus();
+                        /* swal('Tamanho do NCM incorreto! Digite novamente"');*/
+                        toastr.error("Tamanho do CEST incorreto! Digite novamente");
+
+                    }
+                }
+
+
+
+            }
+
+
+
+            if (ncm != "") {
+                if (ncm.length != 10) {
+                    /* alert("Tamanho do NCM incorreto! Digite novamente");*/
+
+                    document.getElementById("ncm").focus();
+                    /* swal('Tamanho do NCM incorreto! Digite novamente"');*/
+                    toastr.error("Tamanho do NCM incorreto! Digite novamente");
+
+                } else {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, ncm: ncm, cest: cest },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+
+                            window.location.href = '/Tributacao/TributacaoNcmEditMassaModalEditMassaModalComNCMPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
+
+                        }
+
+
+                    });
+
+
+                }
+
+
+            } else {
+                var resultado = confirm("O NCM informado foi NULO, deseja continuar ?");
+                if (resultado == true) {
+                    /*Laço para varrer os elementos com a tag TD*/
+                    for (var i = 0; i < selecionados.length; i++) {
+                        var selecionado = selecionados[i]; //variavel para conter os itens selecionados
+                        selecionado = selecionado.getElementsByTagName("td"); //atribui o item com a tag td
+                        dados[i] = selecionado[0].innerHTML;//atribui o valor presente no indice 0 à variavel dados
+                        dados[i] = dados[i].trim();
+                        strDados += dados[i] + ",";
+                    }
+
+                    bloqueioTela();//bloqueia tela
+
+                    //agora o ajax
+                    $.ajax({
+
+                        data: { strDados: strDados, ncm: ncm, cest: cest },
+                        types: "GET",
+                        processData: true,
+                        success: function () {
+                            window.location.href = '/Tributacao/TributacaoNcmEditMassaModalEditMassaModalComNCMPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
+                            //window.location.href = '/Produto/EditMassaModalPost?strDados=' + strDados + '&ncm=' + ncm + '&cest=' + cest;
+
+                        }
+
+                    });
+
+
+                } else {
+                    toastr.warning("Atribuição de NCM para os produtos selecionados abortada");
+                    /* alert("Atribuição de NCM para os produtos selecionados abortada");*/
+                    document.getElementById("ncm").focus();
+                }
+
+            }
+
+
+
+
+
+
+        });
+    }
+
+
+});
+
+
+
 
 //salvar ncm alterados
 $(document).ready(function () {

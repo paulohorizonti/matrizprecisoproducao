@@ -273,6 +273,20 @@ table.dataTable thead th, table.dataTable thead td {
     .pr-botoes-fundo::placeholder {
         background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%) !important;
     }
+
+.pr-botoes-fundo-menu {
+    background-color: rgba(0, 0, 0, 0.02);
+    color: #021E36;
+    font-size: 0.9em;
+    font-weight: 300;
+    padding: 10px;
+}
+    .pr-botoes-fundo-menu:hover {
+        background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%);
+    }
+.pr-botoes-fundo-menu::placeholder {
+    background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%) !important;
+}
     
 /**Cor quando passar por cima**/
 #tablepr tr:hover td {
@@ -929,6 +943,10 @@ li.page-item.active > a {
     border-top: none;
     border-left: none;
 }
+
+
+
+
 .prn-borderEspecial3 {
     border-right: 1px solid #fff;
   
@@ -940,4 +958,14 @@ li.page-item.active > a {
     margin-bottom: 1rem;
     border: 1px solid transparent;
     border-radius: 0.25rem;
+}
+
+.prn-borderEspecial4 {
+    border-right: 0.5px solid #454d55;
+}
+.prn-borderEspecial5 {
+    border-left: 1px solid #02101f14 !important;
+    border-bottom: none;
+    border-top: none;
+    border-right: none;
 }

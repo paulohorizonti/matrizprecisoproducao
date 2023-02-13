@@ -1,10 +1,15 @@
 ﻿using MatrizTributaria.Areas.Cliente.Models;
 using MatrizTributaria.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Web.Mvc;
+
 
 namespace MatrizTributaria.Controllers
 {
@@ -18,7 +23,7 @@ namespace MatrizTributaria.Controllers
         List<TributacaoGeralView> tribMTX = new List<TributacaoGeralView>();
         List<Produto> prodMTX = new List<Produto>();
         Usuario user;
-        Empresa emp;
+      //  Empresa emp;
 
         Usuario usuario;
         Empresa empresa;
@@ -40,8 +45,14 @@ namespace MatrizTributaria.Controllers
                 //verificar
                 if(!(Session["cnpjEmp"].ToString() == "30.272.433/0001-67"))
                 {
-                    return RedirectToRoute("cliente");
+                    //verificar
+                    if (!(Session["cnpjEmp"].ToString() == "15.381.712/0001-75"))
+                    {
+                        return RedirectToRoute("cliente");
+                    }
+                    
                 }
+               
             }
             //string cnpj = Session["cnpjEmp"].ToString();
             return View();
@@ -152,7 +163,13 @@ namespace MatrizTributaria.Controllers
                     Session["cnpjEmp"] = user.empresa.cnpj;
                     Session["empresa"] = user.empresa.fantasia;
 
-                    if(user.acesso_empresas == 1)
+                    //03/08/2022 - verificar se é simples nacional
+                    Session["simplesNacional"] = user.empresa.simples_nacional.ToString();
+                    TempData["UfOrigem"] = user.empresa.estado.ToString();
+                    TempData["UfDestino"] = user.empresa.estado.ToString();
+                    
+
+                    if (user.acesso_empresas == 1)
                     {
                         Session["acessoEmpresas"] = "sim";
                     }
@@ -249,8 +266,62 @@ namespace MatrizTributaria.Controllers
 
                 
             }
+
+            /*Vitor: 08112022*/
+            //Verifica se o Usuario é Preciso Ou NorteSYS
+            if (user.empresa.id != 4 && user.empresa.id != 42)
+            {
+                //Verificar pagamento SuperLogica
+                int? idSuperLogica = user.empresa.id_superlogica;
+                //validar o cliente na superlogica
+                var requisicaoWeb = WebRequest.CreateHttp("https://api.superlogica.net/v2/financeiro/clientes/" + idSuperLogica);
+
+                //passar os tokens
+                requisicaoWeb.Method = "GET";
+                requisicaoWeb.Headers["app_token"] = "6c7a8c42-3291-39d5-bc1c-1e0ce8e1beef";//Adicionando o AuthToken  no Header da requisição
+                requisicaoWeb.Headers["access_token"] = "05deedee-25c2-46ab-8fa3-10cd78f3f297";//Adicionando o AuthToken  no Header da requisição
+
+                //verificando se o cadastro do cliente existe e esta ok
+                using (HttpWebResponse resposta = (HttpWebResponse)requisicaoWeb.GetResponse())
+                {
+                    if (resposta.StatusCode == HttpStatusCode.OK)
+                    {
+                        //pegando os dados do cliente da resposta da api
+                        var streamDados = resposta.GetResponseStream();
+                        StreamReader reader = new StreamReader(streamDados);
+
+                        int combranças = 0;
+                        string objResponse = reader.ReadToEnd();
+
+                        string[] linhas = objResponse.Split(',');
+
+                        foreach (string linha in linhas)
+                        {
+                            string texto = linha.Replace('"', '|');
+                            if (texto.StartsWith("|quantidade_cobs_atrasadas|"))
+                            {
+                                string[] campo = texto.Split('|');
+                                if (campo[3] != "0")
+                                {
+                                    combranças = int.Parse(campo[3]);
+                                }
+                            }
+                        }
+                        if (combranças > 0)
+                        {
+                            Session["usuario"] = null;
+                            ViewBag.Message = "Não foi possível conectar, motivo: Debitos em atraso!";
+                            ViewBag.Empresas = db.Empresas;
+                            return View();
+                        }
+
+                    }
+
+                }
+            }
+            ViewBag.Message = "Bem vindo : " + user.nome;
             ViewBag.Empresas = db.Empresas;
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         //alteração de senha usuario
@@ -323,7 +394,7 @@ namespace MatrizTributaria.Controllers
 
             }
 
-            return null;
+           // return null;
         }
         public ActionResult LogOut()
         {
@@ -338,15 +409,21 @@ namespace MatrizTributaria.Controllers
                 TempData["usuarioEmpresa"] = null;
                 Session["usuarios"] = null;
                 Session["empresas"] = null;
+                Session["simplesNacional"] = null;
                 TempData["procuraCAT"] = null;
+                TempData["procuraPor"] = null;
 
                 //cliente
                 TempData["prdInexistente"] = null;
                 TempData["analise2"] = null;
                 TempData["UfOrigem"] = null;
                 TempData["UfDestino"] = null;
-
-
+                TempData["procuraPor"] = null;
+                TempData["analiseSN"] = null;
+                TempData["tributacao"] = null;
+                TempData["analise_NCM"] = null;
+                TempData["tributacaoMTX_NCMView"] = null;
+                TempData["linhas"] = null;
                 return RedirectToAction("Index");
             }
             else

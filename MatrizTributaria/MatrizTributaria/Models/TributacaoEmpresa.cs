@@ -209,6 +209,9 @@ namespace MatrizTributaria.Models
         [Column("UF_DESTINO")]
         public string UF_DESTINO { get; set; }
 
+        [Column("ATIVO")]
+        public sbyte ATIVO { get; set; }
+
 
 
 

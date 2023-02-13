@@ -53,7 +53,7 @@ namespace MatrizTributaria.Models
         public Nullable<decimal> aliqEntPis { get; set; }
 
         [Column("Aliq_Saida_Pis")]
-        public Nullable<decimal> aliqSaidaPis { get; set; }
+        public decimal? aliqSaidaPis { get; set; }
 
         [Column("Aliq_Ent_Cofins")]
         public Nullable<decimal> aliqEntCofins { get; set; }

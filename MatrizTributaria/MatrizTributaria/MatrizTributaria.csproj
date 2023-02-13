@@ -316,6 +316,9 @@
     <Compile Include="Areas\Cliente\Controllers\HomeClienteController.cs" />
     <Compile Include="Areas\Cliente\Controllers\ImportarExportarJsonController.cs" />
     <Compile Include="Areas\Cliente\Controllers\TributacaoEmpresaController.cs" />
+    <Compile Include="Areas\Cliente\Models\AnaliseProd.cs" />
+    <Compile Include="Areas\Cliente\Models\AnaliseTributaria3.cs" />
+    <Compile Include="Areas\Cliente\Models\AnaliseTributariaNCM.cs" />
     <Compile Include="Areas\Cliente\Models\AnaliseTributariaSn .cs" />
     <Compile Include="Areas\Cliente\Models\AnaliseTributaria.cs" />
     <Compile Include="Areas\Cliente\Models\AnaliseTributaria2.cs" />
@@ -367,6 +370,9 @@
     <Compile Include="Models\TributacaoEmpresa.cs" />
     <Compile Include="Models\TributacaoGeralView.cs" />
     <Compile Include="Models\TributacaoNCM.cs" />
+    <Compile Include="Models\TributacaoNCMView.cs" />
+    <Compile Include="Models\TributacaoSN.cs" />
+    <Compile Include="Models\TtributacaoGeralViewSN.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Versao.cs" />
     <Compile Include="Models\ViewModels\CategoriaProdutoViewModel.cs" />
@@ -397,6 +403,7 @@
     <Content Include="Areas\Cliente\Content\img\logo_nova_empresas.png" />
     <Content Include="Areas\Cliente\Content\jquery-1.10.2.min.js" />
     <Content Include="Areas\Cliente\Content\shieldui-lite-all.min.js" />
+    <Content Include="Areas\Cliente\Scripts\adm-direcionar-menus.js" />
     <Content Include="Areas\Cliente\Scripts\adm-edicao-massa.js" />
     <Content Include="Areas\Cliente\Scripts\Graficos\bootstrap.bundle.min.js" />
     <Content Include="Areas\Cliente\Scripts\Graficos\bootstrap.min.js" />
@@ -2507,6 +2514,23 @@
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliAliqRedBasCalcIcmsCompAtaMassaSn.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliAliqRedBasCalcIcmsCompSNMassaSn.cshtml" />
     <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliAliqRedBasCalcIcmsSTCompSNMassaSn.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstEntradaPisCofinsMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\AnaliseCSTSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstVendaVarCFMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstVendaVarContMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstSaidaPisCofinsMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstVendaAtaContMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EdtCliCstVendaAtaSNMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\AnaliseProdt.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\TabelaProdutoSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\TributacaoEmpresa\EditClienteProdMassaSN.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CamposSelecionaUF.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CardInicial2.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CamposSelecionaUFCliente.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CardInicialRed.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CardInicialPisCofins.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\MensagemRODAPE.cshtml" />
+    <Content Include="Areas\Cliente\Views\Acoes\CardInicialST.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
@@ -2942,7 +2966,17 @@
     <Content Include="Views\Empresa\MudarEmpresa.cshtml" />
     <Content Include="Views\Produto\EditTributacaoMassaNCMModal.cshtml" />
     <Content Include="Views\Acoes\CamposSelecionaUFNCM .cshtml" />
-    <Content Include="Views\Empresa\CadSuperLogica.cshtml" />
+    <Content Include="Views\Empresa\Cadastro.cshtml" />
+    <Content Include="Views\Tributacao\TributacaoNcm.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsTribNCM.cshtml" />
+    <Content Include="Views\Acoes\botoesTribNCM.cshtml" />
+    <Content Include="Views\Tributacao\TributacaoNcmEditMassaModal.cshtml" />
+    <Content Include="Views\Tributacao\TributacaoNcmEditMassaNCMModal.cshtml" />
+    <Content Include="Views\Tributacao\GraficoIcmsSaidaSN.cshtml" />
+    <Content Include="Views\Tributacao\TributacaoNcmSN.cshtml" />
+    <Content Include="Views\Acoes\CamposSelecionaUFCliente.cshtml" />
+    <Content Include="Views\Tributacao\TributacaoComNCM.cshtml" />
+    <Content Include="Views\Tributacao\TributacaoNcmEditMassaModalComNCM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2950,6 +2984,7 @@
     <Folder Include="Areas\Cliente\Views\BackupActions\" />
     <Folder Include="Jsons\" />
     <Folder Include="Views\Criptografia\" />
+    <Folder Include="Views\Teste\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

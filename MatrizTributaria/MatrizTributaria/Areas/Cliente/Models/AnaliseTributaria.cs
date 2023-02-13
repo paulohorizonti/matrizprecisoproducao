@@ -209,6 +209,13 @@ namespace MatrizTributaria.Areas.Cliente.Models
         public string UF_DESTINO { get; set; }
 
 
+        [Column("ATIVO")]
+        public sbyte ATIVO { get; set; }
+
+
+
+        
+
         [Column("Cst_Entrada_PisCofins_INTERNO")]
         public int? Cst_Entrada_PisCofins_INTERNO { get; set; }
 
@@ -321,6 +328,7 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("Cest_INTERNO")]
         public string Cest_INTERNO { get; set; }
 
+
         [Column("NCM_INTERNO")]
         public string NCM_INTERNO { get; set; }
 
@@ -339,7 +347,11 @@ namespace MatrizTributaria.Areas.Cliente.Models
         [Column("UF_Destino_INTERNO")]
         public string UF_Destino_INTERNO { get; set; }
 
-       
+
+
+
 
     }
+    //outra classe
+
 }

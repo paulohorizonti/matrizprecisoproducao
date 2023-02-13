@@ -9,6 +9,9 @@ $(document).ready(function () {
     //funcao para selecionar as linhas da tabela: o parametro é a tabela pelo seu ID
     selecionaLinhas(tabela);
 
+    //TO-DO - SELECIONAR TODA A TELA
+
+
 
     $('#edtSelCstNfeSNCli').click(function () {
         btnAlterarSelecionados = document.getElementById("edtSelCstNfeSNCli"); //botao para confirmar a edição dos selecionados
@@ -324,6 +327,7 @@ $(document).ready(function () {
     }
 
 });
+
 
 /*=============== ATUALIZAÇÃO CST COMPRA ATACADO  =====================*/
 /*Alteração CST ATACADO NO CLIENTYE*/
@@ -680,10 +684,29 @@ $(document).ready(function () {
 
 
     $('#edtSelCstVenaAtaSNCli').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaSNCli"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliCstVendaAtaSNMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+        opcaoFiltro = opcaoSelect;
+    if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas"|| totalRegistros.innerHTML == "0")
+        {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else
+        {
+            btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaSNCli"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliCstVendaAtaSNMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+       
     });
 
     //fiz alterações aqui de novo
@@ -790,10 +813,26 @@ $(document).ready(function () {
 
 
     $('#edtSelCstVenaAtaContCli').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaContCli"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliCstVendaAtaContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Nulas Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro != "Descrição nula" && opcaoFiltro != "NCM Diferentes" && opcaoFiltro != "NCM Nulo Cliente" && opcaoFiltro != "CEST Diferentes" && opcaoFiltro != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+            btnAlterarSelecionados = document.getElementById("edtSelCstVenaAtaContCli"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliCstVendaAtaContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+        }
+      
     });
 
     //fiz alterações aqui de novo
@@ -900,10 +939,29 @@ $(document).ready(function () {
 
 
     $('#edtSelCstVenVarContCli').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelCstVenVarContCli"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliCstVendaVarContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Nulas Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro != "Descrição nula" && opcaoFiltro != "NCM Diferentes" && opcaoFiltro != "NCM Nulo Cliente" && opcaoFiltro != "CEST Diferentes" && opcaoFiltro != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else
+        {
+            btnAlterarSelecionados = document.getElementById("edtSelCstVenVarContCli"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliCstVendaVarContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+        }
+
+       
     });
 
     //fiz alterações aqui de novo
@@ -1010,11 +1068,34 @@ $(document).ready(function () {
 
 
     $('#edtSelCstVenVarCFCli').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelCstVenVarCFCli"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliCstVendaVarCFMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        if (opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Nulas Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro != "Descrição nula" && opcaoFiltro != "NCM Diferentes" && opcaoFiltro != "NCM Nulo Cliente" && opcaoFiltro != "CEST Diferentes" && opcaoFiltro != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelCstVenVarCFCli"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliCstVendaVarCFMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+        }
+
+        
     });
+
+
+
+
 
     //fiz alterações aqui de novo
     $('#edtSelCstVenVarCFCliManual').click(function () {
@@ -1023,6 +1104,51 @@ $(document).ready(function () {
         //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
         alterarSelecionados(btnAlterarSelecionados, controller);
     });
+
+
+    //Botao de Alteração de todos os Registros
+    $('#edtAlterarTODOS').click(function () {
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+      //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        opcaoFiltro = opcaoSelect;
+
+        var controller = document.getElementById("titulo");
+
+       
+        totalRegistros = document.getElementById("totalReg");//total de registros
+       // alert(opcaoFiltro.value);
+
+       
+
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas"|| totalRegistros.innerHTML == "0")
+        {
+            toastr.warning("Não há registros a serem atualizados !!");
+           // alert("Não há registros a serem atualizados !!")
+
+        }else
+        {
+          
+            //concatena para montar o nome da action que vai fazer a alteração: titulo da pagina + o sufixo TODOS
+            controller = controller.innerHTML + "TODOS";
+           // alert(controller);
+                     
+            btnAlterarTodos = document.getElementById("edtAlterarTODOS"); //atribui o botao de alterar todos
+            //controller = "EdtCliCstVendaVarCFMassaTODOS";
+            alterarTodosRegistros(btnAlterarTodos, controller, totalRegistros, opcaoFiltro);
+        }
+       
+
+
+    });
+
+
 
 });
 
@@ -1121,10 +1247,29 @@ $(document).ready(function () {
 
 
     $('#edtSelCstSaiPisCofCli').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelCstSaiPisCofCli"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliCstSaidaPisCofinsMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        if (opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Nulas Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro != "Descrição nula" && opcaoFiltro != "NCM Diferentes" && opcaoFiltro != "NCM Nulo Cliente" && opcaoFiltro != "CEST Diferentes" && opcaoFiltro != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelCstSaiPisCofCli"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliCstSaidaPisCofinsMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+       
     });
 
     //fiz alterações aqui de novo
@@ -3218,10 +3363,37 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenAtaSNCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsSTVenAtaSNMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsSTVenAtaSNMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+
+
+
+       
     });
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenAtaSNClienteManual').click(function () {
@@ -3325,10 +3497,34 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsVenAtaSNCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsVenAtaSNMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsVenAtaSNMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+      
     });
 
     $('#edtSelecionadosRedBasCalcIcmsVenAtaSNClienteManual').click(function () {
@@ -3437,10 +3633,33 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenAtaContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenAtaContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenAtaContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+      
     });
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenAtaContClienteManual').click(function () {
@@ -3545,10 +3764,34 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsVenAtaContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenAtaContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsVenAtaContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenAtaContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsVenAtaContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+       
     });
 
     $('#edtSelecionadosRedBasCalcIcmsVenAtaContClienteManual').click(function () {
@@ -3656,10 +3899,36 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenVarContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenVarContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsSTVenVarContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenVarContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsSTVenVarContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+
+
+
+
+       
     });
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenVarContClienteManual').click(function () {
@@ -3767,10 +4036,35 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsVenVarContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenVarContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsVenVarContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenVarContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsVenVarContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+        
     });
 
     $('#edtSelecionadosRedBasCalcIcmsVenVarContClienteManual').click(function () {
@@ -3878,10 +4172,36 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenVarCFCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenVarCFCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsSTVenVarCFMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro.value != "Diferentes" && opcaoFiltro.value != "Nulos Cliente" && opcaoFiltro.value != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro.value != "Alíquotas Maiores" && opcaoFiltro.value != "Alíquotas Menores" && opcaoFiltro.value != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+          
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsSTVenVarCFCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsSTVenVarCFMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+        
+          
+
+
+
+       
     });
 
     $('#edtSelecionadosRedBasCalcIcmsSTVenVarCFClienteManual').click(function () {
@@ -3982,10 +4302,45 @@ $(document).ready(function () {
 
 
     $('#edtSelecionadosRedBasCalcIcmsVenVarCFCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenVarCFCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EdtCliAliqRedBasCalcIcmsVenVarCFMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (
+            opcaoFiltro  != "Diferentes" &&
+            opcaoFiltro  != "Nulos Cliente" &&
+            opcaoFiltro  != "Descrição diferente" &&
+            opcaoFiltro  != "Descrição nula" &&
+            opcaoFiltro  != "NCM Diferentes" &&
+            opcaoFiltro  != "NCM Nulo Cliente" &&
+            opcaoFiltro  != "CEST Diferentes" &&
+            opcaoFiltro  != "CEST Nulo Cliente" &&
+            opcaoFiltro  != "Alíquotas Maiores" &&
+            opcaoFiltro  != "Alíquotas Menores" &&
+            opcaoFiltro  != "Alíquotas Nulas no Cliente" ||
+            totalRegistros.innerHTML == "0")
+           {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("edtSelecionadosRedBasCalcIcmsVenVarCFCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EdtCliAliqRedBasCalcIcmsVenVarCFMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+        }
+
+       
     });
 
     $('#edtSelecionadosRedBasCalcIcmsVenVarCFClienteManual').click(function () {
@@ -4087,10 +4442,35 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsSTVenAtaSNCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsSTVenAtaSNMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro  != "Diferentes" && opcaoFiltro  != "Nulos Cliente" && opcaoFiltro  != "Descrição diferente" && opcaoFiltro  != "Descrição nula" && opcaoFiltro  != "NCM Diferentes" && opcaoFiltro  != "NCM Nulo Cliente" && opcaoFiltro  != "CEST Diferentes" && opcaoFiltro  != "CEST Nulo Cliente"
+            && opcaoFiltro  != "Alíquotas Maiores" && opcaoFiltro  != "Alíquotas Menores" && opcaoFiltro  != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsSTVenAtaSNMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+
+      
     });
 
     $('#editarSelecionadosIcmsSTVenAtaSNClienteManual').click(function () {
@@ -4193,10 +4573,32 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsVenAtaSNCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsVenAtaSNMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro  != "Diferentes" && opcaoFiltro  != "Nulos Cliente" && opcaoFiltro  != "Descrição diferente" && opcaoFiltro  != "Descrição nula" && opcaoFiltro  != "NCM Diferentes" && opcaoFiltro  != "NCM Nulo Cliente" && opcaoFiltro  != "CEST Diferentes" && opcaoFiltro  != "CEST Nulo Cliente"
+            && opcaoFiltro  != "Alíquotas Maiores" && opcaoFiltro  != "Alíquotas Menores" && opcaoFiltro  != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+                                                             
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenAtaSNCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsVenAtaSNMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+               
     });
 
     $('#editarSelecionadosIcmsVenAtaSNClienteManual').click(function () {
@@ -4299,10 +4701,29 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsSTVenAtaContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenAtaContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsSTVenAtaContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro  != "Diferentes" && opcaoFiltro  != "Nulos Cliente" && opcaoFiltro  != "Descrição diferente" && opcaoFiltro  != "Descrição nula" && opcaoFiltro  != "NCM Diferentes" && opcaoFiltro  != "NCM Nulo Cliente" && opcaoFiltro  != "CEST Diferentes" && opcaoFiltro  != "CEST Nulo Cliente"
+            && opcaoFiltro  != "Alíquotas Maiores" && opcaoFiltro  != "Alíquotas Menores" && opcaoFiltro  != "Alíquotas Nulas no Cliente" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenAtaContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsSTVenAtaContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+        }
+
     });
 
     $('#editarSelecionadosIcmsSTVenAtaContClienteManual').click(function () {
@@ -4406,10 +4827,32 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsVenAtaContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenAtaContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsVenAtaContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenAtaContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsVenAtaContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+               
     });
 
     $('#editarSelecionadosIcmsVenAtaContClienteManual').click(function () {
@@ -4512,10 +4955,36 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsSTVenVarContCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenVarContCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsSTVenVarContMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenVarContCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsSTVenVarContMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+
+
+      
     });
 
     $('#editarSelecionadosIcmsSTVenVarContClienteManual').click(function () {
@@ -4619,10 +5088,35 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsVenVarContCliente').click(function () {
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
         btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenVarContCliente"); //botao para confirmar a edição dos selecionados
         controller = "EditClienteAliqIcmsVenVarContMassaModal"; //envia o nome da Action para a função
         //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
         alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+
+
+       
     });
 
     $('#editarSelecionadosIcmsVenVarContClienteManual').click(function () {
@@ -4728,10 +5222,33 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsSTVenVarCFCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenVarCFCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsSTVenVarCFMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsSTVenVarCFCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsSTVenVarCFMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+       
     });
 
     $('#editarSelecionadosIcmsSTVenVarCFClienteManual').click(function () {
@@ -4833,10 +5350,33 @@ $(document).ready(function () {
 
 
     $('#editarSelecionadosIcmsVenVarCFCliente').click(function () {
-        btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenVarCFCliente"); //botao para confirmar a edição dos selecionados
-        controller = "EditClienteAliqIcmsVenVarCFMassaModal"; //envia o nome da Action para a função
-        //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
-        alterarSelecionados(btnAlterarSelecionados, controller);
+        //pegar o select
+        var select = document.getElementById("filtroNulo");
+
+        var opcaoSelect = select.options[select.selectedIndex].text;
+
+        //  opcaoFiltro = document.getElementById("opcaoFiltro"); //opcao do filtro
+
+        totalRegistros = document.getElementById("totalReg");//total de registros
+
+        opcaoFiltro = opcaoSelect;
+        //so atualiza se forem DIFERENTES OU ESTIVEREM NULOS NO CLIENTE
+        if (opcaoFiltro != "Diferentes" && opcaoFiltro != "Nulos Cliente" && opcaoFiltro != "Descrição diferente" && opcaoFiltro.value != "Descrição nula" && opcaoFiltro.value != "NCM Diferentes" && opcaoFiltro.value != "NCM Nulo Cliente" && opcaoFiltro.value != "CEST Diferentes" && opcaoFiltro.value != "CEST Nulo Cliente"
+            && opcaoFiltro != "Alíquotas Maiores" && opcaoFiltro != "Alíquotas Menores" && opcaoFiltro != "Alíquotas Nulas no Cliente" && opcaoFiltro != "Cst Diferentes" && opcaoFiltro != "Cst Nulos no Cliente" && opcaoFiltro != "Subst. Tributária" && opcaoFiltro != "Não Tributadas" && opacaoFiltro == "Isentas" || totalRegistros.innerHTML == "0") {
+            toastr.warning("Não há registros a serem atualizados !!");
+
+
+        } else {
+
+            btnAlterarSelecionados = document.getElementById("editarSelecionadosIcmsVenVarCFCliente"); //botao para confirmar a edição dos selecionados
+            controller = "EditClienteAliqIcmsVenVarCFMassaModal"; //envia o nome da Action para a função
+            //funcao para enviar os selecionados para action: o parametro são os selecionados pelo ID e a action, definida pela var controller
+            alterarSelecionados(btnAlterarSelecionados, controller);
+
+        }
+
+
+       
     });
 
     $('#editarSelecionadosIcmsVenVarCFClienteManual').click(function () {
@@ -5599,6 +6139,52 @@ function alterarSelecionados(par1, par2) {
 }
 
 
+/**
+ * 
+ * @param {any} par1 -> Botão clicado
+ * @param {any} par2 -> Controller
+ * @param {any} par3 -> Quantidade de registros
+ * @param {any} par4 -> O´ção de filtro
+ */
+function alterarTodosRegistros(par1, par2, par3, par4)
+{
+    opcaoF = par4;
+    controler = par2; //para verifiar a contagem de registros
+  //  controler = controler + "CONTAGEM";//para verifiar a contagem de registros
+    //alert(controler);
+    //se o botao for clicado ele entra na condição
+    if (par1)
+    {
+        //pede uma confirmação do usuário
+        var confirme = confirm("ATENÇÃO : ESTA AÇÃO IRÁ ALTERAR TODOS OS REGISTROS (" + par3.innerHTML + " registros) DESTE FILTRO. CLIQUE EM 'OK' PARA CONTINUAR");
+        //se a confirmação for positiva ele entra na condição
+        if (confirme == true) {
+
+           
+
+            //agora mandar esse vetor para o modal e passar o valor correto do ncm
+            bloqueioTela();//bloqueia a tela ate a chamada do ajax
+
+            //progressbar
+        /*    move(par3.innerHTML);*/
+
+            $.ajax(
+                {
+                    data: { array: opcaoF },
+                    types: "GET",
+                    processData: true,
+                    success: function () {
+
+                        window.location.href = '/Cliente/TributacaoEmpresa/' + par2 + '?opcao=' + opcaoF;
+                      
+                    }
+
+                });
+        }
+
+    }
+
+}
 
 
 function alterarSelecinadosDescricao(par1, par2)
@@ -5637,6 +6223,10 @@ function alterarSelecinadosDescricao(par1, par2)
             strDados += dados[i] + ",";
 
         }
+
+       
+
+
 
         bloqueioTela();//bloqueia a tela ate a chamada do ajax
 
@@ -5744,6 +6334,111 @@ function onlynumber(evt) {
     }
 }
 
+//$(document).ready(function () {
+  
    
+
+//});
+
+//function move(qtdRegistros, controler, opcao) {
+//  //  alert(qtdRegistros + "-" + controler + " - " + opcao);
+//    //var opcaoF = opcao.value;
+//    var i = 0;
+//    if (i == 0) {
+//        i = 1;
+//        var elem = document.getElementById("myBar");
+
+//        var width = 0;
+//       // var teste = "";
+//        var id = setInterval(frame, 10);
+//        function frame() {
+//            if (width >= qtdRegistros) {
+              
+//                clearInterval(id);
+//                i = 0;
+//            } else {
+               
+              
+//              //  alert(width);
+//                //var url = '/Cliente/TributacaoEmpresa/' + controler + '?opcao=' + opcao;
+//                //$.get(url, null, function (data) {
+//                //    $("#rData").html(data);
+//                //    teste = data;
+//                //});
+
+//               // alert(url);
+//               // alert(teste);
+
+//                /*  width++;*/
+               
+//                width = qtdRegistros - width;
+//                var x = (width * 100) / qtdRegistros;
+//                x = Math.round(x);
+
+//                elem.style.width = x + "%";
+//                elem.innerHTML = x + "%";
+//            }
+//        }
+//    }
+//}
+
+
+
+//function move(par) {
+//    var i = 0;
+//    if (i == 0) {
+//        i = 1;
+//        var elem = document.getElementById("myBar");
+//        var width = par; //5679
+//        var sub = 0;
+//        var id = setInterval(frame, 2000);
+
+
+//        function frame() {
+//            if (width == 0) {
+//                clearInterval(id);
+//                i = 0;
+//            } else {
+//                ////ajax
+//                //var url = '/Cliente/TributacaoEmpresa/EdtCliCstVendaVarCFMassaSNTODOSCONTAGEM?opcao=Nulos Cliente';
+//                //$.get(url, null, function (data) {
+//                //    $("#rData").html(data);
+//                //  /*  var teste = document.getElementById("rData");*/
+//                //    alert("Contador sem value: " + data);
+                   
+//                //    //width = teste.innerHTML;
+                  
+//                //    //alert("Width sem nada: " + width);
+
+//                //});
+
+//                $.ajax({
+//                    url: '/Cliente/TributacaoEmpresa/EdtCliCstVendaVarCFMassaSNTODOSCONTAGEM?opcao=Nulos Cliente'
+//                    , data: { data: width }
+//                    , type: "GET"
+//                    , datatype: "html"
+//                    , success: function (data) {
+//                        if (data.resultado > 0) {
+//                            location.reload();
+//                        }
+//                    }
+//                });
+
+//                //seria pegar o valor do elemento html, mas ele ainda nao retornou
+
+
+               
+//                width = width-30; 
+
+//                sub = par - width;
+//               // width = par - width;
+//                var x = (sub * 100) / par;
+//                x = Math.round(x);
+//                elem.style.width = x + "%";
+//                elem.innerHTML = x + "%";
+//            }
+//        }
+//    }
+//}
 
 
