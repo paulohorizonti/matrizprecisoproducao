@@ -78,16 +78,16 @@
                                 </div>
 
                                 <div class="form-group col-lg-2">
-                                    <label class="pr-fontalternativa">CEST</label>
+                                    <label class="pr-fontalternativa">NCM</label>
                                     <div class="input-group input-group-sm">
                                         @if (ViewBag.FiltroCorrenteCest == null)
                                         {
-                                            @Html.TextBox("ProcuraCEST", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o CEST", id = "cest" })
+                                            @Html.TextBox("ProcuraNCM", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o NCM", id = "ncm" })
 
                                         }
                                         else
                                         {
-                                            @Html.TextBox("ProcuraCEST", (string)ViewBag.FiltroCorrenteCest, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o CEST", id = "cest" })
+                                            @Html.TextBox("ProcuraNCM", (string)ViewBag.FiltroCorrenteNCM, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o ", id = "ncm" })
 
                                         }
 

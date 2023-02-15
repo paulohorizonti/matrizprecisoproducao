@@ -652,47 +652,52 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
 
             /*Red Base Calc  ICMS  venda ATA PARA CONTRIBUINTE*/
-            ViewBag.RedBaseCalcICMSVataMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVataMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVataIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVataNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVataNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-
-
-            ViewBag.RedBaseCalcICMSVataNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVataMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVataMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVataIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVataNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVataNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVataNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            
+            ViewBag.RedBaseCalcICMSVataSemReducao = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
 
             /*Red Base Calc  ICMS ST  venda ATA PARA CONTRIBUINTE*/
-            ViewBag.RedBaseCalcICMSSTVataMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVataMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVataIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVataNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVataNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVataMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVataMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVataIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVataNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVataNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVataNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
+            ViewBag.RedBaseCalcICMSSTVataSemReducao = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
-            ViewBag.RedBaseCalcICMSSTVataNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
             /*Redução base de calc ICMS venda no atacado para Simples Nacional*/
-            ViewBag.RedBaseCalcICMSVATASimpNacionalMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVATASimpNacionalMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVATASimpNacionalIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVATASimpNacionalNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVATASimpNacionalNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSVATASimpNacionalNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVATASimpNacionalMaior       = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVATASimpNacionalMenor       = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVATASimpNacionalIgual       = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVATASimpNacionalNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVATASimpNacionalNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSVATASimpNacionalNulaAmbos   = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            
+            ViewBag.RedBaseCalcICMSVATASimpNacionalSemReducao  = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null  && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
 
 
 
             /*Redução base de calc ICMS ST venda no atacado para Simples Nacional*/
-            ViewBag.RedBaseCalcICMSSTVATASimpNacionalMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVATASimpNacionalMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVATASimpNacionalIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVATASimpNacionalNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
-            ViewBag.RedBaseCalcICMSSTVATASimpNacionalNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalMaior = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalMenor = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalIgual = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalNulaInterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalNulaExterno = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
 
-            ViewBag.RedBaseCalcICMSSTVATASimpNacionalNulaAmbos = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+            ViewBag.RedBaseCalcICMSSTVATASimpNacionalSemReducao = this.analise_NCM.Count(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino));
+
 
             return View();
         }
@@ -2970,8 +2975,6 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             }
 
-
-
             //numero de linhas? se o parametro numerolinhas vier preenchido ele atualiza a variavel, caso contrario continua em 10 (padrao)
             ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 5;
             //ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3"; //filtro para mostrar todos os dados
@@ -3028,17 +3031,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
                 return View(this.trib3.ToPagedList(numeroPagina, tamaanhoPagina)); //retorna a view com o numero de paginas e tamanho
 
-
-
-
-
-
             }
             else
             {
 
                 ////<!--Escrever codigo para produtos não encontrados na tabela -->
-
                 return RedirectToAction("TabelaProduto2", new { filtroSelect = 2 });
             }
 
@@ -18191,7 +18188,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ////persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
             //TempData.Keep("opcao");
 
-            VerificarOpcaoAliq(filtroNulo, opcao);
+            VerificarOpcaoRed(filtroNulo, opcao);
             opcao = TempData["opcao"].ToString();
 
             //origem e destino
@@ -18237,170 +18234,218 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
 
-
-           
-
             /*Switch da opção*/
             switch (opcao)
             {
                 case "Maiores":
+                case "Alíquotas Maiores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
                     switch (ViewBag.Filtro)
                     {
-                       
+
                         case "1":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
-
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
                     }
                     break;
                 case "Menores":
+                case "Alíquotas Menores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
-
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
                     }
                     break;
                 case "Iguais":
+                case "Alíquotas Iguais":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
-
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
                     }
                     break;
                 case "Nulas Cliente":
+                case "Alíquotas Nulas no Cliente":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
                     switch (ViewBag.Filtro)
                     {
+
                         case "1":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+
                     }
                     break;
                 case "Nulas MTX":
+                case "Alíquotas Nulas no MTX":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
-
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
                     }
                     break;
                 case "Nulas Ambos":
+                case "Alíquotas Nulas em Ambos":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "6";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Sem Redução":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "7";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7": //sem redução
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 20 && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
@@ -18410,6 +18455,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
 
             //Action para procurar
             //analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+            //this.analise_NCM = ProcuraPorSnPorNCM(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise_NCM);
             this.analise_NCM = ProcuraPorSnPorNCM(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise_NCM);
 
             switch (ordenacao)
@@ -18421,6 +18467,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     this.analise_NCM = this.analise_NCM.OrderBy(s => s.PRODUTO_NCM).ToList();
                     break;
             }
+
 
 
 
@@ -18722,31 +18769,34 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            string analiseRetorno = "0";
-            string analiseTrib = "0";
+            string analiseRetorno = "";
+            string analiseTrib = "";
+
+            string ufOrigem = TempData["UfOrigem"].ToString();
+            string ufDestino = TempData["UfDestino"].ToString();
             try
             {
-                if (this.empresa.simples_nacional.Equals(1))
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
                 {
-                    //laço de repetição para percorrer o array com os registros
-                    for (int i = 0; i < idTrib.Length; i++)
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    if (this.empresa.simples_nacional.Equals(1))
                     {
-                        //converter em inteiro
-                        int idTrb = int.Parse(idTrib[i]);
-
-                        //faz a busca no objeto criado instanciando um so objeto
-                        trib = db.TributacaoEmpresas.Find(idTrb);
-
                         //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+                        //AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
 
-                        //pegar valores
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 1 select a).First();
 
-                        analiseRetorno = (analiseSn.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString();
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE).ToString();
 
-                        analiseTrib = (analiseSn.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA);
-
-
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA);
                         //analisar se já são iguais
                         if (analiseTrib == analiseRetorno)
                         {
@@ -18758,76 +18808,87 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                             if (analiseRetorno == "0")
                             {
                                 //se veio 0.0 o valor deve ser atribuido nulo
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = null;
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = "0.000";
                             }
                             else
                             {
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = analiseSn.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE.ToString().Replace(",", ".");
 
                             }
+                            trib.DT_ALTERACAO = DateTime.Now;
                             db.SaveChanges();
                             regSalv++; //contagem de registros salvos
+
                         }
 
+                    }
+                    else
+                    {
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        //AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino select a).First();
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 0 select a).First();
+
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE).ToString();
+
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA);
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = "0.000";
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE.ToString().Replace(",", ".");
+
+                            }
+                            trib.DT_ALTERACAO = DateTime.Now;
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+
+                        }
 
                     }
+
+
+
+
+                }
+                if (this.empresa.simples_nacional.Equals(1))
+                {
+                    TempData["analiseSN"] = null;
+                    TempData["analise_NCM"] = null;
+
                 }
                 else
                 {
-                    //laço de repetição para percorrer o array com os registros
-                    for (int i = 0; i < idTrib.Length; i++)
-                    {
-                        //converter em inteiro
-                        int idTrb = int.Parse(idTrib[i]);
-
-                        //faz a busca no objeto criado instanciando um so objeto
-                        trib = db.TributacaoEmpresas.Find(idTrb);
-
-                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                        //pegar valores
-
-                        analiseRetorno = (analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString();
-
-                        analiseTrib = (analise.RED_BASE_CALC_ICMS_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA);
-
-
-                        //analisar se já são iguais
-                        if (analiseTrib == analiseRetorno)
-                        {
-                            regNsalv++;
-                        }
-                        else
-                        {
-                            //verificar se a variavel veio 0.0
-                            if (analiseRetorno == "0")
-                            {
-                                //se veio 0.0 o valor deve ser atribuido nulo
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = null;
-                            }
-                            else
-                            {
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA = analise.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
-
-                            }
-                            db.SaveChanges();
-                            regSalv++; //contagem de registros salvos
-                        }
-
-
-                    }
+                    TempData["analise"] = null;
+                    TempData["analise_NCM"] = null;
                 }
-                   
-             
+
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
             catch (Exception e)
             {
-                resultado = "Problemas ao salvar o registro: " + e.ToString();
+                string erro = e.ToString();
+                resultado = "Problemas ao salvar o registro: " + erro;
 
             }
+
+
+
+
+
+       
             if (this.empresa.simples_nacional.Equals(1))
             {
                 TempData["analiseSN"] = null;
@@ -18944,24 +19005,24 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             this.ufOrigem = TempData["UfOrigem"].ToString();
             this.ufDestino = TempData["UfDestino"].ToString();
 
-            VerificaTempData();
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
             TributacaoEmpresa trib = new TributacaoEmpresa();
 
-            if (opcao == "Maiores")
+            if (opcao == "Alíquotas Maiores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                
             }
 
-            if (opcao == "Menores")
+            if (opcao == "Alíquotas Menores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Nulas Cliente")
+            if (opcao == "Alíquotas Nulas no Cliente")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_ATA_CONT_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
@@ -18970,14 +19031,14 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             string resultado = ""; //variavel auxiliar;
             //pega todos os ID para serem alterados
             //this.analiseSn.Count()
-            for (int i = 0; i < this.analise.Count(); i++)
+            for (int i = 0; i < this.analise_NCM.Count(); i++)
             {
 
                 //converter em inteiro
-                int? idTrb = (this.analise[i].TE_ID);
+                int? idTrb = (this.analise_NCM[i].TE_ID);
                 trib = db.TributacaoEmpresas.Find(idTrb);//busca o registro
-                trib.RED_BASE_CALC_ICMS_VENDA_ATA = this.analise[i].Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString();
-
+                trib.RED_BASE_CALC_ICMS_VENDA_ATA = this.analise_NCM[i].RED_BASE_CALC_ICMS_VENDA_ATA_CONT_BASE.ToString().Replace(",",".");
+                trib.DT_ALTERACAO = DateTime.Now;
                 try
                 {
 
@@ -18998,9 +19059,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             resultado = "Registro Salvo com Sucesso!!";
 
 
-            TempData["analise"] = null;
-            //string[] idTrib = this.alanliseSN.
-            //a analise vai me dar todos os ids
+            TempData["analise_NCM"] = null;
+            TempData.Keep("analise_NCM");
 
 
             return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaContMassa", new { param = resultado, qtdSalvos = regSalv, opcao = opcao });
@@ -19040,6 +19100,17 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             {
                 this.empresa = (Empresa)Session["empresas"];
             }
+            //se for simples nacional direciona para essa action
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["tributacao"] = "SIMPLES";
+                TempData.Keep("tributacao");
+            }
+            else
+            {
+                TempData["tributacao"] = "OUTROS";
+                TempData.Keep("tributacao");
+            }
 
             //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
             string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
@@ -19052,9 +19123,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             procuraCEST = (procuraCEST != null) ? procuraCEST : null;
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
 
-            //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
-            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
-
+            VerificarLinhas(numeroLinhas);
 
             //parametro de ordenacao da tabela
             ViewBag.Ordenacao = ordenacao;
@@ -19062,12 +19131,17 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //Se a ordenação nao estiver nula ele aplica a ordenação produto decresente
             ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
 
-            /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
-            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
-            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+            ///*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
+            //TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
+            //opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
 
-            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
-            TempData.Keep("opcao");
+            ////persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
+            //TempData.Keep("opcao");
+
+            VerificarOpcaoRed(filtroNulo, opcao);
+            opcao = TempData["opcao"].ToString();
+
+
 
             //atribui 1 a pagina caso os parametreos nao sejam nulos
             page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
@@ -19084,18 +19158,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteCest = procuraCEST;
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
-
-
-            if (this.empresa.simples_nacional.Equals(1))
-            {
-                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaSn", new { opcao = opcao });
-
-            }
-
-            VerificaTempData();
-
             //origem e destino
-
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados.ToList();
             ViewBag.EstadosDestinos = db.Estados.ToList();
@@ -19110,10 +19173,20 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassaSn", new { opcao = opcao });
+
+            }
+
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
+
+
             /*Switch da opção*/
             switch (opcao)
             {
                 case "Maiores":
+                case "Alíquotas Maiores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
@@ -19121,154 +19194,212 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     {
 
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
                     break;
                 case "Menores":
+                case "Alíquotas Menores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
                     switch (ViewBag.Filtro)
                     {
+
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
                     break;
                 case "Iguais":
+                case "Alíquotas Iguais":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
                     switch (ViewBag.Filtro)
                     {
+
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas Cliente":
+                case "Alíquotas Nulas no Cliente":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
                     switch (ViewBag.Filtro)
                     {
+
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas MTX":
+                case "Alíquotas Nulas no MTX":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
                     switch (ViewBag.Filtro)
                     {
+
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas Ambos":
+                case "Alíquotas Nulas em Ambos":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "6";
 
                     switch (ViewBag.Filtro)
                     {
+
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+           
+                case "Sem Redução":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "7";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.CST_VENDA_ATA_CONT_BASE == 70 && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA != null && a.CST_VENDA_ATA_CONT_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
@@ -19277,15 +19408,15 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             }//fim do switche
 
             //Action para procurar
-            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+            this.analise_NCM = ProcuraPorSnPorNCM(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise_NCM);
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    this.analise_NCM = this.analise_NCM.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
                     break;
                 default:
-                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    this.analise_NCM = this.analise_NCM.OrderBy(s => s.PRODUTO_NCM).ToList();
                     break;
             }
 
@@ -19300,9 +19431,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
 
+            //mandar a opção para que o javascript veja
+            ViewBag.Opcao = opcao;
             int numeroPagina = (page ?? 1);
 
-            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+            return View(this.analise_NCM.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
 
 
@@ -19574,35 +19707,38 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //retira o elemento vazio do array deixando somente os id dos registros
             idTrib = idTrib.Where(item => item != "").ToArray();
 
-
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            string analiseRetorno = "0";
-            string analiseTrib = "0";
+            string analiseRetorno = "";
+            string analiseTrib = "";
+
+            string ufOrigem = TempData["UfOrigem"].ToString();
+            string ufDestino = TempData["UfDestino"].ToString();
+
             try
             {
-                if (this.empresa.simples_nacional.Equals(1)) 
+
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
                 {
-                    //laço de repetição para percorrer o array com os registros
-                    for (int i = 0; i < idTrib.Length; i++)
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    if (this.empresa.simples_nacional.Equals(1))
                     {
-                        //converter em inteiro
-                        int idTrb = int.Parse(idTrib[i]);
-
-                        //faz a busca no objeto criado instanciando um so objeto
-                        trib = db.TributacaoEmpresas.Find(idTrb);
-
                         //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+                        //AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
 
-                        //pegar valores
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 1 select a).First();
 
-                        analiseRetorno = (analiseSn.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString();
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE).ToString();
 
-                        analiseTrib = (analiseSn.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
-
-
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
                         //analisar se já são iguais
                         if (analiseTrib == analiseRetorno)
                         {
@@ -19614,43 +19750,30 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                             if (analiseRetorno == "0")
                             {
                                 //se veio 0.0 o valor deve ser atribuido nulo
-                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = null;
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = "0.000";
                             }
                             else
                             {
-                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analiseSn.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE.ToString().Replace(",", ".");
 
                             }
+                            trib.DT_ALTERACAO = DateTime.Now;
                             db.SaveChanges();
                             regSalv++; //contagem de registros salvos
+
                         }
 
-
                     }
-
-                }
-                else 
-                {
-
-                    //laço de repetição para percorrer o array com os registros
-                    for (int i = 0; i < idTrib.Length; i++)
+                    else
                     {
-                        //converter em inteiro
-                        int idTrb = int.Parse(idTrib[i]);
-
-                        //faz a busca no objeto criado instanciando um so objeto
-                        trib = db.TributacaoEmpresas.Find(idTrb);
-
                         //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+                        //AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino select a).First();
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 0 select a).First();
 
-                        //pegar valores
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE).ToString();
 
-                        analiseRetorno = (analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString();
-
-                        analiseTrib = (analise.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
-
-
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA);
                         //analisar se já são iguais
                         if (analiseTrib == analiseRetorno)
                         {
@@ -19662,32 +19785,52 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                             if (analiseRetorno == "0")
                             {
                                 //se veio 0.0 o valor deve ser atribuido nulo
-                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = null;
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = "0.000";
                             }
                             else
                             {
-                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analise.Red_Base_Calc_Icms_ST_Venda_Ata_Cont_INTERNO.ToString().Replace(",", ".");
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE.ToString().Replace(",", ".");
 
                             }
+                            trib.DT_ALTERACAO = DateTime.Now;
                             db.SaveChanges();
                             regSalv++; //contagem de registros salvos
-                        }
 
+                        }
 
                     }
 
+
+
+
+                }
+                if (this.empresa.simples_nacional.Equals(1))
+                {
+                    TempData["analiseSN"] = null;
+                    TempData["analise_NCM"] = null;
+
+                }
+                else
+                {
+                    TempData["analise"] = null;
+                    TempData["analise_NCM"] = null;
                 }
 
-                   
-                
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
             catch (Exception e)
             {
-                resultado = "Problemas ao salvar o registro: " + e.ToString();
+                string erro = e.ToString();
+                resultado = "Problemas ao salvar o registro: " + erro;
 
             }
+
+
+
+
+
+           
             if (this.empresa.simples_nacional.Equals(1))
             {
                 TempData["analiseSN"] = null;
@@ -19803,24 +19946,24 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             this.ufOrigem = TempData["UfOrigem"].ToString();
             this.ufDestino = TempData["UfDestino"].ToString();
 
-            VerificaTempData();
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
             TributacaoEmpresa trib = new TributacaoEmpresa();
 
-            if (opcao == "Maiores")
+            if (opcao == "Alíquotas Maiores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA > a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_VAREJO_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Menores")
+            if (opcao == "Alíquotas Menores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA < a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE && a.CST_VENDA_VAREJO_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Nulas Cliente")
+            if (opcao == "Alíquotas Nulas no Cliente")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA == null && a.Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE != null && a.CST_VENDA_VAREJO_CONT_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
@@ -19829,14 +19972,14 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             string resultado = ""; //variavel auxiliar;
             //pega todos os ID para serem alterados
             //this.analiseSn.Count()
-            for (int i = 0; i < this.analise.Count(); i++)
+            for (int i = 0; i < this.analise_NCM.Count(); i++)
             {
 
                 //converter em inteiro
-                int? idTrb = (this.analise[i].TE_ID);
+                int? idTrb = (this.analise_NCM[i].TE_ID);
                 trib = db.TributacaoEmpresas.Find(idTrb);//busca o registro
-                trib.RED_BASE_CALC_ICMS_VENDA_ATA = this.analise[i].Red_Base_Calc_Icms_Venda_Ata_Cont_INTERNO.ToString();
-
+                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA = this.analise_NCM[i].RED_BASE_CALC_ICMS_ST_VENDA_ATA_CONT_BASE.ToString().Replace(",", ".");
+                trib.DT_ALTERACAO = DateTime.Now;
                 try
                 {
 
@@ -19857,9 +20000,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             resultado = "Registro Salvo com Sucesso!!";
 
 
-            TempData["analise"] = null;
-            //string[] idTrib = this.alanliseSN.
-            //a analise vai me dar todos os ids
+            TempData["analise_NCM"] = null;
+            TempData.Keep("analise_NCM");
 
 
             return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaContMassa", new { param = resultado, qtdSalvos = regSalv, opcao = opcao });
@@ -19898,6 +20040,19 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             else //se existir apenas atribui à empresa
             {
                 this.empresa = (Empresa)Session["empresas"];
+            } 
+            
+            
+            //se for simples nacional direciona para essa action
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["tributacao"] = "SIMPLES";
+                TempData.Keep("tributacao");
+            }
+            else
+            {
+                TempData["tributacao"] = "OUTROS";
+                TempData.Keep("tributacao");
             }
 
             //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
@@ -19912,7 +20067,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
 
             //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
-            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+            VerificarLinhas(numeroLinhas);
 
 
             //parametro de ordenacao da tabela
@@ -19922,11 +20077,9 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
 
             /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
-            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
-            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
+            VerificarOpcaoRed(filtroNulo, opcao);
+            opcao = TempData["opcao"].ToString();
 
-            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
-            TempData.Keep("opcao");
 
             //atribui 1 a pagina caso os parametreos nao sejam nulos
             page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
@@ -19943,17 +20096,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteCest = procuraCEST;
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
-
-            if (this.empresa.simples_nacional.Equals(1))
-            {
-                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassaSn", new { opcao = opcao });
-
-            }
-
-            VerificaTempData();
-
             //origem e destino
-
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados.ToList();
             ViewBag.EstadosDestinos = db.Estados.ToList();
@@ -19968,11 +20111,22 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
 
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassaSn", new { opcao = opcao });
+
+            }
+
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
+
+
+
 
             /*Switch da opção*/
             switch (opcao)
             {
                 case "Maiores":
+                case "Alíquotas Maiores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
@@ -19980,153 +20134,205 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     {
 
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
                     break;
                 case "Menores":
+                case "Alíquotas Menores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Iguais":
+                case "Alíquotas Iguais":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas Cliente":
+                case "Alíquotas Nulas no Cliente":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas MTX":
+                case "Alíquotas Nulas no MTX":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas Ambos":
+                case "Alíquotas Nulas em Ambos":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "6";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Sem Redução":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "7";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 20 && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
@@ -20135,15 +20341,15 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             }//fim do switche
 
             //Action para procurar
-            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+            this.analise_NCM = ProcuraPorSnPorNCM(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise_NCM);
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    this.analise_NCM = this.analise_NCM.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
                     break;
                 default:
-                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    this.analise_NCM = this.analise_NCM.OrderBy(s => s.PRODUTO_NCM).ToList();
                     break;
             }
 
@@ -20158,9 +20364,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
 
+            //mandar a opção para que o javascript veja
+            ViewBag.Opcao = opcao;
             int numeroPagina = (page ?? 1);
 
-            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+            return View(this.analise_NCM.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
 
 
@@ -20435,30 +20643,35 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            string analiseRetorno = "0";
-            string analiseTrib = "0";
+            string analiseRetorno = "";
+            string analiseTrib = "";
+
+            string ufOrigem = TempData["UfOrigem"].ToString();
+            string ufDestino = TempData["UfDestino"].ToString();
+
             try
             {
 
-                if (this.empresa.simples_nacional.Equals(1)) 
+                //laço de repetição para percorrer o array com os registros
+                for (int i = 0; i < idTrib.Length; i++)
                 {
-                    //laço de repetição para percorrer o array com os registros
-                    for (int i = 0; i < idTrib.Length; i++)
+                    //converter em inteiro
+                    int idTrb = int.Parse(idTrib[i]);
+
+                    //faz a busca no objeto criado instanciando um so objeto
+                    trib = db.TributacaoEmpresas.Find(idTrb);
+
+                    if (this.empresa.simples_nacional.Equals(1))
                     {
-                        //converter em inteiro
-                        int idTrb = int.Parse(idTrib[i]);
-
-                        //faz a busca no objeto criado instanciando um so objeto
-                        trib = db.TributacaoEmpresas.Find(idTrb);
-
                         //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+                        //AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
 
-                        //pegar valores
-                        analiseRetorno = (analiseSn.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : analiseSn.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString();
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 1 select a).First();
 
-                        analiseTrib = (analiseSn.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE).ToString();
 
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
                         //analisar se já são iguais
                         if (analiseTrib == analiseRetorno)
                         {
@@ -20470,75 +20683,85 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                             if (analiseRetorno == "0")
                             {
                                 //se veio 0.0 o valor deve ser atribuido nulo
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = null;
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = "0.000";
                             }
                             else
                             {
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analiseSn.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString().Replace(",", ".");
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE.ToString().Replace(",", ".");
 
                             }
+                            trib.DT_ALTERACAO = DateTime.Now;
                             db.SaveChanges();
                             regSalv++; //contagem de registros salvos
+
                         }
 
+                    }
+                    else
+                    {
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        //AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino select a).First();
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 0 select a).First();
+
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE).ToString();
+
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = "0.000";
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analiseNCM.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE.ToString().Replace(",", ".");
+
+                            }
+                            trib.DT_ALTERACAO = DateTime.Now;
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+
+                        }
 
                     }
+
+
+
+
+                }
+                if (this.empresa.simples_nacional.Equals(1))
+                {
+                    TempData["analiseSN"] = null;
+                    TempData["analise_NCM"] = null;
+
                 }
                 else
                 {
-                    //laço de repetição para percorrer o array com os registros
-                    for (int i = 0; i < idTrib.Length; i++)
-                    {
-                        //converter em inteiro
-                        int idTrb = int.Parse(idTrib[i]);
-
-                        //faz a busca no objeto criado instanciando um so objeto
-                        trib = db.TributacaoEmpresas.Find(idTrb);
-
-                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                        AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                        //pegar valores
-                        analiseRetorno = (analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString();
-
-                        analiseTrib = (analise.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL);
-
-                        //analisar se já são iguais
-                        if (analiseTrib == analiseRetorno)
-                        {
-                            regNsalv++;
-                        }
-                        else
-                        {
-                            //verificar se a variavel veio 0.0
-                            if (analiseRetorno == "0")
-                            {
-                                //se veio 0.0 o valor deve ser atribuido nulo
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = null;
-                            }
-                            else
-                            {
-                                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = analise.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString().Replace(",", ".");
-
-                            }
-                            db.SaveChanges();
-                            regSalv++; //contagem de registros salvos
-                        }
-
-
-                    }
+                    TempData["analise"] = null;
+                    TempData["analise_NCM"] = null;
                 }
 
-                    
-              
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
             catch (Exception e)
             {
-                resultado = "Problemas ao salvar o registro: " + e.ToString();
+                string erro = e.ToString();
+                resultado = "Problemas ao salvar o registro: " + erro;
 
             }
+
+
+
+
 
             if (this.empresa.simples_nacional.Equals(1))
             {
@@ -20655,24 +20878,24 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             this.ufOrigem = TempData["UfOrigem"].ToString();
             this.ufDestino = TempData["UfDestino"].ToString();
 
-            VerificaTempData();
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
             TributacaoEmpresa trib = new TributacaoEmpresa();
 
-            if (opcao == "Maiores")
+            if (opcao == "Alíquotas Maiores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Menores")
+            if (opcao == "Alíquotas Menores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Nulas Cliente")
+            if (opcao == "Alíquotas Nulas no Cliente")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 20 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
@@ -20681,14 +20904,14 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             string resultado = ""; //variavel auxiliar;
             //pega todos os ID para serem alterados
             //this.analiseSn.Count()
-            for (int i = 0; i < this.analise.Count(); i++)
+            for (int i = 0; i < this.analise_NCM.Count(); i++)
             {
 
                 //converter em inteiro
-                int? idTrb = (this.analise[i].TE_ID);
+                int? idTrb = (this.analise_NCM[i].TE_ID);
                 trib = db.TributacaoEmpresas.Find(idTrb);//busca o registro
-                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = this.analise[i].Red_Base_Calc_Icms_Venda_Ata_Simp_Nacional_INTERNO.ToString();
-
+                trib.RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL = this.analise_NCM[i].RED_BASE_CALC_ICMS_VENDA_ATA_SIMP_NACIONAL_BASE.ToString().Replace(",", ".");
+                trib.DT_ALTERACAO = DateTime.Now;
                 try
                 {
 
@@ -20709,9 +20932,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             resultado = "Registro Salvo com Sucesso!!";
 
 
-            TempData["analise"] = null;
-            //string[] idTrib = this.alanliseSN.
-            //a analise vai me dar todos os ids
+            TempData["analise_NCM"] = null;
+            TempData.Keep("analise_NCM");
 
 
             return RedirectToAction("EdtCliAliqRedBasCalcIcmsVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalv, opcao = opcao });
@@ -20755,6 +20977,18 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                 this.empresa = (Empresa)Session["empresas"];
             }
 
+            //se for simples nacional direciona para essa action
+            if (this.empresa.simples_nacional.Equals(1))
+            {
+                TempData["tributacao"] = "SIMPLES";
+                TempData.Keep("tributacao");
+            }
+            else
+            {
+                TempData["tributacao"] = "OUTROS";
+                TempData.Keep("tributacao");
+            }
+
             //se o filtro corrente estiver nulo ele busca pelo parametro procurarpor
             string codBarras = (filtroCorrente != null) ? filtroCorrente : procuraPor;
 
@@ -20767,7 +21001,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             procuraNCM = (procuraNCM != null) ? procuraNCM : null;
 
             //numero de linhas: Se o parametro numerolinhas vier preenchido ele atribui, caso contrario ele atribui o valor padrao: 10
-            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+            VerificarLinhas(numeroLinhas);
 
 
             //parametro de ordenacao da tabela
@@ -20777,11 +21011,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.ParametroProduto = (String.IsNullOrEmpty(ordenacao) ? "Produto_desc" : "");
 
             /*Variavel temporaria para guardar a opção: tempData para que o ciclo de vida seja maior*/
-            TempData["opcao"] = opcao ?? TempData["opcao"];//se a opção for diferente de nula a tempdata recebe o seu valor
-            opcao = (opcao == null) ? TempData["opcao"].ToString() : opcao;//caso venha nula a opcao recebe o valor de tempdata
-
-            //persiste tempdata entre as requisicoes ate que a opcao seja mudada na chamada pelo grafico
-            TempData.Keep("opcao");
+            VerificarOpcaoRed(filtroNulo, opcao);
+            opcao = TempData["opcao"].ToString();
 
             //atribui 1 a pagina caso os parametreos nao sejam nulos
             page = (procuraPor != null) || (procuraCEST != null) || (procuraNCM != null) ? 1 : page;
@@ -20798,11 +21029,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.FiltroCorrenteCest = procuraCEST;
             ViewBag.FiltroCorrenteNCM = procuraNCM; //nao procura por ncm mas ficara aqui para futuras solicitações
             ViewBag.FiltroCorrente = procuraPor;
-
-            VerificaTempData();
-
             //origem e destino
-
             //montar select estado origem e destino
             ViewBag.EstadosOrigem = db.Estados.ToList();
             ViewBag.EstadosDestinos = db.Estados.ToList();
@@ -20817,10 +21044,16 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.UfOrigem = this.ufOrigem;
             ViewBag.UfDestino = this.ufDestino;
 
+
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
+
+            
+
             /*Switch da opção*/
             switch (opcao)
             {
                 case "Maiores":
+                case "Alíquotas Maiores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
@@ -20828,154 +21061,206 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     {
 
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
                     break;
                 case "Menores":
+                case "Alíquotas Menores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
 
                     }
                     break;
                 case "Iguais":
+                case "Alíquotas Iguais":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas Cliente":
+                case "Alíquotas Nulas no Cliente":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas MTX":
+                case "Alíquotas Nulas no MTX":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
                 case "Nulas Ambos":
+                case "Alíquotas Nulas em Ambos":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "6";
 
                     switch (ViewBag.Filtro)
                     {
                         case "1":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "2":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "3":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "4":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "5":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                         case "6":
-                            analise = analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                    }
+                    break;
+                case "Sem Redução":
+                    //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
+                    ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "7";
+
+                    switch (ViewBag.Filtro)
+                    {
+                        case "1":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "2":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "3":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "4":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "5":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "6":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                            break;
+                        case "7":
+                            this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE != 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
                             break;
                     }
                     break;
@@ -20984,17 +21269,18 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             }//fim do switche
 
             //Action para procurar
-            analise = ProcuraPor(codBarrasL, procuraPor, procuraCEST, procuraNCM, analise);
+            this.analise_NCM = ProcuraPorSnPorNCM(codBarrasL, procuraPor, procuraCEST, procuraNCM, this.analise_NCM);
 
             switch (ordenacao)
             {
                 case "Produto_desc":
-                    analise = analise.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
+                    this.analise_NCM = this.analise_NCM.OrderByDescending(s => s.PRODUTO_DESCRICAO).ToList();
                     break;
                 default:
-                    analise = analise.OrderBy(s => s.Id_Produto_INTERNO).ToList();
+                    this.analise_NCM = this.analise_NCM.OrderBy(s => s.PRODUTO_NCM).ToList();
                     break;
             }
+
 
             //montar a pagina
             int tamaanhoPagina = 0;
@@ -21007,9 +21293,11 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
 
+            //mandar a opção para que o javascript veja
+            ViewBag.Opcao = opcao;
             int numeroPagina = (page ?? 1);
 
-            return View(analise.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
+            return View(this.analise_NCM.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada
         }
 
         [HttpGet]
@@ -21030,12 +21318,15 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             //retira o elemento vazio do array deixando somente os id dos registros
             idTrib = idTrib.Where(item => item != "").ToArray();
 
-
             //registros salvos
             int regSalv = 0;
             int regNsalv = 0;
-            decimal analiseRetorno = 0.0M;
-            decimal analiseTrib = 0.0M;
+            string analiseRetorno = "";
+            string analiseTrib = "";
+
+            string ufOrigem = TempData["UfOrigem"].ToString();
+            string ufDestino = TempData["UfDestino"].ToString();
+
             try
             {
 
@@ -21048,47 +21339,105 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     //faz a busca no objeto criado instanciando um so objeto
                     trib = db.TributacaoEmpresas.Find(idTrb);
 
-                    //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
-                    AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
-
-                    //pegar valores
-                    analiseRetorno = (analise.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO == null) ? analiseRetorno : (decimal)analise.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO;
-
-                    analiseTrib = (analise.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : decimal.Parse(trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL);
-                   
-                    //analisar se já são iguais
-                    if (analiseTrib == analiseRetorno)
+                    if (this.empresa.simples_nacional.Equals(1))
                     {
-                        regNsalv++;
-                    }
-                    else
-                    {
-                        //verificar se a variavel veio 0.0
-                        if (analiseRetorno == 0.0M)
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        //AnaliseTributariaSn analiseSn = (from a in db.Analise_TributariaSn where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS select a).FirstOrDefault();
+
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 1 select a).First();
+
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE).ToString();
+
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL);
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
                         {
-                            //se veio 0.0 o valor deve ser atribuido nulo
-                            trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = null;
+                            regNsalv++;
                         }
                         else
                         {
-                            trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = analise.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO.ToString().Replace(",", ".");
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = "0.000";
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE.ToString().Replace(",", ".");
+
+                            }
+                            trib.DT_ALTERACAO = DateTime.Now;
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
 
                         }
-                        db.SaveChanges();
-                        regSalv++; //contagem de registros salvos
+
+                    }
+                    else
+                    {
+                        //faz a busca pelo CODIGO DE BARRAS DO PRODUTO e instancia um outro objeto da analise tributária
+                        //AnaliseTributaria analise = (from a in db.Analise_Tributaria where a.PRODUTO_COD_BARRAS == trib.PRODUTO_COD_BARRAS && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino select a).First();
+                        AnaliseTributariaNCM analiseNCM = (from a in db.Analise_TributariaNCM where a.PRODUTO_NCM == trib.PRODUTO_NCM && trib.CNPJ_EMPRESA == this.empresa.cnpj && a.UF_ORIGEM == ufOrigem && a.UF_DESTINO == ufDestino && a.SIMP_NACIONAL_BASE == 0 select a).First();
+
+                        analiseRetorno = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE == null) ? analiseRetorno : (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE).ToString();
+
+                        /*o mesmo acontece aqui, se for nulo ele permanece com valor 0.0*/
+                        analiseTrib = (analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null) ? analiseTrib : (trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL);
+                        //analisar se já são iguais
+                        if (analiseTrib == analiseRetorno)
+                        {
+                            regNsalv++;
+                        }
+                        else
+                        {
+                            //verificar se a variavel veio 0.0
+                            if (analiseRetorno == "0")
+                            {
+                                //se veio 0.0 o valor deve ser atribuido nulo
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = "0.000";
+                            }
+                            else
+                            {
+                                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = analiseNCM.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE.ToString().Replace(",", ".");
+
+                            }
+                            trib.DT_ALTERACAO = DateTime.Now;
+                            db.SaveChanges();
+                            regSalv++; //contagem de registros salvos
+
+                        }
+
                     }
 
 
+
+
                 }
-                TempData["analise"] = null;
+                if (this.empresa.simples_nacional.Equals(1))
+                {
+                    TempData["analiseSN"] = null;
+                    TempData["analise_NCM"] = null;
+
+                }
+                else
+                {
+                    TempData["analise"] = null;
+                    TempData["analise_NCM"] = null;
+                }
+
                 resultado = "Registro Salvo com Sucesso!!";
 
             }
             catch (Exception e)
             {
-                resultado = "Problemas ao salvar o registro: " + e.ToString();
+                string erro = e.ToString();
+                resultado = "Problemas ao salvar o registro: " + erro;
 
             }
+
+         
 
 
             //Redirecionar para a tela de graficos
@@ -21184,24 +21533,24 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             this.ufOrigem = TempData["UfOrigem"].ToString();
             this.ufDestino = TempData["UfDestino"].ToString();
 
-            VerificaTempData();
+            VerificaTempData_por_NCM(TempData["tributacao"].ToString()); //manda verificar passando a tributacao
             TributacaoEmpresa trib = new TributacaoEmpresa();
 
-            if (opcao == "Maiores")
+            if (opcao == "Alíquotas Maiores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL > a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Menores")
+            if (opcao == "Alíquotas Menores")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL < a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
-            if (opcao == "Nulas Cliente")
+            if (opcao == "Alíquotas Nulas no Cliente")
             {
-                this.analise = this.analise.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO != null && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
+                this.analise_NCM = this.analise_NCM.Where(a => a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL == null && a.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE != null && a.CST_VENDA_ATA_SIMP_NACIONAL_BASE == 70 && a.UF_ORIGEM.Equals(this.ufOrigem) && a.UF_DESTINO.Equals(this.ufDestino)).ToList();
 
             }
 
@@ -21210,14 +21559,14 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             string resultado = ""; //variavel auxiliar;
             //pega todos os ID para serem alterados
             //this.analiseSn.Count()
-            for (int i = 0; i < this.analise.Count(); i++)
+            for (int i = 0; i < this.analise_NCM.Count(); i++)
             {
 
                 //converter em inteiro
-                int? idTrb = (this.analise[i].TE_ID);
+                int? idTrb = (this.analise_NCM[i].TE_ID);
                 trib = db.TributacaoEmpresas.Find(idTrb);//busca o registro
-                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = this.analise[i].Red_Base_Calc_Icms_ST_Venda_Ata_Simp_Nacional_INTERNO.ToString();
-
+                trib.RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL = this.analise_NCM[i].RED_BASE_CALC_ICMS_ST_VENDA_ATA_SIMP_NACIONAL_BASE.ToString().Replace(",", ".");
+                trib.DT_ALTERACAO = DateTime.Now;
                 try
                 {
 
@@ -21238,9 +21587,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             resultado = "Registro Salvo com Sucesso!!";
 
 
-            TempData["analise"] = null;
-            //string[] idTrib = this.alanliseSN.
-            //a analise vai me dar todos os ids
+            TempData["analise_NCM"] = null;
+            TempData.Keep("analise_NCM");
 
 
             return RedirectToAction("EdtCliAliqRedBasCalcIcmsSTVenAtaSNMassa", new { param = resultado, qtdSalvos = regSalv, opcao = opcao });
@@ -33309,6 +33657,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             switch (opcao)
             {
                 case "Maiores":
+                case "Alíquotas Maiores":
+                    
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
@@ -33337,6 +33687,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Menores":
+                case "Alíquotas Menores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
@@ -33367,6 +33718,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Iguais":
+                case "Alíquotas Iguais":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
@@ -33397,6 +33749,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Nulas Cliente":
+                case "Alíquotas Nulas no Cliente":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
@@ -33426,6 +33779,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Nulas MTX":
+                case "Alíquotas Nulas no MTX":
+                  
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
@@ -33455,6 +33810,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Nulas Ambos":
+                case "Alíquotas Nulas em Ambos":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
@@ -33511,7 +33867,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
             ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
-
+            ViewBag.CstPisCofinsS = db.CstPisCofinsSaidas.ToList();
 
             //mandar a opção para que o javascript veja
             ViewBag.Opcao = opcao;
@@ -34383,6 +34739,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             switch (opcao)
             {
                 case "Maiores":
+                case "Alíquotas Maiores":
+                    
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "1";
 
@@ -34411,6 +34769,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Menores":
+                case "Alíquotas Menores":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "2";
 
@@ -34440,6 +34799,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Iguais":
+                case "Alíquotas Iguais":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "3";
 
@@ -34469,6 +34829,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Nulas Cliente":
+                case "Alíquotas Nulas no Cliente":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "4";
 
@@ -34498,6 +34859,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break; 
                 case "Nulas MTX":
+                case "Alíquotas Nulas no MTX":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
@@ -34527,6 +34889,7 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
                     }
                     break;
                 case "Nulas Ambos":
+                case "Alíquotas Nulas em Ambos":
                     //O parametro filtro nulo mostra o filtro que foi informado, caso não informa nenhum ele será de acordo com a opção
                     ViewBag.Filtro = (filtroNulo != null) ? filtroNulo : "5";
 
@@ -34585,6 +34948,8 @@ namespace MatrizTributaria.Areas.Cliente.Controllers
             ViewBag.RegNsalvos = (qtdNSalvos != null) ? qtdNSalvos : "0";
             //mandar a opção para que o javascript veja
             ViewBag.Opcao = opcao;
+
+            ViewBag.CstPisCofinsS = db.CstPisCofinsSaidas.ToList();
             int numeroPagina = (page ?? 1);
 
             return View(this.analise_NCM.ToPagedList(numeroPagina, tamaanhoPagina));//retorna a view tipada

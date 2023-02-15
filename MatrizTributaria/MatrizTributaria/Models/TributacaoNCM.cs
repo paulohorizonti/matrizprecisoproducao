@@ -245,6 +245,9 @@ namespace MatrizTributaria.Models
         [Column("AuditadoNCM")]
         public Nullable<sbyte> auditadoPorNCM { get; set; }
 
+        [Column("Simp_Nacional")]
+        public Nullable<sbyte> simpNacional { get; set; }
+
 
 
 

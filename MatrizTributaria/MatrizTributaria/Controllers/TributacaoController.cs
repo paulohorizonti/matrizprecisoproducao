@@ -1717,8 +1717,38 @@ namespace MatrizTributaria.Controllers
             //variaveis de auxilio
             int regSalvos = 0;
             int regNSalvos = 0;
-
+           
             string retorno = "";
+            //PEGAR ESTADO ORIGEM E DESTINO E SE A EMPRESA É SIMPLES NACIONAL
+            string uf_origem = TempData["UfOrigem"].ToString();
+            string uf_Destino = TempData["UfDestino"].ToString();
+
+            int tipoTrib = 0;
+            tipoTrib = (TempData["tributacao"].Equals("OUTROS")) ? tipoTrib : 1;
+
+            List<TributacaoNCM> tribNCM;
+            
+            if(ncm != "")
+            {
+                string ncmReplace = ncm.Replace(".", "");
+                ncmReplace = ncmReplace.Trim();
+                tribNCM = db.TributacoesNcm.Where(a => a.UF_Origem == uf_origem && a.UF_Destino == uf_Destino && a.simpNacional == tipoTrib && a.ncm.Equals(ncmReplace)).ToList();
+               
+                if (tribNCM.Count > 0)
+                {
+                    int qtd = tribNCM.Count();
+
+                    for (int i = 0; i < qtd; i++)
+                    {
+                        TributacaoNCM tribDel = db.TributacoesNcm.Find(tribNCM[i].id);
+                        db.TributacoesNcm.Remove(tribDel);
+                        db.SaveChanges();
+                    }
+
+
+                }
+
+            }
 
 
             //varivael para recebe o novo ncm
@@ -1776,8 +1806,9 @@ namespace MatrizTributaria.Controllers
                     //verificar se veio nulo
                     if (ncmMudar != null)
                     {
-                        if (ncmMudar != "")
+                        if (ncmMudar != "") //VERIFICAR SE VEIO VAZIO
                         {
+                            //FAZER UMA BUSCA PARA VERIFICAR SE JA EXISTE O NCM NA TABELA COM ESSA ORIGEM E DESTINO
                             if (tNCM.ncm != ncmMudar)
                             {
                                 tNCM.ncm = ncmMudar;
