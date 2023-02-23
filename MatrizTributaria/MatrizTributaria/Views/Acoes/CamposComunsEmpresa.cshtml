@@ -38,15 +38,15 @@
 
         <!--Parte de procura-->
         <div class="form-group col-lg-6 p-1">
-            <label class="pr-fontalternativa">Usuarios</label>
+            <label class="pr-fontalternativa">Razão Social</label>
             <div class="input-group input-group-sm">
                 @if (ViewBag.FiltroCorrente == null)
                 {
-                    @Html.TextBox("ProcurarPor", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do usuario" })
+                    @Html.TextBox("ProcurarPor", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Razão Social  da empresa" })
                 }
                 else
                 {
-                    @Html.TextBox("ProcurarPor", (string)ViewBag.FiltroCorrente, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite o nome do usuario" })
+                    @Html.TextBox("ProcurarPor", (string)ViewBag.FiltroCorrente, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Razão Social  da empresa" })
 
                 }
                 <div class="input-group-append">
@@ -58,21 +58,18 @@
         </div><!--fim coluna de 5-->
 
         <div class="form-group col-lg-4 p-1">
-            <label class="pr-fontalternativa">Empresa</label>
+            <label class="pr-fontalternativa">Fantasia</label>
             <div class="input-group input-group-sm">
                 @if (ViewBag.FiltroCorrenteEmpresa == null)
                 {
-                    @Html.DropDownList("ProcuraEmpresa", new SelectList(ViewBag.Empresas, "id", "fantasia"), "-", new { @class = "form-control form-control-sm dropdown prn-select" })
-
-                    @*@Html.TextBox("ProcuraEmpresa", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Empresa", id = "empresa" })*@
-                }
-                else
-                {
-                    @Html.DropDownList("ProcuraEmpresa", new SelectList(ViewBag.Empresas, "id", "fantasia"), " - ", new { @class = "form-control form-control-sm dropdown prn-select"})
-
-                    @*@Html.TextBox("ProcuraEmpresa", (string)ViewBag.FiltroCorrenteCEST, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Empresa", id = "empresa" })*@
-
-                }
+            @Html.TextBox("ProcuraEmpresa", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Fantasia da empresa" }) }
+                        else
+                        {
+            @Html.TextBox("ProcuraEmpresa", (string)ViewBag.FiltroCorrenteEmpresa, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Fantasia da empresa" })}
+               
+            
+            
+           
                 <div class="input-group-append">
                     <button data-toggle="tooltip" data-placement="right" title="Localizar" class="btn btn-secondary pr-botoes-fundo" type="submit" id="button-addonCest">
                         <i style="font-size:1.3em;" class="fas fa-search"></i>

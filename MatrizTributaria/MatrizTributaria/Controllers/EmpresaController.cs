@@ -2,6 +2,7 @@
 using MatrizTributaria.Models.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,24 +21,78 @@ namespace MatrizTributaria.Controllers
         //Objego context
         readonly MatrizDbContext db;
         Empresa emp;
-
+        List<Empresa> listEmp = new List<Empresa>();
         //Construtor da classe
         public EmpresaController()
         {
             db = new MatrizDbContext();
         }
         // GET: Empresa
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    if (Session["usuario"] == null)
+        //    {
+        //        return RedirectToAction("../Home/Login");
+        //    }
+        //    var empresa = db.Empresas.ToList();
+        //    return View(empresa);
+        //}
+
+        public ActionResult Index(string param, string ordenacao, string qtdSalvos, string procurarPor, string procuraEmpresa,
+            string filtroCorrente, string filtroEmpresa, int? page, int? numeroLinhas)
         {
             if (Session["usuario"] == null)
             {
                 return RedirectToAction("../Home/Login");
             }
-            var empresa = db.Empresas.ToList();
-            return View(empresa);
+
+            //variavel auxiliar
+            string resultado = param;
+
+            procurarPor = (filtroCorrente != null) ? filtroCorrente : procurarPor; //procura por nome
+            procuraEmpresa = (procuraEmpresa != null) ? procuraEmpresa : null;
+
+            //numero de linhas
+            ViewBag.NumeroLinhas = (numeroLinhas != null) ? numeroLinhas : 10;
+
+            ViewBag.Ordenacao = ordenacao;
+            ViewBag.ParametroNome = String.IsNullOrEmpty(ordenacao) ? "Nome_desc" : ""; //Se nao vier nula a ordenacao aplicar por nome decrescente
+
+            //atribui 1 a pagina caso os parametros nao sejam nulos
+            page = (procurarPor != null) || (procuraEmpresa != null) ? 1 : page; //atribui 1 à pagina caso procurapor seja diferente de nullo
+
+
+            procurarPor = (procurarPor == null) ? filtroCorrente : procurarPor; //atribui o filtro corrente se procuraPor estiver nulo
+            procuraEmpresa = (procuraEmpresa == null) ? filtroEmpresa : procuraEmpresa;
+
+            ViewBag.FiltroCorrente = procurarPor;
+            ViewBag.FiltroCorrenteEmpresa = procuraEmpresa;
+
+            this.listEmp = db.Empresas.ToList();
+
+            //procura
+            if (!String.IsNullOrEmpty(procurarPor))
+            {
+                this.listEmp = listEmp.Where(s => s.razacaosocial.Contains(procurarPor)).ToList();
+            }
+            if (!String.IsNullOrEmpty(procuraEmpresa))
+            {
+                listEmp = listEmp.Where(s => s.fantasia.ToString() == procuraEmpresa).ToList();
+            }
+            //montar a pagina
+            int tamanhoPagina = 0;
+
+            //Ternario para tamanho da pagina
+            tamanhoPagina = (ViewBag.NumeroLinha != null) ? ViewBag.NumeroLinhas : (tamanhoPagina = (numeroLinhas != 10) ? ViewBag.numeroLinhas : (int)numeroLinhas);
+            int numeroPagina = (page ?? 1);
+            //Mensagens de retorno
+            ViewBag.MensagemGravar = (resultado != null) ? resultado : "";
+            ViewBag.RegSalvos = (qtdSalvos != null) ? qtdSalvos : "";
+
+            ViewBag.Empresas = db.Empresas.ToList();
+
+            return View(listEmp.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
         }
-
-
         //Chamando a view para criar o usuario
         public ActionResult Create()
         {

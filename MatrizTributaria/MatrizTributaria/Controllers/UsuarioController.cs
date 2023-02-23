@@ -78,11 +78,36 @@ namespace MatrizTributaria.Controllers
 
             ViewBag.Empresas = db.Empresas.ToList();
 
-            return View(listUser.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
+            return View(this.listUser.ToPagedList(numeroPagina, tamanhoPagina));//retorna o pagedlist
            
         }
 
+        public ActionResult AltAtivoAcesso(int id_enviar, string alt)
+        {
+            int id = id_enviar;
+             
+            Usuario user = db.Usuarios.Where(a => a.id.Equals(id)).FirstOrDefault();
+           
+            if(user != null)
+            {
+                if(alt == "ativo")
+                {
+                    user.ativo = (sbyte)(user.ativo == 1 ? 0 : 1);
+                    user.dataAlt = DateTime.Now;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    user.acesso_empresas = (sbyte)(user.acesso_empresas == 1 ? 0 : 1);
+                    user.dataAlt = DateTime.Now;
+                    db.SaveChanges();
+                }
+            }
 
+            ViewBag.Empresas = db.Empresas.ToList();
+            return RedirectToAction("Index");
+
+        }
 
         //Chamando a view para criar o usuario
         public ActionResult Create()
@@ -111,19 +136,20 @@ namespace MatrizTributaria.Controllers
             string resultado = "";
             int regSalvos = 0;
             var hash = new Hash(SHA512.Create());
+           
             //iformando a data do dia da criação do registro
             model.dataCad = DateTime.Now;
             model.dataAlt = DateTime.Now;
             model.ativo = 1; //ativando o registro no cadastro
-            model.primeiro_acesso = 1; //validar esse requisito
-            if(model.idNivel == 5)
-            {
-                model.acesso_empresas = 1; //AINDA INICIA COM NÃO
-            }
-            else
-            {
-                model.acesso_empresas = 0; //AINDA INICIA COM NÃO
-            }
+            ////model.primeiro_acesso = 1; //validar esse requisito
+            //if(model.idNivel == 5)
+            //{
+            //    model.acesso_empresas = 1; //AINDA INICIA COM NÃO
+            //}
+            //else
+            //{
+            //    model.acesso_empresas = 0; //AINDA INICIA COM NÃO
+            //}
            
             //ativando o registro no cadastro
             if (ModelState.IsValid)
@@ -145,7 +171,7 @@ namespace MatrizTributaria.Controllers
 
                     nome = model.nome,
                     email = model.email,
-                    sexo = model.sexo,
+                    sexo = model.sexo == "MASCULINO" ? "M" : "F",
                     logradouro = model.logradouro,
                     numero = model.numero,
                     cep = model.cep,
@@ -267,7 +293,9 @@ namespace MatrizTributaria.Controllers
             /*ViewBags com os dados necessários para preencher as dropbox na view*/
             ViewBag.Niveis = db.Niveis;
             ViewBag.Empresas = db.Empresas;
-
+            ViewBag.Sexo = usuario.sexo;
+            ViewBag.MudarSenha = usuario.primeiro_acesso;
+            ViewBag.AcessoEmpresas = usuario.acesso_empresas;
             /*Retorna a view passando o objeto como parametro*/
             return View(usuario);
         }
@@ -290,7 +318,7 @@ namespace MatrizTributaria.Controllers
                 }
                 usuario.nome = model.nome;
                 usuario.email = model.email;
-                usuario.sexo = model.sexo;
+                usuario.sexo = model.sexo == "MASCULINO" ? "M" : "F";
                 usuario.logradouro = model.logradouro;
                 usuario.numero = model.numero;
                 usuario.cep = model.cep;
@@ -299,7 +327,7 @@ namespace MatrizTributaria.Controllers
                 usuario.senha = hash.CriptografarSenha(model.senha);
                 
                 //usuario.senha = model.senha;
-                usuario.ativo = model.ativo;
+               
                 usuario.nome = model.nome;
                 usuario.dataAlt = model.dataAlt;
                 usuario.idNivel = model.idNivel; 

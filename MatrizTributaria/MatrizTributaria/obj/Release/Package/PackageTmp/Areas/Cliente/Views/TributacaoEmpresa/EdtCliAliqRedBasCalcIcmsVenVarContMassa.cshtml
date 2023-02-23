@@ -1,6 +1,6 @@
 ﻿@using PagedList.Mvc
 @using MatrizTributaria.Areas.Cliente.Models
-@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributaria>
+@model PagedList.IPagedList<MatrizTributaria.Areas.Cliente.Models.AnaliseTributariaNCM>
 @{
     ViewBag.Title = "EdtCliAliqRedBasCalcIcmsVenVarContMassa";
 
@@ -32,7 +32,7 @@
                                 <table id="table-redBasCalcIcmsVenVarCont" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="5" class="pr-fonte2" scope="col">Analise Alíquota</th>
+                                            <th style="text-align:center; border:none;" colspan="8" class="pr-fonte2" scope="col">Analise Alíquota</th>
 
                                         </tr>
                                         <tr class="pr-td">
@@ -40,16 +40,26 @@
                                                 Registro
                                             </th>
                                             <th>
+                                                NCM
+                                            </th>
+                                            <th>
                                                 Código de Barras
                                             </th>
                                             <th>
                                                 Descrição
                                             </th>
-                                          
-                                            <th>
+                                            <th class="text-center">
+                                                CST no Cliente
+                                            </th>
+
+                                            <th class="text-center">
                                                 Alíquota no Cliente (%)
                                             </th>
-                                            <th>
+
+                                            <th class="text-center">
+                                                CST no MTX
+                                            </th>
+                                            <th class="text-center">
                                                 Alíquota no MTX (%)
                                             </th>
 
@@ -62,69 +72,80 @@
                                             <td style="width:4%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.TE_ID)
                                             </td>
-                                            <td style="width:8%;" class="prn-borderEspecial5">
+                                            <td style="width:5%;" class="prn-borderEspecial5">
+                                                @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
+                                            </td>
+                                            <td style="width:10%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
                                             </td>
-                                            <td style="width:40%;" class="prn-borderEspecial5">
+                                            <td style="width:20%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
                                             </td>
-                                         
+
+                                            @if (item.CST_VENDA_VAREJO_CONT != item.CST_VENDA_VAREJO_CONT_BASE)
+                                            {
+                                        <td style="width:5%;" class="pr-td-maior prn-borderEspecial5 text-center">
+                                            @Html.DisplayFor(modelItem => item.CST_VENDA_VAREJO_CONT)
+                                        </td> }
+                                                        else
+                                                        {
+                                        <td style="width:5%;" class="pr-td-igual prn-borderEspecial5 text-center">
+                                            @Html.DisplayFor(modelItem => item.CST_VENDA_VAREJO_CONT)
+                                        </td>}
+
+
 
                                             @if (item.RED_BASE_CALC_VENDA_VAREJO_CONT == null)
                                             {
-                                                <td style="text-align:center; width:10%;" class="prn-borderEspecial5">
-                                                    @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                if (item.RED_BASE_CALC_VENDA_VAREJO_CONT > item.Red_Base_Calc_Venda_Varejo_Cont_INTERNO)
-                                                {
-
-                                                    <td style="text-align:center; width:10%;" class="pr-td-maior prn-borderEspecial5">
-                                                        @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    if (item.RED_BASE_CALC_VENDA_VAREJO_CONT < item.Red_Base_Calc_Venda_Varejo_Cont_INTERNO)
-                                                    {
-                                                        <td style="text-align:center; width:10%;" class="pr-td-menor prn-borderEspecial5">
-                                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
-                                                        </td>
-
-                                                    }
-                                                    else
-                                                    {
-
-                                                        if (item.RED_BASE_CALC_VENDA_VAREJO_CONT == item.Red_Base_Calc_Venda_Varejo_Cont_INTERNO)
-                                                        {
-                                                            <td style="text-align:center; width:10%;" class="pr-td-igual prn-borderEspecial5">
-                                                                @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
-                                                            </td>
-
-                                                        }
+                                        <td style="text-align:center; width:10%;" class="prn-borderEspecial5">
+                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
+                                        </td> }
                                                         else
                                                         {
-                                                            if (item.RED_BASE_CALC_VENDA_VAREJO_CONT != null && item.Red_Base_Calc_Venda_Varejo_Cont_INTERNO == null)
+                                                            if (item.RED_BASE_CALC_VENDA_VAREJO_CONT > item.RED_BASE_CALC_VENDA_VAREJO_CONT_BASE)
                                                             {
-                                                                <td style="text-align:center; width:10%;" class="prn-borderEspecial5">
-                                                                    @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
-                                                                </td>
+
+                                        <td style="text-align:center; width:10%;" class="pr-td-maior prn-borderEspecial5">
+                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
+                                        </td> }
+                                                            else
+                                                            {
+                                                                if (item.RED_BASE_CALC_VENDA_VAREJO_CONT < item.RED_BASE_CALC_VENDA_VAREJO_CONT_BASE)
+                                                                {
+                                        <td style="text-align:center; width:10%;" class="pr-td-menor prn-borderEspecial5">
+                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
+                                        </td> }
+                                                                else
+                                                                {
+
+                                                                    if (item.RED_BASE_CALC_VENDA_VAREJO_CONT == item.RED_BASE_CALC_VENDA_VAREJO_CONT_BASE)
+                                                                    {
+                                        <td style="text-align:center; width:10%;" class="pr-td-igual prn-borderEspecial5">
+                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
+                                        </td> }
+                                                                    else
+                                                                    {
+                                                                        if (item.RED_BASE_CALC_VENDA_VAREJO_CONT != null && item.RED_BASE_CALC_VENDA_VAREJO_CONT_BASE == null)
+                                                                        {
+                                        <td style="text-align:center; width:10%;" class="prn-borderEspecial5">
+                                            @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT)
+                                        </td>}
+
+
+                                                                    }
+
+
+                                                                }
 
                                                             }
-
-
                                                         }
 
-
-                                                    }
-
-                                                }
-                                            }
-
                                             <td style="text-align:center; width:10%;" class="prn-borderEspecial5">
-                                                @Html.DisplayFor(modelItem => item.Red_Base_Calc_Venda_Varejo_Cont_INTERNO)
+                                                @Html.DisplayFor(modelItem => item.CST_VENDA_VAREJO_CONT_BASE)
+                                            </td>
+                                            <td style="text-align:center; width:10%;" class="prn-borderEspecial5">
+                                                @Html.DisplayFor(modelItem => item.RED_BASE_CALC_VENDA_VAREJO_CONT_BASE)
+                                            </td>
                                         </tr>
 
                                         }
@@ -174,10 +195,7 @@
         </div><!--Fim do corpo do card-->
         <div class="card-footer">
 
-            Todos os Registros+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; <i style="font-size:1.5em;" class="fas fa-edit"></i> = Edição em massa: <b>IGUALANDO</b> ao MTX; <br />
-            @*Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-user-edit"></i> = Edição em massa informando CST manualmente <br />*@
-            Linha(s) selecionada(s) + :&nbsp; <i style="font-size:1.5em;" class="fas fa-database"></i> = Edição em massa: <b>ALTERAR TODOS OS REGISTROS</b> <br />
-
+            @RenderPage("~/Areas/Cliente/Views/Acoes/MensagemRODAPE.cshtml") <!--Renderiza o card inicial-->
 
         </div>
 

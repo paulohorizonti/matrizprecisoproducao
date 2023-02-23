@@ -1239,8 +1239,12 @@ $(document).ready(function () {
 
             var selecionados = document.getElementsByClassName("selecionado"); //pega os elementos da linha com a classe selecionado
             //Verificar se está selecionado
-            if (selecionados.length < 1) {
-                alert("Selecione pelo menos uma linha");
+            if (selecionados.length > 1) {
+                alert("Apenas um registro de NCM pode ser selecionado!! os dados nessa tabela NÃO SE REPETEM");
+                return false;
+            }
+            if (selecionados.length == 0) {
+                alert("Selecione uma linha para alterar");
                 return false;
             }
 

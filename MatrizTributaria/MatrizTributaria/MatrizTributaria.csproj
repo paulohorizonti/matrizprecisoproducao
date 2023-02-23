@@ -355,6 +355,7 @@
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\EstadosEnun.cs" />
+    <Compile Include="Models\GeneroEnum.cs" />
     <Compile Include="Models\Hash.cs" />
     <Compile Include="Models\Legislacao.cs" />
     <Compile Include="Models\MatrizDbContext.cs" />
@@ -2113,6 +2114,7 @@
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\suepermercado.jpg" />
+    <Content Include="Content\img\mtx-assinatura.png" />
     <Content Include="Content\img\user_add.png" />
     <Content Include="Content\img\voltar.png" />
     <Content Include="Content\jquery.dataTables.min.css" />
@@ -2977,6 +2979,7 @@
     <Content Include="Views\Acoes\CamposSelecionaUFCliente.cshtml" />
     <Content Include="Views\Tributacao\TributacaoComNCM.cshtml" />
     <Content Include="Views\Tributacao\TributacaoNcmEditMassaModalComNCM.cshtml" />
+    <Content Include="Views\Acoes\CamposComunsEmpresa.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -57,8 +57,11 @@ namespace MatrizTributaria.Models.ViewModels
 
         [Required(ErrorMessage = "Campo Empresa é obrigatório")]
         public int idEmpresa { get; set; }
+
+        [Required(ErrorMessage = "Informar esse campo para alteração de senha")]
         public sbyte primeiro_acesso { get; set; }
-        
+
+        [Required(ErrorMessage = "Informar esse campo para acesso a outras empresas")]
         public sbyte acesso_empresas { get; set; }
 
 

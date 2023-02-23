@@ -23,6 +23,7 @@ namespace MatrizTributaria.Models
         public string email { get; set; }
 
         //[Required(ErrorMessage = "O campo Sexo é obrigatório", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "O campo Sexo é obrigatório", AllowEmptyStrings = false)]
         [Column("sexo")]
         public string sexo { get; set; }
 
@@ -72,9 +73,11 @@ namespace MatrizTributaria.Models
         [Column("idempresa")]
         public int idEmpresa { get; set; }
 
+        [Required(ErrorMessage = "Informar esse campo para alteração de senha")]
         [Column("primeiro_acesso")]
         public sbyte primeiro_acesso { get; set; }
 
+        [Required(ErrorMessage = "Informar esse campo para acesso a outras empresas")]
         [Column("acesso_empresas")]
         public sbyte acesso_empresas { get; set; }
 

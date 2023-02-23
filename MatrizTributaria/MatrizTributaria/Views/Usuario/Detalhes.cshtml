@@ -7,14 +7,17 @@
 <div class="container-fluid pr-container pr-card-cad">
     <div class="card mt-2">
         <div class="card-header">
-            Cadastro de Usuários - DETALHES
+            <span class="prn-font-header"> Cadastro de Usuários - DETALHES</span>
+            <a class="float-lg-right dis-blockbtn btn btn-secondary pr-botoes-fundo border-0" data-toggle="tooltip" data-placement="right" title="Voltar" href="@Url.Action("Index", "Usuario")"><i style="font-size:1.6em;" class="fas fa-directions"></i></a><!--Novo-->
+            <a class="float-lg-right dis-blockbtn btn btn-secondary pr-botoes-fundo border-0" data-toggle="tooltip" data-placement="right" title="Home" href="@Url.Action("Index", "Home")"><i style="font-size:1.6em;" class="fas fa-home"></i></a><!--Novo-->
+
         </div><!--fim do cabeçalho-->
         <div class="card-body">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <div class="container">
-                            <div class="form-group row">
+                        <div class="container-fluid">
+                            @*<div class="form-group row">
                                 <div class="col-md-offset-2 col-md-12">
                                     <div style="background-color: ButtonFace; border-radius:0.4em; width:100%;" class="mb-2">
                                         <div id="pr-botoes" class="btn-group border-0" role="group" aria-label="Grupo de botões com dropdown aninhado">
@@ -23,8 +26,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row ">
+                            </div>*@
+                            <div class="form-group row mt-1 ">
                                 <div class="col-lg-6">
                                     <div class="form-group row col-lg-12 pl-3 ">
                                         <label class="col-form-label col-lg-2 pl-1 pr-fontalternativa" for="id">Id:</label>
@@ -48,8 +51,8 @@
                                     <div class="form-group row col-lg-12 pl-3">
                                         <label class="col-form-label col-lg-2 pl-1 pr-fontalternativa" for="nome">Sexo:</label>
                                         <div class="col-lg-6 pr-fontanternativa ml-1">
-                                             <span class="pr-fonte">Masculino: @Html.RadioButtonFor(model => model.sexo, "M", new { id = "masc", name = "sexo", value = "M", @disabled = "disabled" })</span>
-                                             <span class="pr-fonte">Feminino:   @Html.RadioButtonFor(model => model.sexo, "F", new { id = "fem", name = "sexo", value = "F", @disabled = "disabled" })</span>
+                                            <span class="pr-fonte">Masculino: @Html.RadioButtonFor(model => model.sexo, "M", new { id = "masc", name = "sexo", value = "M", @disabled = "disabled" })</span>
+                                            <span class="pr-fonte">Feminino:   @Html.RadioButtonFor(model => model.sexo, "F", new { id = "fem", name = "sexo", value = "F", @disabled = "disabled" })</span>
                                         </div>
 
                                     </div>
@@ -93,7 +96,17 @@
 
 
                                     </div>
-                                   
+                                    <div class="form-group row col-lg-12 pl-3 ">
+                                        <label class="col-form-label col-lg-2 pl-1 pr-fontalternativa" for="acesoo">Acesso Empresas:</label>
+
+                                        <div class="col-lg-6 pr-fontanternativa ml-1">
+                                            <span class="pr-fonte">Sim: @Html.RadioButtonFor(m => m.acesso_empresas, 1, new { @disabled = "disabled" })</span>
+                                            <span class="pr-fonte">Não: @Html.RadioButtonFor(m => m.acesso_empresas, 0, new { @disabled = "disabled" })</span>
+                                        </div>
+
+
+                                    </div>
+
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group row col-lg-12 pl-3 ">
@@ -138,8 +151,8 @@
                                         <label class="col-form-label col-lg-2 pl-1 pr-fontalternativa" for="ativo">Ativo:</label>
 
                                         <div class="col-lg-6 pr-fontanternativa ml-1">
-                                             <span class="pr-fonte">Sim: @Html.RadioButtonFor(m => m.ativo, 1, new { @disabled = "disabled" })</span>
-                                             <span class="pr-fonte">Não: @Html.RadioButtonFor(m => m.ativo, 0, new { @disabled = "disabled" })</span>
+                                            <span class="pr-fonte">Sim: @Html.RadioButtonFor(m => m.ativo, 1, new { @disabled = "disabled" })</span>
+                                            <span class="pr-fonte">Não: @Html.RadioButtonFor(m => m.ativo, 0, new { @disabled = "disabled" })</span>
                                         </div>
 
 
@@ -168,6 +181,18 @@
 
 
                                     </div>
+                                    <div class="form-group row col-lg-12 pl-3 ">
+                                        <label class="col-form-label col-lg-2 pl-1 pr-fontalternativa" for="primeiro">Mudar Senha:</label>
+
+                                        <div class="col-lg-6 pr-fontanternativa ml-1">
+                                            <span class="pr-fonte">Sim: @Html.RadioButtonFor(m => m.primeiro_acesso, 1, new { @disabled = "disabled" })</span>
+                                            <span class="pr-fonte">Não: @Html.RadioButtonFor(m => m.primeiro_acesso, 0, new { @disabled = "disabled" })</span>
+                                        </div>
+
+
+                                    </div>
+
+
                                 </div>
 
                                

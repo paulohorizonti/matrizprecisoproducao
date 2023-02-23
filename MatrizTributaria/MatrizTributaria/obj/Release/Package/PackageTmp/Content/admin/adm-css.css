@@ -91,7 +91,7 @@ table.dataTable thead th, table.dataTable thead td {
 
 .card-header {
     padding: 0.2rem 0.30rem;
-    font-size: 0.8em;
+    font-size: 0.9em;
     font-weight: 500;
     color: #343a40;
     
@@ -265,6 +265,7 @@ table.dataTable thead th, table.dataTable thead td {
     color: #021E36;
     font-size: 0.8em;
     font-weight: 600;
+    border-radius: 0.4em;
 }
     .pr-botoes-fundo:hover {
         /*background-color: #A7291D !important;*/
@@ -273,6 +274,41 @@ table.dataTable thead th, table.dataTable thead td {
     .pr-botoes-fundo::placeholder {
         background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%) !important;
     }
+
+.pr-botoes-fundo-index {
+    background-color: rgb(0, 0, 0, 0.01);
+    color: #021E36;
+    font-size: 1.10em;
+    font-weight: 600;
+    border-radius: 0.4em;
+}
+    .pr-botoes-fundo-index:hover {
+        /*background-color: #A7291D !important;*/
+        background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%);
+        font-size: 1.2em;
+    }
+
+    .pr-botoes-fundo-index::placeholder {
+        background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%) !important;
+        font-size: 1.2em;
+    }
+
+.pr-botoes-fundo-index-down {
+    background-color: rgb(0, 0, 0, 0.01);
+    color: #A7291D;
+}
+
+.pr-botoes-fundo-index-down:hover {
+    /*background-color: #A7291D !important;*/
+    background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%);
+    font-size: 1.2em;
+}
+
+.pr-botoes-fundo-index-down::placeholder {
+    background: linear-gradient(to bottom, #A7291D 0%, #A7291D 100%) !important;
+    font-size: 1.2em;
+}
+
 
 .pr-botoes-fundo-menu {
     background-color: rgba(0, 0, 0, 0.02);
@@ -969,3 +1005,8 @@ li.page-item.active > a {
     border-top: none;
     border-right: none;
 }
+
+.prn-select{
+    max-width: 1000px !important;
+}
+

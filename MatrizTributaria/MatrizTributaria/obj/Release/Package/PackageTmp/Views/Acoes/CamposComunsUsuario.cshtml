@@ -62,13 +62,13 @@
             <div class="input-group input-group-sm">
                 @if (ViewBag.FiltroCorrenteEmpresa == null)
                 {
-                    @Html.DropDownList("ProcuraEmpresa", new SelectList(ViewBag.Empresas, "id", "fantasia"), "-", new { @class = "form-control form-control-sm dropdown" })
+                    @Html.DropDownList("ProcuraEmpresa", new SelectList(ViewBag.Empresas, "id", "fantasia"), "-", new { @class = "form-control form-control-sm dropdown prn-select" })
 
                     @*@Html.TextBox("ProcuraEmpresa", null, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Empresa", id = "empresa" })*@
                 }
                 else
                 {
-                    @Html.DropDownList("ProcuraEmpresa", new SelectList(ViewBag.Empresas, "id", "fantasia"), " - ", new { @class = "form-control form-control-sm dropdown" })
+                    @Html.DropDownList("ProcuraEmpresa", new SelectList(ViewBag.Empresas, "id", "fantasia"), " - ", new { @class = "form-control form-control-sm dropdown prn-select"})
 
                     @*@Html.TextBox("ProcuraEmpresa", (string)ViewBag.FiltroCorrenteCEST, new { @class = "form-control form-control-sm", onkeyup = "maiuscula(this);", placeholder = "Digite a Empresa", id = "empresa" })*@
 

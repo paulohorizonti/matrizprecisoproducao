@@ -9,7 +9,10 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Web.Mvc;
-
+using System.Net.Mail;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Net.Mime;
 
 namespace MatrizTributaria.Controllers
 {
@@ -396,6 +399,105 @@ namespace MatrizTributaria.Controllers
 
            // return null;
         }
+
+        public ActionResult SenhaAlterar(string emailUsu)
+        {
+            //pegar o email
+            string e_mail = emailUsu;
+
+           
+            //verifica se o email contem carcteres válidos
+            if (!IsValidEmail(emailUsu.ToLower()))
+            {
+                ViewBag.Message = "O e-mail informado é inválido";
+                return View("Login");
+            }
+            //verificar se existe realmente
+            Usuario user = db.Usuarios.FirstOrDefault(x => x.email.ToLower().Equals(emailUsu));
+            if(user == null)
+            {
+                ViewBag.Message = "E-mail não encontrado na base de dados.";
+                return View("Login");
+            }
+            else //se não, encaminha o email
+            {
+                //gerar uma senha provisória
+                string senha_provisoria = alfanumericoAleatorio(8);
+                user.senha = senha_provisoria;
+                user.primeiro_acesso = 1;
+                user.dataAlt = DateTime.Now;
+
+                //envio do email com a senha provisória
+               
+                SmtpClient smtp = new SmtpClient();
+
+                //smtp.Host = "smtp.gmail.com";
+                smtp.Host = "smtpout.secureserver.net"; 
+                smtp.Port = 587;
+                //smtp.Port = 465;
+
+                smtp.EnableSsl = false;
+
+                smtp.UseDefaultCredentials = false;
+
+                smtp.Credentials = new System.Net.NetworkCredential("suporte@precisomtx.com.br", "MTX@12345");
+                //smtp.Credentials = new System.Net.NetworkCredential("desenvolvimentomtx@gmail.com", "kzplodtqicuytgpa");
+
+
+
+                MailMessage mail = new System.Net.Mail.MailMessage();
+                mail.From = new System.Net.Mail.MailAddress("suporte@precisomtx.com.br");
+                if (!string.IsNullOrWhiteSpace(emailUsu.ToLower()))
+                {
+                    mail.To.Add(new System.Net.Mail.MailAddress(emailUsu.ToLower()));
+                }
+                else
+                {
+                    ViewBag.Message = "O e-mail informado é inválido";
+                    return View("Login");
+                }
+                mail.Subject = "Senha Provisória - PrecisoMtx";
+                mail.Body = "Segue informações de usuário e senha provisórios:\n ";
+                mail.Body += "Usuário: " + emailUsu.ToLower() + "\n";
+                mail.Body += "Senha: " + senha_provisoria + "\n";
+                mail.Body += "Obs.: Utilize essa senha provisória no proximo acesso e será solicitado que a mesma seja alterada. \n";
+                mail.Body += "Acesse: " + "http://18.223.22.3/Home/Login" + " para efetuar o  Login e alterar a senha \n";
+               
+
+                //envio de email
+                try
+                {
+
+                    try
+                    {
+                        smtp.Send(mail);
+                        db.SaveChanges();
+                    }
+                    catch (SmtpFailedRecipientException ex)
+                    {
+                        ViewBag.Message = "Problemas no envio da senha provisória";
+                        return View("Login");
+                    }
+
+                    ViewBag.Message = "Uma senha provisória foi encaminhada para seu e-mail.";
+                    return View("Login");
+
+
+
+                }
+                catch (SmtpException e)
+                {
+                    ViewBag.Message = "Problemas no envio da senha provisória";
+                    return View("Login");
+                }
+
+
+            }
+
+
+
+            return null;
+        }
         public ActionResult LogOut()
         {
             if (Session["usuario"] != null)
@@ -433,6 +535,60 @@ namespace MatrizTributaria.Controllers
 
 
         }
+
+        public static string alfanumericoAleatorio(int tamanho)
+        {
+            var chars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnPpQqRrSsTtUuVvWwXxYyZz123456789@#$*";
+            var random = new Random();
+            var result = new string(
+                Enumerable.Repeat(chars, tamanho)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+            return result;
+        }
+        public static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Normalize the domain
+                email = Regex.Replace(email, @"(@)(.+)$", DomainMapper, RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+                // Examines the domain part of the email and normalizes it.
+                string DomainMapper(Match match)
+                {
+                    // Use IdnMapping class to convert Unicode domain names.
+                    var idn = new IdnMapping();
+
+                    // Pull out and process domain name (throws ArgumentException on invalid)
+                    string domainName = idn.GetAscii(match.Groups[2].Value);
+
+                    return match.Groups[1].Value + domainName;
+                }
+            }
+            catch (RegexMatchTimeoutException e)
+            {
+                return false;
+            }
+            catch (ArgumentException e)
+            {
+                return false;
+            }
+
+            try
+            {
+                return Regex.IsMatch(email,
+                    @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                    RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

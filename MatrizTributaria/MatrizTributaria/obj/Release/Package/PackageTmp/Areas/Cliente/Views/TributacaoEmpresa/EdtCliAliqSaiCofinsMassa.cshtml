@@ -32,33 +32,34 @@
                                 <table id="tbl-edtAlqSaiCofins" class="table table table-light table-hover thead-dark table-striped pr-table">
                                     <thead class="pr-thead">
                                         <tr>
-                                            <th style="text-align:center; border:none;" colspan="8" class="pr-fonte2" scope="col">Analise Alíquota</th>
+                                            <th style="text-align:center; border:none;" colspan="10" class="pr-fonte2" scope="col">Analise Alíquota</th>
 
                                         </tr>
                                         <tr class="pr-td">
                                             <th>
                                                 Registro
                                             </th>
-                                            <th>
+                                            <th style="border-left: 1px solid white !important;">
                                                 Código de Barras
                                             </th>
-                                            <th>
+                                            <th style="border-left: 1px solid white !important;">
                                                 NCM
                                             </th>
-                                            <th>
+                                            <th style="text-align: center; border-left: 1px solid white !important;">
                                                 Descrição
                                             </th>
 
-                                            <th style="text-align:center;">
+                                            <th style="text-align: center; border-left: 1px solid white !important;">
                                                 Alíquota no Cliente
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th colspan="2" style="text-align: center; border-left: 1px solid; border-color: white !important;">
                                                 CST - Cliente
                                             </th>
-                                            <th style="text-align:center;">
+
+                                            <th style="text-align: center; border-left: 1px solid; border-color: white !important;">
                                                 Alíquota no MTX
                                             </th>
-                                            <th style="text-align:center;">
+                                            <th colspan="2" style="text-align: center; border-left: 1px solid; border-color: white !important;">
                                                 CST - MTX
                                             </th>
 
@@ -69,23 +70,23 @@
                                         @foreach (var item in Model)
                                         {
                                         <tr style="height:12.0px;" class="pr-td">
-                                            <td style="width:4%;">
+                                            <td style="width:4%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.TE_ID)
                                             </td>
-                                            <td style="width:8%;">
+                                            <td style="width:8%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_COD_BARRAS)
                                             </td>
-                                            <td style="width:8%;">
+                                            <td style="width:4%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_NCM)
                                             </td>
-                                            <td style="width:40%;">
+                                            <td style="width:15%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.PRODUTO_DESCRICAO)
                                             </td>
 
 
                                             @if (item.ALIQ_SAIDA_COFINS == null)
                                             {
-                                        <td style="text-align:center; width:10%;">
+                                        <td style="text-align:center; width:5%;">
                                             @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_COFINS)
                                         </td> }
                                                         else
@@ -93,14 +94,14 @@
                                                             if (item.ALIQ_SAIDA_COFINS > item.ALIQ_SAIDA_COFINS_BASE)
                                                             {
 
-                                        <td style="text-align:center; width:10%;" class="pr-td-maior">
+                                        <td style="text-align:center; width:5%;" class="pr-td-maior prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_COFINS)
                                         </td> }
                                                             else
                                                             {
                                                                 if (item.ALIQ_SAIDA_COFINS < item.ALIQ_SAIDA_COFINS_BASE)
                                                                 {
-                                        <td style="text-align:center; width:10%;" class="pr-td-menor">
+                                        <td style="text-align:center; width:5%;" class="pr-td-menor prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_COFINS)
                                         </td> }
                                                                 else
@@ -108,14 +109,14 @@
 
                                                                     if (item.ALIQ_SAIDA_COFINS == item.ALIQ_SAIDA_COFINS_BASE)
                                                                     {
-                                        <td style="text-align:center; width:10%;" class="pr-td-igual">
+                                        <td style="text-align:center; width:5%;" class="pr-td-igual prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_COFINS)
                                         </td> }
                                                                     else
                                                                     {
                                                                         if (item.ALIQ_SAIDA_COFINS != null && item.ALIQ_SAIDA_COFINS_BASE == null)
                                                                         {
-                                        <td style="text-align:center; width:10%;">
+                                        <td style="text-align:center; width:5%;" class="prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_COFINS)
                                         </td>}
 
@@ -130,7 +131,7 @@
 
                                             @if (item.CST_SAIDA_PIS_COFINS == null)
                                             {
-                                        <td style="text-align:center; width:10%;">
+                                        <td style="text-align:center; width:5%;" class="prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                         </td> }
                                                         else
@@ -139,29 +140,53 @@
 
                                                             if (item.CST_SAIDA_PIS_COFINS != item.CST_SAIDA_PISCOFINS_BASE)
                                                             {
-                                        <td style="text-align:center; width:10%;" class="pr-td-maior">
+                                        <td style="text-align:center; width:5%;" class="pr-td-maior prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                         </td>
  }
                                     else
                                     {
-                                        <td style="text-align:center; width:10%;" class="pr-td-igual">
+                                        <td style="text-align:center; width:5%;" class="pr-td-igual prn-borderEspecial5">
                                             @Html.DisplayFor(modelItem => item.CST_SAIDA_PIS_COFINS)
                                         </td>
 }
                                 } <!--Fim else-->
 
-
-
-
-
-
-
                                             <td style="text-align:center; width:10%;">
+
+                                                @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                {
+                                                    if (item.CST_SAIDA_PIS_COFINS == dado.codigo)
+                                                    {
+                                        <span>@dado.descricao</span>break;
+                                    }
+
+                                }
+
+                                            </td>
+
+
+
+
+
+                                            <td style="text-align:center; width:5%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.ALIQ_SAIDA_COFINS_BASE)
                                             </td>
-                                            <td style="text-align:center; width:10%;">
+                                            <td style="text-align:center; width:5%;" class="prn-borderEspecial5">
                                                 @Html.DisplayFor(modelItem => item.CST_SAIDA_PISCOFINS_BASE)
+                                            </td>
+
+                                            <td style="text-align:center; width:10%;">
+
+                                                @foreach (var dado in ViewBag.CstPisCofinsS)
+                                                {
+                                                    if (item.CST_SAIDA_PISCOFINS_BASE == dado.codigo)
+                                                    {
+                                        <span>@dado.descricao</span>break;
+                                    }
+
+                                }
+
                                             </td>
 
                                         </tr>
